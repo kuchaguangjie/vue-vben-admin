@@ -1,4 +1,4 @@
-import { baseRequestClient, requestClient } from '#/api/request';
+import {baseRequestClient, requestClient} from '#/api/request';
 
 export namespace AuthApi {
   /** 登录接口参数 */
@@ -44,9 +44,7 @@ export async function refreshTokenApi() {
  * 退出登录
  */
 export async function logoutApi() {
-  return baseRequestClient.post('/auth/logout', null, {
-    withCredentials: true,
-  });
+  return requestClient.post<string[]>('/auth/logout');
 }
 
 /**
