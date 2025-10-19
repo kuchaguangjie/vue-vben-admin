@@ -15,6 +15,7 @@ async function generateRoutesByBackend(
   options: GenerateMenuAndRoutesOptions,
 ): Promise<RouteRecordRaw[]> {
   const { fetchMenuListAsync, layoutMap = {}, pageMap = {} } = options;
+  console.warn('backend routes');
 
   try {
     const menuRoutes = await fetchMenuListAsync?.();

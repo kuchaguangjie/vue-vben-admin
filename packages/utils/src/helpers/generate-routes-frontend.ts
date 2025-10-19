@@ -10,6 +10,8 @@ async function generateRoutesByFrontend(
   roles: string[],
   forbiddenComponent?: RouteRecordRaw['component'],
 ): Promise<RouteRecordRaw[]> {
+  console.warn('frontend routes');
+
   // 根据角色标识过滤路由表,判断当前用户是否拥有指定权限
   const finalRoutes = filterTree(routes, (route) => {
     return hasAuthority(route, roles);
