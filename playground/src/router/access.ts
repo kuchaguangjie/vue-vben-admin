@@ -25,8 +25,8 @@ async function generateAccess(options: GenerateMenuAndRoutesOptions) {
 
   // const accessMode = preferences.app.accessMode; // TODO: 这里读不到 ?
   // const accessMode: AccessModeType = 'frontend';
-  // const accessMode: AccessModeType = 'backend';
-  const accessMode: AccessModeType = 'mixed';
+  const accessMode: AccessModeType = 'backend';
+  // const accessMode: AccessModeType = 'mixed';
 
   return await generateAccessible(accessMode, {
     ...options,
