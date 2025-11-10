@@ -61,5 +61,13 @@
     "operation": "Operation",
     "permissions": "Permissions",
     "setPermissions": "Permissions"
+  },
+  "user": {
+    "title": "User Management",
+    "list": "User List",
+    "nick": "Nickname",
+    "username": "Username",
+    "id": "User ID",
+    "status": "Status"
   }
 }

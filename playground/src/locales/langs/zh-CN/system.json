@@ -63,5 +63,13 @@
     "permissions": "权限",
     "setPermissions": "授权"
   },
+  "user": {
+    "title": "用户管理",
+    "list": "用户列表",
+    "nick": "昵称",
+    "username": "用户名称",
+    "id": "用户ID",
+    "status": "状态"
+  },
   "title": "系统管理"
 }
