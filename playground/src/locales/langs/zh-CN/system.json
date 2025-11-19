@@ -67,9 +67,12 @@
     "title": "用户管理",
     "list": "用户列表",
     "nick": "昵称",
-    "username": "用户名称",
-    "id": "用户ID",
-    "status": "状态"
+    "username": "用户名",
+    "email": "邮箱",
+    "id": "用户 ID",
+    "status": "状态",
+    "createdAt": "创建时间",
+    "operation": "操作"
   },
   "title": "系统管理"
 }

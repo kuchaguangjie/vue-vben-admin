@@ -67,7 +67,10 @@
     "list": "User List",
     "nick": "Nickname",
     "username": "Username",
+    "email": "Email",
     "id": "User ID",
-    "status": "Status"
+    "status": "Status",
+    "createdAt": "Created At",
+    "operation": "Operation"
   }
 }
