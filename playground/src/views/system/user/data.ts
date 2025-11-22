@@ -63,8 +63,11 @@ export function useGridFormSchema(): VbenFormSchema[] {
     },
     {
       component: 'RangePicker',
-      fieldName: 'createdAt',
+      fieldName: 'createdAtRangeMs',
       label: $t('system.user.createdAt'),
+      componentProps: {
+        valueFormat: 'x', // in ms
+      },
     },
   ];
 }
