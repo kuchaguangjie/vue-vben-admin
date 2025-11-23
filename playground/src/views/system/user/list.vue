@@ -5,16 +5,15 @@ import type {
   OnActionClickParams,
   VxeTableGridOptions,
 } from '#/adapter/vxe-table';
-import type { SystemRoleApi } from '#/api';
+import { useVbenVxeGrid } from '#/adapter/vxe-table';
+import type { SystemUserApi } from '#/api';
+import { updateUser } from '#/api';
 
 import { Page, useVbenDrawer } from '@vben/common-ui';
 import { Plus } from '@vben/icons';
 
 import { Button, message, Modal } from 'ant-design-vue';
-
-import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import { deleteRole, updateRole } from '#/api';
-import { getUserList, SystemUserApi } from '#/api/system/user';
+import { getUserList } from '#/api/system/user';
 import { $t } from '#/locales';
 
 import { useColumns, useGridFormSchema } from './data';
@@ -57,10 +56,10 @@ const [Grid, gridApi] = useVbenVxeGrid({
       search: true,
       zoom: true,
     },
-  } as VxeTableGridOptions<SystemRoleApi.SystemRole>,
+  } as VxeTableGridOptions<SystemUserApi.SystemUser>,
 });
 
-function onActionClick(e: OnActionClickParams<SystemRoleApi.SystemRole>) {
+function onActionClick(e: OnActionClickParams<SystemUserApi.SystemUser>) {
   switch (e.code) {
     case 'delete': {
       onDelete(e.row);
@@ -109,21 +108,21 @@ async function onStatusChange(
   };
   try {
     await confirm(
-      `你要将${row.name}的状态切换为 【${status[newStatus.toString()]}】 吗？`,
+      `你要将${row.username}的状态切换为 【${status[newStatus.toString()]}】 吗？`,
       `切换状态`,
     );
-    await updateRole(row.id, { status: newStatus });
+    await updateUser(row.id, { status: newStatus });
     return true;
   } catch {
     return false;
   }
 }
 
-function onEdit(row: SystemRoleApi.SystemRole) {
+function onEdit(row: SystemUserApi.SystemUser) {
   formDrawerApi.setData(row).open();
 }
 
-function onDelete(row: SystemRoleApi.SystemRole) {
+function onDelete(row: SystemUserApi.SystemUser) {
   const hideLoading = message.loading({
     content: $t('ui.actionMessage.deleting', [row.name]),
     duration: 0,
