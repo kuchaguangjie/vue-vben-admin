@@ -111,9 +111,7 @@ export function useColumns<T = SystemRoleApi.SystemRole>(
       field: 'createdAt',
       title: $t('system.user.createdAt'),
       width: 160,
-      formatter: ({ cellValue }) => {
-        return formatBackendTime(cellValue); // 自定义 格式 转换
-      },
+      formatter: ({ cellValue }) => formatBackendTime(cellValue), // 时间格式转换
     },
     {
       align: 'center',

@@ -63,6 +63,7 @@
     "setPermissions": "Permissions"
   },
   "user": {
+    "name": "User",
     "title": "User Management",
     "list": "User List",
     "nick": "Nickname",

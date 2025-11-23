@@ -14,7 +14,7 @@ import { Button, message, Modal } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { deleteRole, updateRole } from '#/api';
-import { getUserList } from '#/api/system/user';
+import { getUserList, SystemUserApi } from '#/api/system/user';
 import { $t } from '#/locales';
 
 import { useColumns, useGridFormSchema } from './data';
@@ -101,7 +101,7 @@ function confirm(content: string, title: string) {
  */
 async function onStatusChange(
   newStatus: number,
-  row: SystemRoleApi.SystemRole,
+  row: SystemUserApi.SystemUser,
 ) {
   const status: Recordable<string> = {
     0: '禁用',

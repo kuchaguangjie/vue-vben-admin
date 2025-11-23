@@ -64,6 +64,7 @@
     "setPermissions": "授权"
   },
   "user": {
+    "name": "用户",
     "title": "用户管理",
     "list": "用户列表",
     "nick": "昵称",
