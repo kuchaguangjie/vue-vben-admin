@@ -5,14 +5,15 @@ import type {
   OnActionClickParams,
   VxeTableGridOptions,
 } from '#/adapter/vxe-table';
-import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import type { SystemUserApi } from '#/api';
-import { updateUser } from '#/api';
 
 import { Page, useVbenDrawer } from '@vben/common-ui';
 import { Plus } from '@vben/icons';
 
 import { Button, message, Modal } from 'ant-design-vue';
+
+import { useVbenVxeGrid } from '#/adapter/vxe-table';
+import { deleteRole, updateUserStatus } from '#/api';
 import { getUserList } from '#/api/system/user';
 import { $t } from '#/locales';
 
@@ -111,7 +112,7 @@ async function onStatusChange(
       `你要将${row.username}的状态切换为 【${status[newStatus.toString()]}】 吗？`,
       `切换状态`,
     );
-    await updateUser(row.id, { status: newStatus });
+    await updateUserStatus({ id: row.id, status: newStatus });
     return true;
   } catch {
     return false;

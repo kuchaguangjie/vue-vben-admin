@@ -1,16 +1,18 @@
 import type { Recordable } from '@vben/types';
 
+import type { CommonType } from '#/api';
+
 import { requestClient } from '#/api/request';
 
 export namespace SystemUserApi {
   export interface SystemUser {
     [key: string]: any;
 
-    id: string;
+    id: number;
     name: string;
     permissions: string[];
     remark?: string;
-    status: 0 | 1;
+    status: number;
   }
 }
 
@@ -46,6 +48,14 @@ async function updateUser(
 }
 
 /**
+ * 更新用户状态
+ * @param data 用户数据
+ */
+async function updateUserStatus(data: CommonType.UpdateStatus) {
+  return requestClient.post(`/system/user/updateStatus`, data);
+}
+
+/**
  * 删除用户
  * @param id 用户 ID
  */
@@ -53,4 +63,4 @@ async function deleteUser(id: string) {
   return requestClient.delete(`/system/user/${id}`);
 }
 
-export { createUser, deleteUser, getUserList, updateUser };
+export { createUser, deleteUser, getUserList, updateUser, updateUserStatus };

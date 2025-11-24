@@ -48,7 +48,7 @@ async function updateRole(
  * 删除角色
  * @param id 角色 ID
  */
-async function deleteRole(id: string) {
+async function deleteRole(id: number) {
   return requestClient.delete(`/system/role/${id}`);
 }
 
