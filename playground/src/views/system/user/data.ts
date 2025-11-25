@@ -28,15 +28,10 @@ export function useFormSchema(): VbenFormSchema[] {
       label: $t('system.user.status'),
     },
     {
-      component: 'Textarea',
-      fieldName: 'remark',
-      label: $t('system.user.remark'),
-    },
-    {
       component: 'Input',
       fieldName: 'permissions',
       formItemClass: 'items-start',
-      label: $t('system.user.setPermissions'),
+      label: $t('system.user.setMenuPerm'),
       modelPropName: 'modelValue',
     },
   ];

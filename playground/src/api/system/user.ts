@@ -9,9 +9,8 @@ export namespace SystemUserApi {
     [key: string]: any;
 
     id: number;
-    name: string;
-    permissions: string[];
-    remark?: string;
+    nick: string;
+    permissions?: string[];
     status: number;
   }
 }
@@ -37,14 +36,10 @@ async function createUser(data: Omit<SystemUserApi.SystemUser, 'id'>) {
 /**
  * 更新用户
  *
- * @param id 用户 ID
  * @param data 用户数据
  */
-async function updateUser(
-  id: string,
-  data: Omit<SystemUserApi.SystemUser, 'id'>,
-) {
-  return requestClient.put(`/system/user/${id}`, data);
+async function updateUser(data: SystemUserApi.SystemUser) {
+  return requestClient.post(`/system/user/update`, data);
 }
 
 /**

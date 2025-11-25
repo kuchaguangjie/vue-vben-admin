@@ -72,6 +72,7 @@
     "id": "User ID",
     "status": "Status",
     "createdAt": "Created At",
-    "operation": "Operation"
+    "operation": "Operation",
+    "setMenuPerm": "Menus"
   }
 }
