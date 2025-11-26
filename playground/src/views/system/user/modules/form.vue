@@ -3,7 +3,7 @@ import type { DataNode } from 'ant-design-vue/es/tree';
 
 import type { Recordable } from '@vben/types';
 
-import type { SystemRoleApi } from '#/api/system/role';
+import { getRoleList, type SystemRoleApi } from '#/api/system/role';
 
 import { computed, nextTick, ref } from 'vue';
 
@@ -28,8 +28,13 @@ const [Form, formApi] = useVbenForm({
   showDefaultActions: false,
 });
 
+// menus
 const permissions = ref<DataNode[]>([]);
 const loadingPermissions = ref(false);
+
+// roles
+const roles = ref<DataNode[]>([]);
+const loadingRoles = ref(false);
 
 const id = ref();
 const [Drawer, drawerApi] = useVbenDrawer({
@@ -60,8 +65,13 @@ const [Drawer, drawerApi] = useVbenDrawer({
         id.value = undefined;
       }
 
+      // TODO: remove
       if (permissions.value.length === 0) {
         await loadPermissions();
+      }
+
+      if (roles.value.length === 0) {
+        await loadRoles();
       }
       // Wait for Vue to flush DOM updates (form fields mounted)
       await nextTick();
@@ -72,6 +82,7 @@ const [Drawer, drawerApi] = useVbenDrawer({
   },
 });
 
+// TODO: remove
 async function loadPermissions() {
   loadingPermissions.value = true;
   try {
@@ -79,6 +90,16 @@ async function loadPermissions() {
     permissions.value = res as unknown as DataNode[];
   } finally {
     loadingPermissions.value = false;
+  }
+}
+
+async function loadRoles() {
+  loadingRoles.value = true;
+  try {
+    const res = await getRoleList();
+    roles.value = res as unknown as DataNode[];
+  } finally {
+    loadingRoles.value = false;
   }
 }
 

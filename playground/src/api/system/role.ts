@@ -5,6 +5,7 @@ import { requestClient } from '#/api/request';
 export namespace SystemRoleApi {
   export interface SystemRole {
     [key: string]: any;
+
     id: string;
     name: string;
     permissions: string[];
@@ -14,12 +15,21 @@ export namespace SystemRoleApi {
 }
 
 /**
- * 获取角色列表数据
+ * 获取角色列表数据, 带有 menu 信息;
  */
-async function getRoleList(params: Recordable<any>) {
+async function getRoleListWithMenu(params: Recordable<any>) {
+  return requestClient.get<Array<SystemRoleApi.SystemRole>>(
+    '/system/role/listWithMenu',
+    { params },
+  );
+}
+
+/**
+ * 获取角色列表数据, 无 menu 信息;
+ */
+async function getRoleList() {
   return requestClient.get<Array<SystemRoleApi.SystemRole>>(
     '/system/role/list',
-    { params },
   );
 }
 
@@ -52,4 +62,4 @@ async function deleteRole(id: number) {
   return requestClient.delete(`/system/role/${id}`);
 }
 
-export { createRole, deleteRole, getRoleList, updateRole };
+export { createRole, deleteRole, getRoleList, getRoleListWithMenu, updateRole };
