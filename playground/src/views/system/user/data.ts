@@ -5,6 +5,7 @@ import type { SystemRoleApi } from '#/api';
 import { $t } from '#/locales';
 import { formatBackendTime } from '#/utils/dateFormat';
 
+// for item edit
 export function useFormSchema(): VbenFormSchema[] {
   return [
     {
@@ -27,16 +28,18 @@ export function useFormSchema(): VbenFormSchema[] {
       fieldName: 'status',
       label: $t('system.user.status'),
     },
+    // TODO
     {
       component: 'Input',
-      fieldName: 'permissions',
+      fieldName: 'roles',
       formItemClass: 'items-start',
-      label: $t('system.user.setMenuPerm'),
+      label: $t('system.user.setRoles'),
       modelPropName: 'modelValue',
     },
   ];
 }
 
+// for list search
 export function useGridFormSchema(): VbenFormSchema[] {
   return [
     {

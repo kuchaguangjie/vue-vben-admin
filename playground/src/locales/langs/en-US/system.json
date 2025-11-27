@@ -60,7 +60,8 @@
     "createTime": "Creation Time",
     "operation": "Operation",
     "permissions": "Permissions",
-    "setPermissions": "Permissions"
+    "setPermissions": "Permissions",
+    "setRoles": "Roles"
   },
   "user": {
     "name": "User",

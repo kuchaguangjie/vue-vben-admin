@@ -1,14 +1,11 @@
 <script lang="ts" setup>
 import type { DataNode } from 'ant-design-vue/es/tree';
 
-import type { Recordable } from '@vben/types';
-
 import type { SystemRoleApi } from '#/api/system/role';
 
 import { computed, nextTick, ref } from 'vue';
 
-import { Tree, useVbenDrawer } from '@vben/common-ui';
-import { IconifyIcon } from '@vben/icons';
+import { useVbenDrawer } from '@vben/common-ui';
 
 import { Spin } from 'ant-design-vue';
 
@@ -109,37 +106,22 @@ const getDrawerTitle = computed(() => {
     ? $t('common.edit', $t('system.user.name'))
     : $t('common.create', $t('system.user.name'));
 });
-
-function getNodeClass(node: Recordable<any>) {
-  const classes: string[] = [];
-  if (node.value?.type === 'button') {
-    classes.push('inline-flex');
-  }
-
-  return classes.join(' ');
-}
 </script>
+
 <template>
   <Drawer :title="getDrawerTitle">
     <Form>
-      <template #permissions="slotProps">
-        <Spin :spinning="loadingPermissions" wrapper-class-name="w-full">
-          <Tree
-            :tree-data="permissions"
-            multiple
-            bordered
-            :default-expanded-level="2"
-            :get-node-class="getNodeClass"
-            v-bind="slotProps"
-            value-field="id"
-            label-field="meta.title"
-            icon-field="meta.icon"
-          >
-            <template #node="{ value }">
-              <IconifyIcon v-if="value.meta.icon" :icon="value.meta.icon" />
-              {{ $t(value.meta.title) }}
-            </template>
-          </Tree>
+      <template #roles="slotProps">
+        <Spin :spinning="loadingRoles" wrapper-class-name="w-full">
+          <div v-for="item in roles" :key="item.id">
+            <input
+              type="checkbox"
+              :value="item.code"
+              :id="item.id"
+              v-bind="slotProps"
+            />
+            <label :for="item.id">{{ item.name }}</label>
+          </div>
         </Spin>
       </template>
     </Form>
