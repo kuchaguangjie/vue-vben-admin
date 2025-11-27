@@ -30,11 +30,18 @@ export function useFormSchema(): VbenFormSchema[] {
     },
     // TODO
     {
-      component: 'Input',
-      fieldName: 'roles',
-      formItemClass: 'items-start',
+      component: 'CheckboxGroup',
+      fieldName: 'roleIds',
       label: $t('system.user.setRoles'),
-      modelPropName: 'modelValue',
+      defaultValue: [],
+      componentProps: {
+        options: [
+          { label: '管理员', value: 1 },
+          { label: '编辑', value: 2 },
+          { label: '查看者', value: 3 },
+          { label: '访客', value: 4 },
+        ],
+      },
     },
   ];
 }
