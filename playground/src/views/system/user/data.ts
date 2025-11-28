@@ -34,13 +34,6 @@ export function useFormSchema(): VbenFormSchema[] {
       defaultValue: [],
       componentProps: {},
     },
-    {
-      component: 'Input',
-      fieldName: 'permissions',
-      formItemClass: 'items-start',
-      label: $t('system.user.setMenuPerm'),
-      modelPropName: 'modelValue',
-    },
   ];
 }
 

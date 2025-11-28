@@ -1,16 +1,17 @@
 <script lang="ts" setup>
 import type { DataNode } from 'ant-design-vue/es/tree';
-import type { Recordable } from '@vben/types';
+
 import type { SystemRoleApi } from '#/api/system/role';
-import { getRoleList } from '#/api/system/role';
+
 import { computed, nextTick, ref } from 'vue';
-import { Tree, useVbenDrawer } from '@vben/common-ui';
-import { IconifyIcon } from '@vben/icons';
-import { Spin } from 'ant-design-vue';
+
+import { useVbenDrawer } from '@vben/common-ui';
+
 import { useVbenForm } from '#/adapter/form';
-import { getMenuList } from '#/api/system/menu';
+import { getRoleList } from '#/api/system/role';
 import { createUser, updateUser } from '#/api/system/user';
 import { $t } from '#/locales';
+
 import { useFormSchema } from '../data';
 
 const emits = defineEmits(['success']);
@@ -24,10 +25,6 @@ const [Form, formApi] = useVbenForm({
   schema: useFormSchema(),
   showDefaultActions: false,
 });
-
-// menus
-const permissions = ref<DataNode[]>([]);
-const loadingPermissions = ref(false);
 
 // roles
 const roles = ref<DataNode[]>([]);
@@ -62,11 +59,6 @@ const [Drawer, drawerApi] = useVbenDrawer({
         id.value = undefined;
       }
 
-      // TODO: remove
-      if (permissions.value.length === 0) {
-        await loadPermissions();
-      }
-
       if (roles.value.length === 0) {
         await loadRoles();
       }
@@ -84,17 +76,6 @@ const [Drawer, drawerApi] = useVbenDrawer({
     }
   },
 });
-
-// TODO: remove
-async function loadPermissions() {
-  loadingPermissions.value = true;
-  try {
-    const res = await getMenuList();
-    permissions.value = res as unknown as DataNode[];
-  } finally {
-    loadingPermissions.value = false;
-  }
-}
 
 async function loadRoles() {
   loadingRoles.value = true;
@@ -135,41 +116,11 @@ const getDrawerTitle = computed(() => {
     ? $t('common.edit', $t('system.user.name'))
     : $t('common.create', $t('system.user.name'));
 });
-
-function getNodeClass(node: Recordable<any>) {
-  const classes: string[] = [];
-  if (node.value?.type === 'button') {
-    classes.push('inline-flex');
-  }
-
-  return classes.join(' ');
-}
 </script>
 
 <template>
   <Drawer :title="getDrawerTitle">
-    <Form>
-      <template #permissions="slotProps">
-        <Spin :spinning="loadingPermissions" wrapper-class-name="w-full">
-          <Tree
-            :tree-data="permissions"
-            multiple
-            bordered
-            :default-expanded-level="2"
-            :get-node-class="getNodeClass"
-            v-bind="slotProps"
-            value-field="id"
-            label-field="meta.title"
-            icon-field="meta.icon"
-          >
-            <template #node="{ value }">
-              <IconifyIcon v-if="value.meta.icon" :icon="value.meta.icon" />
-              {{ $t(value.meta.title) }}
-            </template>
-          </Tree>
-        </Spin>
-      </template>
-    </Form>
+    <Form />
   </Drawer>
 </template>
 
