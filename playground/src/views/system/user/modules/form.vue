@@ -1,25 +1,24 @@
 <script lang="ts" setup>
 import type { DataNode } from 'ant-design-vue/es/tree';
-
+import type { Recordable } from '@vben/types';
 import type { SystemRoleApi } from '#/api/system/role';
-
+import { getRoleList } from '#/api/system/role';
 import { computed, nextTick, ref } from 'vue';
-
-import { useVbenDrawer } from '@vben/common-ui';
-
+import { Tree, useVbenDrawer } from '@vben/common-ui';
+import { IconifyIcon } from '@vben/icons';
 import { Spin } from 'ant-design-vue';
-
 import { useVbenForm } from '#/adapter/form';
 import { getMenuList } from '#/api/system/menu';
-import { getRoleList } from '#/api/system/role';
 import { createUser, updateUser } from '#/api/system/user';
 import { $t } from '#/locales';
-
 import { useFormSchema } from '../data';
 
 const emits = defineEmits(['success']);
 
 const formData = ref<SystemRoleApi.SystemRole>();
+
+// 修改：添加角色选项响应式数据
+const roleOptions = ref<{ label: string; value: number }[]>([]);
 
 const [Form, formApi] = useVbenForm({
   schema: useFormSchema(),
@@ -71,6 +70,12 @@ const [Drawer, drawerApi] = useVbenDrawer({
       if (roles.value.length === 0) {
         await loadRoles();
       }
+
+      // 修改：等待角色数据加载完成后设置选项
+      if (roleOptions.value.length === 0) {
+        await loadRoleOptions();
+      }
+
       // Wait for Vue to flush DOM updates (form fields mounted)
       await nextTick();
       if (data) {
@@ -101,32 +106,73 @@ async function loadRoles() {
   }
 }
 
+// 修改：新增函数 - 加载角色选项
+async function loadRoleOptions() {
+  try {
+    const res = await getRoleList();
+    const roles = res.items;
+    roleOptions.value = roles.map((role: any) => ({
+      label: role.name,
+      value: role.code,
+    }));
+
+    // 动态更新表单字段的选项
+    formApi.updateSchema([
+      {
+        fieldName: 'roleIds',
+        componentProps: {
+          options: roleOptions.value,
+        },
+      },
+    ]);
+  } catch (error) {
+    console.error('加载角色选项失败:', error);
+  }
+}
+
 const getDrawerTitle = computed(() => {
   return formData.value?.id
     ? $t('common.edit', $t('system.user.name'))
     : $t('common.create', $t('system.user.name'));
 });
+
+function getNodeClass(node: Recordable<any>) {
+  const classes: string[] = [];
+  if (node.value?.type === 'button') {
+    classes.push('inline-flex');
+  }
+
+  return classes.join(' ');
+}
 </script>
 
 <template>
   <Drawer :title="getDrawerTitle">
     <Form>
-      <template #roles="slotProps">
-        <Spin :spinning="loadingRoles" wrapper-class-name="w-full">
-          <div v-for="item in roles" :key="item.id">
-            <input
-              type="checkbox"
-              :value="item.code"
-              :id="item.id"
-              v-bind="slotProps"
-            />
-            <label :for="item.id">{{ item.name }}</label>
-          </div>
+      <template #permissions="slotProps">
+        <Spin :spinning="loadingPermissions" wrapper-class-name="w-full">
+          <Tree
+            :tree-data="permissions"
+            multiple
+            bordered
+            :default-expanded-level="2"
+            :get-node-class="getNodeClass"
+            v-bind="slotProps"
+            value-field="id"
+            label-field="meta.title"
+            icon-field="meta.icon"
+          >
+            <template #node="{ value }">
+              <IconifyIcon v-if="value.meta.icon" :icon="value.meta.icon" />
+              {{ $t(value.meta.title) }}
+            </template>
+          </Tree>
         </Spin>
       </template>
     </Form>
   </Drawer>
 </template>
+
 <style lang="css" scoped>
 :deep(.ant-tree-title) {
   .tree-actions {

@@ -60,8 +60,7 @@
     "createTime": "Creation Time",
     "operation": "Operation",
     "permissions": "Permissions",
-    "setPermissions": "Permissions",
-    "setRoles": "Roles"
+    "setPermissions": "Permissions"
   },
   "user": {
     "name": "User",
@@ -74,6 +73,7 @@
     "status": "Status",
     "createdAt": "Created At",
     "operation": "Operation",
+    "setRoles": "Roles",
     "setMenuPerm": "Menus"
   }
 }
