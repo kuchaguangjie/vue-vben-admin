@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 import type { SystemRoleApi } from '#/api/system/role';
-import { getRoleList } from '#/api/system/role';
 
 import { computed, nextTick, ref } from 'vue';
 
 import { useVbenDrawer } from '@vben/common-ui';
 
 import { useVbenForm } from '#/adapter/form';
+import { getRoleList } from '#/api/system/role';
 import { createUser, updateUser } from '#/api/system/user';
 import { $t } from '#/locales';
 
@@ -58,7 +58,7 @@ const [Drawer, drawerApi] = useVbenDrawer({
       if (data) {
         formApi.setValues(data);
       }
-      
+
       // 修改：等待角色数据加载完成后设置选项
       if (roleOptions.value.length === 0) {
         await loadRoleOptions();
