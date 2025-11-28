@@ -5,6 +5,7 @@ import type { SystemRoleApi } from '#/api';
 import { $t } from '#/locales';
 import { formatBackendTime } from '#/utils/dateFormat';
 
+// for edit single
 export function useFormSchema(): VbenFormSchema[] {
   return [
     {
@@ -37,6 +38,7 @@ export function useFormSchema(): VbenFormSchema[] {
   ];
 }
 
+// for search list
 export function useGridFormSchema(): VbenFormSchema[] {
   return [
     {

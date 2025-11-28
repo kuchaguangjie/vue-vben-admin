@@ -1,14 +1,12 @@
 <script lang="ts" setup>
-import type { DataNode } from 'ant-design-vue/es/tree';
-
 import type { SystemRoleApi } from '#/api/system/role';
+import { getRoleList } from '#/api/system/role';
 
 import { computed, nextTick, ref } from 'vue';
 
 import { useVbenDrawer } from '@vben/common-ui';
 
 import { useVbenForm } from '#/adapter/form';
-import { getRoleList } from '#/api/system/role';
 import { createUser, updateUser } from '#/api/system/user';
 import { $t } from '#/locales';
 
@@ -18,16 +16,12 @@ const emits = defineEmits(['success']);
 
 const formData = ref<SystemRoleApi.SystemRole>();
 
-// 修改：添加角色选项响应式数据
-const roleOptions = ref<{ label: string; value: number }[]>([]);
-
 const [Form, formApi] = useVbenForm({
   schema: useFormSchema(),
   showDefaultActions: false,
 });
 
-// roles
-const roles = ref<DataNode[]>([]);
+const roleOptions = ref<{ label: string; value: number }[]>([]);
 const loadingRoles = ref(false);
 
 const id = ref();
@@ -59,36 +53,23 @@ const [Drawer, drawerApi] = useVbenDrawer({
         id.value = undefined;
       }
 
-      if (roles.value.length === 0) {
-        await loadRoles();
-      }
-
-      // 修改：等待角色数据加载完成后设置选项
-      if (roleOptions.value.length === 0) {
-        await loadRoleOptions();
-      }
-
       // Wait for Vue to flush DOM updates (form fields mounted)
       await nextTick();
       if (data) {
         formApi.setValues(data);
       }
+      
+      // 修改：等待角色数据加载完成后设置选项
+      if (roleOptions.value.length === 0) {
+        await loadRoleOptions();
+      }
     }
   },
 });
 
-async function loadRoles() {
-  loadingRoles.value = true;
-  try {
-    const res = await getRoleList();
-    roles.value = res as unknown as DataNode[];
-  } finally {
-    loadingRoles.value = false;
-  }
-}
-
-// 修改：新增函数 - 加载角色选项
+// 加载角色选项
 async function loadRoleOptions() {
+  loadingRoles.value = true;
   try {
     const res = await getRoleList();
     const roles = res.items;
@@ -109,6 +90,8 @@ async function loadRoleOptions() {
   } catch (error) {
     console.error('加载角色选项失败:', error);
   }
+
+  loadingRoles.value = false;
 }
 
 const getDrawerTitle = computed(() => {
@@ -124,20 +107,4 @@ const getDrawerTitle = computed(() => {
   </Drawer>
 </template>
 
-<style lang="css" scoped>
-:deep(.ant-tree-title) {
-  .tree-actions {
-    display: none;
-    margin-left: 20px;
-  }
-}
-
-:deep(.ant-tree-title:hover) {
-  .tree-actions {
-    display: flex;
-    flex: auto;
-    justify-content: flex-end;
-    margin-left: 20px;
-  }
-}
-</style>
+<style lang="css" scoped></style>
