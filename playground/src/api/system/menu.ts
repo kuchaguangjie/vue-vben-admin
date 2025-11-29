@@ -93,9 +93,9 @@ export namespace SystemMenuApi {
 /**
  * 获取菜单数据列表
  */
-async function getMenuList() {
+async function getMenuTree() {
   return requestClient.get<Array<SystemMenuApi.SystemMenu>>(
-    '/system/menu/list',
+    '/system/menu/tree',
   );
 }
 
@@ -151,7 +151,7 @@ async function deleteMenu(id: string) {
 export {
   createMenu,
   deleteMenu,
-  getMenuList,
+  getMenuTree,
   isMenuNameExists,
   isMenuPathExists,
   updateMenu,

@@ -14,9 +14,9 @@ export namespace SystemDeptApi {
 /**
  * 获取部门列表数据
  */
-async function getDeptList() {
+async function getDeptTree() {
   return requestClient.get<Array<SystemDeptApi.SystemDept>>(
-    '/system/dept/list',
+    '/system/dept/tree',
   );
 }
 
@@ -51,4 +51,4 @@ async function deleteDept(id: string) {
   return requestClient.delete(`/system/dept/${id}`);
 }
 
-export { createDept, deleteDept, getDeptList, updateDept };
+export { createDept, deleteDept, getDeptTree, updateDept };

@@ -6,7 +6,7 @@ import { computed, nextTick, ref } from 'vue';
 import { useVbenDrawer } from '@vben/common-ui';
 
 import { useVbenForm } from '#/adapter/form';
-import { getRoleList } from '#/api/system/role';
+import { getRoleAll } from '#/api/system/role';
 import { createUser, getUserRoles, updateUser } from '#/api/system/user';
 import { $t } from '#/locales';
 
@@ -72,7 +72,7 @@ async function loadRoleOptions(username: string) {
   loadingRoles.value = true;
   try {
     // 获取所有可用角色
-    const roles = await getRoleList();
+    const roles = await getRoleAll();
     roleOptions.value = roles.map((role: any) => ({
       label: role.name,
       value: role.code,

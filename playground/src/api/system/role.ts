@@ -27,10 +27,8 @@ async function getRoleListWithMenu(params: Recordable<any>) {
 /**
  * 获取角色列表数据, 无 menu 信息;
  */
-async function getRoleList() {
-  return requestClient.get<Array<SystemRoleApi.SystemRole>>(
-    '/system/role/list',
-  );
+async function getRoleAll() {
+  return requestClient.get<Array<SystemRoleApi.SystemRole>>('/system/role/all');
 }
 
 /**
@@ -62,4 +60,4 @@ async function deleteRole(id: number) {
   return requestClient.delete(`/system/role/${id}`);
 }
 
-export { createRole, deleteRole, getRoleList, getRoleListWithMenu, updateRole };
+export { createRole, deleteRole, getRoleAll, getRoleListWithMenu, updateRole };

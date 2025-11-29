@@ -4,7 +4,7 @@ import type { Recordable } from '@vben/types';
 import { useQuery } from '@tanstack/vue-query';
 
 import { useVbenForm } from '#/adapter/form';
-import { getMenuList } from '#/api';
+import { getMenuTree } from '#/api';
 
 const queryKey = ['demo', 'api', 'options'];
 const count = 4;
@@ -13,7 +13,7 @@ const { dataUpdatedAt, promise: fetchDataFn } = useQuery({
   // 在组件渲染期间预取数据
   experimental_prefetchInRender: true,
   // 获取接口数据的函数
-  queryFn: getMenuList,
+  queryFn: getMenuTree,
   queryKey,
   // 每次组件挂载时都重新获取数据。如果不需要每次都重新获取就不要设置为always
   refetchOnMount: 'always',
