@@ -19,7 +19,7 @@ export namespace SystemRoleApi {
  */
 async function getRoleListWithMenu(params: Recordable<any>) {
   return requestClient.get<Array<SystemRoleApi.SystemRole>>(
-    '/system/role/listWithMenu',
+    '/system/role/pageWithMenu',
     { params },
   );
 }

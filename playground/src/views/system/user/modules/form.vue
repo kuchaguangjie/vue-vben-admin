@@ -7,7 +7,7 @@ import { useVbenDrawer } from '@vben/common-ui';
 
 import { useVbenForm } from '#/adapter/form';
 import { getRoleList } from '#/api/system/role';
-import { createUser, updateUser } from '#/api/system/user';
+import { createUser, getUserRoles, updateUser } from '#/api/system/user';
 import { $t } from '#/locales';
 
 import { useFormSchema } from '../data';
@@ -44,7 +44,7 @@ const [Drawer, drawerApi] = useVbenDrawer({
   async onOpenChange(isOpen) {
     if (isOpen) {
       const data = drawerApi.getData<SystemRoleApi.SystemRole>();
-      formApi.resetForm();
+      await formApi.resetForm();
 
       if (data) {
         formData.value = data;
@@ -56,27 +56,30 @@ const [Drawer, drawerApi] = useVbenDrawer({
       // Wait for Vue to flush DOM updates (form fields mounted)
       await nextTick();
       if (data) {
-        formApi.setValues(data);
+        await formApi.setValues(data);
       }
 
       // 修改：等待角色数据加载完成后设置选项
       if (roleOptions.value.length === 0) {
-        await loadRoleOptions();
+        await loadRoleOptions(data.username);
       }
     }
   },
 });
 
-// 加载角色选项
-async function loadRoleOptions() {
+// 加载角色选项, 并设置用户已拥有的角色
+async function loadRoleOptions(username: string) {
   loadingRoles.value = true;
   try {
-    const res = await getRoleList();
-    const roles = res.items;
+    // 获取所有可用角色
+    const roles = await getRoleList();
     roleOptions.value = roles.map((role: any) => ({
       label: role.name,
       value: role.code,
     }));
+
+    // 获取用户当前拥有的角色
+    const userRoles = await getUserRoles(username);
 
     // 动态更新表单字段的选项
     formApi.updateSchema([
@@ -87,11 +90,14 @@ async function loadRoleOptions() {
         },
       },
     ]);
+
+    // 选中用户已有角色
+    await formApi.setFieldValue('roleIds', userRoles);
   } catch (error) {
     console.error('加载角色选项失败:', error);
+  } finally {
+    loadingRoles.value = false;
   }
-
-  loadingRoles.value = false;
 }
 
 const getDrawerTitle = computed(() => {

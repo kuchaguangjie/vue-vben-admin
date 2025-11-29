@@ -51,6 +51,13 @@ async function updateUserStatus(data: CommonType.UpdateStatus) {
 }
 
 /**
+ * 获得用户 角色
+ */
+async function getUserRoles(username: string) {
+  return requestClient.get(`/system/user/getUserRoles?username=${username}`);
+}
+
+/**
  * 删除用户
  * @param id 用户 ID
  */
@@ -58,4 +65,11 @@ async function deleteUser(id: string) {
   return requestClient.delete(`/system/user/${id}`);
 }
 
-export { createUser, deleteUser, getUserList, updateUser, updateUserStatus };
+export {
+  createUser,
+  deleteUser,
+  getUserList,
+  getUserRoles,
+  updateUser,
+  updateUserStatus,
+};
