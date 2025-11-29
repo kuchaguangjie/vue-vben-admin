@@ -20,7 +20,7 @@ export namespace SystemUserApi {
  */
 async function getUserList(params: Recordable<any>) {
   return requestClient.get<Array<SystemUserApi.SystemUser>>(
-    '/system/user/list',
+    '/system/user/page',
     { params },
   );
 }
