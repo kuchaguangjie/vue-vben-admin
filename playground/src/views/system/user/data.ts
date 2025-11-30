@@ -10,6 +10,15 @@ export function useFormSchema(): VbenFormSchema[] {
   return [
     {
       component: 'Input',
+      fieldName: 'username',
+      label: '', // 空标签使其不显示
+      componentProps: {
+        style: { display: 'none' }, // 隐藏输入框
+        disabled: true, // 使其不可编辑
+      },
+    },
+    {
+      component: 'Input',
       fieldName: 'nick',
       label: $t('system.user.nick'),
       rules: 'required',
@@ -30,7 +39,7 @@ export function useFormSchema(): VbenFormSchema[] {
     },
     {
       component: 'CheckboxGroup',
-      fieldName: 'roleIds',
+      fieldName: 'roleCodes',
       label: $t('system.user.setRoles'),
       defaultValue: [],
       componentProps: {},

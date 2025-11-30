@@ -84,7 +84,7 @@ async function loadRoleOptions(username: string) {
     // 动态更新表单字段的选项
     formApi.updateSchema([
       {
-        fieldName: 'roleIds',
+        fieldName: 'roleCodes',
         componentProps: {
           options: roleOptions.value,
         },
@@ -92,7 +92,7 @@ async function loadRoleOptions(username: string) {
     ]);
 
     // 选中用户已有角色
-    await formApi.setFieldValue('roleIds', userRoles);
+    await formApi.setFieldValue('roleCodes', userRoles);
   } catch (error) {
     console.error('加载角色选项失败:', error);
   } finally {
