@@ -2,7 +2,7 @@ import type { VbenFormSchema } from '#/adapter/form';
 import type { VxeTableGridOptions } from '#/adapter/vxe-table';
 
 import { $t } from '#/locales';
-import { formatBackendTime } from '#/utils/dateFormat';
+import { formatBackendTime, formatJsonObj } from '#/utils/valueFormat';
 
 // for search list
 export function useGridFormSchema(): VbenFormSchema[] {
@@ -39,23 +39,7 @@ export function useColumns(): VxeTableGridOptions['columns'] {
       field: 'data',
       title: $t('system.log.data'),
       width: 300,
-      // 添加格式化器，将 JSON 对象转换为可读字符串
-      formatter: ({ cellValue }) => {
-        if (!cellValue) return '';
-
-        try {
-          // 如果已经是字符串，直接返回
-          if (typeof cellValue === 'string') {
-            return cellValue;
-          }
-
-          // 如果是对象，格式化为 JSON 字符串
-          return JSON.stringify(cellValue, null, 2);
-        } catch (error) {
-          console.error('格式化 data 字段失败:', error);
-          return String(cellValue);
-        }
-      },
+      formatter: ({ cellValue }) => formatJsonObj(cellValue), // json -> string
     },
     {
       field: 'createdBy',
