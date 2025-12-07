@@ -75,5 +75,14 @@
     "operation": "Operation",
     "setRoles": "Roles",
     "setMenuPerm": "Menus"
+  },
+  "log": {
+    "code": "Code",
+    "data": "Data",
+    "title": "Log Management",
+    "list": "Log List",
+    "id": "Log ID",
+    "createdBy": "Created By [ID]",
+    "createdAt": "Created At"
   }
 }

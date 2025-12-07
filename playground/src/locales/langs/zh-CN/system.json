@@ -77,5 +77,14 @@
     "setRoles": "角色",
     "setMenuPerm": "菜单权限"
   },
+  "log": {
+    "code": "操作码",
+    "data": "数据",
+    "title": "日志管理",
+    "list": "日志列表",
+    "id": "日志 ID",
+    "createdBy": "创建人 ID",
+    "createdAt": "创建时间"
+  },
   "title": "系统管理"
 }
