@@ -5,14 +5,15 @@ import type {
   OnActionClickParams,
   VxeTableGridOptions,
 } from '#/adapter/vxe-table';
-import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import type { SystemUserApi } from '#/api';
-import { deleteUser, updateUserStatus } from '#/api';
 
 import { Page, useVbenDrawer } from '@vben/common-ui';
 import { Plus } from '@vben/icons';
 
 import { Button, message, Modal } from 'ant-design-vue';
+
+import { useVbenVxeGrid } from '#/adapter/vxe-table';
+import { deleteUser, updateUserStatus } from '#/api';
 import { getUserList } from '#/api/system/user';
 import { $t } from '#/locales';
 
