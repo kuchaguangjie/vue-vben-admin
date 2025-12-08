@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import type { SystemUserApi } from '#/api/system/user';
-import { createUser, getUserRoles, updateUser } from '#/api/system/user';
 
 import { computed, nextTick, ref } from 'vue';
 
@@ -8,6 +7,7 @@ import { useVbenDrawer } from '@vben/common-ui';
 
 import { useVbenForm } from '#/adapter/form';
 import { getRoleAll } from '#/api/system/role';
+import { createUser, getUserRoles, updateUser } from '#/api/system/user';
 import { $t } from '#/locales';
 
 import { useFormSchema } from '../data';
