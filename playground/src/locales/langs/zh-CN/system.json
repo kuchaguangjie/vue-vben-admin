@@ -70,6 +70,7 @@
     "nick": "昵称",
     "username": "用户名",
     "email": "邮箱",
+    "password": "密码",
     "id": "用户 ID",
     "status": "状态",
     "createdAt": "创建时间",

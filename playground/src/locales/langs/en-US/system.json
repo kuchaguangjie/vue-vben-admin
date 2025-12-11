@@ -69,6 +69,7 @@
     "nick": "Nickname",
     "username": "Username",
     "email": "Email",
+    "password": "Password",
     "id": "User ID",
     "status": "Status",
     "createdAt": "Created At",

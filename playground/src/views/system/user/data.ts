@@ -1,30 +1,28 @@
-import type { VbenFormSchema } from '#/adapter/form';
+import { type VbenFormSchema, z } from '#/adapter/form';
 import type { OnActionClickFn, VxeTableGridOptions } from '#/adapter/vxe-table';
 import type { SystemUserApi } from '#/api';
 
 import { $t } from '#/locales';
 import { formatBackendTime } from '#/utils/valueFormat';
 
-// for edit single
+// single - common fields
 export function useFormSchema(): VbenFormSchema[] {
   return [
     {
       component: 'Input',
       fieldName: 'username',
-      label: '', // 空标签使其不显示
-      componentProps: {
-        style: { display: 'none' }, // 隐藏输入框
-        disabled: true, // 使其不可编辑
-      },
+    },
+    {
+      component: 'Input',
+      fieldName: 'email',
+    },
+    {
+      component: 'InputPassword',
+      fieldName: 'password',
     },
     {
       component: 'Input',
       fieldName: 'version',
-      label: '', // 空标签使其不显示
-      componentProps: {
-        style: { display: 'none' }, // 隐藏输入框
-        disabled: true, // 使其不可编辑
-      },
     },
     {
       component: 'Input',
@@ -54,6 +52,70 @@ export function useFormSchema(): VbenFormSchema[] {
       componentProps: {},
     },
   ];
+}
+
+// single - extra fields - edit
+export function useFormSchemaExtraEdit(): VbenFormSchema[] {
+  return [
+    {
+      component: 'Input',
+      fieldName: 'username',
+      label: '', // 空标签使其不显示
+      componentProps: {
+        style: { display: 'none' }, // 隐藏输入框
+        disabled: true, // 使其不可编辑
+      },
+    },
+    {
+      component: 'Input',
+      fieldName: 'version',
+      label: '', // 空标签使其不显示
+      componentProps: {
+        style: { display: 'none' }, // 隐藏输入框
+        disabled: true, // 使其不可编辑
+      },
+    },
+  ];
+}
+
+// single - extra fields - new
+export function useFormSchemaExtraNew(): VbenFormSchema[] {
+  return [
+    {
+      component: 'Input',
+      fieldName: 'username',
+      label: $t('system.user.username'),
+      rules: 'required',
+    },
+    {
+      component: 'VbenInput',
+      componentProps: {
+        placeholder: 'example@example.com',
+      },
+      fieldName: 'email',
+      label: $t('system.user.email'),
+      rules: z
+        .string()
+        .min(1, { message: $t('authentication.emailTip') })
+        .email($t('authentication.emailValidErrorTip')),
+    },
+    {
+      component: 'InputPassword',
+      fieldName: 'password',
+      label: $t('system.user.password'),
+      rules: 'required',
+    },
+  ];
+}
+
+// single - fields to remove - edit
+export function useFormSchemaFieldsRemoveEdit(): string[] {
+  return ['email', 'password'];
+}
+
+// single - fields to remove - new
+export function useFormSchemaFieldsRemoveNew(): string[] {
+  return ['version'];
 }
 
 // for search list

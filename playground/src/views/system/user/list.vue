@@ -113,6 +113,7 @@ async function onStatusChange(
       `切换状态`,
     );
     await updateUserStatus({ id: row.id, status: newStatus });
+    onRefresh();
     return true;
   } catch {
     return false;

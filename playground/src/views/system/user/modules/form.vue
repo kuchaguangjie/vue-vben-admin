@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import type { SystemUserApi } from '#/api/system/user';
+import { createUser, getUserRoles, updateUser } from '#/api/system/user';
 
 import { computed, nextTick, ref } from 'vue';
 
@@ -7,10 +8,14 @@ import { useVbenDrawer } from '@vben/common-ui';
 
 import { useVbenForm } from '#/adapter/form';
 import { getRoleAll } from '#/api/system/role';
-import { createUser, getUserRoles, updateUser } from '#/api/system/user';
 import { $t } from '#/locales';
 
-import { useFormSchema } from '../data';
+import {
+  useFormSchema,
+  useFormSchemaExtraEdit,
+  useFormSchemaExtraNew, useFormSchemaFieldsRemoveEdit,
+  useFormSchemaFieldsRemoveNew,
+} from '../data';
 
 const emits = defineEmits(['success']);
 
@@ -64,33 +69,13 @@ const [Drawer, drawerApi] = useVbenDrawer({
         await loadRoleOptions(data.username);
       }
 
-      if (data.id) {
-        // edit
-        formApi.updateSchema([
-          {
-            component: 'Input',
-            fieldName: 'username',
-            label: '', // 空标签使其不显示
-            componentProps: {
-              style: { display: 'none' }, // 隐藏输入框
-              disabled: true, // 使其不可编辑
-            },
-          },
-        ]);
+      const isEdit = data && data.id;
+      if (isEdit) {
+        formApi.updateSchema(useFormSchemaExtraEdit());
+        await formApi.removeSchemaByFields(useFormSchemaFieldsRemoveEdit());
       } else {
-        // new
-        formApi.updateSchema([
-          {
-            component: 'Input',
-            fieldName: 'username',
-            label: $t('system.user.username'),
-            rules: 'required',
-            componentProps: {
-              style: { display: 'block' },
-              disabled: false,
-            },
-          },
-        ]);
+        formApi.updateSchema(useFormSchemaExtraNew());
+        await formApi.removeSchemaByFields(useFormSchemaFieldsRemoveNew());
       }
     }
   },
