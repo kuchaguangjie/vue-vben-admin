@@ -148,6 +148,7 @@ export function useGridFormSchema(): VbenFormSchema[] {
       label: $t('system.user.createdAt'),
       componentProps: {
         valueFormat: 'x', // in ms
+        showTime: true, // 选择 时/分/秒
       },
     },
   ];
@@ -174,7 +175,6 @@ export function useColumns<T = SystemUserApi.SystemUser>(
       field: 'nick',
       title: $t('system.user.nick'),
       width: 150,
-      sortable: true,
     },
     {
       cellRender: {

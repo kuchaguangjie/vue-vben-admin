@@ -11,3 +11,11 @@
   - data.ts 对应的 column 加:
     > formatter: ({ cellValue }) => formatJsonObj(cellValue), // json -> string
 -
+
+### paging
+- params
+  - page # page num, start from 1
+  - pageSize # page size
+  - 
+  - sortBy  # field name to sort, it's camelCase, should convert to snake_case in backend.
+  - sortDesc # boolean, false -> asc, true -> desc;
