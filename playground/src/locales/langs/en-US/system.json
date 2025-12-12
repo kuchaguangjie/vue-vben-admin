@@ -75,7 +75,8 @@
     "createdAt": "Created At",
     "operation": "Operation",
     "setRoles": "Roles",
-    "setMenuPerm": "Menus"
+    "setMenuPerm": "Menus",
+    "passwordValidation": "Length 6~30, allow a-z A-Z _"
   },
   "log": {
     "code": "Code",

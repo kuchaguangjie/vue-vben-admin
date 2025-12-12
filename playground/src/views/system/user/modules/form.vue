@@ -14,8 +14,8 @@ import {
   useFormSchema,
   useFormSchemaExtraEdit,
   useFormSchemaExtraNew,
-  useFormSchemaFieldsRemoveEdit,
-  useFormSchemaFieldsRemoveNew,
+  useFormSchemaRemoveEdit,
+  useFormSchemaRemoveNew,
 } from '../data';
 
 const emits = defineEmits(['success']);
@@ -73,10 +73,10 @@ const [Drawer, drawerApi] = useVbenDrawer({
       const isEdit = data && data.id;
       if (isEdit) {
         formApi.updateSchema(useFormSchemaExtraEdit());
-        await formApi.removeSchemaByFields(useFormSchemaFieldsRemoveEdit());
+        await formApi.removeSchemaByFields(useFormSchemaRemoveEdit());
       } else {
         formApi.updateSchema(useFormSchemaExtraNew());
-        await formApi.removeSchemaByFields(useFormSchemaFieldsRemoveNew());
+        await formApi.removeSchemaByFields(useFormSchemaRemoveNew());
       }
     }
   },

@@ -55,7 +55,7 @@ export function useFormSchema(): VbenFormSchema[] {
   ];
 }
 
-// single - extra fields - edit
+// single - edit - set fields
 export function useFormSchemaExtraEdit(): VbenFormSchema[] {
   return [
     {
@@ -79,7 +79,7 @@ export function useFormSchemaExtraEdit(): VbenFormSchema[] {
   ];
 }
 
-// single - extra fields - new
+// single - new - add fields
 export function useFormSchemaExtraNew(): VbenFormSchema[] {
   return [
     {
@@ -104,18 +104,20 @@ export function useFormSchemaExtraNew(): VbenFormSchema[] {
       component: 'InputPassword',
       fieldName: 'password',
       label: $t('system.user.password'),
-      rules: 'required',
+      rules: z
+        .string()
+        .regex(/^\w{6,30}$/, $t('system.user.passwordValidation')),
     },
   ];
 }
 
-// single - fields to remove - edit
-export function useFormSchemaFieldsRemoveEdit(): string[] {
+// single - edit - remove fields
+export function useFormSchemaRemoveEdit(): string[] {
   return ['email', 'password'];
 }
 
-// single - fields to remove - new
-export function useFormSchemaFieldsRemoveNew(): string[] {
+// single - new - remove fields
+export function useFormSchemaRemoveNew(): string[] {
   return ['version'];
 }
 

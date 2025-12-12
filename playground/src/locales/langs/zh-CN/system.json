@@ -76,7 +76,8 @@
     "createdAt": "创建时间",
     "operation": "操作",
     "setRoles": "角色",
-    "setMenuPerm": "菜单权限"
+    "setMenuPerm": "菜单权限",
+    "passwordValidation": "'长度 6~30, 只能包含 字母 数字 _'"
   },
   "log": {
     "code": "操作码",
