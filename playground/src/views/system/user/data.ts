@@ -162,16 +162,19 @@ export function useColumns<T = SystemUserApi.SystemUser>(
       field: 'id',
       title: $t('system.user.id'),
       width: 90,
+      sortable: true,
     },
     {
       field: 'username',
       title: $t('system.user.username'),
       width: 150,
+      sortable: true,
     },
     {
       field: 'nick',
       title: $t('system.user.nick'),
       width: 150,
+      sortable: true,
     },
     {
       cellRender: {
@@ -181,16 +184,19 @@ export function useColumns<T = SystemUserApi.SystemUser>(
       field: 'status',
       title: $t('system.user.status'),
       width: 100,
+      sortable: true,
     },
     {
       field: 'email',
       width: 200,
       title: $t('system.user.email'),
+      sortable: true,
     },
     {
       field: 'createdAt',
       title: $t('system.user.createdAt'),
       width: 160,
+      sortable: true,
       formatter: ({ cellValue }) => formatBackendTime(cellValue), // 时间格式转换
     },
     {

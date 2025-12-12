@@ -5,15 +5,14 @@ import type {
   OnActionClickParams,
   VxeTableGridOptions,
 } from '#/adapter/vxe-table';
+import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import type { SystemUserApi } from '#/api';
+import { deleteUser, updateUserStatus } from '#/api';
 
 import { Page, useVbenDrawer } from '@vben/common-ui';
 import { Plus } from '@vben/icons';
 
 import { Button, message, Modal } from 'ant-design-vue';
-
-import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import { deleteUser, updateUserStatus } from '#/api';
 import { getUserList } from '#/api/system/user';
 import { $t } from '#/locales';
 
@@ -37,10 +36,12 @@ const [Grid, gridApi] = useVbenVxeGrid({
     keepSource: true,
     proxyConfig: {
       ajax: {
-        query: async ({ page }, formValues) => {
+        query: async ({ page, sort }, formValues) => {
           return await getUserList({
             page: page.currentPage,
             pageSize: page.pageSize,
+            sortBy: sort.field,
+            sortDesc: sort.order && sort.order === 'desc',
             ...formValues,
           });
         },
@@ -56,6 +57,19 @@ const [Grid, gridApi] = useVbenVxeGrid({
       refresh: true,
       search: true,
       zoom: true,
+    },
+    sortConfig: {
+      remote: true, // 远程排序
+      trigger: 'default', // 点击表头触发
+      orders: ['asc', 'desc', null], // 排序顺序
+    },
+    // 启用远程模式
+    remote: {
+      sort: true, // 远程排序
+    },
+    // 排序变化事件
+    onSortChange() {
+      gridApi.query();
     },
   } as VxeTableGridOptions<SystemUserApi.SystemUser>,
 });
@@ -79,14 +93,14 @@ function onActionClick(e: OnActionClickParams<SystemUserApi.SystemUser>) {
  * @param title 提示标题
  */
 function confirm(content: string, title: string) {
-  return new Promise((reslove, reject) => {
+  return new Promise((resolve, reject) => {
     Modal.confirm({
       content,
       onCancel() {
         reject(new Error('已取消'));
       },
       onOk() {
-        reslove(true);
+        resolve(true);
       },
       title,
     });

@@ -61,7 +61,7 @@ async function getUserRoles(username: string) {
  * 删除用户
  * @param id 用户 ID
  */
-async function deleteUser(id: string) {
+async function deleteUser(id: number) {
   return requestClient.delete(`/system/user/${id}`);
 }
 
