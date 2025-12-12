@@ -13,9 +13,10 @@
 -
 
 ### paging
+
 - params
   - page # page num, start from 1
   - pageSize # page size
-  - 
-  - sortBy  # field name to sort, it's camelCase, should convert to snake_case in backend.
+  -
+  - sortBy # field name to sort, it's camelCase, should convert to snake_case in backend.
   - sortDesc # boolean, false -> asc, true -> desc;
