@@ -65,7 +65,7 @@ const [Drawer, drawerApi] = useVbenDrawer({
         await formApi.setValues(data);
       }
 
-      // 修改：等待角色数据加载完成后设置选项
+      // 加载角色选项
       if (roleOptions.value.length === 0) {
         await loadRoleOptions(data.username);
       }

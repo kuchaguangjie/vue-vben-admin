@@ -61,7 +61,8 @@
     "createTime": "创建时间",
     "operation": "操作",
     "permissions": "权限",
-    "setPermissions": "菜单"
+    "setPermissions": "菜单",
+    "setInheritRoles": "角色继承"
   },
   "user": {
     "name": "用户",

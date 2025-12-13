@@ -3,7 +3,12 @@ import type { DataNode } from 'ant-design-vue/es/tree';
 
 import type { Recordable } from '@vben/types';
 
-import type { SystemRoleApi } from '#/api/system/role';
+import {
+  createRole,
+  getRoleAll,
+  type SystemRoleApi,
+  updateRole,
+} from '#/api/system/role';
 
 import { computed, nextTick, ref } from 'vue';
 
@@ -14,10 +19,10 @@ import { Spin } from 'ant-design-vue';
 
 import { useVbenForm } from '#/adapter/form';
 import { getMenuTree } from '#/api/system/menu';
-import { createRole, updateRole } from '#/api/system/role';
 import { $t } from '#/locales';
 
 import { useFormSchema } from '../data';
+import { getInheritRoles } from '#/api';
 
 const emits = defineEmits(['success']);
 
@@ -30,6 +35,9 @@ const [Form, formApi] = useVbenForm({
 
 const permissions = ref<DataNode[]>([]);
 const loadingPermissions = ref(false);
+
+const roleOptions = ref<{ label: string; value: number }[]>([]);
+const loadingRoles = ref(false);
 
 const id = ref();
 const [Drawer, drawerApi] = useVbenDrawer({
@@ -51,7 +59,7 @@ const [Drawer, drawerApi] = useVbenDrawer({
   async onOpenChange(isOpen) {
     if (isOpen) {
       const data = drawerApi.getData<SystemRoleApi.SystemRole>();
-      formApi.resetForm();
+      await formApi.resetForm();
 
       if (data) {
         formData.value = data;
@@ -66,7 +74,12 @@ const [Drawer, drawerApi] = useVbenDrawer({
       // Wait for Vue to flush DOM updates (form fields mounted)
       await nextTick();
       if (data) {
-        formApi.setValues(data);
+        await formApi.setValues(data);
+      }
+
+      // 加载角色选项
+      if (roleOptions.value.length === 0) {
+        await loadInheritRoleOptions(data.code);
       }
     }
   },
@@ -79,6 +92,40 @@ async function loadPermissions() {
     permissions.value = res as unknown as DataNode[];
   } finally {
     loadingPermissions.value = false;
+  }
+}
+
+// 加载角色选项, 并设置已继承的角色
+async function loadInheritRoleOptions(code: string) {
+  loadingRoles.value = true;
+  try {
+    // 获取所有可用角色
+    const roles = await getRoleAll();
+    roleOptions.value = roles.map((role: any) => ({
+      label: role.name,
+      value: role.code,
+      disabled: role.code === code, // 不可选中自己
+    }));
+
+    // 动态更新表单字段的选项
+    formApi.updateSchema([
+      {
+        fieldName: 'roleCodes',
+        componentProps: {
+          options: roleOptions.value,
+        },
+      },
+    ]);
+
+    // 修改
+    if (code) {
+      const inheritRoles = await getInheritRoles(code); // 获取 继承的角色
+      await formApi.setFieldValue('roleCodes', inheritRoles); // 选中 继承的角色
+    }
+  } catch (error) {
+    console.error('加载角色选项失败:', error);
+  } finally {
+    loadingRoles.value = false;
   }
 }
 

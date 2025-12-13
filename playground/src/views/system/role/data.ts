@@ -38,6 +38,13 @@ export function useFormSchema(): VbenFormSchema[] {
       label: $t('system.role.setPermissions'),
       modelPropName: 'modelValue',
     },
+    {
+      component: 'CheckboxGroup',
+      fieldName: 'roleCodes',
+      label: $t('system.role.setInheritRoles'),
+      defaultValue: [],
+      componentProps: {},
+    },
   ];
 }
 

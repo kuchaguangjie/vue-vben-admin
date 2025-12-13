@@ -6,11 +6,13 @@ export namespace SystemRoleApi {
   export interface SystemRole {
     [key: string]: any;
 
+    code: string;
     id: string;
     name: string;
     permissions: string[];
     remark?: string;
-    status: 0 | 1;
+    sort: number;
+    status: number;
   }
 }
 

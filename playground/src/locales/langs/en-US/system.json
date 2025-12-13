@@ -60,7 +60,8 @@
     "createTime": "Creation Time",
     "operation": "Operation",
     "permissions": "Permissions",
-    "setPermissions": "Menus"
+    "setPermissions": "Menus",
+    "setInheritRoles": "Inherit roles"
   },
   "user": {
     "name": "User",
