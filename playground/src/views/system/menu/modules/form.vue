@@ -18,7 +18,6 @@ import { useVbenForm, z } from '#/adapter/form';
 import {
   createMenu,
   getMenuTree,
-  isMenuNameExists,
   isMenuPathExists,
   SystemMenuApi,
   updateMenu,
@@ -53,7 +52,7 @@ const schema: VbenFormSchema[] = [
     rules: z
       .string()
       .min(2, $t('ui.formRules.minLength', [$t('system.menu.menuName'), 2]))
-      .max(30, $t('ui.formRules.maxLength', [$t('system.menu.menuName'), 30]))
+      .max(30, $t('ui.formRules.maxLength', [$t('system.menu.menuName'), 30])),
   },
   {
     component: 'ApiTreeSelect',
@@ -125,7 +124,7 @@ const schema: VbenFormSchema[] = [
           return value.startsWith('/');
         },
         $t('ui.formRules.startWith', [$t('system.menu.path'), '/']),
-      )
+      ),
   },
   {
     component: 'Input',
