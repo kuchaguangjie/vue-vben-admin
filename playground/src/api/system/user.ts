@@ -75,9 +75,9 @@ async function deleteUser(id: number) {
 export {
   createUser,
   deleteUser,
+  getInheritRoles,
   getUserList,
   getUserRoles,
   updateUser,
   updateUserStatus,
-  getInheritRoles,
 };

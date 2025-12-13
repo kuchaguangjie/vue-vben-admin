@@ -3,12 +3,7 @@ import type { DataNode } from 'ant-design-vue/es/tree';
 
 import type { Recordable } from '@vben/types';
 
-import {
-  createRole,
-  getRoleAll,
-  type SystemRoleApi,
-  updateRole,
-} from '#/api/system/role';
+import type { SystemRoleApi } from '#/api/system/role';
 
 import { computed, nextTick, ref } from 'vue';
 
@@ -18,11 +13,12 @@ import { IconifyIcon } from '@vben/icons';
 import { Spin } from 'ant-design-vue';
 
 import { useVbenForm } from '#/adapter/form';
+import { getInheritRoles } from '#/api';
 import { getMenuTree } from '#/api/system/menu';
+import { createRole, getRoleAll, updateRole } from '#/api/system/role';
 import { $t } from '#/locales';
 
 import { useFormSchema } from '../data';
-import { getInheritRoles } from '#/api';
 
 const emits = defineEmits(['success']);
 
