@@ -5,23 +5,21 @@ import type {
   OnActionClickParams,
   VxeTableGridOptions,
 } from '#/adapter/vxe-table';
-import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import {
-  deleteRole,
-  getRoleListWithMenu,
-  type SystemRoleApi,
-  updateRoleStatus,
-} from '#/api';
+import type { SystemRoleApi } from '#/api';
+import type { PageParams } from '#/api/request';
 
 import { Page, useVbenDrawer } from '@vben/common-ui';
 import { Plus } from '@vben/icons';
 
 import { Button, message, Modal } from 'ant-design-vue';
+
+import { useVbenVxeGrid } from '#/adapter/vxe-table';
+import { deleteRole, getRoleListWithMenu, updateRoleStatus } from '#/api';
+import { doPageQuery } from '#/api/request';
 import { $t } from '#/locales';
 
 import { useColumns, useGridFormSchema } from './data';
 import Form from './modules/form.vue';
-import { doPageQuery, type PageParams } from '#/api/request';
 
 const [FormDrawer, formDrawerApi] = useVbenDrawer({
   connectedComponent: Form,

@@ -1,15 +1,16 @@
 <script lang="ts" setup>
 import type { VxeTableGridOptions } from '#/adapter/vxe-table';
-import { getUserList, type SystemUserApi } from '#/api';
+import type { SystemUserApi } from '#/api';
+import type { PageParams } from '#/api/request';
 
 import { Page } from '@vben/common-ui';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
+import { doPageQuery } from '#/api/request';
 import { getLogList } from '#/api/system/log';
 import { $t } from '#/locales';
 
 import { useColumns, useGridFormSchema } from './data';
-import { doPageQuery, type PageParams } from '#/api/request';
 
 const [Grid] = useVbenVxeGrid({
   formOptions: {
