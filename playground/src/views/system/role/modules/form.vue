@@ -18,7 +18,13 @@ import { getMenuTree } from '#/api/system/menu';
 import { createRole, getRoleAll, updateRole } from '#/api/system/role';
 import { $t } from '#/locales';
 
-import { useFormSchema } from '../data';
+import {
+  useFormSchema,
+  useFormSchemaExtraEdit,
+  useFormSchemaExtraNew,
+  useFormSchemaRemoveEdit,
+  useFormSchemaRemoveNew,
+} from '../data';
 
 const emits = defineEmits(['success']);
 
@@ -57,7 +63,8 @@ const [Drawer, drawerApi] = useVbenDrawer({
       const data = drawerApi.getData<SystemRoleApi.SystemRole>();
       await formApi.resetForm();
 
-      if (data) {
+      const isEdit = data && data.id;
+      if (isEdit) {
         formData.value = data;
         id.value = data.id;
       } else {
@@ -69,13 +76,21 @@ const [Drawer, drawerApi] = useVbenDrawer({
       }
       // Wait for Vue to flush DOM updates (form fields mounted)
       await nextTick();
-      if (data) {
+      if (isEdit) {
         await formApi.setValues(data);
       }
 
       // 加载角色选项
       if (roleOptions.value.length === 0) {
         await loadInheritRoleOptions(data.code);
+      }
+
+      if (isEdit) {
+        formApi.updateSchema(useFormSchemaExtraEdit());
+        await formApi.removeSchemaByFields(useFormSchemaRemoveEdit());
+      } else {
+        formApi.updateSchema(useFormSchemaExtraNew());
+        await formApi.removeSchemaByFields(useFormSchemaRemoveNew());
       }
     }
   },

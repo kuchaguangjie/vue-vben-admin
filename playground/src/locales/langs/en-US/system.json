@@ -53,7 +53,7 @@
     "title": "Role Management",
     "list": "Role List",
     "name": "Role",
-    "roleName": "Role Name",
+    "code": "Code",
     "id": "Role ID",
     "status": "Status",
     "remark": "Remark",

@@ -52,7 +52,8 @@ const [Drawer, drawerApi] = useVbenDrawer({
       const data = drawerApi.getData<SystemUserApi.SystemUser>();
       await formApi.resetForm();
 
-      if (data) {
+      const isEdit = data && data.id;
+      if (isEdit) {
         formData.value = data;
         id.value = data.id;
       } else {
@@ -61,7 +62,7 @@ const [Drawer, drawerApi] = useVbenDrawer({
 
       // Wait for Vue to flush DOM updates (form fields mounted)
       await nextTick();
-      if (data) {
+      if (isEdit) {
         await formApi.setValues(data);
       }
 
@@ -70,7 +71,6 @@ const [Drawer, drawerApi] = useVbenDrawer({
         await loadRoleOptions(data.username);
       }
 
-      const isEdit = data && data.id;
       if (isEdit) {
         formApi.updateSchema(useFormSchemaExtraEdit());
         await formApi.removeSchemaByFields(useFormSchemaRemoveEdit());

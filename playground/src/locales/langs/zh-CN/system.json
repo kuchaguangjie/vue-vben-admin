@@ -54,7 +54,7 @@
     "title": "角色管理",
     "list": "角色列表",
     "name": "角色",
-    "roleName": "角色名称",
+    "code": "编码",
     "id": "角色ID",
     "status": "状态",
     "remark": "备注",

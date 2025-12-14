@@ -1,7 +1,7 @@
 import type { VbenFormSchema } from '#/adapter/form';
+import { z } from '#/adapter/form';
 import type { OnActionClickFn, VxeTableGridOptions } from '#/adapter/vxe-table';
 import type { SystemRoleApi } from '#/api';
-
 import { $t } from '#/locales';
 
 export function useFormSchema(): VbenFormSchema[] {
@@ -9,8 +9,24 @@ export function useFormSchema(): VbenFormSchema[] {
     {
       component: 'Input',
       fieldName: 'name',
-      label: $t('system.role.roleName'),
+      label: $t('system.role.name'),
       rules: 'required',
+    },
+    {
+      component: 'Input',
+      fieldName: 'code',
+      label: $t('system.role.code'),
+      defaultValue: 'role_',
+      rules: z
+        .string()
+        .min(6, { message: '代码长度不能少于6个字符' })
+        .max(25, { message: '代码长度不能超过25个字符' })
+        .regex(/^role/, { message: '代码必须以 role_ 开头' }),
+      componentProps: {
+        placeholder: 'role_xxx',
+        maxlength: 25,
+        showCount: true,
+      },
     },
     {
       component: 'RadioGroup',
@@ -48,12 +64,39 @@ export function useFormSchema(): VbenFormSchema[] {
   ];
 }
 
+// single - edit - set fields
+export function useFormSchemaExtraEdit(): VbenFormSchema[] {
+  return [];
+}
+
+// single - new - add fields
+export function useFormSchemaExtraNew(): VbenFormSchema[] {
+  return [
+    {
+      component: 'Input',
+      fieldName: 'code',
+      label: $t('system.role.code'),
+      rules: 'required',
+    },
+  ];
+}
+
+// single - edit - remove fields
+export function useFormSchemaRemoveEdit(): string[] {
+  return ['code'];
+}
+
+// single - new - remove fields
+export function useFormSchemaRemoveNew(): string[] {
+  return [];
+}
+
 export function useGridFormSchema(): VbenFormSchema[] {
   return [
     {
       component: 'Input',
       fieldName: 'name',
-      label: $t('system.role.roleName'),
+      label: $t('system.role.name'),
     },
     { component: 'Input', fieldName: 'id', label: $t('system.role.id') },
     {
@@ -88,7 +131,7 @@ export function useColumns<T = SystemRoleApi.SystemRole>(
   return [
     {
       field: 'name',
-      title: $t('system.role.roleName'),
+      title: $t('system.role.name'),
       width: 200,
     },
     {
