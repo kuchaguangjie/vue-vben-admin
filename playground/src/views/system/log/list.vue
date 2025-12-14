@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import type { VxeTableGridOptions } from '#/adapter/vxe-table';
-import type { SystemUserApi } from '#/api';
+import { getUserList, type SystemUserApi } from '#/api';
 
 import { Page } from '@vben/common-ui';
 
@@ -9,6 +9,7 @@ import { getLogList } from '#/api/system/log';
 import { $t } from '#/locales';
 
 import { useColumns, useGridFormSchema } from './data';
+import { doPageQuery, type PageParams } from '#/api/request';
 
 const [Grid] = useVbenVxeGrid({
   formOptions: {
@@ -22,13 +23,8 @@ const [Grid] = useVbenVxeGrid({
     keepSource: true,
     proxyConfig: {
       ajax: {
-        query: async ({ page }, formValues) => {
-          return await getLogList({
-            page: page.currentPage,
-            pageSize: page.pageSize,
-            ...formValues,
-          });
-        },
+        query: async (params: PageParams, formValues) =>
+          await doPageQuery(getLogList, params, formValues),
       },
     },
     rowConfig: {

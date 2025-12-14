@@ -3,6 +3,8 @@
  */
 import type { AxiosResponseHeaders, RequestClientOptions } from '@vben/request';
 
+import type { Recordable } from '@vben-core/typings';
+
 import { useAppConfig } from '@vben/hooks';
 import { preferences } from '@vben/preferences';
 import {
@@ -17,7 +19,6 @@ import { cloneDeep } from '@vben/utils';
 import { message } from 'ant-design-vue';
 import JSONBigInt from 'json-bigint';
 
-import { getRoleListWithMenu } from '#/api/system';
 import { useAuthStore } from '#/store';
 
 import { refreshTokenApi } from './core';
@@ -123,17 +124,20 @@ export const requestClient = createRequestClient(apiURL, {
 
 export const baseRequestClient = new RequestClient({ baseURL: apiURL });
 
-/*
-export interface QueryParams {
-  [key: string]: any;
-
+// 通用 分页查询 - 分页/排序 参数.
+export interface PageParams {
   page: any;
   sort?: any;
 }
 
-export async function doQuery(queryFunc: any, pageParam: QueryParams, formValues: any) {
-  const { page, sort } = pageParam;
-  return await queryFunc({
+// 通用 分页查询.
+export async function doPageQuery(
+  func: (r: Recordable<any>) => Promise<any>,
+  pageParams: PageParams,
+  formValues: any,
+) {
+  const { page, sort } = pageParams;
+  return func({
     page: page.currentPage,
     pageSize: page.pageSize,
     sortBy: sort.field,
@@ -141,4 +145,3 @@ export async function doQuery(queryFunc: any, pageParam: QueryParams, formValues
     ...formValues,
   });
 }
-*/

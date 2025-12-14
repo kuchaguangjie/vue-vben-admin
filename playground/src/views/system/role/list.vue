@@ -8,7 +8,7 @@ import type {
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import {
   deleteRole,
-  getLogList, getRoleListWithMenu,
+  getRoleListWithMenu,
   type SystemRoleApi,
   updateRoleStatus,
 } from '#/api';
@@ -21,6 +21,7 @@ import { $t } from '#/locales';
 
 import { useColumns, useGridFormSchema } from './data';
 import Form from './modules/form.vue';
+import { doPageQuery, type PageParams } from '#/api/request';
 
 const [FormDrawer, formDrawerApi] = useVbenDrawer({
   connectedComponent: Form,
@@ -39,15 +40,8 @@ const [Grid, gridApi] = useVbenVxeGrid({
     keepSource: true,
     proxyConfig: {
       ajax: {
-        query: async ({ page, sort }, formValues) => {
-          return await getRoleListWithMenu({
-            page: page.currentPage,
-            pageSize: page.pageSize,
-            sortBy: sort.field,
-            sortDesc: sort.order && sort.order === 'desc',
-            ...formValues,
-          });
-        },
+        query: async (params: PageParams, formValues) =>
+          await doPageQuery(getRoleListWithMenu, params, formValues),
       },
     },
     rowConfig: {

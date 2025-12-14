@@ -5,7 +5,8 @@ import type {
   OnActionClickParams,
   VxeTableGridOptions,
 } from '#/adapter/vxe-table';
-import { getLogList, getUserList, type SystemUserApi } from '#/api';
+import type { SystemUserApi } from '#/api';
+import type { PageParams } from '#/api/request';
 
 import { Page, useVbenDrawer } from '@vben/common-ui';
 import { Plus } from '@vben/icons';
@@ -13,7 +14,8 @@ import { Plus } from '@vben/icons';
 import { Button, message, Modal } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import { deleteUser, updateUserStatus } from '#/api';
+import { deleteUser, getUserList, updateUserStatus } from '#/api';
+import { doPageQuery } from '#/api/request';
 import { $t } from '#/locales';
 
 import { useColumns, useGridFormSchema } from './data';
@@ -36,16 +38,9 @@ const [Grid, gridApi] = useVbenVxeGrid({
     keepSource: true,
     proxyConfig: {
       ajax: {
-        query: async ({ page, sort }, formValues) => {
-          return await getUserList({
-            page: page.currentPage,
-            pageSize: page.pageSize,
-            sortBy: sort.field,
-            sortDesc: sort.order && sort.order === 'desc',
-            ...formValues,
-          });
-        },
-      }
+        query: async (params: PageParams, formValues) =>
+          await doPageQuery(getUserList, params, formValues),
+      },
     },
     rowConfig: {
       keyField: 'id',
