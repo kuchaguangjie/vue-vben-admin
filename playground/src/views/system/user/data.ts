@@ -194,10 +194,15 @@ export function useColumns<T = SystemUserApi.SystemUser>(
     },
     {
       field: 'createdAt',
-      title: $t('system.user.createdAt'),
+      title: $t('common.createdAt'),
       width: 160,
-      sortable: true,
       formatter: ({ cellValue }) => formatBackendTime(cellValue), // 时间格式转换
+      sortable: true,
+    },
+    {
+      field: 'createdBy',
+      title: $t('common.createdBy'),
+      width: 100,
     },
     {
       align: 'center',

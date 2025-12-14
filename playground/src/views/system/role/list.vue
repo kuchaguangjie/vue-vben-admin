@@ -5,19 +5,18 @@ import type {
   OnActionClickParams,
   VxeTableGridOptions,
 } from '#/adapter/vxe-table';
-import type { SystemRoleApi } from '#/api';
+import { useVbenVxeGrid } from '#/adapter/vxe-table';
+import { deleteRole, type SystemRoleApi, updateRole } from '#/api';
 
 import { Page, useVbenDrawer } from '@vben/common-ui';
 import { Plus } from '@vben/icons';
 
 import { Button, message, Modal } from 'ant-design-vue';
-
-import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import { deleteRole, getRoleListWithMenu, updateRole } from '#/api';
 import { $t } from '#/locales';
 
 import { useColumns, useGridFormSchema } from './data';
 import Form from './modules/form.vue';
+import { query } from '#/api/request';
 
 const [FormDrawer, formDrawerApi] = useVbenDrawer({
   connectedComponent: Form,
@@ -34,17 +33,7 @@ const [Grid, gridApi] = useVbenVxeGrid({
     columns: useColumns(onActionClick, onStatusChange),
     height: 'auto',
     keepSource: true,
-    proxyConfig: {
-      ajax: {
-        query: async ({ page }, formValues) => {
-          return await getRoleListWithMenu({
-            page: page.currentPage,
-            pageSize: page.pageSize,
-            ...formValues,
-          });
-        },
-      },
-    },
+    proxyConfig: { ajax: { query } },
     rowConfig: {
       keyField: 'id',
     },
@@ -55,6 +44,19 @@ const [Grid, gridApi] = useVbenVxeGrid({
       refresh: true,
       search: true,
       zoom: true,
+    },
+    sortConfig: {
+      remote: true, // 远程排序
+      trigger: 'default', // 点击表头触发
+      orders: ['asc', 'desc', null], // 排序顺序
+    },
+    // 启用远程模式
+    remote: {
+      sort: true, // 远程排序
+    },
+    // 排序变化事件
+    onSortChange() {
+      gridApi.query();
     },
   } as VxeTableGridOptions<SystemRoleApi.SystemRole>,
 });

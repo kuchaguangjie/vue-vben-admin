@@ -3,6 +3,7 @@ import { z } from '#/adapter/form';
 import type { OnActionClickFn, VxeTableGridOptions } from '#/adapter/vxe-table';
 import type { SystemRoleApi } from '#/api';
 import { $t } from '#/locales';
+import { formatBackendTime } from '#/utils/valueFormat';
 
 export function useFormSchema(): VbenFormSchema[] {
   return [
@@ -130,14 +131,22 @@ export function useColumns<T = SystemRoleApi.SystemRole>(
 ): VxeTableGridOptions['columns'] {
   return [
     {
+      field: 'id',
+      title: $t('system.role.id'),
+      width: 90,
+      sortable: true,
+    },
+    {
       field: 'name',
       title: $t('system.role.name'),
       width: 200,
+      sortable: true,
     },
     {
-      field: 'id',
-      title: $t('system.role.id'),
+      field: 'code',
+      title: $t('system.role.code'),
       width: 200,
+      sortable: true,
     },
     {
       cellRender: {
@@ -147,16 +156,24 @@ export function useColumns<T = SystemRoleApi.SystemRole>(
       field: 'status',
       title: $t('system.role.status'),
       width: 100,
+      sortable: true,
     },
     {
       field: 'remark',
-      minWidth: 100,
+      minWidth: 150,
       title: $t('system.role.remark'),
     },
     {
-      field: 'createTime',
-      title: $t('system.role.createTime'),
-      width: 200,
+      field: 'createdAt',
+      title: $t('common.createdAt'),
+      width: 160,
+      formatter: ({ cellValue }) => formatBackendTime(cellValue), // 时间格式转换
+      sortable: true,
+    },
+    {
+      field: 'createdBy',
+      title: $t('common.createdBy'),
+      width: 100,
     },
     {
       align: 'center',

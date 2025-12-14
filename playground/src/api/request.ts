@@ -2,15 +2,15 @@
  * 该文件可自行根据业务逻辑进行调整
  */
 import type { AxiosResponseHeaders, RequestClientOptions } from '@vben/request';
-
-import { useAppConfig } from '@vben/hooks';
-import { preferences } from '@vben/preferences';
 import {
   authenticateResponseInterceptor,
   defaultResponseInterceptor,
   errorMessageResponseInterceptor,
   RequestClient,
 } from '@vben/request';
+
+import { useAppConfig } from '@vben/hooks';
+import { preferences } from '@vben/preferences';
 import { useAccessStore } from '@vben/stores';
 import { cloneDeep } from '@vben/utils';
 
@@ -20,6 +20,7 @@ import JSONBigInt from 'json-bigint';
 import { useAuthStore } from '#/store';
 
 import { refreshTokenApi } from './core';
+import { getRoleListWithMenu } from '#/api/system';
 
 const { apiURL } = useAppConfig(import.meta.env, import.meta.env.PROD);
 
@@ -122,8 +123,20 @@ export const requestClient = createRequestClient(apiURL, {
 
 export const baseRequestClient = new RequestClient({ baseURL: apiURL });
 
-export interface PageFetchParams {
+export interface QueryParams {
   [key: string]: any;
-  pageNo?: number;
-  pageSize?: number;
+
+  page: any;
+  sort?: any;
+}
+
+export async function query(pageParam: QueryParams, formValues: any) {
+  const { page, sort } = pageParam;
+  return await getRoleListWithMenu({
+    page: page.currentPage,
+    pageSize: page.pageSize,
+    sortBy: sort.field,
+    sortDesc: sort.order && sort.order === 'desc',
+    ...formValues,
+  });
 }

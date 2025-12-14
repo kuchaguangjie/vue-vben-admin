@@ -13,11 +13,11 @@ import { Page, useVbenDrawer } from '@vben/common-ui';
 import { Plus } from '@vben/icons';
 
 import { Button, message, Modal } from 'ant-design-vue';
-import { getUserList } from '#/api/system/user';
 import { $t } from '#/locales';
 
 import { useColumns, useGridFormSchema } from './data';
 import Form from './modules/form.vue';
+import { query } from '#/api/request';
 
 const [FormDrawer, formDrawerApi] = useVbenDrawer({
   connectedComponent: Form,
@@ -34,19 +34,7 @@ const [Grid, gridApi] = useVbenVxeGrid({
     columns: useColumns(onActionClick, onStatusChange),
     height: 'auto',
     keepSource: true,
-    proxyConfig: {
-      ajax: {
-        query: async ({ page, sort }, formValues) => {
-          return await getUserList({
-            page: page.currentPage,
-            pageSize: page.pageSize,
-            sortBy: sort.field,
-            sortDesc: sort.order && sort.order === 'desc',
-            ...formValues,
-          });
-        },
-      },
-    },
+    proxyConfig: { ajax: { query } },
     rowConfig: {
       keyField: 'id',
     },
