@@ -16,19 +16,12 @@ export function useFormSchema(): VbenFormSchema[] {
     {
       component: 'Input',
       fieldName: 'code',
-      label: $t('system.role.code'),
-      defaultValue: 'role_',
-      rules: z
-        .string()
-        .min(6, { message: '代码长度不能少于6个字符' })
-        .max(25, { message: '代码长度不能超过25个字符' })
-        .regex(/^role/, { message: '代码必须以 role_ 开头' }),
-      componentProps: {
-        placeholder: 'role_xxx',
-        maxlength: 25,
-        showCount: true,
-      },
     },
+    {
+      component: 'Input',
+      fieldName: 'version',
+    },
+
     {
       component: 'RadioGroup',
       componentProps: {
@@ -67,7 +60,17 @@ export function useFormSchema(): VbenFormSchema[] {
 
 // single - edit - set fields
 export function useFormSchemaExtraEdit(): VbenFormSchema[] {
-  return [];
+  return [
+    {
+      component: 'Input',
+      fieldName: 'version',
+      label: '', // 空标签使其不显示
+      componentProps: {
+        style: { display: 'none' }, // 隐藏输入框
+        disabled: true, // 使其不可编辑
+      },
+    },
+  ];
 }
 
 // single - new - add fields
@@ -77,7 +80,17 @@ export function useFormSchemaExtraNew(): VbenFormSchema[] {
       component: 'Input',
       fieldName: 'code',
       label: $t('system.role.code'),
-      rules: 'required',
+      defaultValue: 'role_',
+      rules: z
+        .string()
+        .min(6, { message: '代码长度不能少于6个字符' })
+        .max(25, { message: '代码长度不能超过25个字符' })
+        .regex(/^role/, { message: '代码必须以 role_ 开头' }),
+      componentProps: {
+        placeholder: 'role_xxx',
+        maxlength: 25,
+        showCount: true,
+      },
     },
   ];
 }
@@ -89,7 +102,7 @@ export function useFormSchemaRemoveEdit(): string[] {
 
 // single - new - remove fields
 export function useFormSchemaRemoveNew(): string[] {
-  return [];
+  return ['version'];
 }
 
 export function useGridFormSchema(): VbenFormSchema[] {

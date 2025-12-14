@@ -5,19 +5,19 @@ import type {
   OnActionClickParams,
   VxeTableGridOptions,
 } from '#/adapter/vxe-table';
-import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import type { SystemUserApi } from '#/api';
-import { deleteUser, updateUserStatus } from '#/api';
+import { getLogList, getUserList, type SystemUserApi } from '#/api';
 
 import { Page, useVbenDrawer } from '@vben/common-ui';
 import { Plus } from '@vben/icons';
 
 import { Button, message, Modal } from 'ant-design-vue';
+
+import { useVbenVxeGrid } from '#/adapter/vxe-table';
+import { deleteUser, updateUserStatus } from '#/api';
 import { $t } from '#/locales';
 
 import { useColumns, useGridFormSchema } from './data';
 import Form from './modules/form.vue';
-import { query } from '#/api/request';
 
 const [FormDrawer, formDrawerApi] = useVbenDrawer({
   connectedComponent: Form,
@@ -34,7 +34,19 @@ const [Grid, gridApi] = useVbenVxeGrid({
     columns: useColumns(onActionClick, onStatusChange),
     height: 'auto',
     keepSource: true,
-    proxyConfig: { ajax: { query } },
+    proxyConfig: {
+      ajax: {
+        query: async ({ page, sort }, formValues) => {
+          return await getUserList({
+            page: page.currentPage,
+            pageSize: page.pageSize,
+            sortBy: sort.field,
+            sortDesc: sort.order && sort.order === 'desc',
+            ...formValues,
+          });
+        },
+      }
+    },
     rowConfig: {
       keyField: 'id',
     },

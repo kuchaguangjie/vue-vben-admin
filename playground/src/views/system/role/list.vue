@@ -6,7 +6,12 @@ import type {
   VxeTableGridOptions,
 } from '#/adapter/vxe-table';
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import { deleteRole, type SystemRoleApi, updateRole } from '#/api';
+import {
+  deleteRole,
+  getLogList, getRoleListWithMenu,
+  type SystemRoleApi,
+  updateRoleStatus,
+} from '#/api';
 
 import { Page, useVbenDrawer } from '@vben/common-ui';
 import { Plus } from '@vben/icons';
@@ -16,7 +21,6 @@ import { $t } from '#/locales';
 
 import { useColumns, useGridFormSchema } from './data';
 import Form from './modules/form.vue';
-import { query } from '#/api/request';
 
 const [FormDrawer, formDrawerApi] = useVbenDrawer({
   connectedComponent: Form,
@@ -33,7 +37,19 @@ const [Grid, gridApi] = useVbenVxeGrid({
     columns: useColumns(onActionClick, onStatusChange),
     height: 'auto',
     keepSource: true,
-    proxyConfig: { ajax: { query } },
+    proxyConfig: {
+      ajax: {
+        query: async ({ page, sort }, formValues) => {
+          return await getRoleListWithMenu({
+            page: page.currentPage,
+            pageSize: page.pageSize,
+            sortBy: sort.field,
+            sortDesc: sort.order && sort.order === 'desc',
+            ...formValues,
+          });
+        },
+      },
+    },
     rowConfig: {
       keyField: 'id',
     },
@@ -113,7 +129,7 @@ async function onStatusChange(
       `你要将${row.name}的状态切换为 【${status[newStatus.toString()]}】 吗？`,
       `切换状态`,
     );
-    await updateRole(row.id, { status: newStatus });
+    await updateRoleStatus({ id: row.id, status: newStatus });
     return true;
   } catch {
     return false;

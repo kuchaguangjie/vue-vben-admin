@@ -42,15 +42,15 @@ export function useColumns(): VxeTableGridOptions['columns'] {
       formatter: ({ cellValue }) => formatJsonObj(cellValue), // json -> string
     },
     {
-      field: 'createdBy',
-      title: $t('system.log.createdBy'),
-      width: 150,
-    },
-    {
       field: 'createdAt',
       title: $t('system.log.createdAt'),
       width: 160,
       formatter: ({ cellValue }) => formatBackendTime(cellValue), // 时间格式转换
+    },
+    {
+      field: 'createdBy',
+      title: $t('system.log.createdBy'),
+      width: 150,
     },
   ];
 }

@@ -1,5 +1,7 @@
 import type { Recordable } from '@vben/types';
 
+import type { CommonType } from '#/api';
+
 import { requestClient } from '#/api/request';
 
 export namespace SystemRoleApi {
@@ -7,7 +9,7 @@ export namespace SystemRoleApi {
     [key: string]: any;
 
     code: string;
-    id: string;
+    id: number;
     name: string;
     permissions: string[];
     remark?: string;
@@ -55,6 +57,14 @@ async function updateRole(
 }
 
 /**
+ * 更新角色状态
+ * @param data 角色数据
+ */
+async function updateRoleStatus(data: CommonType.UpdateStatus) {
+  return requestClient.post(`/system/role/updateStatus`, data);
+}
+
+/**
  * 删除角色
  * @param id 角色 ID
  */
@@ -62,4 +72,11 @@ async function deleteRole(id: number) {
   return requestClient.delete(`/system/role/${id}`);
 }
 
-export { createRole, deleteRole, getRoleAll, getRoleListWithMenu, updateRole };
+export {
+  createRole,
+  deleteRole,
+  getRoleAll,
+  getRoleListWithMenu,
+  updateRole,
+  updateRoleStatus,
+};
