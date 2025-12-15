@@ -1,8 +1,7 @@
 import type { VbenFormSchema } from '#/adapter/form';
+import { z } from '#/adapter/form';
 import type { OnActionClickFn, VxeTableGridOptions } from '#/adapter/vxe-table';
 import type { SystemRoleApi } from '#/api';
-
-import { z } from '#/adapter/form';
 import { $t } from '#/locales';
 import { formatBackendTime } from '#/utils/valueFormat';
 
@@ -112,6 +111,9 @@ export function useGridFormSchema(): VbenFormSchema[] {
       component: 'Input',
       fieldName: 'name',
       label: $t('system.role.name'),
+      componentProps: {
+        placeholder: $t('common.prefix'),
+      },
     },
     { component: 'Input', fieldName: 'id', label: $t('system.role.id') },
     {
@@ -127,14 +129,13 @@ export function useGridFormSchema(): VbenFormSchema[] {
       label: $t('system.role.status'),
     },
     {
-      component: 'Input',
-      fieldName: 'remark',
-      label: $t('system.role.remark'),
-    },
-    {
       component: 'RangePicker',
-      fieldName: 'createTime',
-      label: $t('system.role.createTime'),
+      fieldName: 'createdAtRangeMs',
+      label: $t('common.createdAt'),
+      componentProps: {
+        valueFormat: 'x', // in ms
+        showTime: true, // 选择 时/分/秒
+      },
     },
   ];
 }

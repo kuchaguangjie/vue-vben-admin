@@ -145,7 +145,7 @@ export function useGridFormSchema(): VbenFormSchema[] {
     {
       component: 'RangePicker',
       fieldName: 'createdAtRangeMs',
-      label: $t('system.user.createdAt'),
+      label: $t('common.createdAt'),
       componentProps: {
         valueFormat: 'x', // in ms
         showTime: true, // 选择 时/分/秒

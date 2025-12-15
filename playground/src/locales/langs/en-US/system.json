@@ -52,12 +52,11 @@
   "role": {
     "title": "Role Management",
     "list": "Role List",
-    "name": "Role",
+    "name": "Name",
     "code": "Code",
     "id": "Role ID",
     "status": "Status",
     "remark": "Remark",
-    "createTime": "Creation Time",
     "operation": "Operation",
     "permissions": "Permissions",
     "setPermissions": "Menus",
