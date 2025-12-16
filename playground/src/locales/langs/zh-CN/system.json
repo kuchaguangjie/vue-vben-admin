@@ -50,6 +50,18 @@
     "typeLink": "外链",
     "typeMenu": "菜单"
   },
+  "api": {
+    "titleNew": "api",
+    "title": "api管理",
+    "list": "api列表",
+    "path": "路径",
+    "action": "api操作",
+    "id": "api ID",
+    "status": "状态",
+    "remark": "备注",
+    "pid": "PID",
+    "operation": "操作"
+  },
   "role": {
     "title": "角色管理",
     "list": "角色列表",
@@ -61,7 +73,7 @@
     "operation": "操作",
     "permissions": "权限",
     "setPermissions": "菜单",
-    "setInheritRoles": "角色继承"
+    "setInheritRoles": "角色继承 (api)"
   },
   "user": {
     "name": "用户",

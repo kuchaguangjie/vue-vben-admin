@@ -1,3 +1,4 @@
+export * from './api';
 export * from './dept';
 export * from './log';
 export * from './menu';

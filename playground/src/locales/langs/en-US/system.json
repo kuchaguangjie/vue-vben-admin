@@ -49,6 +49,18 @@
     },
     "badgeVariants": "Badge Style"
   },
+  "api": {
+    "titleNew": "api",
+    "title": "api Management",
+    "list": "api List",
+    "path": "Path",
+    "action": "api Action",
+    "id": "api ID",
+    "status": "Status",
+    "remark": "Remark",
+    "pid": "PID",
+    "operation": "Operation"
+  },
   "role": {
     "title": "Role Management",
     "list": "Role List",
@@ -60,7 +72,7 @@
     "operation": "Operation",
     "permissions": "Permissions",
     "setPermissions": "Menus",
-    "setInheritRoles": "Inherit roles"
+    "setInheritRoles": "Inherit roles (api)"
   },
   "user": {
     "name": "User",
