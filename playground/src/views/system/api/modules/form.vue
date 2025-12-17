@@ -1,20 +1,12 @@
 <script lang="ts" setup>
-import type { DataNode } from 'ant-design-vue/es/tree';
-
-import type { Recordable } from '@vben/types';
-
 import type { SystemApiApi } from '#/api/system/api';
 
 import { computed, nextTick, ref } from 'vue';
 
-import { Tree, useVbenDrawer } from '@vben/common-ui';
-import { IconifyIcon } from '@vben/icons';
-
-import { Spin } from 'ant-design-vue';
+import { useVbenDrawer } from '@vben/common-ui';
 
 import { useVbenForm } from '#/adapter/form';
-import { createApi, getApiAll, updateApi } from '#/api/system/api';
-import { getMenuTree } from '#/api/system/menu';
+import { createApi, updateApi } from '#/api/system/api';
 import { $t } from '#/locales';
 
 import {
@@ -33,12 +25,6 @@ const [Form, formApi] = useVbenForm({
   schema: useFormSchema(),
   showDefaultActions: false,
 });
-
-const permissions = ref<DataNode[]>([]);
-const loadingPermissions = ref(false);
-
-const apiOptions = ref<{ label: string; value: number }[]>([]);
-const loadingApis = ref(false);
 
 const id = ref();
 const [Drawer, drawerApi] = useVbenDrawer({
@@ -70,18 +56,10 @@ const [Drawer, drawerApi] = useVbenDrawer({
         id.value = undefined;
       }
 
-      if (permissions.value.length === 0) {
-        await loadPermissions();
-      }
       // Wait for Vue to flush DOM updates (form fields mounted)
       await nextTick();
       if (isEdit) {
         await formApi.setValues(data);
-      }
-
-      // 加载角色选项
-      if (apiOptions.value.length === 0) {
-        await loadInheritApiOptions(data.code);
       }
 
       if (isEdit) {
@@ -95,105 +73,15 @@ const [Drawer, drawerApi] = useVbenDrawer({
   },
 });
 
-async function loadPermissions() {
-  loadingPermissions.value = true;
-  try {
-    const res = await getMenuTree();
-    permissions.value = res as unknown as DataNode[];
-  } finally {
-    loadingPermissions.value = false;
-  }
-}
-
-// 加载角色选项, 并设置已继承的角色
-async function loadInheritApiOptions(code: string) {
-  loadingApis.value = true;
-  try {
-    // 获取所有可用角色
-    const apis = await getApiAll();
-    apiOptions.value = apis.map((api: any) => ({
-      label: api.name,
-      value: api.code,
-      disabled: api.code === code, // 不可选中自己
-    }));
-
-    // 动态更新表单字段的选项
-    formApi.updateSchema([
-      {
-        fieldName: 'apiCodes',
-        componentProps: {
-          options: apiOptions.value,
-        },
-      },
-    ]);
-
-    // 修改
-    if (code) {
-      const inheritApis = await getInheritApis(code); // 获取 继承的角色
-      await formApi.setFieldValue('apiCodes', inheritApis); // 选中 继承的角色
-    }
-  } catch (error) {
-    console.error('加载角色选项失败:', error);
-  } finally {
-    loadingApis.value = false;
-  }
-}
-
 const getDrawerTitle = computed(() => {
   return formData.value?.id
-    ? $t('common.edit', $t('system.api.name'))
-    : $t('common.create', $t('system.api.name'));
+    ? $t('common.edit', $t('system.api.menuName'))
+    : $t('common.create', $t('system.api.menuName'));
 });
-
-function getNodeClass(node: Recordable<any>) {
-  const classes: string[] = [];
-  if (node.value?.type === 'button') {
-    classes.push('inline-flex');
-  }
-
-  return classes.join(' ');
-}
 </script>
 <template>
   <Drawer :title="getDrawerTitle">
-    <Form>
-      <template #permissions="slotProps">
-        <Spin :spinning="loadingPermissions" wrapper-class-name="w-full">
-          <Tree
-            :tree-data="permissions"
-            multiple
-            bordered
-            :default-expanded-level="2"
-            :get-node-class="getNodeClass"
-            v-bind="slotProps"
-            value-field="id"
-            label-field="meta.title"
-            icon-field="meta.icon"
-          >
-            <template #node="{ value }">
-              <IconifyIcon v-if="value.meta.icon" :icon="value.meta.icon" />
-              {{ $t(value.meta.title) }}
-            </template>
-          </Tree>
-        </Spin>
-      </template>
-    </Form>
+    <Form />
   </Drawer>
 </template>
-<style lang="css" scoped>
-:deep(.ant-tree-title) {
-  .tree-actions {
-    display: none;
-    margin-left: 20px;
-  }
-}
-
-:deep(.ant-tree-title:hover) {
-  .tree-actions {
-    display: flex;
-    flex: auto;
-    justify-content: flex-end;
-    margin-left: 20px;
-  }
-}
-</style>
+<style lang="css" scoped></style>

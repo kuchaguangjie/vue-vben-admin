@@ -50,7 +50,7 @@
     "badgeVariants": "Badge Style"
   },
   "api": {
-    "titleNew": "api",
+    "menuName": "api",
     "title": "api Management",
     "list": "api List",
     "path": "Path",
@@ -59,6 +59,8 @@
     "status": "Status",
     "remark": "Remark",
     "pid": "PID",
+    "typeApi": "api",
+    "typeDir": "dir",
     "operation": "Operation"
   },
   "role": {

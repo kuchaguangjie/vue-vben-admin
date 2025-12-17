@@ -20,6 +20,10 @@ export function useFormSchema(): VbenFormSchema[] {
       rules: 'required',
     },
     {
+      component: 'Select',
+      fieldName: 'type',
+    },
+    {
       component: 'Input',
       fieldName: 'version',
     },
@@ -69,12 +73,26 @@ export function useFormSchemaExtraEdit(): VbenFormSchema[] {
 
 // single - new - add fields
 export function useFormSchemaExtraNew(): VbenFormSchema[] {
-  return [];
+  return [
+    {
+      component: 'Select',
+      fieldName: 'type',
+      label: $t('common.type'),
+      componentProps: {
+        allowClear: true,
+        options: [
+          { label: $t('system.api.typeApi'), value: 0 },
+          { label: $t('system.api.typeDir'), value: 1 },
+        ],
+      },
+      rules: 'required',
+    },
+  ];
 }
 
 // single - edit - remove fields
 export function useFormSchemaRemoveEdit(): string[] {
-  return [];
+  return ['type'];
 }
 
 // single - new - remove fields
@@ -97,7 +115,20 @@ export function useGridFormSchema(): VbenFormSchema[] {
       fieldName: 'action',
       label: $t('system.api.action'),
     },
-    { component: 'Input', fieldName: 'id', label: $t('system.api.id') },
+    { component: 'InputNumber', fieldName: 'id', label: $t('system.api.id') },
+    { component: 'InputNumber', fieldName: 'pid', label: $t('system.api.pid') },
+    {
+      component: 'Select',
+      componentProps: {
+        allowClear: true,
+        options: [
+          { label: $t('system.api.typeApi'), value: 0 },
+          { label: $t('system.api.typeDir'), value: 1 },
+        ],
+      },
+      fieldName: 'type',
+      label: $t('common.type'),
+    },
     {
       component: 'Select',
       componentProps: {
@@ -142,7 +173,33 @@ export function useColumns<T = SystemApiApi.SystemApi>(
     {
       field: 'action',
       title: $t('system.api.action'),
-      width: 200,
+      width: 120,
+      sortable: true,
+    },
+    {
+      field: 'pid',
+      title: $t('system.api.pid'),
+      width: 90,
+      sortable: true,
+    },
+    {
+      field: 'type',
+      title: $t('common.type'),
+      width: 100,
+      formatter: ({ cellValue }) => {
+        let text: string = 'unknown';
+        switch (cellValue) {
+          case 0: {
+            text = $t('system.api.typeApi');
+            break;
+          }
+          case 1: {
+            text = $t('system.api.typeDir');
+            break;
+          }
+        }
+        return text;
+      },
       sortable: true,
     },
     {

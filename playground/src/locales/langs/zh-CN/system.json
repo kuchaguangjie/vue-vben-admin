@@ -51,7 +51,7 @@
     "typeMenu": "菜单"
   },
   "api": {
-    "titleNew": "api",
+    "menuName": "api",
     "title": "api管理",
     "list": "api列表",
     "path": "路径",
@@ -60,6 +60,8 @@
     "status": "状态",
     "remark": "备注",
     "pid": "PID",
+    "typeApi": "api",
+    "typeDir": "目录",
     "operation": "操作"
   },
   "role": {

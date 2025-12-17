@@ -163,7 +163,7 @@ function onCreate() {
       <template #toolbar-tools>
         <Button type="primary" @click="onCreate">
           <Plus class="size-5" />
-          {{ $t('ui.actionTitle.create', [$t('system.api.titleNew')]) }}
+          {{ $t('ui.actionTitle.create', [$t('system.api.menuName')]) }}
         </Button>
       </template>
     </Grid>

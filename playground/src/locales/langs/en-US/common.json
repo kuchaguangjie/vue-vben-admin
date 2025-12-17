@@ -1,5 +1,6 @@
 {
   "createdAt": "Created At",
   "createdBy": "Created By",
-  "prefix": "Prefix"
+  "prefix": "Prefix",
+  "type": "Type"
 }
