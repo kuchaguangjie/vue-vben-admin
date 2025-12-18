@@ -91,7 +91,7 @@ export namespace SystemMenuApi {
 }
 
 /**
- * 获取菜单数据列表
+ * 获取 菜单 tree
  */
 async function getMenuTree() {
   return requestClient.get<Array<SystemMenuApi.SystemMenu>>(

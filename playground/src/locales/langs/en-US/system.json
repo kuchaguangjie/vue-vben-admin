@@ -73,8 +73,9 @@
     "remark": "Remark",
     "operation": "Operation",
     "permissions": "Permissions",
+    "setInheritRoles": "Inherit roles (api)",
     "setPermissions": "Menus",
-    "setInheritRoles": "Inherit roles (api)"
+    "setApis": "Role APIs"
   },
   "user": {
     "name": "User",

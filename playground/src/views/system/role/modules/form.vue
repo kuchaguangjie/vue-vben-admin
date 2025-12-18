@@ -4,6 +4,7 @@ import type { DataNode } from 'ant-design-vue/es/tree';
 import type { Recordable } from '@vben/types';
 
 import type { SystemRoleApi } from '#/api/system/role';
+import { createRole, getRoleAll, updateRole } from '#/api/system/role';
 
 import { computed, nextTick, ref } from 'vue';
 
@@ -13,9 +14,8 @@ import { IconifyIcon } from '@vben/icons';
 import { Spin } from 'ant-design-vue';
 
 import { useVbenForm } from '#/adapter/form';
-import { getInheritRoles } from '#/api';
+import { getApiTree, getInheritRoles } from '#/api';
 import { getMenuTree } from '#/api/system/menu';
-import { createRole, getRoleAll, updateRole } from '#/api/system/role';
 import { $t } from '#/locales';
 
 import {
@@ -37,6 +37,9 @@ const [Form, formApi] = useVbenForm({
 
 const permissions = ref<DataNode[]>([]);
 const loadingPermissions = ref(false);
+
+const apis = ref<DataNode[]>([]);
+const loadingApis = ref(false);
 
 const roleOptions = ref<{ label: string; value: number }[]>([]);
 const loadingRoles = ref(false);
@@ -63,6 +66,7 @@ const [Drawer, drawerApi] = useVbenDrawer({
       const data = drawerApi.getData<SystemRoleApi.SystemRole>();
       await formApi.resetForm();
 
+      // 判断 new / edit 模式
       const isEdit = data && data.id;
       if (isEdit) {
         formData.value = data;
@@ -71,13 +75,20 @@ const [Drawer, drawerApi] = useVbenDrawer({
         id.value = undefined;
       }
 
+      // 加载 menu tree
       if (permissions.value.length === 0) {
         await loadPermissions();
       }
+      // 加载 api tree
+      if (apis.value.length === 0) {
+        await loadApis();
+      }
+
       // Wait for Vue to flush DOM updates (form fields mounted)
       await nextTick();
       if (isEdit) {
         await formApi.setValues(data);
+        await formApi.setFieldValue('apis', [1, 2, 3, 4, 5]); // 选中 已有的 api
       }
 
       // 加载角色选项
@@ -103,6 +114,16 @@ async function loadPermissions() {
     permissions.value = res as unknown as DataNode[];
   } finally {
     loadingPermissions.value = false;
+  }
+}
+
+async function loadApis() {
+  loadingApis.value = true;
+  try {
+    const res = await getApiTree();
+    apis.value = res as unknown as DataNode[];
+  } finally {
+    loadingApis.value = false;
   }
 }
 
@@ -174,6 +195,23 @@ function getNodeClass(node: Recordable<any>) {
             <template #node="{ value }">
               <IconifyIcon v-if="value.meta.icon" :icon="value.meta.icon" />
               {{ $t(value.meta.title) }}
+            </template>
+          </Tree>
+        </Spin>
+      </template>
+      <template #apis="slotProps">
+        <Spin :spinning="loadingApis" wrapper-class-name="w-full">
+          <Tree
+            :tree-data="apis"
+            multiple
+            bordered
+            :default-expanded-level="2"
+            :get-node-class="getNodeClass"
+            v-bind="slotProps"
+            value-field="id"
+          >
+            <template #node="{ value }">
+              {{ $t(value.path) }}
             </template>
           </Tree>
         </Spin>

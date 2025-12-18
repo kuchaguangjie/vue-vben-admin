@@ -74,8 +74,9 @@
     "remark": "备注",
     "operation": "操作",
     "permissions": "权限",
+    "setInheritRoles": "角色继承 (api)",
     "setPermissions": "菜单",
-    "setInheritRoles": "角色继承 (api)"
+    "setApis": "角色 APIs"
   },
   "user": {
     "name": "用户",

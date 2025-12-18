@@ -43,18 +43,25 @@ export function useFormSchema(): VbenFormSchema[] {
       label: $t('system.role.remark'),
     },
     {
-      component: 'Input',
-      fieldName: 'permissions',
-      formItemClass: 'items-start',
-      label: $t('system.role.setPermissions'),
-      modelPropName: 'modelValue',
-    },
-    {
       component: 'CheckboxGroup',
       fieldName: 'roleCodes',
       label: $t('system.role.setInheritRoles'),
       defaultValue: [],
       componentProps: {},
+    },
+    {
+      component: 'Input',
+      fieldName: 'apis',
+      formItemClass: 'items-start',
+      label: $t('system.role.setApis'),
+      modelPropName: 'modelValue',
+    },
+    {
+      component: 'Input',
+      fieldName: 'permissions',
+      formItemClass: 'items-start',
+      label: $t('system.role.setPermissions'),
+      modelPropName: 'modelValue',
     },
   ];
 }

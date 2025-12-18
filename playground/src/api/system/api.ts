@@ -1,6 +1,6 @@
 import type { Recordable } from '@vben/types';
 
-import type { CommonType } from '#/api';
+import { type CommonType, SystemMenuApi } from '#/api';
 
 import { requestClient } from '#/api/request';
 
@@ -25,6 +25,15 @@ async function getApiList(params: Recordable<any>) {
   return requestClient.get<Array<SystemApiApi.SystemApi>>('/system/api/page', {
     params,
   });
+}
+
+/**
+ * 获取 api tree
+ */
+async function getApiTree() {
+  return requestClient.get<Array<SystemApiApi.SystemApi>>(
+    '/system/api/tree',
+  );
 }
 
 /**
@@ -73,6 +82,7 @@ export {
   deleteApi,
   getApiAll,
   getApiList,
+  getApiTree,
   updateApi,
   updateApiStatus,
 };
