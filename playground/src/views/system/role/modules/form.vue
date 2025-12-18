@@ -4,7 +4,14 @@ import type { DataNode } from 'ant-design-vue/es/tree';
 import type { Recordable } from '@vben/types';
 
 import type { SystemApiApi } from '#/api';
+import { getApiTree, getInheritRoles } from '#/api';
 import type { SystemRoleApi } from '#/api/system/role';
+import {
+  createRole,
+  getRoleAll,
+  getRoleApis,
+  updateRole,
+} from '#/api/system/role';
 
 import { computed, nextTick, ref } from 'vue';
 
@@ -14,14 +21,7 @@ import { IconifyIcon } from '@vben/icons';
 import { Spin } from 'ant-design-vue';
 
 import { useVbenForm } from '#/adapter/form';
-import { getApiTree, getInheritRoles } from '#/api';
 import { getMenuTree } from '#/api/system/menu';
-import {
-  createRole,
-  getRoleAll,
-  getRoleApis,
-  updateRole,
-} from '#/api/system/role';
 import { $t } from '#/locales';
 
 import {
@@ -225,7 +225,7 @@ function getNodeClass(node: Recordable<any>) {
             value-field="id"
           >
             <template #node="{ value }">
-              {{ $t(value.path) }}
+              {{ $t(value.path) }} ({{ $t(value.action) }})
             </template>
           </Tree>
         </Spin>

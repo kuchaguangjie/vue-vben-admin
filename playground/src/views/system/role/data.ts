@@ -51,16 +51,16 @@ export function useFormSchema(): VbenFormSchema[] {
     },
     {
       component: 'Input',
-      fieldName: 'apis',
+      fieldName: 'permissions',
       formItemClass: 'items-start',
-      label: $t('system.role.setApis'),
+      label: $t('system.role.setPermissions'),
       modelPropName: 'modelValue',
     },
     {
       component: 'Input',
-      fieldName: 'permissions',
+      fieldName: 'apis',
       formItemClass: 'items-start',
-      label: $t('system.role.setPermissions'),
+      label: $t('system.role.setApis'),
       modelPropName: 'modelValue',
     },
   ];
