@@ -58,13 +58,6 @@ async function getUserRoles(username: string) {
 }
 
 /**
- * 获得角色 已继承的角色
- */
-async function getInheritRoles(code: string) {
-  return requestClient.get(`/system/role/getInheritRoles?code=${code}`);
-}
-
-/**
  * 删除用户
  * @param id 用户 ID
  */
@@ -75,7 +68,6 @@ async function deleteUser(id: number) {
 export {
   createUser,
   deleteUser,
-  getInheritRoles,
   getUserList,
   getUserRoles,
   updateUser,

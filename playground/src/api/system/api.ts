@@ -8,13 +8,14 @@ export namespace SystemApiApi {
   export interface SystemApi {
     [key: string]: any;
 
-    code: string;
+    action: string;
     id: number;
-    name: string;
-    permissions: string[];
+    path: string;
+    pid: number;
     remark?: string;
-    sort: number;
     status: number;
+    type: number;
+    version: number;
   }
 }
 

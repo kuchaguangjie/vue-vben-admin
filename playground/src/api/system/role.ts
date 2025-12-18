@@ -72,10 +72,26 @@ async function deleteRole(id: number) {
   return requestClient.delete(`/system/role/${id}`);
 }
 
+/**
+ * 获得角色 已继承的角色
+ */
+async function getInheritRoles(code: string) {
+  return requestClient.get(`/system/role/getInheritRoles?code=${code}`);
+}
+
+/**
+ * 获得角色 的 api
+ */
+async function getRoleApis(code: string) {
+  return requestClient.get(`/system/role/getRoleApis?code=${code}`);
+}
+
 export {
   createRole,
   deleteRole,
+  getInheritRoles,
   getRoleAll,
+  getRoleApis,
   getRoleListWithMenu,
   updateRole,
   updateRoleStatus,

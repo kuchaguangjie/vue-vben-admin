@@ -3,6 +3,7 @@ import type { DataNode } from 'ant-design-vue/es/tree';
 
 import type { Recordable } from '@vben/types';
 
+import type { SystemApiApi } from '#/api';
 import type { SystemRoleApi } from '#/api/system/role';
 
 import { computed, nextTick, ref } from 'vue';
@@ -15,7 +16,12 @@ import { Spin } from 'ant-design-vue';
 import { useVbenForm } from '#/adapter/form';
 import { getApiTree, getInheritRoles } from '#/api';
 import { getMenuTree } from '#/api/system/menu';
-import { createRole, getRoleAll, updateRole } from '#/api/system/role';
+import {
+  createRole,
+  getRoleAll,
+  getRoleApis,
+  updateRole,
+} from '#/api/system/role';
 import { $t } from '#/locales';
 
 import {
@@ -88,7 +94,7 @@ const [Drawer, drawerApi] = useVbenDrawer({
       await nextTick();
       if (isEdit) {
         await formApi.setValues(data);
-        await formApi.setFieldValue('apis', [1, 2, 3, 4, 5]); // 选中 已有的 api
+        await loadAndInitRoleApis(data.code); // load & init role's apis
       }
 
       // 加载角色选项
@@ -159,6 +165,14 @@ async function loadInheritRoleOptions(code: string) {
   } finally {
     loadingRoles.value = false;
   }
+}
+
+async function loadAndInitRoleApis(code: string) {
+  const roleApis = await getRoleApis(code); // 获取 角色的 api
+  await formApi.setFieldValue(
+    'apis',
+    roleApis.map((v: SystemApiApi.SystemApi) => v.id),
+  ); // 选中 已有的 api
 }
 
 const getDrawerTitle = computed(() => {
