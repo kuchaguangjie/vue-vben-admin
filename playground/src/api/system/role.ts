@@ -79,19 +79,11 @@ async function getInheritRoles(code: string) {
   return requestClient.get(`/system/role/getInheritRoles?code=${code}`);
 }
 
-/**
- * 获得角色 的 api
- */
-async function getRoleApis(code: string) {
-  return requestClient.get(`/system/role/getRoleApis?code=${code}`);
-}
-
 export {
   createRole,
   deleteRole,
   getInheritRoles,
   getRoleAll,
-  getRoleApis,
   getRoleListWithMenu,
   updateRole,
   updateRoleStatus,

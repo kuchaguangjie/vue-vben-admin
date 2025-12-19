@@ -3,7 +3,6 @@ import type { DataNode } from 'ant-design-vue/es/tree';
 
 import type { Recordable } from '@vben/types';
 
-import type { SystemApiApi } from '#/api';
 import type { SystemRoleApi } from '#/api/system/role';
 
 import { computed, nextTick, ref } from 'vue';
@@ -14,14 +13,9 @@ import { IconifyIcon } from '@vben/icons';
 import { Spin } from 'ant-design-vue';
 
 import { useVbenForm } from '#/adapter/form';
-import { getApiTree, getInheritRoles } from '#/api';
+import { getApiTree, getApiTreeForRole, getInheritRoles } from '#/api';
 import { getMenuTree } from '#/api/system/menu';
-import {
-  createRole,
-  getRoleAll,
-  getRoleApis,
-  updateRole,
-} from '#/api/system/role';
+import { createRole, getRoleAll, updateRole } from '#/api/system/role';
 import { $t } from '#/locales';
 
 import {
@@ -81,33 +75,34 @@ const [Drawer, drawerApi] = useVbenDrawer({
         id.value = undefined;
       }
 
-      // 加载 menu tree
-      if (permissions.value.length === 0) {
-        await loadPermissions();
-      }
-      // 加载 api tree
-      if (apis.value.length === 0) {
-        await loadApis();
-      }
-
-      // Wait for Vue to flush DOM updates (form fields mounted)
-      await nextTick();
-      if (isEdit) {
-        await formApi.setValues(data);
-        await loadAndInitRoleApis(data.code); // load & init role's apis
-      }
-
-      // 加载角色选项
-      if (roleOptions.value.length === 0) {
-        await loadInheritRoleOptions(data.code);
-      }
-
       if (isEdit) {
         formApi.updateSchema(useFormSchemaExtraEdit());
         await formApi.removeSchemaByFields(useFormSchemaRemoveEdit());
       } else {
         formApi.updateSchema(useFormSchemaExtraNew());
         await formApi.removeSchemaByFields(useFormSchemaRemoveNew());
+      }
+      // Wait for Vue to flush DOM updates (form fields mounted)
+      await nextTick();
+
+      // 加载 menu tree
+      if (permissions.value.length === 0) {
+        await loadPermissions();
+      }
+
+      if (isEdit) {
+        await formApi.setValues(data);
+        await loadApisForRole(data.code); // load & init role's apis
+      } else {
+        if (apis.value.length === 0) {
+          // 加载 api tree, new only
+          await loadApis();
+        }
+      }
+
+      // 加载角色选项
+      if (roleOptions.value.length === 0) {
+        await loadInheritRoleOptions(data.code);
       }
     }
   },
@@ -123,11 +118,24 @@ async function loadPermissions() {
   }
 }
 
+// for new, load api tree.
 async function loadApis() {
   loadingApis.value = true;
   try {
     const res = await getApiTree();
     apis.value = res as unknown as DataNode[];
+  } finally {
+    loadingApis.value = false;
+  }
+}
+
+// for edit, load api tree for role.
+async function loadApisForRole(code: string) {
+  loadingApis.value = true;
+  try {
+    const { topApis, treeIds } = await getApiTreeForRole(code); // 获取 api tree for 角色
+    apis.value = topApis as unknown as DataNode[];
+    await formApi.setFieldValue('apis', treeIds); // 选中 已有的 api
   } finally {
     loadingApis.value = false;
   }
@@ -165,14 +173,6 @@ async function loadInheritRoleOptions(code: string) {
   } finally {
     loadingRoles.value = false;
   }
-}
-
-async function loadAndInitRoleApis(code: string) {
-  const roleApis = await getRoleApis(code); // 获取 角色的 api
-  await formApi.setFieldValue(
-    'apis',
-    roleApis.map((v: SystemApiApi.SystemApi) => v.id),
-  ); // 选中 已有的 api
 }
 
 const getDrawerTitle = computed(() => {

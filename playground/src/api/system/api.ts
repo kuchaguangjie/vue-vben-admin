@@ -36,6 +36,20 @@ async function getApiTree() {
 }
 
 /**
+ * 获得 api tree & 角色 api ids (含 parent id).
+ */
+async function getApiTreeForRole(code: string) {
+  return requestClient.get(`/system/api/treeForRole?code=${code}`);
+}
+
+/**
+ * 获得角色 的 api
+ */
+async function getRoleApis(code: string) {
+  return requestClient.get(`/system/api/getRoleApis?code=${code}`);
+}
+
+/**
  * 获取api列表数据, 无 menu 信息;
  */
 async function getApiAll() {
@@ -82,6 +96,8 @@ export {
   getApiAll,
   getApiList,
   getApiTree,
+  getApiTreeForRole,
+  getRoleApis,
   updateApi,
   updateApiStatus,
 };
