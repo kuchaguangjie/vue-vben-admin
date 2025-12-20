@@ -4,6 +4,7 @@ import type { DataNode } from 'ant-design-vue/es/tree';
 import type { Recordable } from '@vben/types';
 
 import type { SystemRoleApi } from '#/api/system/role';
+import { createRole, getRoleAll, updateRole } from '#/api/system/role';
 
 import { computed, nextTick, ref } from 'vue';
 
@@ -17,10 +18,9 @@ import {
   getApiTree,
   getApiTreeForRole,
   getInheritRoles,
-  getRoleMenus,
+  getMenuTreeForRole,
 } from '#/api';
 import { getMenuTree } from '#/api/system/menu';
-import { createRole, getRoleAll, updateRole } from '#/api/system/role';
 import { $t } from '#/locales';
 
 import {
@@ -90,16 +90,15 @@ const [Drawer, drawerApi] = useVbenDrawer({
       // Wait for Vue to flush DOM updates (form fields mounted)
       await nextTick();
 
-      // 加载 menu tree
-      if (permissions.value.length === 0) {
-        await loadPermissions();
-      }
-
       if (isEdit) {
         await formApi.setValues(data);
-        await loadApisForRole(data.code); // load & init role's apis
         await loadPermissionsForRole(data.id); // load & init role's menus
+        await loadApisForRole(data.code); // load & init role's apis
       } else {
+        if (permissions.value.length === 0) {
+          // 加载 menu tree, new only
+          await loadPermissions();
+        }
         if (apis.value.length === 0) {
           // 加载 api tree, new only
           await loadApis();
@@ -128,8 +127,10 @@ async function loadPermissions() {
 async function loadPermissionsForRole(roleId: number) {
   loadingPermissions.value = true;
   try {
-    const menuIds = await getRoleMenus(roleId);
-    await formApi.setFieldValue('permissions', menuIds); // 选中 已有的 menu
+    const { roots, chosenIds } = await getMenuTreeForRole(roleId);
+    permissions.value = roots as unknown as DataNode[];
+    await nextTick();
+    await formApi.setFieldValue('permissions', chosenIds); // 选中 已有的 menu
   } finally {
     loadingPermissions.value = false;
   }
@@ -150,9 +151,10 @@ async function loadApis() {
 async function loadApisForRole(code: string) {
   loadingApis.value = true;
   try {
-    const { topApis, treeIds } = await getApiTreeForRole(code); // 获取 api tree for 角色
-    apis.value = topApis as unknown as DataNode[];
-    await formApi.setFieldValue('apis', treeIds); // 选中 已有的 api
+    const { roots, chosenIds } = await getApiTreeForRole(code); // 获取 api tree for 角色
+    apis.value = roots as unknown as DataNode[];
+    await nextTick();
+    await formApi.setFieldValue('apis', chosenIds); // 选中 已有的 api
   } finally {
     loadingApis.value = false;
   }
