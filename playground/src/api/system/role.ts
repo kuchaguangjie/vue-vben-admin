@@ -85,17 +85,33 @@ async function deleteRole(id: number) {
 /**
  * 获得角色 已继承的角色
  */
-async function getInheritRoles(code: string) {
-  return requestClient.get(`/system/role/getInheritRoles?code=${code}`);
+async function allInheritRoles(code: string) {
+  return requestClient.get(`/system/role/allInheritRoles?code=${code}`);
+}
+
+/**
+ * create 角色前 获取数据.
+ */
+async function prepareRoleForCreate() {
+  return requestClient.get(`/system/role/prepareForCreate`);
+}
+
+/**
+ * update 角色前 获取数据.
+ */
+async function prepareRoleForUpdate(roleId: number) {
+  return requestClient.get(`/system/role/prepareForUpdate?id=${roleId}`);
 }
 
 export {
+  allInheritRoles,
   createRole,
   deleteRole,
-  getInheritRoles,
   getRoleAll,
   getRoleList,
   getRoleListWithMenu,
+  prepareRoleForCreate,
+  prepareRoleForUpdate,
   updateRole,
   updateRoleStatus,
 };

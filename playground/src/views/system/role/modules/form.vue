@@ -14,13 +14,11 @@ import { Spin } from 'ant-design-vue';
 
 import { useVbenForm } from '#/adapter/form';
 import {
-  getApiTree,
-  getApiTreeForRole,
-  getInheritRoles,
-  getMenuTreeForRole,
-} from '#/api';
-import { getMenuTree } from '#/api/system/menu';
-import { createRole, getRoleAll, updateRole } from '#/api/system/role';
+  createRole,
+  prepareRoleForCreate,
+  prepareRoleForUpdate,
+  updateRole,
+} from '#/api/system/role';
 import { $t } from '#/locales';
 
 import {
@@ -40,14 +38,11 @@ const [Form, formApi] = useVbenForm({
   showDefaultActions: false,
 });
 
+const loadingData = ref(false);
+
 const permissions = ref<DataNode[]>([]);
-const loadingPermissions = ref(false);
-
 const apis = ref<DataNode[]>([]);
-const loadingApis = ref(false);
-
 const roleOptions = ref<{ label: string; value: number }[]>([]);
-const loadingRoles = ref(false);
 
 const id = ref();
 const [Drawer, drawerApi] = useVbenDrawer({
@@ -80,6 +75,7 @@ const [Drawer, drawerApi] = useVbenDrawer({
         id.value = undefined;
       }
 
+      // update form fields
       if (isEdit) {
         formApi.updateSchema(useFormSchemaExtraEdit());
         await formApi.removeSchemaByFields(useFormSchemaRemoveEdit());
@@ -90,108 +86,88 @@ const [Drawer, drawerApi] = useVbenDrawer({
       // Wait for Vue to flush DOM updates (form fields mounted)
       await nextTick();
 
+      // get data & update field value
       if (isEdit) {
         await formApi.setValues(data);
-        await loadPermissionsForRole(data.id); // load & init role's menus
-        await loadApisForRole(data.code); // load & init role's apis
+        await loadForUpdate(data.id, data.code); // load data, for update
       } else {
-        if (permissions.value.length === 0) {
-          // 加载 menu tree, new only
-          await loadPermissions();
-        }
-        if (apis.value.length === 0) {
-          // 加载 api tree, new only
-          await loadApis();
-        }
-      }
-
-      // 加载角色选项
-      if (roleOptions.value.length === 0) {
-        await loadInheritRoleOptions(data.code);
+        await loadForCreate(); // load data, for create
       }
     }
   },
 });
 
-async function loadPermissions() {
-  loadingPermissions.value = true;
+// for new, load data & update form value.
+async function loadForCreate() {
+  loadingData.value = true;
   try {
-    const res = await getMenuTree();
-    permissions.value = res as unknown as DataNode[];
+    // load data
+    const { roles, menuTree, apiTree } = await prepareRoleForCreate();
+
+    // set data - role
+    updateFormRoleOptions(roles);
+
+    // set data - menu
+    permissions.value = menuTree as unknown as DataNode[];
+
+    // set data - api
+    apis.value = apiTree as unknown as DataNode[];
   } finally {
-    loadingPermissions.value = false;
+    loadingData.value = false;
   }
 }
 
-// for edit, load menu tree for role.
-async function loadPermissionsForRole(roleId: number) {
-  loadingPermissions.value = true;
+// for edit, load data & update form value.
+async function loadForUpdate(id: number, code: string) {
+  loadingData.value = true;
   try {
-    const { roots, chosenIds } = await getMenuTreeForRole(roleId);
-    permissions.value = roots as unknown as DataNode[];
+    // load data
+    const { roles, inheritCodes, menuTreeWithChosen, apiTreeWithChosen } =
+      await prepareRoleForUpdate(id);
+
+    // set data - role
+    updateFormRoleOptions(roles, code);
     await nextTick();
-    await formApi.setFieldValue('permissions', chosenIds); // 选中 已有的 menu
-  } finally {
-    loadingPermissions.value = false;
-  }
-}
+    await formApi.setFieldValue('roleCodes', inheritCodes); // 选中 继承的角色
 
-// for new, load api tree.
-async function loadApis() {
-  loadingApis.value = true;
-  try {
-    const res = await getApiTree();
-    apis.value = res as unknown as DataNode[];
-  } finally {
-    loadingApis.value = false;
-  }
-}
-
-// for edit, load api tree for role.
-async function loadApisForRole(code: string) {
-  loadingApis.value = true;
-  try {
-    const { roots, chosenIds } = await getApiTreeForRole(code); // 获取 api tree for 角色
-    apis.value = roots as unknown as DataNode[];
+    // set data - menu
+    const { roots: menuRoots, chosenIds: menuChosenIds } = menuTreeWithChosen;
+    permissions.value = menuRoots as unknown as DataNode[];
     await nextTick();
-    await formApi.setFieldValue('apis', chosenIds); // 选中 已有的 api
+    await formApi.setFieldValue('permissions', menuChosenIds); // 选中 已有的 menu
+
+    // set data - api
+    const { roots: apiRoots, chosenIds: apiChosenIds } = apiTreeWithChosen;
+    apis.value = apiRoots as unknown as DataNode[];
+    await nextTick();
+    await formApi.setFieldValue('apis', apiChosenIds); // 选中 已有的 api
   } finally {
-    loadingApis.value = false;
+    loadingData.value = false;
   }
 }
 
-// 加载角色选项, 并设置已继承的角色
-async function loadInheritRoleOptions(code: string) {
-  loadingRoles.value = true;
-  try {
-    // 获取所有可用角色
-    const roles = await getRoleAll();
-    roleOptions.value = roles.map((role: any) => ({
-      label: role.name,
-      value: role.code,
-      disabled: role.code === code, // 不可选中自己
-    }));
+/**
+ * update roles field's options
+ * @param roles all roles
+ * @param code current role's code, for create it's not provided.
+ */
+function updateFormRoleOptions(roles: any, code?: string) {
+  // 获取所有可用角色
+  roleOptions.value = roles.map((role: any) => ({
+    label: role.name,
+    value: role.code,
+    disabled: role.code === code, // 不可选中自己
+  }));
 
-    // 动态更新表单字段的选项
-    formApi.updateSchema([
-      {
-        fieldName: 'roleCodes',
-        componentProps: {
-          options: roleOptions.value,
-        },
+  // 动态更新表单字段的选项
+  formApi.updateSchema([
+    {
+      fieldName: 'roleCodes',
+      componentProps: {
+        options: roleOptions.value,
       },
-    ]);
-
-    // 修改
-    if (code) {
-      const inheritRoles = await getInheritRoles(code); // 获取 继承的角色
-      await formApi.setFieldValue('roleCodes', inheritRoles); // 选中 继承的角色
-    }
-  } catch (error) {
-    console.error('加载角色选项失败:', error);
-  } finally {
-    loadingRoles.value = false;
-  }
+    },
+  ]);
 }
 
 const getDrawerTitle = computed(() => {
@@ -213,7 +189,7 @@ function getNodeClass(node: Recordable<any>) {
   <Drawer :title="getDrawerTitle">
     <Form>
       <template #permissions="slotProps">
-        <Spin :spinning="loadingPermissions" wrapper-class-name="w-full">
+        <Spin :spinning="loadingData" wrapper-class-name="w-full">
           <Tree
             :tree-data="permissions"
             multiple
@@ -233,7 +209,7 @@ function getNodeClass(node: Recordable<any>) {
         </Spin>
       </template>
       <template #apis="slotProps">
-        <Spin :spinning="loadingApis" wrapper-class-name="w-full">
+        <Spin :spinning="loadingData" wrapper-class-name="w-full">
           <Tree
             :tree-data="apis"
             multiple
