@@ -4,7 +4,6 @@ import type { DataNode } from 'ant-design-vue/es/tree';
 import type { Recordable } from '@vben/types';
 
 import type { SystemRoleApi } from '#/api/system/role';
-import { createRole, getRoleAll, updateRole } from '#/api/system/role';
 
 import { computed, nextTick, ref } from 'vue';
 
@@ -21,6 +20,7 @@ import {
   getMenuTreeForRole,
 } from '#/api';
 import { getMenuTree } from '#/api/system/menu';
+import { createRole, getRoleAll, updateRole } from '#/api/system/role';
 import { $t } from '#/locales';
 
 import {
