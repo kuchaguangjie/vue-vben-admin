@@ -4,6 +4,7 @@ import type { DataNode } from 'ant-design-vue/es/tree';
 import type { Recordable } from '@vben/types';
 
 import type { SystemRoleApi } from '#/api/system/role';
+import { createRole, getRoleAll, updateRole } from '#/api/system/role';
 
 import { computed, nextTick, ref } from 'vue';
 
@@ -13,9 +14,13 @@ import { IconifyIcon } from '@vben/icons';
 import { Spin } from 'ant-design-vue';
 
 import { useVbenForm } from '#/adapter/form';
-import { getApiTree, getApiTreeForRole, getInheritRoles } from '#/api';
+import {
+  getApiTree,
+  getApiTreeForRole,
+  getInheritRoles,
+  getRoleMenus,
+} from '#/api';
 import { getMenuTree } from '#/api/system/menu';
-import { createRole, getRoleAll, updateRole } from '#/api/system/role';
 import { $t } from '#/locales';
 
 import {
@@ -93,6 +98,7 @@ const [Drawer, drawerApi] = useVbenDrawer({
       if (isEdit) {
         await formApi.setValues(data);
         await loadApisForRole(data.code); // load & init role's apis
+        await loadPermissionsForRole(data.id); // load & init role's menus
       } else {
         if (apis.value.length === 0) {
           // 加载 api tree, new only
@@ -113,6 +119,17 @@ async function loadPermissions() {
   try {
     const res = await getMenuTree();
     permissions.value = res as unknown as DataNode[];
+  } finally {
+    loadingPermissions.value = false;
+  }
+}
+
+// for edit, load menu tree for role.
+async function loadPermissionsForRole(roleId: number) {
+  loadingPermissions.value = true;
+  try {
+    const menuIds = await getRoleMenus(roleId);
+    await formApi.setFieldValue('permissions', menuIds); // 选中 已有的 menu
   } finally {
     loadingPermissions.value = false;
   }

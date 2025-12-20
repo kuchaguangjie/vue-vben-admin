@@ -19,6 +19,16 @@ export namespace SystemRoleApi {
 }
 
 /**
+ * 获取角色列表数据
+ */
+async function getRoleList(params: Recordable<any>) {
+  return requestClient.get<Array<SystemRoleApi.SystemRole>>(
+    '/system/role/page',
+    { params },
+  );
+}
+
+/**
  * 获取角色列表数据, 带有 menu 信息;
  */
 async function getRoleListWithMenu(params: Recordable<any>) {
@@ -84,6 +94,7 @@ export {
   deleteRole,
   getInheritRoles,
   getRoleAll,
+  getRoleList,
   getRoleListWithMenu,
   updateRole,
   updateRoleStatus,
