@@ -40,8 +40,8 @@ const [Form, formApi] = useVbenForm({
 
 const loadingData = ref(false);
 
-const permissions = ref<DataNode[]>([]);
-const apis = ref<DataNode[]>([]);
+const menuOptions = ref<DataNode[]>([]);
+const apiOptions = ref<DataNode[]>([]);
 const roleOptions = ref<{ label: string; value: number }[]>([]);
 
 const id = ref();
@@ -102,16 +102,16 @@ async function loadForCreate() {
   loadingData.value = true;
   try {
     // load data
-    const { roles, menuTree, apiTree } = await prepareRoleForCreate();
+    const { roles, menuRoots, apiRoots } = await prepareRoleForCreate();
 
     // set data - role
     updateFormRoleOptions(roles);
 
     // set data - menu
-    permissions.value = menuTree as unknown as DataNode[];
+    menuOptions.value = menuRoots as unknown as DataNode[];
 
     // set data - api
-    apis.value = apiTree as unknown as DataNode[];
+    apiOptions.value = apiRoots as unknown as DataNode[];
   } finally {
     loadingData.value = false;
   }
@@ -132,13 +132,13 @@ async function loadForUpdate(id: number, code: string) {
 
     // set data - menu
     const { roots: menuRoots, chosenIds: menuChosenIds } = menuTreeWithChosen;
-    permissions.value = menuRoots as unknown as DataNode[];
+    menuOptions.value = menuRoots as unknown as DataNode[];
     await nextTick();
     await formApi.setFieldValue('permissions', menuChosenIds); // 选中 已有的 menu
 
     // set data - api
     const { roots: apiRoots, chosenIds: apiChosenIds } = apiTreeWithChosen;
-    apis.value = apiRoots as unknown as DataNode[];
+    apiOptions.value = apiRoots as unknown as DataNode[];
     await nextTick();
     await formApi.setFieldValue('apis', apiChosenIds); // 选中 已有的 api
   } finally {
@@ -191,7 +191,7 @@ function getNodeClass(node: Recordable<any>) {
       <template #permissions="slotProps">
         <Spin :spinning="loadingData" wrapper-class-name="w-full">
           <Tree
-            :tree-data="permissions"
+            :tree-data="menuOptions"
             multiple
             bordered
             :default-expanded-level="2"
@@ -211,7 +211,7 @@ function getNodeClass(node: Recordable<any>) {
       <template #apis="slotProps">
         <Spin :spinning="loadingData" wrapper-class-name="w-full">
           <Tree
-            :tree-data="apis"
+            :tree-data="apiOptions"
             multiple
             bordered
             :default-expanded-level="2"
