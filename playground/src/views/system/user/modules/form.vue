@@ -6,8 +6,12 @@ import { computed, nextTick, ref } from 'vue';
 import { useVbenDrawer } from '@vben/common-ui';
 
 import { useVbenForm } from '#/adapter/form';
-import { getRoleAll } from '#/api/system/role';
-import { createUser, getUserRoles, updateUser } from '#/api/system/user';
+import {
+  createUser,
+  prepareUserForCreate,
+  prepareUserForUpdate,
+  updateUser,
+} from '#/api/system/user';
 import { $t } from '#/locales';
 
 import {
@@ -27,8 +31,9 @@ const [Form, formApi] = useVbenForm({
   showDefaultActions: false,
 });
 
+const loadingData = ref(false);
+
 const roleOptions = ref<{ label: string; value: number }[]>([]);
-const loadingRoles = ref(false);
 
 const id = ref();
 const [Drawer, drawerApi] = useVbenDrawer({
@@ -37,7 +42,7 @@ const [Drawer, drawerApi] = useVbenDrawer({
     if (!valid) return;
     const values = await formApi.getValues();
     drawerApi.lock();
-    (id.value ? updateUser({ id: id.value, ...values }) : createUser(values))
+    (id.value ? updateUser(id.value, values) : createUser(values))
       .then(() => {
         emits('success');
         drawerApi.close();
@@ -60,17 +65,6 @@ const [Drawer, drawerApi] = useVbenDrawer({
         id.value = undefined;
       }
 
-      // Wait for Vue to flush DOM updates (form fields mounted)
-      await nextTick();
-      if (isEdit) {
-        await formApi.setValues(data);
-      }
-
-      // 加载角色选项
-      if (roleOptions.value.length === 0) {
-        await loadRoleOptions(data.username);
-      }
-
       if (isEdit) {
         formApi.updateSchema(useFormSchemaExtraEdit());
         await formApi.removeSchemaByFields(useFormSchemaRemoveEdit());
@@ -78,41 +72,70 @@ const [Drawer, drawerApi] = useVbenDrawer({
         formApi.updateSchema(useFormSchemaExtraNew());
         await formApi.removeSchemaByFields(useFormSchemaRemoveNew());
       }
+      // Wait for Vue to flush DOM updates (form fields mounted)
+      await nextTick();
+
+      // get data & update field value
+      if (isEdit) {
+        await formApi.setValues(data);
+        await loadForUpdate(data.username); // load data, for update
+      } else {
+        await loadForCreate(); // load data, for create
+      }
     }
   },
 });
 
-// 加载角色选项, 并设置用户已拥有的角色
-async function loadRoleOptions(username: string) {
-  loadingRoles.value = true;
+// for new, load data & update form value.
+async function loadForCreate() {
+  loadingData.value = true;
   try {
-    // 获取所有可用角色
-    const roles = await getRoleAll();
-    roleOptions.value = roles.map((role: any) => ({
-      label: role.name,
-      value: role.code,
-    }));
+    // load data
+    const { roles } = await prepareUserForCreate();
 
-    // 动态更新表单字段的选项
-    formApi.updateSchema([
-      {
-        fieldName: 'roleCodes',
-        componentProps: {
-          options: roleOptions.value,
-        },
-      },
-    ]);
-
-    // 修改
-    if (username) {
-      const userRoles = await getUserRoles(username); // 获取用户当前拥有的角色
-      await formApi.setFieldValue('roleCodes', userRoles); // 选中用户已有角色
-    }
-  } catch (error) {
-    console.error('加载角色选项失败:', error);
+    // set data - role
+    updateFormRoleOptions(roles);
   } finally {
-    loadingRoles.value = false;
+    loadingData.value = false;
   }
+}
+
+// for edit, load data & update form value.
+async function loadForUpdate(username: string) {
+  loadingData.value = true;
+  try {
+    // load data
+    const { roles, codes } = await prepareUserForUpdate(username);
+
+    // set data - role
+    updateFormRoleOptions(roles);
+    await nextTick();
+    await formApi.setFieldValue('roleCodes', codes); // 选中 继承的角色
+  } finally {
+    loadingData.value = false;
+  }
+}
+
+/**
+ * update roles field's options
+ * @param roles all roles
+ */
+function updateFormRoleOptions(roles: any) {
+  // 获取所有可用角色
+  roleOptions.value = roles.map((role: any) => ({
+    label: role.name,
+    value: role.code,
+  }));
+
+  // 动态更新表单字段的选项
+  formApi.updateSchema([
+    {
+      fieldName: 'roleCodes',
+      componentProps: {
+        options: roleOptions.value,
+      },
+    },
+  ]);
 }
 
 const getDrawerTitle = computed(() => {

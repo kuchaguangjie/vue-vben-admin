@@ -35,11 +35,14 @@ async function createUser(data: Omit<SystemUserApi.SystemUser, 'id'>) {
 
 /**
  * 更新用户
- *
+ * @param id
  * @param data 用户数据
  */
-async function updateUser(data: SystemUserApi.SystemUser) {
-  return requestClient.post(`/system/user/update`, data);
+async function updateUser(
+  id: number,
+  data: Omit<SystemUserApi.SystemUser, 'id'>,
+) {
+  return requestClient.put(`/system/user/${id}`, data);
 }
 
 /**
@@ -65,11 +68,29 @@ async function deleteUser(id: number) {
   return requestClient.delete(`/system/user/${id}`);
 }
 
+/**
+ * create 前 获取数据.
+ */
+async function prepareUserForCreate() {
+  return requestClient.get(`/system/user/prepareForCreate`);
+}
+
+/**
+ * update 前 获取数据.
+ */
+async function prepareUserForUpdate(username: string) {
+  return requestClient.get(
+    `/system/user/prepareForUpdate?username=${username}`,
+  );
+}
+
 export {
   createUser,
   deleteUser,
   getUserList,
   getUserRoles,
+  prepareUserForCreate,
+  prepareUserForUpdate,
   updateUser,
   updateUserStatus,
 };
