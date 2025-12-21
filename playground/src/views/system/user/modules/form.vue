@@ -8,8 +8,8 @@ import { useVbenDrawer } from '@vben/common-ui';
 import { useVbenForm } from '#/adapter/form';
 import {
   createUser,
-  prepareUserForCreate,
-  prepareUserForUpdate,
+  preCreateUser,
+  preUpdateUser,
   updateUser,
 } from '#/api/system/user';
 import { $t } from '#/locales';
@@ -91,7 +91,7 @@ async function loadForCreate() {
   loadingData.value = true;
   try {
     // load data
-    const { roles } = await prepareUserForCreate();
+    const { roles } = await preCreateUser();
 
     // set data - role
     updateFormRoleOptions(roles);
@@ -105,7 +105,7 @@ async function loadForUpdate(username: string) {
   loadingData.value = true;
   try {
     // load data
-    const { roles, codes } = await prepareUserForUpdate(username);
+    const { roles, codes } = await preUpdateUser(username);
 
     // set data - role
     updateFormRoleOptions(roles);

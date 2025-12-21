@@ -92,15 +92,15 @@ async function allInheritRoles(code: string) {
 /**
  * create 角色前 获取数据.
  */
-async function prepareRoleForCreate() {
-  return requestClient.get(`/system/role/prepareForCreate`);
+async function preCreateRole() {
+  return requestClient.get(`/system/role/preCreate`);
 }
 
 /**
  * update 角色前 获取数据.
  */
-async function prepareRoleForUpdate(roleId: number) {
-  return requestClient.get(`/system/role/prepareForUpdate?id=${roleId}`);
+async function preUpdateRole(roleId: number) {
+  return requestClient.get(`/system/role/preUpdate?id=${roleId}`);
 }
 
 export {
@@ -110,8 +110,8 @@ export {
   getRoleAll,
   getRoleList,
   getRoleListWithMenu,
-  prepareRoleForCreate,
-  prepareRoleForUpdate,
+  preCreateRole,
+  preUpdateRole,
   updateRole,
   updateRoleStatus,
 };

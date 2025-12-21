@@ -71,17 +71,15 @@ async function deleteUser(id: number) {
 /**
  * create 前 获取数据.
  */
-async function prepareUserForCreate() {
-  return requestClient.get(`/system/user/prepareForCreate`);
+async function preCreateUser() {
+  return requestClient.get(`/system/user/preCreate`);
 }
 
 /**
  * update 前 获取数据.
  */
-async function prepareUserForUpdate(username: string) {
-  return requestClient.get(
-    `/system/user/prepareForUpdate?username=${username}`,
-  );
+async function preUpdateUser(username: string) {
+  return requestClient.get(`/system/user/preUpdate?username=${username}`);
 }
 
 export {
@@ -89,8 +87,8 @@ export {
   deleteUser,
   getUserList,
   getUserRoles,
-  prepareUserForCreate,
-  prepareUserForUpdate,
+  preCreateUser,
+  preUpdateUser,
   updateUser,
   updateUserStatus,
 };

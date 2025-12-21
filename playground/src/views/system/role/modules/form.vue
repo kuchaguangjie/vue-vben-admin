@@ -15,8 +15,8 @@ import { Spin } from 'ant-design-vue';
 import { useVbenForm } from '#/adapter/form';
 import {
   createRole,
-  prepareRoleForCreate,
-  prepareRoleForUpdate,
+  preCreateRole,
+  preUpdateRole,
   updateRole,
 } from '#/api/system/role';
 import { $t } from '#/locales';
@@ -102,7 +102,7 @@ async function loadForCreate() {
   loadingData.value = true;
   try {
     // load data
-    const { roles, menuRoots, apiRoots } = await prepareRoleForCreate();
+    const { roles, menuRoots, apiRoots } = await preCreateRole();
 
     // set data - role
     updateFormRoleOptions(roles);
@@ -123,7 +123,7 @@ async function loadForUpdate(id: number, code: string) {
   try {
     // load data
     const { roles, inheritCodes, menuTreeWithChosen, apiTreeWithChosen } =
-      await prepareRoleForUpdate(id);
+      await preUpdateRole(id);
 
     // set data - role
     updateFormRoleOptions(roles, code);
