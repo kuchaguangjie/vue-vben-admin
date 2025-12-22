@@ -22,8 +22,12 @@ export function useFormSchema(): VbenFormSchema[] {
     {
       component: 'Input',
       fieldName: 'version',
+      label: '', // 空标签使其不显示
+      componentProps: {
+        style: { display: 'none' }, // 隐藏输入框
+        disabled: true, // 使其不可编辑
+      },
     },
-
     {
       component: 'RadioGroup',
       componentProps: {
@@ -69,17 +73,7 @@ export function useFormSchema(): VbenFormSchema[] {
 
 // single - edit - set fields
 export function useFormSchemaExtraEdit(): VbenFormSchema[] {
-  return [
-    {
-      component: 'Input',
-      fieldName: 'version',
-      label: '', // 空标签使其不显示
-      componentProps: {
-        style: { display: 'none' }, // 隐藏输入框
-        disabled: true, // 使其不可编辑
-      },
-    },
-  ];
+  return [];
 }
 
 // single - new - add fields
@@ -111,7 +105,7 @@ export function useFormSchemaRemoveEdit(): string[] {
 
 // single - new - remove fields
 export function useFormSchemaRemoveNew(): string[] {
-  return ['version'];
+  return [];
 }
 
 export function useGridFormSchema(): VbenFormSchema[] {

@@ -1,8 +1,7 @@
 import type { VbenFormSchema } from '#/adapter/form';
+import { z } from '#/adapter/form';
 import type { OnActionClickFn, VxeTableGridOptions } from '#/adapter/vxe-table';
 import type { SystemUserApi } from '#/api';
-
-import { z } from '#/adapter/form';
 import { $t } from '#/locales';
 import { formatBackendTime } from '#/utils/valueFormat';
 
@@ -24,6 +23,11 @@ export function useFormSchema(): VbenFormSchema[] {
     {
       component: 'Input',
       fieldName: 'version',
+      label: '', // 空标签使其不显示
+      componentProps: {
+        style: { display: 'none' }, // 隐藏输入框
+        disabled: true, // 使其不可编辑
+      },
     },
     {
       component: 'Input',
@@ -61,15 +65,6 @@ export function useFormSchemaExtraEdit(): VbenFormSchema[] {
     {
       component: 'Input',
       fieldName: 'username',
-      label: '', // 空标签使其不显示
-      componentProps: {
-        style: { display: 'none' }, // 隐藏输入框
-        disabled: true, // 使其不可编辑
-      },
-    },
-    {
-      component: 'Input',
-      fieldName: 'version',
       label: '', // 空标签使其不显示
       componentProps: {
         style: { display: 'none' }, // 隐藏输入框
@@ -124,7 +119,7 @@ export function useFormSchemaRemoveEdit(): string[] {
 
 // single - new - remove fields
 export function useFormSchemaRemoveNew(): string[] {
-  return ['version'];
+  return [];
 }
 
 // for search list
