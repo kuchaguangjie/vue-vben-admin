@@ -158,7 +158,7 @@ async function updateMenuStatus(data: CommonType.UpdateStatus) {
  * @param data 菜单数据
  */
 async function updateMenu(
-  id: string,
+  id: number,
   data: Omit<SystemMenuApi.SystemMenu, 'children' | 'id'>,
 ) {
   return requestClient.put(`/system/menu/${id}`, data);
