@@ -21,10 +21,10 @@ import {
   SystemMenuApi,
   updateMenuStatus,
 } from '#/api/system/menu';
+import { confirmDialog } from '#/utils/dialog';
 
 import { useColumns } from './data';
 import Form from './modules/form.vue';
-import { confirmDialog } from '#/utils/dialog';
 
 const [FormDrawer, formDrawerApi] = useVbenDrawer({
   connectedComponent: Form,
