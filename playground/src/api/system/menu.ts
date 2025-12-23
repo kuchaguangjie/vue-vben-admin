@@ -23,9 +23,11 @@ export namespace SystemMenuApi {
     'link',
     'button',
   ] as const;
+
   /** 系统菜单 */
   export interface SystemMenu {
     [key: string]: any;
+
     /** 后端权限标识 */
     authCode: string;
     /** 子级 */
@@ -95,9 +97,10 @@ export namespace SystemMenuApi {
 /**
  * 获取 菜单 tree
  */
-async function getMenuTree() {
+async function getMenuTree(params: Recordable<any>) {
   return requestClient.get<Array<SystemMenuApi.SystemMenu>>(
     '/system/menu/tree',
+    { params },
   );
 }
 

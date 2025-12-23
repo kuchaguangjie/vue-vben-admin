@@ -5,6 +5,7 @@ import type {
   OnActionClickParams,
   VxeTableGridOptions,
 } from '#/adapter/vxe-table';
+import type { PageParams } from '#/api/request';
 
 import { Page, useVbenDrawer } from '@vben/common-ui';
 import { IconifyIcon, Plus } from '@vben/icons';
@@ -15,6 +16,7 @@ import { MenuBadge } from '@vben-core/menu-ui';
 import { Button, message } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
+import { doPageQuery } from '#/api/request';
 import {
   deleteMenu,
   getMenuTree,
@@ -41,8 +43,8 @@ const [Grid, gridApi] = useVbenVxeGrid({
     },
     proxyConfig: {
       ajax: {
-        query: async (_params) => {
-          return await getMenuTree();
+        query: async (params: PageParams) => {
+          return await doPageQuery(getMenuTree, params);
         },
       },
     },
@@ -59,6 +61,19 @@ const [Grid, gridApi] = useVbenVxeGrid({
       parentField: 'pid',
       rowField: 'id',
       transform: false,
+    },
+    sortConfig: {
+      remote: true, // 远程排序
+      trigger: 'default', // 点击表头触发
+      orders: ['asc', 'desc', null], // 排序顺序
+    },
+    // 启用远程模式
+    remote: {
+      sort: true, // 远程排序
+    },
+    // 排序变化事件
+    onSortChange() {
+      gridApi.query();
     },
   } as VxeTableGridOptions,
 });

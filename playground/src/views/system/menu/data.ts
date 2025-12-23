@@ -2,6 +2,7 @@ import type { OnActionClickFn, VxeTableGridOptions } from '#/adapter/vxe-table';
 import type { SystemMenuApi } from '#/api/system/menu';
 
 import { $t } from '#/locales';
+import { formatBackendTime } from '#/utils/valueFormat';
 
 export function getMenuTypeOptions() {
   return [
@@ -27,6 +28,13 @@ export function useColumns<T = SystemMenuApi.SystemMenu>(
 ): VxeTableGridOptions<SystemMenuApi.SystemMenu>['columns'] {
   return [
     {
+      field: 'id',
+      title: $t('common.id'),
+      fixed: 'left',
+      width: 75,
+      sortable: true,
+    },
+    {
       align: 'left',
       field: 'meta.title',
       fixed: 'left',
@@ -41,12 +49,14 @@ export function useColumns<T = SystemMenuApi.SystemMenu>(
       field: 'type',
       title: $t('system.menu.type'),
       width: 100,
+      sortable: true,
     },
     {
       align: 'left',
       field: 'path',
       title: $t('system.menu.path'),
       width: 150,
+      sortable: true,
     },
     {
       align: 'left',
@@ -70,11 +80,6 @@ export function useColumns<T = SystemMenuApi.SystemMenu>(
       title: $t('system.menu.component'),
     },
     {
-      field: 'authCode',
-      title: $t('system.menu.authCode'),
-      width: 100,
-    },
-    {
       cellRender: {
         attrs: { beforeChange: onStatusChange },
         name: onStatusChange ? 'CellSwitch' : 'CellTag',
@@ -83,6 +88,23 @@ export function useColumns<T = SystemMenuApi.SystemMenu>(
       title: $t('system.menu.status'),
       width: 100,
       sortable: true,
+    },
+    {
+      field: 'authCode',
+      title: $t('system.menu.authCode'),
+      width: 100,
+    },
+    {
+      field: 'createdAt',
+      title: $t('common.createdAt'),
+      width: 160,
+      formatter: ({ cellValue }) => formatBackendTime(cellValue), // 时间格式转换
+      sortable: true,
+    },
+    {
+      field: 'createdBy',
+      title: $t('common.createdBy'),
+      width: 100,
     },
     {
       align: 'right',

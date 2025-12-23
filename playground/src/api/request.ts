@@ -2,17 +2,17 @@
  * 该文件可自行根据业务逻辑进行调整
  */
 import type { AxiosResponseHeaders, RequestClientOptions } from '@vben/request';
-
-import type { Recordable } from '@vben-core/typings';
-
-import { useAppConfig } from '@vben/hooks';
-import { preferences } from '@vben/preferences';
 import {
   authenticateResponseInterceptor,
   defaultResponseInterceptor,
   errorMessageResponseInterceptor,
   RequestClient,
 } from '@vben/request';
+
+import type { Recordable } from '@vben-core/typings';
+
+import { useAppConfig } from '@vben/hooks';
+import { preferences } from '@vben/preferences';
 import { useAccessStore } from '@vben/stores';
 import { cloneDeep } from '@vben/utils';
 
@@ -134,12 +134,12 @@ export interface PageParams {
 export async function doPageQuery(
   func: (r: Recordable<any>) => Promise<any>,
   pageParams: PageParams,
-  formValues: any,
+  formValues?: any,
 ) {
   const { page, sort } = pageParams;
   return func({
-    page: page.currentPage,
-    pageSize: page.pageSize,
+    page: page?.currentPage,
+    pageSize: page?.pageSize,
     sortBy: sort.field,
     sortDesc: sort.order && sort.order === 'desc',
     ...formValues,
