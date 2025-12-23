@@ -21,8 +21,9 @@ export function getMenuTypeOptions() {
   ];
 }
 
-export function useColumns(
+export function useColumns<T = SystemMenuApi.SystemMenu>(
   onActionClick: OnActionClickFn<SystemMenuApi.SystemMenu>,
+  onStatusChange?: (newStatus: any, row: T) => PromiseLike<boolean | undefined>,
 ): VxeTableGridOptions<SystemMenuApi.SystemMenu>['columns'] {
   return [
     {
@@ -42,17 +43,11 @@ export function useColumns(
       width: 100,
     },
     {
-      field: 'authCode',
-      title: $t('system.menu.authCode'),
-      width: 200,
-    },
-    {
       align: 'left',
       field: 'path',
       title: $t('system.menu.path'),
-      width: 200,
+      width: 150,
     },
-
     {
       align: 'left',
       field: 'component',
@@ -71,16 +66,24 @@ export function useColumns(
         }
         return '';
       },
-      minWidth: 200,
+      width: 200,
       title: $t('system.menu.component'),
     },
     {
-      cellRender: { name: 'CellTag' },
+      field: 'authCode',
+      title: $t('system.menu.authCode'),
+      width: 100,
+    },
+    {
+      cellRender: {
+        attrs: { beforeChange: onStatusChange },
+        name: onStatusChange ? 'CellSwitch' : 'CellTag',
+      },
       field: 'status',
       title: $t('system.menu.status'),
       width: 100,
+      sortable: true,
     },
-
     {
       align: 'right',
       cellRender: {

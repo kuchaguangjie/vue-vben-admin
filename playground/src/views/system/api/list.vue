@@ -20,6 +20,7 @@ import { $t } from '#/locales';
 
 import { useColumns, useGridFormSchema } from './data';
 import Form from './modules/form.vue';
+import { confirmDialog } from '#/utils/dialog';
 
 const [FormDrawer, formDrawerApi] = useVbenDrawer({
   connectedComponent: Form,
@@ -83,26 +84,6 @@ function onActionClick(e: OnActionClickParams<SystemApiApi.SystemApi>) {
 }
 
 /**
- * 将Antd的Modal.confirm封装为promise，方便在异步函数中调用。
- * @param content 提示内容
- * @param title 提示标题
- */
-function confirm(content: string, title: string) {
-  return new Promise((reslove, reject) => {
-    Modal.confirm({
-      content,
-      onCancel() {
-        reject(new Error('已取消'));
-      },
-      onOk() {
-        reslove(true);
-      },
-      title,
-    });
-  });
-}
-
-/**
  * 状态开关即将改变
  * @param newStatus 期望改变的状态值
  * @param row 行数据
@@ -114,7 +95,7 @@ async function onStatusChange(newStatus: number, row: SystemApiApi.SystemApi) {
     1: '启用',
   };
   try {
-    await confirm(
+    await confirmDialog(
       `你要将${row.name}的状态切换为 【${status[newStatus.toString()]}】 吗？`,
       `切换状态`,
     );

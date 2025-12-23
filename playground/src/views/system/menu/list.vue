@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import type { Recordable } from '@vben-core/typings';
+
 import type {
   OnActionClickParams,
   VxeTableGridOptions,
@@ -13,10 +15,16 @@ import { MenuBadge } from '@vben-core/menu-ui';
 import { Button, message } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import { deleteMenu, getMenuTree, SystemMenuApi } from '#/api/system/menu';
+import {
+  deleteMenu,
+  getMenuTree,
+  SystemMenuApi,
+  updateMenuStatus,
+} from '#/api/system/menu';
 
 import { useColumns } from './data';
 import Form from './modules/form.vue';
+import { confirmDialog } from '#/utils/dialog';
 
 const [FormDrawer, formDrawerApi] = useVbenDrawer({
   connectedComponent: Form,
@@ -25,7 +33,7 @@ const [FormDrawer, formDrawerApi] = useVbenDrawer({
 
 const [Grid, gridApi] = useVbenVxeGrid({
   gridOptions: {
-    columns: useColumns(onActionClick),
+    columns: useColumns(onActionClick, onStatusChange),
     height: 'auto',
     keepSource: true,
     pagerConfig: {
@@ -78,15 +86,45 @@ function onActionClick({
   }
 }
 
+/**
+ * 状态开关即将改变
+ * @param newStatus 期望改变的状态值
+ * @param row 行数据
+ * @returns 返回false则中止改变，返回其他值（undefined、true）则允许改变
+ */
+async function onStatusChange(
+  newStatus: number,
+  row: SystemMenuApi.SystemMenu,
+) {
+  const status: Recordable<string> = {
+    0: '禁用',
+    1: '启用',
+  };
+  try {
+    await confirmDialog(
+      `你要将 ${row.meta?.title} 的状态切换为 【${status[newStatus.toString()]}】 吗？`,
+      `切换状态`,
+    );
+    await updateMenuStatus({ id: row.id, status: newStatus });
+    onRefresh();
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 function onRefresh() {
   gridApi.query();
 }
+
 function onEdit(row: SystemMenuApi.SystemMenu) {
   formDrawerApi.setData(row).open();
 }
+
 function onCreate() {
   formDrawerApi.setData({}).open();
 }
+
 function onAppend(row: SystemMenuApi.SystemMenu) {
   formDrawerApi.setData({ pid: row.id }).open();
 }

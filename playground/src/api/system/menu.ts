@@ -1,5 +1,7 @@
 import type { Recordable } from '@vben/types';
 
+import type { CommonType } from '#/api';
+
 import { requestClient } from '#/api/request';
 
 export namespace SystemMenuApi {
@@ -31,7 +33,7 @@ export namespace SystemMenuApi {
     /** 组件 */
     component?: string;
     /** 菜单ID */
-    id: string;
+    id: number;
     /** 菜单元数据 */
     meta?: {
       /** 激活时显示的图标 */
@@ -142,6 +144,14 @@ async function createMenu(
 }
 
 /**
+ * 更新菜单状态
+ * @param data 爱但数据
+ */
+async function updateMenuStatus(data: CommonType.UpdateStatus) {
+  return requestClient.post(`/system/menu/updateStatus`, data);
+}
+
+/**
  * 更新菜单
  *
  * @param id 菜单 ID
@@ -158,7 +168,7 @@ async function updateMenu(
  * 删除菜单
  * @param id 菜单 ID
  */
-async function deleteMenu(id: string) {
+async function deleteMenu(id: number) {
   return requestClient.delete(`/system/menu/${id}`);
 }
 
@@ -171,4 +181,5 @@ export {
   isMenuNameExists,
   isMenuPathExists,
   updateMenu,
+  updateMenuStatus,
 };

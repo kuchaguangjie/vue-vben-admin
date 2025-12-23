@@ -5,21 +5,21 @@ import type {
   OnActionClickParams,
   VxeTableGridOptions,
 } from '#/adapter/vxe-table';
+import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import type { SystemUserApi } from '#/api';
+import { deleteUser, getUserList, updateUserStatus } from '#/api';
 import type { PageParams } from '#/api/request';
+import { doPageQuery } from '#/api/request';
 
 import { Page, useVbenDrawer } from '@vben/common-ui';
 import { Plus } from '@vben/icons';
 
-import { Button, message, Modal } from 'ant-design-vue';
-
-import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import { deleteUser, getUserList, updateUserStatus } from '#/api';
-import { doPageQuery } from '#/api/request';
+import { Button, message } from 'ant-design-vue';
 import { $t } from '#/locales';
 
 import { useColumns, useGridFormSchema } from './data';
 import Form from './modules/form.vue';
+import { confirmDialog } from '#/utils/dialog';
 
 const [FormDrawer, formDrawerApi] = useVbenDrawer({
   connectedComponent: Form,
@@ -83,26 +83,6 @@ function onActionClick(e: OnActionClickParams<SystemUserApi.SystemUser>) {
 }
 
 /**
- * 将Antd的Modal.confirm封装为promise，方便在异步函数中调用。
- * @param content 提示内容
- * @param title 提示标题
- */
-function confirm(content: string, title: string) {
-  return new Promise((resolve, reject) => {
-    Modal.confirm({
-      content,
-      onCancel() {
-        reject(new Error('已取消'));
-      },
-      onOk() {
-        resolve(true);
-      },
-      title,
-    });
-  });
-}
-
-/**
  * 状态开关即将改变
  * @param newStatus 期望改变的状态值
  * @param row 行数据
@@ -117,7 +97,7 @@ async function onStatusChange(
     1: '启用',
   };
   try {
-    await confirm(
+    await confirmDialog(
       `你要将${row.username}的状态切换为 【${status[newStatus.toString()]}】 吗？`,
       `切换状态`,
     );
