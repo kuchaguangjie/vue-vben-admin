@@ -4,7 +4,6 @@ import type { ChangeEvent } from 'ant-design-vue/es/_util/EventInterface';
 import type { Recordable } from '@vben/types';
 
 import type { VbenFormSchema } from '#/adapter/form';
-import { useVbenForm, z } from '#/adapter/form';
 
 import { computed, h, ref } from 'vue';
 
@@ -14,6 +13,8 @@ import { $te } from '@vben/locales';
 import { getPopupContainer } from '@vben/utils';
 
 import { breakpointsTailwind, useBreakpoints } from '@vueuse/core';
+
+import { useVbenForm, z } from '#/adapter/form';
 import {
   createMenu,
   getMenuTree,
