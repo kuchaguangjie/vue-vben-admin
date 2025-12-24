@@ -4,6 +4,7 @@ import type { ChangeEvent } from 'ant-design-vue/es/_util/EventInterface';
 import type { Recordable } from '@vben/types';
 
 import type { VbenFormSchema } from '#/adapter/form';
+import { useVbenForm, z } from '#/adapter/form';
 
 import { computed, h, ref } from 'vue';
 
@@ -13,11 +14,10 @@ import { $te } from '@vben/locales';
 import { getPopupContainer } from '@vben/utils';
 
 import { breakpointsTailwind, useBreakpoints } from '@vueuse/core';
-
-import { useVbenForm, z } from '#/adapter/form';
 import {
   createMenu,
   getMenuTree,
+  isMenuNameExists,
   isMenuPathExists,
   SystemMenuApi,
   updateMenu,
@@ -61,7 +61,19 @@ const schema: VbenFormSchema[] = [
     rules: z
       .string()
       .min(2, $t('ui.formRules.minLength', [$t('system.menu.menuName'), 2]))
-      .max(30, $t('ui.formRules.maxLength', [$t('system.menu.menuName'), 30])),
+      .max(30, $t('ui.formRules.maxLength', [$t('system.menu.menuName'), 30]))
+      .refine(
+        async (value: string) => {
+          if (!value) return true; // empty or not init yet
+          return !(await isMenuNameExists(value, formData.value?.id));
+        },
+        (value) => ({
+          message: $t('ui.formRules.alreadyExists', [
+            $t('system.menu.menuName'),
+            value,
+          ]),
+        }),
+      ),
   },
   {
     component: 'ApiTreeSelect',
@@ -134,6 +146,18 @@ const schema: VbenFormSchema[] = [
           return value.startsWith('/');
         },
         $t('ui.formRules.startWith', [$t('system.menu.path'), '/']),
+      )
+      .refine(
+        async (value: string) => {
+          if (!value) return true; // empty or not init yet
+          return !(await isMenuPathExists(value, formData.value?.id));
+        },
+        (value) => ({
+          message: $t('ui.formRules.alreadyExists', [
+            $t('system.menu.path'),
+            value,
+          ]),
+        }),
       ),
   },
   {
@@ -479,6 +503,7 @@ async function onSubmit() {
     }
   }
 }
+
 const getDrawerTitle = computed(() =>
   formData.value?.id
     ? $t('ui.actionTitle.edit', [$t('system.menu.name')])
