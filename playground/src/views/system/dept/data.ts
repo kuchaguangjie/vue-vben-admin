@@ -143,7 +143,7 @@ export function useColumns(
           },
           'edit', // 默认的编辑按钮
           {
-            code: 'delete', // 默认的删除按钮
+            code: 'delete', // 默认的删除按钮, 有 children 不可删除;
             disabled: (row: SystemDeptApi.SystemDept) => {
               return !!(row.children && row.children.length > 0);
             },

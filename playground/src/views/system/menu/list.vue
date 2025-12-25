@@ -46,6 +46,7 @@ const [Grid, gridApi] = useVbenVxeGrid({
     proxyConfig: {
       ajax: {
         query: async (params: PageParams) => {
+          isExpend.value = false; // not expend on load
           return await doPageQuery(getMenuTree, params);
         },
       },
@@ -166,14 +167,19 @@ function onDelete(row: SystemMenuApi.SystemMenu) {
 }
 
 const isExpend = ref(false);
+
 // toggle 全部节点 展开/折叠
-const triggerExpandAll = () => {
+async function triggerExpandAll() {
+  await setExpandAll(!isExpend.value);
+}
+
+async function setExpandAll(status: boolean) {
   const grid = gridApi.grid;
   if (grid) {
-    isExpend.value = !isExpend.value;
-    grid.setAllTreeExpand(isExpend.value);
+    isExpend.value = status;
+    await grid.setAllTreeExpand(status);
   }
-};
+}
 </script>
 <template>
   <Page auto-content-height>

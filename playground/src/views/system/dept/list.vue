@@ -3,8 +3,11 @@ import type {
   OnActionClickParams,
   VxeTableGridOptions,
 } from '#/adapter/vxe-table';
+import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import type { PageParams } from '#/api/request';
+import { doPageQuery } from '#/api/request';
 import type { SystemDeptApi } from '#/api/system/dept';
+import { deleteDept, getDeptTree } from '#/api/system/dept';
 
 import { ref } from 'vue';
 
@@ -12,10 +15,6 @@ import { Page, useVbenModal } from '@vben/common-ui';
 import { Plus } from '@vben/icons';
 
 import { Button, message } from 'ant-design-vue';
-
-import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import { doPageQuery } from '#/api/request';
-import { deleteDept, getDeptTree } from '#/api/system/dept';
 import { $t } from '#/locales';
 
 import { useColumns } from './data';
@@ -107,6 +106,7 @@ const [Grid, gridApi] = useVbenVxeGrid({
     proxyConfig: {
       ajax: {
         query: async (params: PageParams) => {
+          isExpend.value = false; // not expend on load
           return await doPageQuery(getDeptTree, params);
         },
       },
@@ -151,10 +151,14 @@ function refreshGrid() {
 const isExpend = ref(false);
 // toggle 全部节点 展开/折叠
 const triggerExpandAll = () => {
+  setExpandAll(!isExpend.value);
+};
+
+const setExpandAll = (status: boolean) => {
   const grid = gridApi.grid;
   if (grid) {
-    isExpend.value = !isExpend.value;
-    grid.setAllTreeExpand(isExpend.value);
+    isExpend.value = status;
+    grid.setAllTreeExpand(status);
   }
 };
 </script>
