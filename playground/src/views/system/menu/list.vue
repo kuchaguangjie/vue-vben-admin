@@ -27,6 +27,7 @@ import { confirmDialog } from '#/utils/dialog';
 
 import { useColumns } from './data';
 import Form from './modules/form.vue';
+import { ref } from 'vue';
 
 const [FormDrawer, formDrawerApi] = useVbenDrawer({
   connectedComponent: Form,
@@ -162,6 +163,16 @@ function onDelete(row: SystemMenuApi.SystemMenu) {
       hideLoading();
     });
 }
+
+const isExpend = ref(false);
+// toggle 全部节点 展开/折叠
+const triggerExpandAll = () => {
+  const grid = gridApi.grid;
+  if (grid) {
+    isExpend.value = !isExpend.value;
+    grid.setAllTreeExpand(isExpend.value);
+  }
+};
 </script>
 <template>
   <Page auto-content-height>
@@ -171,6 +182,13 @@ function onDelete(row: SystemMenuApi.SystemMenu) {
         <Button type="primary" @click="onCreate">
           <Plus class="size-5" />
           {{ $t('ui.actionTitle.create', [$t('system.menu.name')]) }}
+        </Button>
+        <Button type="primary" @click="triggerExpandAll" class="btn-space">
+          {{
+            isExpend
+              ? $t('ui.actionTitle.collapse')
+              : $t('ui.actionTitle.expend')
+          }}
         </Button>
       </template>
       <template #title="{ row }">
@@ -211,5 +229,8 @@ function onDelete(row: SystemMenuApi.SystemMenu) {
     padding-top: 0;
     padding-bottom: 0;
   }
+}
+.btn-space {
+  margin-left: 8px;
 }
 </style>

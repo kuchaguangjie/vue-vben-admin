@@ -13,7 +13,9 @@
     "edit": "Modify {0}",
     "create": "Create {0}",
     "delete": "Delete {0}",
-    "view": "View {0}"
+    "view": "View {0}",
+    "expend": "Expend",
+    "collapse": "Collapse"
   },
   "actionMessage": {
     "deleteConfirm": "Are you sure to delete {0}?",

@@ -5,6 +5,8 @@ import type {
 } from '#/adapter/vxe-table';
 import type { SystemDeptApi } from '#/api/system/dept';
 
+import { ref } from 'vue';
+
 import { Page, useVbenModal } from '@vben/common-ui';
 import { Plus } from '@vben/icons';
 
@@ -16,6 +18,8 @@ import { $t } from '#/locales';
 
 import { useColumns } from './data';
 import Form from './modules/form.vue';
+import { doPageQuery, type PageParams } from '#/api/request';
+import { getMenuTree } from '#/api';
 
 const [FormModal, formModalApi] = useVbenModal({
   connectedComponent: Form,
@@ -102,8 +106,8 @@ const [Grid, gridApi] = useVbenVxeGrid({
     },
     proxyConfig: {
       ajax: {
-        query: async (_params) => {
-          return await getDeptTree();
+        query: async (params: PageParams) => {
+          return await doPageQuery(getDeptTree, params);
         },
       },
     },
@@ -117,6 +121,22 @@ const [Grid, gridApi] = useVbenVxeGrid({
       parentField: 'pid',
       rowField: 'id',
       transform: false,
+      showIcon: true, // 显示树节点图标
+      trigger: 'default', // 'default'（点击图标）或 'row'（点击整行）
+      // 是否显示展开/折叠图标
+    },
+    sortConfig: {
+      remote: true, // 远程排序
+      trigger: 'default', // 点击表头触发
+      orders: ['asc', 'desc', null], // 排序顺序
+    },
+    // 启用远程模式
+    remote: {
+      sort: true, // 远程排序
+    },
+    // 排序变化事件
+    onSortChange() {
+      gridApi.query();
     },
   } as VxeTableGridOptions,
 });
@@ -127,6 +147,16 @@ const [Grid, gridApi] = useVbenVxeGrid({
 function refreshGrid() {
   gridApi.query();
 }
+
+const isExpend = ref(false);
+// toggle 全部节点 展开/折叠
+const triggerExpandAll = () => {
+  const grid = gridApi.grid;
+  if (grid) {
+    isExpend.value = !isExpend.value;
+    grid.setAllTreeExpand(isExpend.value);
+  }
+};
 </script>
 <template>
   <Page auto-content-height>
@@ -137,7 +167,20 @@ function refreshGrid() {
           <Plus class="size-5" />
           {{ $t('ui.actionTitle.create', [$t('system.dept.name')]) }}
         </Button>
+        <Button type="primary" @click="triggerExpandAll" class="btn-space">
+          {{
+            isExpend
+              ? $t('ui.actionTitle.collapse')
+              : $t('ui.actionTitle.expend')
+          }}
+        </Button>
       </template>
     </Grid>
   </Page>
 </template>
+
+<style lang="scss" scoped>
+.btn-space {
+  margin-left: 8px;
+}
+</style>

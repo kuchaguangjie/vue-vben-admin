@@ -7,6 +7,7 @@ import type { SystemDeptApi } from '#/api/system/dept';
 import { z } from '#/adapter/form';
 import { getDeptTree } from '#/api/system/dept';
 import { $t } from '#/locales';
+import { formatBackendTime } from '#/utils/valueFormat';
 
 /**
  * 获取编辑表单的字段配置。如果没有使用多语言，可以直接export一个数组常量
@@ -88,27 +89,43 @@ export function useColumns(
 ): VxeTableGridOptions<SystemDeptApi.SystemDept>['columns'] {
   return [
     {
+      field: 'id',
+      title: $t('common.id'),
+      fixed: 'left',
+      width: 75,
+      sortable: true,
+    },
+    {
       align: 'left',
       field: 'name',
       fixed: 'left',
       title: $t('system.dept.deptName'),
       treeNode: true,
       width: 150,
+      sortable: true,
     },
     {
       cellRender: { name: 'CellTag' },
       field: 'status',
       title: $t('system.dept.status'),
       width: 100,
-    },
-    {
-      field: 'createTime',
-      title: $t('system.dept.createTime'),
-      width: 180,
+      sortable: true,
     },
     {
       field: 'remark',
       title: $t('system.dept.remark'),
+    },
+    {
+      field: 'createdAt',
+      title: $t('common.createdAt'),
+      width: 160,
+      formatter: ({ cellValue }) => formatBackendTime(cellValue), // 时间格式转换
+      sortable: true,
+    },
+    {
+      field: 'createdBy',
+      title: $t('common.createdBy'),
+      width: 100,
     },
     {
       align: 'right',

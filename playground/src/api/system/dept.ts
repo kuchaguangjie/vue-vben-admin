@@ -1,4 +1,6 @@
 import { requestClient } from '#/api/request';
+import type { Recordable } from '@vben-core/typings';
+import { SystemMenuApi } from '#/api';
 
 export namespace SystemDeptApi {
   export interface SystemDept {
@@ -14,9 +16,10 @@ export namespace SystemDeptApi {
 /**
  * 获取部门列表数据
  */
-async function getDeptTree() {
+async function getDeptTree(params: Recordable<any>) {
   return requestClient.get<Array<SystemDeptApi.SystemDept>>(
     '/system/dept/tree',
+    { params },
   );
 }
 
