@@ -1,6 +1,6 @@
-import { requestClient } from '#/api/request';
 import type { Recordable } from '@vben-core/typings';
-import { SystemMenuApi } from '#/api';
+
+import { requestClient } from '#/api/request';
 
 export namespace SystemDeptApi {
   export interface SystemDept {

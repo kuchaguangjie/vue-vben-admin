@@ -3,6 +3,7 @@ import type {
   OnActionClickParams,
   VxeTableGridOptions,
 } from '#/adapter/vxe-table';
+import type { PageParams } from '#/api/request';
 import type { SystemDeptApi } from '#/api/system/dept';
 
 import { ref } from 'vue';
@@ -13,13 +14,12 @@ import { Plus } from '@vben/icons';
 import { Button, message } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
+import { doPageQuery } from '#/api/request';
 import { deleteDept, getDeptTree } from '#/api/system/dept';
 import { $t } from '#/locales';
 
 import { useColumns } from './data';
 import Form from './modules/form.vue';
-import { doPageQuery, type PageParams } from '#/api/request';
-import { getMenuTree } from '#/api';
 
 const [FormModal, formModalApi] = useVbenModal({
   connectedComponent: Form,

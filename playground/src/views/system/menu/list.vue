@@ -7,6 +7,8 @@ import type {
 } from '#/adapter/vxe-table';
 import type { PageParams } from '#/api/request';
 
+import { ref } from 'vue';
+
 import { Page, useVbenDrawer } from '@vben/common-ui';
 import { IconifyIcon, Plus } from '@vben/icons';
 import { $t } from '@vben/locales';
@@ -27,7 +29,6 @@ import { confirmDialog } from '#/utils/dialog';
 
 import { useColumns } from './data';
 import Form from './modules/form.vue';
-import { ref } from 'vue';
 
 const [FormDrawer, formDrawerApi] = useVbenDrawer({
   connectedComponent: Form,
@@ -230,6 +231,7 @@ const triggerExpandAll = () => {
     padding-bottom: 0;
   }
 }
+
 .btn-space {
   margin-left: 8px;
 }
