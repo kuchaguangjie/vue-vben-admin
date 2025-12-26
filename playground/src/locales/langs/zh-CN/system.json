@@ -7,6 +7,7 @@
     "operation": "操作",
     "parentDept": "上级部门",
     "remark": "备注",
+    "roleCodes": "角色",
     "status": "状态",
     "title": "部门管理"
   },

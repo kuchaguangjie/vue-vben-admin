@@ -5,10 +5,12 @@ import { requestClient } from '#/api/request';
 export namespace SystemDeptApi {
   export interface SystemDept {
     [key: string]: any;
+
     children?: SystemDept[];
-    id: string;
+    id: number;
     name: string;
     remark?: string;
+    roleCodes: string[];
     status: 0 | 1;
   }
 }
@@ -40,7 +42,7 @@ async function createDept(
  * @param data 部门数据
  */
 async function updateDept(
-  id: string,
+  id: number,
   data: Omit<SystemDeptApi.SystemDept, 'children' | 'id'>,
 ) {
   return requestClient.put(`/system/dept/${id}`, data);
@@ -54,4 +56,25 @@ async function deleteDept(id: string) {
   return requestClient.delete(`/system/dept/${id}`);
 }
 
-export { createDept, deleteDept, getDeptTree, updateDept };
+/**
+ * pre create
+ */
+async function preCreateDept() {
+  return requestClient.get(`/system/dept/preCreate`);
+}
+
+/**
+ * pre update
+ */
+async function preUpdateDept(id: number) {
+  return requestClient.get(`/system/dept/preUpdate?id=${id}`);
+}
+
+export {
+  createDept,
+  deleteDept,
+  getDeptTree,
+  preCreateDept,
+  preUpdateDept,
+  updateDept,
+};

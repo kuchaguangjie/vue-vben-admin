@@ -4,6 +4,7 @@
     "name": "Department",
     "title": "Department Management",
     "deptName": "Department Name",
+    "roleCodes": "Roles",
     "status": "Status",
     "createTime": "Create Time",
     "remark": "Remark",
