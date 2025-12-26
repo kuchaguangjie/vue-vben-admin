@@ -3,5 +3,8 @@
   "createdAt": "创建时间",
   "createdBy": "创建人",
   "prefix": "前缀",
-  "type": "类型"
+  "type": "类型",
+  "messages": {
+    "pidEqId": "不可选择自己作为父节点"
+  }
 }

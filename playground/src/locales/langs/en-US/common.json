@@ -3,5 +3,8 @@
   "createdAt": "Created At",
   "createdBy": "Created By",
   "prefix": "Prefix",
-  "type": "Type"
+  "type": "Type",
+  "messages": {
+    "pidEqId": "Can't choose self as parent"
+  }
 }

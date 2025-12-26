@@ -1,19 +1,19 @@
 <script lang="ts" setup>
 import type { SystemDeptApi } from '#/api/system/dept';
-
-import { computed, nextTick, ref } from 'vue';
-
-import { useVbenModal } from '@vben/common-ui';
-
-import { Button } from 'ant-design-vue';
-
-import { useVbenForm } from '#/adapter/form';
 import {
   createDept,
   preCreateDept,
   preUpdateDept,
   updateDept,
 } from '#/api/system/dept';
+
+import { computed, nextTick, ref } from 'vue';
+
+import { alert, useVbenModal } from '@vben/common-ui';
+
+import { Button } from 'ant-design-vue';
+
+import { useVbenForm } from '#/adapter/form';
 import { $t } from '#/locales';
 
 import { useSchema } from '../data';
@@ -48,9 +48,19 @@ const [Modal, modalApi] = useVbenModal({
       modalApi.lock();
       const data = await formApi.getValues();
       try {
-        await (formData.value?.id
-          ? updateDept(formData.value.id, data)
-          : createDept(data));
+        // TODO: merge formData & data, keep only 1 ?
+        if (formData.value?.id) {
+          if (formData.value.id === data.pid) {
+            await alert({
+              content: $t('common.messages.pidEqId'),
+              icon: 'warning',
+            });
+            return;
+          }
+          await updateDept(formData.value.id, data);
+        } else {
+          await createDept(data);
+        }
         await modalApi.close();
         emit('success');
       } finally {
@@ -61,6 +71,7 @@ const [Modal, modalApi] = useVbenModal({
   async onOpenChange(isOpen) {
     if (isOpen) {
       const data = modalApi.getData<SystemDeptApi.SystemDept>();
+      if (data.pid === 0) data.pid = undefined; // avoid shown 0 when no pid;
       formData.value = data;
       await formApi.setValues(formData.value); // even for create, there might be a pid pre-selected from ui.
 
