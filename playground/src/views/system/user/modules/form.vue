@@ -1,17 +1,17 @@
 <script lang="ts" setup>
 import type { SystemUserApi } from '#/api/system/user';
-
-import { computed, nextTick, ref } from 'vue';
-
-import { useVbenDrawer } from '@vben/common-ui';
-
-import { useVbenForm } from '#/adapter/form';
 import {
   createUser,
   preCreateUser,
   preUpdateUser,
   updateUser,
 } from '#/api/system/user';
+
+import { computed, nextTick, ref } from 'vue';
+
+import { useVbenDrawer } from '@vben/common-ui';
+
+import { useVbenForm } from '#/adapter/form';
 import { $t } from '#/locales';
 
 import {
@@ -41,6 +41,8 @@ const [Drawer, drawerApi] = useVbenDrawer({
     const { valid } = await formApi.validate();
     if (!valid) return;
     const values = await formApi.getValues();
+    convertDeptObjectsToIds(values);
+
     drawerApi.lock();
     (id.value ? updateUser(id.value, values) : createUser(values))
       .then(() => {
@@ -78,7 +80,7 @@ const [Drawer, drawerApi] = useVbenDrawer({
       // get data & update field value
       if (isEdit) {
         await formApi.setValues(data);
-        await loadForUpdate(data.username); // load data, for update
+        await loadForUpdate(data.username, data.deptIds); // load data, for update
       } else {
         await loadForCreate(); // load data, for create
       }
@@ -91,28 +93,76 @@ async function loadForCreate() {
   loadingData.value = true;
   try {
     // load data
-    const { roles } = await preCreateUser();
+    const { roles, deptRoots } = await preCreateUser();
 
     // set data - role
     updateFormRoleOptions(roles);
+
+    // set data - dept ids
+    updateSchemaDeptIds(deptRoots);
   } finally {
     loadingData.value = false;
   }
 }
 
 // for edit, load data & update form value.
-async function loadForUpdate(username: string) {
+async function loadForUpdate(username: string, deptIds: number[]) {
   loadingData.value = true;
   try {
     // load data
-    const { roles, codes } = await preUpdateUser(username);
+    const { roles, codes, deptRoots } = await preUpdateUser(username);
 
     // set data - role
     updateFormRoleOptions(roles);
     await nextTick();
     await formApi.setFieldValue('roleCodes', codes); // 选中 继承的角色
+
+    // set data - dept ids
+    updateSchemaDeptIds(deptRoots);
+    await nextTick();
+    await formApi.setFieldValue('deptIds', deptIds);
   } finally {
     loadingData.value = false;
+  }
+}
+
+// set tree data, for deptIds
+function updateSchemaDeptIds(deptRoots: any) {
+  formApi.updateSchema([
+    {
+      fieldName: 'deptIds',
+      component: 'TreeSelect',
+      label: $t('system.user.dept'),
+      componentProps: {
+        treeData: deptRoots,
+        fieldNames: {
+          label: 'name', // 对应 labelField
+          value: 'id', // 对应 valueField
+          children: 'children', // 对应 childrenField
+          key: 'id', // 可选，节点的唯一标识
+        },
+        allowClear: true,
+        class: 'w-full',
+        multiple: true, // 启用多选
+        treeCheckable: true,
+        showCheckedStrategy: 'SHOW_CHILD',
+        treeCheckStrictly: true, // 上/下 不关联, 可独立选择
+        treeDefaultExpandAll: true, // 默认展开所有
+      },
+    },
+  ]);
+}
+
+// Tree 数据如果修改了, 则默认提交 object 数组, 应 转换为 id 数组;
+function convertDeptObjectsToIds(values: any) {
+  if (values.deptIds && Array.isArray(values.deptIds)) {
+    values.deptIds = values.deptIds.map((item: any) => {
+      // 如果是对象，取 value 属性
+      if (item && typeof item === 'object' && 'value' in item) {
+        return item.value;
+      }
+      return item;
+    });
   }
 }
 

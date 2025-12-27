@@ -88,6 +88,7 @@
     "email": "邮箱",
     "password": "密码",
     "id": "用户 ID",
+    "dept": "部门",
     "status": "状态",
     "createdAt": "创建时间",
     "operation": "操作",

@@ -8,6 +8,7 @@ export namespace SystemUserApi {
   export interface SystemUser {
     [key: string]: any;
 
+    deptIds: number[];
     id: number;
     nick: string;
     permissions?: string[];

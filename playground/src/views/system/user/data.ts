@@ -1,8 +1,7 @@
 import type { VbenFormSchema } from '#/adapter/form';
-import type { OnActionClickFn, VxeTableGridOptions } from '#/adapter/vxe-table';
-import type { SystemUserApi } from '#/api';
-
 import { z } from '#/adapter/form';
+import type { OnActionClickFn, VxeTableGridOptions } from '#/adapter/vxe-table';
+import { type SystemUserApi } from '#/api';
 import { $t } from '#/locales';
 import { formatBackendTime } from '#/utils/valueFormat';
 
@@ -49,6 +48,27 @@ export function useFormSchema(): VbenFormSchema[] {
       defaultValue: 1,
       fieldName: 'status',
       label: $t('system.user.status'),
+    },
+    {
+      fieldName: 'deptIds',
+      component: 'TreeSelect',
+      label: $t('system.user.dept'),
+      componentProps: {
+        // treeData: deptRoots,
+        fieldNames: {
+          label: 'name', // 对应 labelField
+          value: 'id', // 对应 valueField
+          children: 'children', // 对应 childrenField
+          key: 'id', // 可选，节点的唯一标识
+        },
+        allowClear: true,
+        class: 'w-full',
+        multiple: true, // 启用多选
+        treeCheckable: true,
+        showCheckedStrategy: 'SHOW_CHILD',
+        treeCheckStrictly: true, // 上/下 不关联, 可独立选择
+        treeDefaultExpandAll: true, // 默认展开所有
+      },
     },
     {
       component: 'CheckboxGroup',
