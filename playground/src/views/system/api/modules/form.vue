@@ -3,7 +3,7 @@ import type { SystemApiApi } from '#/api/system/api';
 
 import { computed, nextTick, ref } from 'vue';
 
-import { useVbenDrawer } from '@vben/common-ui';
+import { alert, useVbenDrawer } from '@vben/common-ui';
 
 import { useVbenForm } from '#/adapter/form';
 import { createApi, updateApi } from '#/api/system/api';
@@ -26,26 +26,39 @@ const [Form, formApi] = useVbenForm({
   showDefaultActions: false,
 });
 
-const id = ref();
 const [Drawer, drawerApi] = useVbenDrawer({
   async onConfirm() {
     const { valid } = await formApi.validate();
     if (!valid) return;
     const values = await formApi.getValues();
     drawerApi.lock();
-    (id.value ? updateApi(id.value, values) : createApi(values))
-      .then(() => {
-        emits('success');
-        drawerApi.close();
-      })
-      .catch(() => {
-        drawerApi.unlock();
-      });
+
+    const id = formData.value?.id;
+
+    try {
+      if (id) {
+        if (id === values.pid) {
+          await alert({
+            content: $t('common.messages.pidEqId'),
+            icon: 'warning',
+          });
+          return;
+        }
+        await updateApi(id, values);
+      } else {
+        await createApi(values);
+      }
+      await drawerApi.close();
+      emits('success');
+    } finally {
+      drawerApi.unlock();
+    }
   },
 
   async onOpenChange(isOpen) {
     if (isOpen) {
       const data = drawerApi.getData<SystemApiApi.SystemApi>();
+      if (data.pid === 0) data.pid = undefined; // avoid shown 0 when no pid;
       formData.value = data;
       await formApi.setValues(formData.value); // even for create, there might be a pid pre-selected from ui.
 

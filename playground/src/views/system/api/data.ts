@@ -1,9 +1,9 @@
 import type { VbenFormSchema } from '#/adapter/form';
 import type { OnActionClickFn, VxeTableGridOptions } from '#/adapter/vxe-table';
 import type { SystemApiApi } from '#/api';
+import { getApiTreeDirOnly } from '#/api';
 
 import { ref } from 'vue';
-
 import { $t } from '#/locales';
 import { formatBackendTime } from '#/utils/valueFormat';
 
@@ -38,11 +38,17 @@ export function useFormSchema(): VbenFormSchema[] {
       },
     },
     {
-      component: 'Input',
+      component: 'ApiTreeSelect',
+      componentProps: {
+        allowClear: true,
+        api: getApiTreeDirOnly,
+        class: 'w-full',
+        labelField: 'path',
+        valueField: 'id',
+        childrenField: 'children',
+      },
       fieldName: 'pid',
-      label: $t('system.api.pid'),
-      rules: 'required',
-      defaultValue: 0,
+      label: $t('common.parent'),
     },
     {
       component: 'RadioGroup',
@@ -116,8 +122,24 @@ export function useGridFormSchema(): VbenFormSchema[] {
       fieldName: 'action',
       label: $t('system.api.action'),
     },
-    { component: 'InputNumber', fieldName: 'id', label: $t('system.api.id') },
-    { component: 'InputNumber', fieldName: 'pid', label: $t('system.api.pid') },
+    {
+      component: 'InputNumber',
+      fieldName: 'id',
+      label: $t('system.api.id'),
+    },
+    {
+      component: 'ApiTreeSelect',
+      componentProps: {
+        allowClear: true,
+        api: getApiTreeDirOnly,
+        class: 'w-full',
+        labelField: 'path',
+        valueField: 'id',
+        childrenField: 'children',
+      },
+      fieldName: 'pid',
+      label: $t('common.parent'),
+    },
     {
       component: 'Select',
       componentProps: {

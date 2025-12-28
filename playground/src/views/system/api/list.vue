@@ -5,8 +5,11 @@ import type {
   OnActionClickParams,
   VxeTableGridOptions,
 } from '#/adapter/vxe-table';
+import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import type { SystemApiApi } from '#/api';
+import { deleteApi, getApiTree, updateApiStatus } from '#/api';
 import type { PageParams } from '#/api/request';
+import { doPageQuery } from '#/api/request';
 
 import { ref } from 'vue';
 
@@ -14,13 +17,9 @@ import { Page, useVbenDrawer } from '@vben/common-ui';
 import { Plus } from '@vben/icons';
 
 import { Button, message } from 'ant-design-vue';
-
-import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import { deleteApi, getApiTree, updateApiStatus } from '#/api';
-import { doPageQuery } from '#/api/request';
 import { $t } from '#/locales';
 import { confirmDialog } from '#/utils/dialog';
-import { checkAllFieldsUndefined } from '#/utils/object';
+import { checkAllFieldsEmpty, removeEmptyFields } from '#/utils/object';
 
 import { hasQueryParam, useColumns, useGridFormSchema } from './data';
 import Form from './modules/form.vue';
@@ -46,8 +45,9 @@ const [Grid, gridApi] = useVbenVxeGrid({
     proxyConfig: {
       ajax: {
         query: async (params: PageParams, formValues) => {
+          formValues = removeEmptyFields(formValues);
           const result = await doPageQuery(getApiTree, params, formValues);
-          hasQueryParam.value = !checkAllFieldsUndefined(formValues);
+          hasQueryParam.value = !checkAllFieldsEmpty(formValues);
           return result;
         },
       },

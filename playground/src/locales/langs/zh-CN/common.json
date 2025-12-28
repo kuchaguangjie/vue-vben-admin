@@ -5,6 +5,7 @@
   "prefix": "前缀",
   "type": "类型",
   "newChild": "新增下级",
+  "parent": "上级",
   "messages": {
     "pidEqId": "不可选择自己作为父节点"
   }

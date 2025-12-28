@@ -11,7 +11,7 @@ export namespace SystemApiApi {
     action: string;
     id: number;
     path: string;
-    pid: number;
+    pid: number | undefined;
     remark?: string;
     status: number;
     type: number;
@@ -35,6 +35,10 @@ async function getApiTree(params: Recordable<any>) {
   return requestClient.get<Array<SystemApiApi.SystemApi>>('/system/api/tree', {
     params,
   });
+}
+
+async function getApiTreeDirOnly() {
+  return await getApiTree({ type: 1 });
 }
 
 /**
@@ -72,7 +76,7 @@ async function createApi(data: Omit<SystemApiApi.SystemApi, 'id'>) {
  * @param id api ID
  * @param data api数据
  */
-async function updateApi(id: string, data: Omit<SystemApiApi.SystemApi, 'id'>) {
+async function updateApi(id: number, data: Omit<SystemApiApi.SystemApi, 'id'>) {
   return requestClient.put(`/system/api/${id}`, data);
 }
 
@@ -98,6 +102,7 @@ export {
   getApiAll,
   getApiList,
   getApiTree,
+  getApiTreeDirOnly,
   getApiTreeForRole,
   getRoleApis,
   updateApi,

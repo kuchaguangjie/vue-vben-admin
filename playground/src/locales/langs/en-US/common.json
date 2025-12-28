@@ -5,6 +5,7 @@
   "prefix": "Prefix",
   "type": "Type",
   "newChild": "New Child",
+  "parent": "Parent",
   "messages": {
     "pidEqId": "Can't choose self as parent"
   }
