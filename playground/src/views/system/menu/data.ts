@@ -117,7 +117,7 @@ export function useColumns<T = SystemMenuApi.SystemMenu>(
         options: [
           {
             code: 'append',
-            text: '新增下级',
+            text: $t('common.newChild'),
           },
           'edit', // 默认的编辑按钮
           'delete', // 默认的删除按钮

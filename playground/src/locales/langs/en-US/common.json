@@ -4,6 +4,7 @@
   "createdBy": "Created By",
   "prefix": "Prefix",
   "type": "Type",
+  "newChild": "New Child",
   "messages": {
     "pidEqId": "Can't choose self as parent"
   }

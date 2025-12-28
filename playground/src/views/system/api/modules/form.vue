@@ -46,22 +46,11 @@ const [Drawer, drawerApi] = useVbenDrawer({
   async onOpenChange(isOpen) {
     if (isOpen) {
       const data = drawerApi.getData<SystemApiApi.SystemApi>();
-      await formApi.resetForm();
+      formData.value = data;
+      await formApi.setValues(formData.value); // even for create, there might be a pid pre-selected from ui.
 
       const isEdit = data && data.id;
-      if (isEdit) {
-        formData.value = data;
-        id.value = data.id;
-      } else {
-        id.value = undefined;
-      }
-
-      // Wait for Vue to flush DOM updates (form fields mounted)
-      await nextTick();
-      if (isEdit) {
-        await formApi.setValues(data);
-      }
-
+      // adjust fields
       if (isEdit) {
         formApi.updateSchema(useFormSchemaExtraEdit());
         await formApi.removeSchemaByFields(useFormSchemaRemoveEdit());
@@ -69,6 +58,8 @@ const [Drawer, drawerApi] = useVbenDrawer({
         formApi.updateSchema(useFormSchemaExtraNew());
         await formApi.removeSchemaByFields(useFormSchemaRemoveNew());
       }
+      // Wait for Vue to flush DOM updates (form fields mounted)
+      await nextTick();
     }
   },
 });

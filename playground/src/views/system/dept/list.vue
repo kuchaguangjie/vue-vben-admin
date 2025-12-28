@@ -119,8 +119,9 @@ const [Grid, gridApi] = useVbenVxeGrid({
       zoom: true,
     },
     treeConfig: {
-      parentField: 'pid',
       rowField: 'id',
+      parentField: 'pid',
+      childrenField: 'children',
       transform: false,
       showIcon: true, // 显示树节点图标
       trigger: 'default', // 'default'（点击图标）或 'row'（点击整行）

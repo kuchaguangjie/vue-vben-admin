@@ -2,8 +2,13 @@ import type { VbenFormSchema } from '#/adapter/form';
 import type { OnActionClickFn, VxeTableGridOptions } from '#/adapter/vxe-table';
 import type { SystemApiApi } from '#/api';
 
+import { ref } from 'vue';
+
 import { $t } from '#/locales';
 import { formatBackendTime } from '#/utils/valueFormat';
+
+// is there any query param
+export const hasQueryParam = ref(false);
 
 export function useFormSchema(): VbenFormSchema[] {
   return [
@@ -33,7 +38,7 @@ export function useFormSchema(): VbenFormSchema[] {
       },
     },
     {
-      component: 'InputNumber',
+      component: 'Input',
       fieldName: 'pid',
       label: $t('system.api.pid'),
       rules: 'required',
@@ -102,6 +107,7 @@ export function useGridFormSchema(): VbenFormSchema[] {
       fieldName: 'path',
       label: $t('system.api.path'),
       componentProps: {
+        allowClear: true,
         placeholder: $t('common.prefix'),
       },
     },
@@ -156,7 +162,7 @@ export function useColumns<T = SystemApiApi.SystemApi>(
     {
       field: 'id',
       title: $t('system.api.id'),
-      width: 90,
+      width: 75,
       sortable: true,
     },
     {
@@ -164,23 +170,13 @@ export function useColumns<T = SystemApiApi.SystemApi>(
       title: $t('system.api.path'),
       width: 200,
       sortable: true,
-    },
-    {
-      field: 'action',
-      title: $t('system.api.action'),
-      width: 120,
-      sortable: true,
-    },
-    {
-      field: 'pid',
-      title: $t('system.api.pid'),
-      width: 90,
-      sortable: true,
+      treeNode: true,
+      align: 'left',
     },
     {
       field: 'type',
       title: $t('common.type'),
-      width: 100,
+      width: 75,
       formatter: ({ cellValue }) => {
         let text: string = 'unknown';
         switch (cellValue) {
@@ -198,6 +194,18 @@ export function useColumns<T = SystemApiApi.SystemApi>(
       sortable: true,
     },
     {
+      field: 'action',
+      title: $t('system.api.action'),
+      width: 75,
+      sortable: true,
+    },
+    {
+      field: 'pid',
+      title: $t('system.api.pid'),
+      width: 75,
+      sortable: true,
+    },
+    {
       cellRender: {
         attrs: { beforeChange: onStatusChange },
         name: onStatusChange ? 'CellSwitch' : 'CellTag',
@@ -209,7 +217,7 @@ export function useColumns<T = SystemApiApi.SystemApi>(
     },
     {
       field: 'remark',
-      minWidth: 150,
+      width: 90,
       title: $t('system.api.remark'),
     },
     {
@@ -233,11 +241,27 @@ export function useColumns<T = SystemApiApi.SystemApi>(
           onClick: onActionClick,
         },
         name: 'CellOperation',
+        options: [
+          {
+            code: 'append',
+            text: $t('common.newChild'),
+          },
+          'edit', // 默认的编辑按钮
+          {
+            code: 'delete', // 默认的删除按钮, 有 children 不可删除;
+            disabled: (row: SystemApiApi.SystemApi) => {
+              return (
+                !!(row.children && row.children.length > 0) ||
+                hasQueryParam.value
+              );
+            },
+          },
+        ],
       },
       field: 'operation',
       fixed: 'right',
       title: $t('system.api.operation'),
-      width: 130,
+      width: 200,
     },
   ];
 }

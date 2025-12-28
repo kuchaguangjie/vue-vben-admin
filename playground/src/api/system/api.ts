@@ -31,8 +31,10 @@ async function getApiList(params: Recordable<any>) {
 /**
  * 获取 api tree
  */
-async function getApiTree() {
-  return requestClient.get<Array<SystemApiApi.SystemApi>>('/system/api/tree');
+async function getApiTree(params: Recordable<any>) {
+  return requestClient.get<Array<SystemApiApi.SystemApi>>('/system/api/tree', {
+    params,
+  });
 }
 
 /**
