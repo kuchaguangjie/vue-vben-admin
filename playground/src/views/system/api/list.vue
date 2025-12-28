@@ -5,11 +5,8 @@ import type {
   OnActionClickParams,
   VxeTableGridOptions,
 } from '#/adapter/vxe-table';
-import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import type { SystemApiApi } from '#/api';
-import { deleteApi, getApiTree, updateApiStatus } from '#/api';
 import type { PageParams } from '#/api/request';
-import { doPageQuery } from '#/api/request';
 
 import { ref } from 'vue';
 
@@ -17,6 +14,10 @@ import { Page, useVbenDrawer } from '@vben/common-ui';
 import { Plus } from '@vben/icons';
 
 import { Button, message } from 'ant-design-vue';
+
+import { useVbenVxeGrid } from '#/adapter/vxe-table';
+import { deleteApi, getApiTree, updateApiStatus } from '#/api';
+import { doPageQuery } from '#/api/request';
 import { $t } from '#/locales';
 import { confirmDialog } from '#/utils/dialog';
 import { checkAllFieldsEmpty, removeEmptyFields } from '#/utils/object';
