@@ -1,4 +1,5 @@
 import type { OnActionClickFn, VxeTableGridOptions } from '#/adapter/vxe-table';
+import type { SystemApiApi } from '#/api';
 import type { SystemMenuApi } from '#/api/system/menu';
 
 import { $t } from '#/locales';
@@ -120,7 +121,12 @@ export function useColumns<T = SystemMenuApi.SystemMenu>(
             text: $t('common.newChild'),
           },
           'edit', // 默认的编辑按钮
-          'delete', // 默认的删除按钮
+          {
+            code: 'delete', // 默认的删除按钮, 有 children 不可删除;
+            disabled: (row: SystemApiApi.SystemApi) => {
+              return !!(row.children && row.children.length > 0);
+            },
+          },
         ],
       },
       field: 'operation',

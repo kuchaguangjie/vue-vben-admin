@@ -1,10 +1,9 @@
 import type { VbenFormSchema } from '#/adapter/form';
 import type { OnActionClickFn, VxeTableGridOptions } from '#/adapter/vxe-table';
 import type { SystemApiApi } from '#/api';
+import { getApiTreeDirOnly } from '#/api';
 
 import { ref } from 'vue';
-
-import { getApiTreeDirOnly } from '#/api';
 import { $t } from '#/locales';
 import { formatBackendTime } from '#/utils/valueFormat';
 
@@ -75,7 +74,22 @@ export function useFormSchema(): VbenFormSchema[] {
 
 // single - edit - set fields
 export function useFormSchemaExtraEdit(): VbenFormSchema[] {
-  return [];
+  return [
+    {
+      component: 'Input',
+      fieldName: 'path',
+      componentProps: {
+        disabled: true, // 不可修改
+      },
+    },
+    {
+      component: 'Input',
+      fieldName: 'action',
+      componentProps: {
+        disabled: true, // 不可修改
+      },
+    },
+  ];
 }
 
 // single - new - add fields

@@ -1,8 +1,7 @@
 import type { VbenFormSchema } from '#/adapter/form';
+import { z } from '#/adapter/form';
 import type { OnActionClickFn, VxeTableGridOptions } from '#/adapter/vxe-table';
 import type { SystemUserApi } from '#/api';
-
-import { z } from '#/adapter/form';
 import { $t } from '#/locales';
 import { formatBackendTime } from '#/utils/valueFormat';
 
@@ -236,6 +235,22 @@ export function useColumns<T = SystemUserApi.SystemUser>(
           onClick: onActionClick,
         },
         name: 'CellOperation',
+        options: [
+          {
+            code: 'append',
+            text: $t('common.newChild'),
+          },
+          'edit', // 默认的编辑按钮
+          // 不可删除 用户
+          /*
+          {
+            code: 'delete', // 默认的删除按钮, 有 children 不可删除;
+            disabled: (row: SystemApiApi.SystemApi) => {
+              return !!(row.children && row.children.length > 0);
+            },
+          },
+          */
+        ],
       },
       field: 'operation',
       fixed: 'right',
