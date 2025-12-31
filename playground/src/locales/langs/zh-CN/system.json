@@ -94,7 +94,7 @@
     "operation": "操作",
     "setRoles": "角色",
     "setMenuPerm": "菜单权限",
-    "usernameValidation": "用户名长度 3-20, 可包含 'a-z A-Z 0-9 _-.', 前缀不可用 role_ 或 dept_",
+    "usernameValidation": "用户名长度 3-20, 可包含 'a-z A-Z 0-9 _-.'",
     "passwordValidation": "'长度 6~30, 只能包含 字母 数字 _'"
   },
   "log": {

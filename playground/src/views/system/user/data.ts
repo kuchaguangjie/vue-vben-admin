@@ -1,8 +1,7 @@
 import type { VbenFormSchema } from '#/adapter/form';
+import { z } from '#/adapter/form';
 import type { OnActionClickFn, VxeTableGridOptions } from '#/adapter/vxe-table';
 import type { SystemUserApi } from '#/api';
-
-import { z } from '#/adapter/form';
 import { $t } from '#/locales';
 import { formatBackendTime } from '#/utils/valueFormat';
 
@@ -107,17 +106,10 @@ export function useFormSchemaExtraNew(): VbenFormSchema[] {
         .string()
         .min(3, { message: $t('system.user.usernameValidation') })
         .max(20, { message: $t('system.user.usernameValidation') })
-        // 1. 限制 字符集：字母、数字、下划线、中划线、点
+        // 限制 字符集：字母、数字、下划线、中划线、点
         .regex(/^[\w\-.]+$/, {
-          message: $t('system.user.usernameValidation'), // 建议增加一个专门的格式错误提示
-        })
-        // 2. 限制 特殊前缀
-        .refine(
-          (val) => !(val.startsWith('role_') || val.startsWith('dept_')),
-          {
-            message: $t('system.user.usernameValidation'),
-          },
-        ),
+          message: $t('system.user.usernameValidation'),
+        }),
     },
     {
       component: 'VbenInput',
