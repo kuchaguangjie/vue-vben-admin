@@ -1,17 +1,17 @@
 <script lang="ts" setup>
 import type { SystemUserApi } from '#/api/system/user';
-
-import { computed, nextTick, ref } from 'vue';
-
-import { useVbenDrawer } from '@vben/common-ui';
-
-import { useVbenForm } from '#/adapter/form';
 import {
   createUser,
   preCreateUser,
   preUpdateUser,
   updateUser,
 } from '#/api/system/user';
+
+import { computed, nextTick, ref } from 'vue';
+
+import { useVbenDrawer } from '@vben/common-ui';
+
+import { useVbenForm } from '#/adapter/form';
 import { $t } from '#/locales';
 
 import {
@@ -80,7 +80,7 @@ const [Drawer, drawerApi] = useVbenDrawer({
       // get data & update field value
       if (isEdit) {
         await formApi.setValues(data);
-        await loadForUpdate(data.username, data.deptIds); // load data, for update
+        await loadForUpdate(data.username); // load data, for update
       } else {
         await loadForCreate(); // load data, for create
       }
@@ -106,11 +106,11 @@ async function loadForCreate() {
 }
 
 // for edit, load data & update form value.
-async function loadForUpdate(username: string, deptIds: number[]) {
+async function loadForUpdate(username: string) {
   loadingData.value = true;
   try {
     // load data
-    const { roles, codes, deptRoots } = await preUpdateUser(username);
+    const { roles, deptRoots, codes, deptIds } = await preUpdateUser(username);
 
     // set data - role
     updateFormRoleOptions(roles);
