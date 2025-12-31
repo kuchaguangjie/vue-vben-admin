@@ -1,7 +1,8 @@
 import type { VbenFormSchema } from '#/adapter/form';
-import { z } from '#/adapter/form';
 import type { OnActionClickFn, VxeTableGridOptions } from '#/adapter/vxe-table';
 import type { SystemUserApi } from '#/api';
+
+import { z } from '#/adapter/form';
 import { $t } from '#/locales';
 import { formatBackendTime } from '#/utils/valueFormat';
 
