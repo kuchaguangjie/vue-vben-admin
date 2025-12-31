@@ -1,5 +1,11 @@
 <script lang="ts" setup>
 import type { SystemDeptApi } from '#/api/system/dept';
+import {
+  createDept,
+  preCreateDept,
+  preUpdateDept,
+  updateDept,
+} from '#/api/system/dept';
 
 import { computed, nextTick, ref } from 'vue';
 
@@ -8,12 +14,6 @@ import { alert, useVbenModal } from '@vben/common-ui';
 import { Button } from 'ant-design-vue';
 
 import { useVbenForm } from '#/adapter/form';
-import {
-  createDept,
-  preCreateDept,
-  preUpdateDept,
-  updateDept,
-} from '#/api/system/dept';
 import { $t } from '#/locales';
 
 import { useSchema } from '../data';
@@ -80,7 +80,7 @@ const [Modal, modalApi] = useVbenModal({
 
       // get data & update field value
       isEdit
-        ? await loadForUpdate(data.id, data.code, data.roleCodes) // load data, for update
+        ? await loadForUpdate(data.id) // load data, for update
         : await loadForCreate(); // load data, for create
     }
   },
@@ -91,27 +91,28 @@ async function loadForCreate() {
   loadingData.value = true;
   try {
     // load data
-    const { roles } = await preCreateDept();
+    const { roles, codes } = await preCreateDept();
 
     // set data - role
     updateFormRoleOptions(roles);
     await nextTick();
+    await formApi.setFieldValue('roleCodes', codes); // 选中 已有的角色
   } finally {
     loadingData.value = false;
   }
 }
 
 // for edit, load data & update form value.
-async function loadForUpdate(id: number, code: string, roleCodes: string[]) {
+async function loadForUpdate(id: number) {
   loadingData.value = true;
   try {
     // load data
-    const { roles } = await preUpdateDept(id);
+    const { roles, codes } = await preUpdateDept(id);
 
     // set data - role
-    updateFormRoleOptions(roles, code);
+    updateFormRoleOptions(roles);
     await nextTick();
-    await formApi.setFieldValue('roleCodes', roleCodes); // 选中 已有的角色
+    await formApi.setFieldValue('roleCodes', codes); // 选中 已有的角色
   } finally {
     loadingData.value = false;
   }
@@ -120,14 +121,12 @@ async function loadForUpdate(id: number, code: string, roleCodes: string[]) {
 /**
  * update roles field's options
  * @param roles all roles
- * @param code current role's code, for create it's not provided.
  */
-function updateFormRoleOptions(roles: any, code?: string) {
+function updateFormRoleOptions(roles: any) {
   // 获取所有可用角色
   roleOptions.value = roles.map((role: any) => ({
     label: role.name,
     value: role.code,
-    disabled: role.code === code, // 不可选中自己
   }));
 
   // 动态更新表单字段的选项
