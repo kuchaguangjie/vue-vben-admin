@@ -77,7 +77,8 @@
     "permissions": "权限",
     "setInheritRoles": "角色继承 (api)",
     "setPermissions": "菜单",
-    "setApis": "角色 APIs"
+    "setApis": "角色 APIs",
+    "codeValidation": "编码 长度 1-20, 可包含 'a-z A-Z 0-9 _'"
   },
   "user": {
     "name": "用户",

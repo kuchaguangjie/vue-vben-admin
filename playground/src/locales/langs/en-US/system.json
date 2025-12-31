@@ -76,7 +76,8 @@
     "permissions": "Permissions",
     "setInheritRoles": "Inherit roles (api)",
     "setPermissions": "Menus",
-    "setApis": "Role APIs"
+    "setApis": "Role APIs",
+    "codeValidation": "Code length 1-20, can contain 'a-z A-Z 0-9 _'"
   },
   "user": {
     "name": "User",
@@ -93,7 +94,7 @@
     "operation": "Operation",
     "setRoles": "Roles",
     "setMenuPerm": "Menus",
-    "usernameValidation": "username length 3-20, can contain 'a-z A-Z 0-9 _-.'",
+    "usernameValidation": "Username length 3-20, can contain 'a-z A-Z 0-9 _-.'",
     "passwordValidation": "Length 6~30, allow a-z A-Z _"
   },
   "log": {

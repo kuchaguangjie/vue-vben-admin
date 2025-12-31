@@ -1,8 +1,7 @@
 import type { VbenFormSchema } from '#/adapter/form';
+import { z } from '#/adapter/form';
 import type { OnActionClickFn, VxeTableGridOptions } from '#/adapter/vxe-table';
 import type { SystemRoleApi } from '#/api';
-
-import { z } from '#/adapter/form';
 import { $t } from '#/locales';
 import { formatBackendTime } from '#/utils/valueFormat';
 
@@ -86,12 +85,15 @@ export function useFormSchemaExtraNew(): VbenFormSchema[] {
       defaultValue: 'role_',
       rules: z
         .string()
-        .min(6, { message: '代码长度不能少于6个字符' })
-        .max(25, { message: '代码长度不能超过25个字符' })
-        .regex(/^role/, { message: '代码必须以 role_ 开头' }),
+        .min(1, { message: '代码长度不能少于1个字符' })
+        .max(20, { message: '代码长度不能超过20个字符' })
+        // 限制 字符集: 字母、数字、下划线
+        .regex(/^\w+$/, {
+          message: $t('system.role.codeValidation'),
+        }),
       componentProps: {
-        placeholder: 'role_xxx',
-        maxlength: 25,
+        placeholder: '1 ~ 20 个字符',
+        maxlength: 20,
         showCount: true,
       },
     },

@@ -107,7 +107,7 @@ export function useFormSchemaExtraNew(): VbenFormSchema[] {
         .string()
         .min(3, { message: $t('system.user.usernameValidation') })
         .max(20, { message: $t('system.user.usernameValidation') })
-        // 限制 字符集：字母、数字、下划线、中划线、点
+        // 限制 字符集: 字母、数字、下划线、中划线、点
         .regex(/^[\w\-.]+$/, {
           message: $t('system.user.usernameValidation'),
         }),
