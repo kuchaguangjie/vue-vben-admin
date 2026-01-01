@@ -96,7 +96,9 @@
     "setRoles": "角色",
     "setMenuPerm": "菜单权限",
     "usernameValidation": "用户名长度 3-20, 可包含 'a-z A-Z 0-9 _-.'",
-    "passwordValidation": "'长度 6~30, 只能包含 字母 数字 _'"
+    "passwordValidationLength": "长度 8~30",
+    "passwordValidationAsciiOnly": "只能包含 字母 数字 特殊符号",
+    "passwordValidationComplexity": "必须同时包含 字母 数字"
   },
   "log": {
     "code": "操作码",

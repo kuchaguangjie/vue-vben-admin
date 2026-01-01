@@ -130,7 +130,17 @@ export function useFormSchemaExtraNew(): VbenFormSchema[] {
       label: $t('system.user.password'),
       rules: z
         .string()
-        .regex(/^\w{6,30}$/, $t('system.user.passwordValidation')),
+        .min(8, { message: $t('system.user.passwordValidationLength') })
+        .max(30, { message: $t('system.user.passwordValidationLength') })
+        // [!-~] 涵盖了 ASCII 表中从 '!' 到 '~' 的所有可见字符, 排除了 空格 / 控制字符 / 中日韩等 Unicode 字符;
+        // eslint-disable-next-line regexp/no-obscure-range
+        .regex(/^[!-~]+$/, {
+          message: $t('system.user.passwordValidationAsciiOnly'),
+        })
+        // 复杂度要求: 同时 包含 字母 & 数字;
+        .refine((val) => /[a-z]/i.test(val) && /\d/.test(val), {
+          message: $t('system.user.passwordValidationComplexity'),
+        }),
     },
   ];
 }

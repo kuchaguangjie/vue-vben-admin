@@ -95,7 +95,9 @@
     "setRoles": "Roles",
     "setMenuPerm": "Menus",
     "usernameValidation": "Username length 3-20, can contain 'a-z A-Z 0-9 _-.'",
-    "passwordValidation": "Length 6~30, allow a-z A-Z _"
+    "passwordValidationLength": "Length 8~30",
+    "passwordValidationAsciiOnly": "Only allow alphabet number special chars",
+    "passwordValidationComplexity": "Must contain both alphabet and number"
   },
   "log": {
     "code": "Code",
