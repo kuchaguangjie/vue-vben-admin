@@ -57,8 +57,8 @@ async function updateUserStatus(data: CommonType.UpdateStatus) {
 /**
  * 获得用户 角色
  */
-async function getUserRoles(username: string) {
-  return requestClient.get(`/system/user/getUserRoles?username=${username}`);
+async function getUserRoles(userId: number) {
+  return requestClient.get(`/system/user/getUserRoles?id=${userId}`);
 }
 
 /**
@@ -79,8 +79,8 @@ async function preCreateUser() {
 /**
  * update 前 获取数据.
  */
-async function preUpdateUser(username: string) {
-  return requestClient.get(`/system/user/preUpdate?username=${username}`);
+async function preUpdateUser(userId: number) {
+  return requestClient.get(`/system/user/preUpdate?id=${userId}`);
 }
 
 export {

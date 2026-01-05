@@ -80,7 +80,7 @@ const [Drawer, drawerApi] = useVbenDrawer({
       // get data & update field value
       if (isEdit) {
         await formApi.setValues(data);
-        await loadForUpdate(data.username); // load data, for update
+        await loadForUpdate(data.id); // load data, for update
       } else {
         await loadForCreate(); // load data, for create
       }
@@ -106,11 +106,11 @@ async function loadForCreate() {
 }
 
 // for edit, load data & update form value.
-async function loadForUpdate(username: string) {
+async function loadForUpdate(userId: number) {
   loadingData.value = true;
   try {
     // load data
-    const { roles, deptRoots, codes, deptIds } = await preUpdateUser(username);
+    const { roles, deptRoots, codes, deptIds } = await preUpdateUser(userId);
 
     // set data - role
     updateFormRoleOptions(roles);
