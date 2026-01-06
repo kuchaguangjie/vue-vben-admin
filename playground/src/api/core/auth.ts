@@ -1,4 +1,4 @@
-import {baseRequestClient, requestClient} from '#/api/request';
+import { baseRequestClient, requestClient } from '#/api/request';
 
 export namespace AuthApi {
   /** 登录接口参数 */
@@ -51,5 +51,6 @@ export async function logoutApi() {
  * 获取用户权限码
  */
 export async function getAccessCodesApi() {
-  return requestClient.get<string[]>('/auth/codes');
+  return [];
+  // return requestClient.get<string[]>('/auth/codes');
 }
