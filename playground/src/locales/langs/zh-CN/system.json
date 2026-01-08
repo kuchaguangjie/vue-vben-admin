@@ -1,4 +1,5 @@
 {
+  "title": "系统管理",
   "dept": {
     "list": "部门列表",
     "createTime": "创建时间",
@@ -108,6 +109,5 @@
     "id": "日志 ID",
     "createdBy": "创建人 ID",
     "createdAt": "创建时间"
-  },
-  "title": "系统管理"
+  }
 }
