@@ -1,5 +1,11 @@
 <script lang="ts" setup>
 import type { SystemDeptApi } from '#/api/system/dept';
+import {
+  createDept,
+  preCreateDept,
+  preUpdateDept,
+  updateDept,
+} from '#/api/system/dept';
 
 import { computed, nextTick, ref } from 'vue';
 
@@ -8,12 +14,6 @@ import { alert, useVbenModal } from '@vben/common-ui';
 import { Button } from 'ant-design-vue';
 
 import { useVbenForm } from '#/adapter/form';
-import {
-  createDept,
-  preCreateDept,
-  preUpdateDept,
-  updateDept,
-} from '#/api/system/dept';
 import { $t } from '#/locales';
 
 import { useSchema } from '../data';
@@ -80,7 +80,7 @@ const [Modal, modalApi] = useVbenModal({
 
       // get data & update field value
       isEdit
-        ? await loadForUpdate(data.id) // load data, for update
+        ? await loadForUpdate(data.id, data.pid) // load data, for update
         : await loadForCreate(); // load data, for create
     }
   },
@@ -91,7 +91,10 @@ async function loadForCreate() {
   loadingData.value = true;
   try {
     // load data
-    const { roles, codes } = await preCreateDept();
+    const { deptRoots, roles, codes } = await preCreateDept();
+
+    // set data - pid
+    updateSchemaPid(deptRoots);
 
     // set data - role
     updateFormRoleOptions(roles);
@@ -103,11 +106,16 @@ async function loadForCreate() {
 }
 
 // for edit, load data & update form value.
-async function loadForUpdate(id: number) {
+async function loadForUpdate(id: number, pid: number) {
   loadingData.value = true;
   try {
     // load data
-    const { roles, codes } = await preUpdateDept(id);
+    const { deptRoots, roles, codes } = await preUpdateDept(id);
+
+    // set data - pid
+    updateSchemaPid(deptRoots);
+    await nextTick();
+    await formApi.setFieldValue('pid', pid);
 
     // set data - role
     updateFormRoleOptions(roles);
@@ -116,6 +124,31 @@ async function loadForUpdate(id: number) {
   } finally {
     loadingData.value = false;
   }
+}
+
+// set tree data, for pid
+function updateSchemaPid(deptRoots: any) {
+  formApi.updateSchema([
+    {
+      component: 'TreeSelect',
+      componentProps: {
+        allowClear: true,
+        treeData: deptRoots,
+        fieldNames: {
+          label: 'name', // 对应 labelField
+          value: 'id', // 对应 valueField
+          children: 'children', // 对应 childrenField
+          key: 'id', // 可选，节点的唯一标识
+        },
+        class: 'w-full',
+        labelField: 'name',
+        valueField: 'id',
+        childrenField: 'children',
+      },
+      fieldName: 'pid',
+      label: $t('system.dept.parentDept'),
+    },
+  ]);
 }
 
 /**

@@ -36,10 +36,9 @@ export function useSchema(): VbenFormSchema[] {
       },
     },
     {
-      component: 'ApiTreeSelect',
+      component: 'TreeSelect',
       componentProps: {
         allowClear: true,
-        api: getDeptTree,
         class: 'w-full',
         labelField: 'name',
         valueField: 'id',
