@@ -1,3 +1,20 @@
+# fiber-crud - web 前端
+
+基于 vben 的 playground 开发, 使用 antd.
+
+## Git branch
+
+|     分支     | 说明                               |
+|:----------:|----------------------------------|
+|    main    | vben 主分支.<br/> 不要动, 方便 同步 & 升级.  |
+| fiber-crud | 本项目分支.<br/> 主要修改 playground/ 子目录 |
+
+## 启动
+
+```bash
+  pnpm dev:play
+```
+
 <div align="center">
   <a href="https://github.com/anncwb/vue-vben-admin">
     <img alt="VbenAdmin Logo" width="215" src="https://unpkg.com/@vbenjs/static-source@0.1.7/source/logo-v1.webp">
@@ -16,11 +33,15 @@
 
 ## Introduction
 
-Vue Vben Admin is a free and open source middle and back-end template. Using the latest `vue3`, `vite`, `TypeScript` and other mainstream technology development, the out-of-the-box middle and back-end front-end solutions can also be used for learning reference.
+Vue Vben Admin is a free and open source middle and back-end template. Using the latest `vue3`, `vite`, `TypeScript` and
+other mainstream technology development, the out-of-the-box middle and back-end front-end solutions can also be used for
+learning reference.
 
 ## Upgrade Notice
 
-This is the latest version, 5.0, and it is not compatible with previous versions. If you are starting a new project, it is recommended to use the latest version. If you wish to view the old version, please use the [v2 branch](https://github.com/vbenjs/vue-vben-admin/tree/v2).
+This is the latest version, 5.0, and it is not compatible with previous versions. If you are starting a new project, it
+is recommended to use the latest version. If you wish to view the old version, please use
+the [v2 branch](https://github.com/vbenjs/vue-vben-admin/tree/v2).
 
 ## Features
 
@@ -86,7 +107,8 @@ pnpm build
 
 ## How to Contribute
 
-You are very welcome to join! [Raise an issue](https://github.com/anncwb/vue-vben-admin/issues/new/choose) or submit a Pull Request.
+You are very welcome to join! [Raise an issue](https://github.com/anncwb/vue-vben-admin/issues/new/choose) or submit a
+Pull Request.
 
 **Pull Request Process:**
 
@@ -98,7 +120,8 @@ You are very welcome to join! [Raise an issue](https://github.com/anncwb/vue-vbe
 
 ## Git Contribution Submission Specification
 
-Reference [vue](https://github.com/vuejs/vue/blob/dev/.github/COMMIT_CONVENTION.md) specification ([Angular](https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-changelog-angular))
+Reference [vue](https://github.com/vuejs/vue/blob/dev/.github/COMMIT_CONVENTION.md)
+specification ([Angular](https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-changelog-angular))
 
 - `feat` Add new features
 - `fix` Fix the problem/BUG
@@ -119,8 +142,8 @@ The `Chrome 80+` browser is recommended for local development
 Support modern browsers, not IE
 
 | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/edge/edge_48x48.png" alt="Edge" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Edge | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png" alt="Firefox" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Firefox | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png" alt="Chrome" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Chrome | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/safari/safari_48x48.png" alt="Safari" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Safari |
-| :-: | :-: | :-: | :-: |
-| last 2 versions | last 2 versions | last 2 versions | last 2 versions |
+|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+|                                                                                            last 2 versions                                                                                            |                                                                                                  last 2 versions                                                                                                  |                                                                                                last 2 versions                                                                                                |                                                                                                last 2 versions                                                                                                |
 
 ## Maintainer
 
@@ -136,7 +159,8 @@ If you think this project is helpful to you, you can help the author buy a cup o
 
 ![donate](https://unpkg.com/@vbenjs/static-source@0.1.7/source/sponsor.png)
 
-<a style="display: block;width: 100px;height: 50px;line-height: 50px; color: #fff;text-align: center; background: #408aee;border-radius: 4px;" href="https://www.paypal.com/paypalme/cvvben">Paypal Me</a>
+<a style="display: block;width: 100px;height: 50px;line-height: 50px; color: #fff;text-align: center; background: #408aee;border-radius: 4px;" href="https://www.paypal.com/paypalme/cvvben">
+Paypal Me</a>
 
 ## Contributors
 
