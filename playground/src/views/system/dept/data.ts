@@ -5,7 +5,6 @@ import type { OnActionClickFn } from '#/adapter/vxe-table';
 import type { SystemDeptApi } from '#/api/system/dept';
 
 import { z } from '#/adapter/form';
-import { getDeptTree } from '#/api/system/dept';
 import { $t } from '#/locales';
 import { formatBackendTime } from '#/utils/valueFormat';
 
