@@ -1,17 +1,17 @@
 <script lang="ts" setup>
 import type { SystemUserApi } from '#/api/system/user';
-
-import { computed, nextTick, ref } from 'vue';
-
-import { useVbenDrawer } from '@vben/common-ui';
-
-import { useVbenForm } from '#/adapter/form';
 import {
   createUser,
   preCreateUser,
   preUpdateUser,
   updateUser,
 } from '#/api/system/user';
+
+import { computed, nextTick, ref } from 'vue';
+
+import { useVbenDrawer } from '@vben/common-ui';
+
+import { useVbenForm } from '#/adapter/form';
 import { $t } from '#/locales';
 import { extractTreeValue } from '#/utils/valueFormat';
 
@@ -113,8 +113,10 @@ async function loadForUpdate(userId: number) {
     await nextTick();
 
     // set current value
-    await formApi.setFieldValue('roleCodes', codes);
-    await formApi.setFieldValue('deptIds', deptIds);
+    if (codes && codes.length > 0)
+      await formApi.setFieldValue('roleCodes', codes);
+    if (deptIds && deptIds.length > 0)
+      await formApi.setFieldValue('deptIds', deptIds);
   } finally {
     loadingData.value = false;
   }

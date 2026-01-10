@@ -131,7 +131,8 @@ async function loadForUpdate(id: number, code: string) {
     // set data - role
     updateSchemaForRole(roles, code);
     await nextTick();
-    await formApi.setFieldValue('roleCodes', inheritCodes); // 选中 继承的角色
+    if (inheritCodes && inheritCodes.length > 0)
+      await formApi.setFieldValue('roleCodes', inheritCodes); // 选中 继承的角色
 
     // set data - menu
     const { roots: menuRoots, chosenIds: menuChosenIds } = menuTreeWithChosen;

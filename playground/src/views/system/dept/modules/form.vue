@@ -1,5 +1,11 @@
 <script lang="ts" setup>
 import type { SystemDeptApi } from '#/api/system/dept';
+import {
+  createDept,
+  preCreateDept,
+  preUpdateDept,
+  updateDept,
+} from '#/api/system/dept';
 
 import { computed, nextTick, ref } from 'vue';
 
@@ -8,12 +14,6 @@ import { alert, useVbenModal } from '@vben/common-ui';
 import { Button } from 'ant-design-vue';
 
 import { useVbenForm } from '#/adapter/form';
-import {
-  createDept,
-  preCreateDept,
-  preUpdateDept,
-  updateDept,
-} from '#/api/system/dept';
 import { $t } from '#/locales';
 import { extractTreeValue } from '#/utils/valueFormat';
 
@@ -114,7 +114,8 @@ async function loadForUpdate(id: number, pid: number) {
 
     // update form value
     await formApi.setFieldValue('pid', pid);
-    await formApi.setFieldValue('roleCodes', codes); // 选中 已有的角色
+    if (codes && codes.length > 0)
+      await formApi.setFieldValue('roleCodes', codes); // 选中 已有的角色
   } finally {
     loadingData.value = false;
   }
