@@ -48,11 +48,9 @@ export function useFormSchema(): VbenFormSchema[] {
       label: $t('system.role.remark'),
     },
     {
-      component: 'CheckboxGroup',
       fieldName: 'roleCodes',
+      component: 'TreeSelect',
       label: $t('system.role.setInheritRoles'),
-      defaultValue: [],
-      componentProps: {},
     },
     {
       component: 'Input',

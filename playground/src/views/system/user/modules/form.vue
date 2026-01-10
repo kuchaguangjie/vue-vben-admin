@@ -95,7 +95,7 @@ async function loadForCreate() {
     const { deptRoots, roles } = await preCreateUser();
 
     // set form option
-    updateSchema(deptRoots, roles);
+    updateSchemaForUser(deptRoots, roles);
   } finally {
     loadingData.value = false;
   }
@@ -109,7 +109,7 @@ async function loadForUpdate(userId: number) {
     const { deptRoots, deptIds, roles, codes } = await preUpdateUser(userId);
 
     // set form option
-    updateSchema(deptRoots, roles);
+    updateSchemaForUser(deptRoots, roles);
     await nextTick();
 
     // set current value
@@ -121,7 +121,7 @@ async function loadForUpdate(userId: number) {
 }
 
 // set tree data, for deptIds
-function updateSchema(deptRoots: any, roles: any) {
+function updateSchemaForUser(deptRoots: any, roles: any) {
   formApi.updateSchema([
     {
       fieldName: 'deptIds',
@@ -153,7 +153,6 @@ function updateSchema(deptRoots: any, roles: any) {
         fieldNames: {
           label: 'name', // 对应 labelField
           value: 'code', // 对应 valueField
-          children: 'children', // 对应 childrenField
           key: 'code', // 可选，节点的唯一标识
         },
         allowClear: true,

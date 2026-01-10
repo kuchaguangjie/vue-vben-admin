@@ -20,6 +20,7 @@ import {
   updateRole,
 } from '#/api/system/role';
 import { $t } from '#/locales';
+import { extractTreeValue } from '#/utils/valueFormat';
 
 import {
   useFormSchema,
@@ -42,14 +43,16 @@ const loadingData = ref(false);
 
 const menuOptions = ref<DataNode[]>([]);
 const apiOptions = ref<DataNode[]>([]);
-const roleOptions = ref<{ label: string; value: number }[]>([]);
 
 const id = ref();
 const [Drawer, drawerApi] = useVbenDrawer({
   async onConfirm() {
     const { valid } = await formApi.validate();
     if (!valid) return;
+
     const values = await formApi.getValues();
+    extractTreeValue(values, ['roleCodes']);
+
     drawerApi.lock();
     (id.value ? updateRole(id.value, values) : createRole(values))
       .then(() => {
@@ -105,7 +108,7 @@ async function loadForCreate() {
     const { roles, menuRoots, apiRoots } = await preCreateRole();
 
     // set data - role
-    updateFormRoleOptions(roles);
+    updateSchemaForRole(roles);
 
     // set data - menu
     menuOptions.value = menuRoots as unknown as DataNode[];
@@ -126,7 +129,7 @@ async function loadForUpdate(id: number, code: string) {
       await preUpdateRole(id);
 
     // set data - role
-    updateFormRoleOptions(roles, code);
+    updateSchemaForRole(roles, code);
     await nextTick();
     await formApi.setFieldValue('roleCodes', inheritCodes); // 选中 继承的角色
 
@@ -147,13 +150,13 @@ async function loadForUpdate(id: number, code: string) {
 }
 
 /**
- * update roles field's options
+ * update schema
  * @param roles all roles
  * @param code current role's code, for create it's not provided.
  */
-function updateFormRoleOptions(roles: any, code?: string) {
-  // 获取所有可用角色
-  roleOptions.value = roles.map((role: any) => ({
+function updateSchemaForRole(roles: any, code?: string) {
+  // 角色选项
+  const roleOptions = roles.map((role: any) => ({
     label: role.name,
     value: role.code,
     disabled: role.code === code, // 不可选中自己
@@ -163,8 +166,17 @@ function updateFormRoleOptions(roles: any, code?: string) {
   formApi.updateSchema([
     {
       fieldName: 'roleCodes',
+      component: 'TreeSelect',
+      label: $t('system.role.setInheritRoles'),
       componentProps: {
-        options: roleOptions.value,
+        treeData: roleOptions,
+        allowClear: true,
+        class: 'w-full',
+        multiple: true, // 启用多选
+        treeCheckable: true,
+        showCheckedStrategy: 'SHOW_CHILD',
+        treeCheckStrictly: true, // 上/下 不关联, 可独立选择
+        treeDefaultExpandAll: true, // 默认展开所有
       },
     },
   ]);
