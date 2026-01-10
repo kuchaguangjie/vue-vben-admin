@@ -72,11 +72,25 @@ export function useFormSchema(): VbenFormSchema[] {
       },
     },
     {
-      component: 'CheckboxGroup',
       fieldName: 'roleCodes',
+      component: 'TreeSelect',
       label: $t('system.user.setRoles'),
-      defaultValue: [],
-      componentProps: {},
+      componentProps: {
+        // treeData: roles,
+        fieldNames: {
+          label: 'name', // 对应 labelField
+          value: 'code', // 对应 valueField
+          children: 'children', // 对应 childrenField
+          key: 'code', // 可选，节点的唯一标识
+        },
+        allowClear: true,
+        class: 'w-full',
+        multiple: true, // 启用多选
+        treeCheckable: true,
+        showCheckedStrategy: 'SHOW_CHILD',
+        treeCheckStrictly: true, // 上/下 不关联, 可独立选择
+        treeDefaultExpandAll: true, // 默认展开所有
+      },
     },
   ];
 }

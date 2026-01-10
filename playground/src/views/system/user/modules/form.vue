@@ -1,17 +1,17 @@
 <script lang="ts" setup>
 import type { SystemUserApi } from '#/api/system/user';
-
-import { computed, nextTick, ref } from 'vue';
-
-import { useVbenDrawer } from '@vben/common-ui';
-
-import { useVbenForm } from '#/adapter/form';
 import {
   createUser,
   preCreateUser,
   preUpdateUser,
   updateUser,
 } from '#/api/system/user';
+
+import { computed, nextTick, ref } from 'vue';
+
+import { useVbenDrawer } from '@vben/common-ui';
+
+import { useVbenForm } from '#/adapter/form';
 import { $t } from '#/locales';
 
 import {
@@ -33,8 +33,6 @@ const [Form, formApi] = useVbenForm({
 
 const loadingData = ref(false);
 
-const roleOptions = ref<{ label: string; value: number }[]>([]);
-
 const id = ref();
 const [Drawer, drawerApi] = useVbenDrawer({
   async onConfirm() {
@@ -42,6 +40,7 @@ const [Drawer, drawerApi] = useVbenDrawer({
     if (!valid) return;
     const values = await formApi.getValues();
     convertDeptObjectsToIds(values);
+    convertRoleObjectsToCodes(values);
 
     drawerApi.lock();
     (id.value ? updateUser(id.value, values) : createUser(values))
@@ -93,13 +92,10 @@ async function loadForCreate() {
   loadingData.value = true;
   try {
     // load data
-    const { roles, deptRoots } = await preCreateUser();
+    const { deptRoots, roles } = await preCreateUser();
 
-    // set data - role
-    updateFormRoleOptions(roles);
-
-    // set data - dept ids
-    updateSchemaDeptIds(deptRoots);
+    // set form option
+    updateSchema(deptRoots, roles);
   } finally {
     loadingData.value = false;
   }
@@ -110,16 +106,14 @@ async function loadForUpdate(userId: number) {
   loadingData.value = true;
   try {
     // load data
-    const { roles, deptRoots, codes, deptIds } = await preUpdateUser(userId);
+    const { deptRoots, deptIds, roles, codes } = await preUpdateUser(userId);
 
-    // set data - role
-    updateFormRoleOptions(roles);
+    // set form option
+    updateSchema(deptRoots, roles);
     await nextTick();
-    await formApi.setFieldValue('roleCodes', codes); // 选中 继承的角色
 
-    // set data - dept ids
-    updateSchemaDeptIds(deptRoots);
-    await nextTick();
+    // set current value
+    await formApi.setFieldValue('roleCodes', codes);
     await formApi.setFieldValue('deptIds', deptIds);
   } finally {
     loadingData.value = false;
@@ -127,7 +121,7 @@ async function loadForUpdate(userId: number) {
 }
 
 // set tree data, for deptIds
-function updateSchemaDeptIds(deptRoots: any) {
+function updateSchema(deptRoots: any, roles: any) {
   formApi.updateSchema([
     {
       fieldName: 'deptIds',
@@ -140,6 +134,27 @@ function updateSchemaDeptIds(deptRoots: any) {
           value: 'id', // 对应 valueField
           children: 'children', // 对应 childrenField
           key: 'id', // 可选，节点的唯一标识
+        },
+        allowClear: true,
+        class: 'w-full',
+        multiple: true, // 启用多选
+        treeCheckable: true,
+        showCheckedStrategy: 'SHOW_CHILD',
+        treeCheckStrictly: true, // 上/下 不关联, 可独立选择
+        treeDefaultExpandAll: true, // 默认展开所有
+      },
+    },
+    {
+      fieldName: 'roleCodes',
+      component: 'TreeSelect',
+      label: $t('system.user.setRoles'),
+      componentProps: {
+        treeData: roles,
+        fieldNames: {
+          label: 'name', // 对应 labelField
+          value: 'code', // 对应 valueField
+          children: 'children', // 对应 childrenField
+          key: 'code', // 可选，节点的唯一标识
         },
         allowClear: true,
         class: 'w-full',
@@ -166,26 +181,17 @@ function convertDeptObjectsToIds(values: any) {
   }
 }
 
-/**
- * update roles field's options
- * @param roles all roles
- */
-function updateFormRoleOptions(roles: any) {
-  // 获取所有可用角色
-  roleOptions.value = roles.map((role: any) => ({
-    label: role.name,
-    value: role.code,
-  }));
-
-  // 动态更新表单字段的选项
-  formApi.updateSchema([
-    {
-      fieldName: 'roleCodes',
-      componentProps: {
-        options: roleOptions.value,
-      },
-    },
-  ]);
+// Tree 数据如果修改了, 则默认提交 object 数组, 应 转换为 id 数组;
+function convertRoleObjectsToCodes(values: any) {
+  if (values.roleCodes && Array.isArray(values.roleCodes)) {
+    values.roleCodes = values.roleCodes.map((item: any) => {
+      // 如果是对象，取 value 属性
+      if (item && typeof item === 'object' && 'value' in item) {
+        return item.value;
+      }
+      return item;
+    });
+  }
 }
 
 const getDrawerTitle = computed(() => {
