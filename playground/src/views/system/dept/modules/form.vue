@@ -1,11 +1,5 @@
 <script lang="ts" setup>
 import type { SystemDeptApi } from '#/api/system/dept';
-import {
-  createDept,
-  preCreateDept,
-  preUpdateDept,
-  updateDept,
-} from '#/api/system/dept';
 
 import { computed, nextTick, ref } from 'vue';
 
@@ -14,6 +8,12 @@ import { alert, useVbenModal } from '@vben/common-ui';
 import { Button } from 'ant-design-vue';
 
 import { useVbenForm } from '#/adapter/form';
+import {
+  createDept,
+  preCreateDept,
+  preUpdateDept,
+  updateDept,
+} from '#/api/system/dept';
 import { $t } from '#/locales';
 import { extractTreeValue } from '#/utils/valueFormat';
 

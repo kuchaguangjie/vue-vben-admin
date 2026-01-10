@@ -1,17 +1,17 @@
 <script lang="ts" setup>
 import type { SystemUserApi } from '#/api/system/user';
-import {
-  createUser,
-  preCreateUser,
-  preUpdateUser,
-  updateUser,
-} from '#/api/system/user';
 
 import { computed, nextTick, ref } from 'vue';
 
 import { useVbenDrawer } from '@vben/common-ui';
 
 import { useVbenForm } from '#/adapter/form';
+import {
+  createUser,
+  preCreateUser,
+  preUpdateUser,
+  updateUser,
+} from '#/api/system/user';
 import { $t } from '#/locales';
 import { extractTreeValue } from '#/utils/valueFormat';
 
