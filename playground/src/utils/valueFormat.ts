@@ -36,3 +36,20 @@ export const formatJsonObj = (cellValue: any): string => {
     return String(cellValue);
   }
 };
+
+// Tree 数据如果修改了, 则默认提交 object 数组, 应 转换为 id 数组;
+// 对 values 下, 指定的 field 做转换;
+export function extractTreeValue(values: any, fieldNames: string[]) {
+  for (const fieldName of fieldNames) {
+    const items = values[fieldName];
+    if (items && Array.isArray(items)) {
+      values[fieldName] = items.map((item: any) => {
+        // 如果是对象，取 value 属性
+        if (item && typeof item === 'object' && 'value' in item) {
+          return item.value;
+        }
+        return item;
+      });
+    }
+  }
+}

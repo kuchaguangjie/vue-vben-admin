@@ -13,6 +13,7 @@ import {
   updateUser,
 } from '#/api/system/user';
 import { $t } from '#/locales';
+import { extractTreeValue } from '#/utils/valueFormat';
 
 import {
   useFormSchema,
@@ -39,8 +40,7 @@ const [Drawer, drawerApi] = useVbenDrawer({
     const { valid } = await formApi.validate();
     if (!valid) return;
     const values = await formApi.getValues();
-    convertDeptObjectsToIds(values);
-    convertRoleObjectsToCodes(values);
+    extractTreeValue(values, ['deptIds', 'roleCodes']);
 
     drawerApi.lock();
     (id.value ? updateUser(id.value, values) : createUser(values))
@@ -166,32 +166,6 @@ function updateSchema(deptRoots: any, roles: any) {
       },
     },
   ]);
-}
-
-// Tree 数据如果修改了, 则默认提交 object 数组, 应 转换为 id 数组;
-function convertDeptObjectsToIds(values: any) {
-  if (values.deptIds && Array.isArray(values.deptIds)) {
-    values.deptIds = values.deptIds.map((item: any) => {
-      // 如果是对象，取 value 属性
-      if (item && typeof item === 'object' && 'value' in item) {
-        return item.value;
-      }
-      return item;
-    });
-  }
-}
-
-// Tree 数据如果修改了, 则默认提交 object 数组, 应 转换为 id 数组;
-function convertRoleObjectsToCodes(values: any) {
-  if (values.roleCodes && Array.isArray(values.roleCodes)) {
-    values.roleCodes = values.roleCodes.map((item: any) => {
-      // 如果是对象，取 value 属性
-      if (item && typeof item === 'object' && 'value' in item) {
-        return item.value;
-      }
-      return item;
-    });
-  }
 }
 
 const getDrawerTitle = computed(() => {
