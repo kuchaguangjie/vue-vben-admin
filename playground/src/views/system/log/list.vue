@@ -9,6 +9,7 @@ import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { doPageQuery } from '#/api/request';
 import { getLogList } from '#/api/system/log';
 import { $t } from '#/locales';
+import { usePagerConfig } from '#/utils/pager';
 
 import { useColumns, useGridFormSchema } from './data';
 
@@ -22,6 +23,7 @@ const [Grid] = useVbenVxeGrid({
     columns: useColumns(),
     height: 'auto',
     keepSource: true,
+    pagerConfig: usePagerConfig(),
     proxyConfig: {
       ajax: {
         query: async (params: PageParams, formValues) =>

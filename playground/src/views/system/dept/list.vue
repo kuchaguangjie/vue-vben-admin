@@ -17,6 +17,7 @@ import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { doPageQuery } from '#/api/request';
 import { deleteDept, getDeptTree } from '#/api/system/dept';
 import { $t } from '#/locales';
+import { useDisabledPagerConfig } from '#/utils/pager';
 
 import { useColumns } from './data';
 import Form from './modules/form.vue';
@@ -101,9 +102,7 @@ const [Grid, gridApi] = useVbenVxeGrid({
     columns: useColumns(onActionClick),
     height: 'auto',
     keepSource: true,
-    pagerConfig: {
-      enabled: false,
-    },
+    pagerConfig: useDisabledPagerConfig(),
     proxyConfig: {
       ajax: {
         query: async (params: PageParams) => {

@@ -18,6 +18,7 @@ import { deleteRole, getRoleList, updateRoleStatus } from '#/api';
 import { doPageQuery } from '#/api/request';
 import { $t } from '#/locales';
 import { confirmDialog } from '#/utils/dialog';
+import { usePagerConfig } from '#/utils/pager';
 
 import { useColumns, useGridFormSchema } from './data';
 import Form from './modules/form.vue';
@@ -37,6 +38,7 @@ const [Grid, gridApi] = useVbenVxeGrid({
     columns: useColumns(onActionClick, onStatusChange),
     height: 'auto',
     keepSource: true,
+    pagerConfig: usePagerConfig(),
     proxyConfig: {
       ajax: {
         query: async (params: PageParams, formValues) =>
@@ -46,7 +48,6 @@ const [Grid, gridApi] = useVbenVxeGrid({
     rowConfig: {
       keyField: 'id',
     },
-
     toolbarConfig: {
       custom: true,
       export: false,

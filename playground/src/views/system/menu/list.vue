@@ -26,6 +26,7 @@ import {
   updateMenuStatus,
 } from '#/api/system/menu';
 import { confirmDialog } from '#/utils/dialog';
+import { useDisabledPagerConfig } from '#/utils/pager';
 
 import { useColumns } from './data';
 import Form from './modules/form.vue';
@@ -40,9 +41,7 @@ const [Grid, gridApi] = useVbenVxeGrid({
     columns: useColumns(onActionClick, onStatusChange),
     height: 'auto',
     keepSource: true,
-    pagerConfig: {
-      enabled: false,
-    },
+    pagerConfig: useDisabledPagerConfig(),
     proxyConfig: {
       ajax: {
         query: async (params: PageParams) => {

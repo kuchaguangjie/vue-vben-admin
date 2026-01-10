@@ -21,6 +21,7 @@ import { doPageQuery } from '#/api/request';
 import { $t } from '#/locales';
 import { confirmDialog } from '#/utils/dialog';
 import { checkAllFieldsEmpty, removeEmptyFields } from '#/utils/object';
+import { useDisabledPagerConfig } from '#/utils/pager';
 
 import { hasQueryParam, useColumns, useGridFormSchema } from './data';
 import Form from './modules/form.vue';
@@ -40,9 +41,7 @@ const [Grid, gridApi] = useVbenVxeGrid({
     columns: useColumns(onActionClick, onStatusChange),
     height: 'auto',
     keepSource: true,
-    pagerConfig: {
-      enabled: false,
-    },
+    pagerConfig: useDisabledPagerConfig(),
     proxyConfig: {
       ajax: {
         query: async (params: PageParams, formValues) => {
