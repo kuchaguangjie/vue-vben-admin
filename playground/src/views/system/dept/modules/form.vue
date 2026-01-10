@@ -15,6 +15,7 @@ import {
   updateDept,
 } from '#/api/system/dept';
 import { $t } from '#/locales';
+import { extractTreeValue } from '#/utils/valueFormat';
 
 import { useSchema } from '../data';
 
@@ -34,8 +35,6 @@ const [Form, formApi] = useVbenForm({
 
 const loadingData = ref(false);
 
-const roleOptions = ref<{ label: string; value: number }[]>([]);
-
 function resetForm() {
   formApi.resetForm();
   formApi.setValues(formData.value || {});
@@ -47,6 +46,8 @@ const [Modal, modalApi] = useVbenModal({
     if (valid) {
       modalApi.lock();
       const data = await formApi.getValues();
+      extractTreeValue(data, ['roleCodes']);
+
       try {
         // TODO: merge formData & data, keep only 1 ?
         if (formData.value?.id) {
@@ -91,15 +92,10 @@ async function loadForCreate() {
   loadingData.value = true;
   try {
     // load data
-    const { deptRoots, roles, codes } = await preCreateDept();
+    const { deptRoots, roles } = await preCreateDept();
 
-    // set data - pid
-    updateSchemaPid(deptRoots);
-
-    // set data - role
-    updateFormRoleOptions(roles);
-    await nextTick();
-    await formApi.setFieldValue('roleCodes', codes); // 选中 已有的角色
+    // update form options
+    updateSchemaForDept(deptRoots, roles);
   } finally {
     loadingData.value = false;
   }
@@ -112,22 +108,26 @@ async function loadForUpdate(id: number, pid: number) {
     // load data
     const { deptRoots, roles, codes } = await preUpdateDept(id);
 
-    // set data - pid
-    updateSchemaPid(deptRoots);
+    // update form options
+    updateSchemaForDept(deptRoots, roles);
     await nextTick();
-    await formApi.setFieldValue('pid', pid);
 
-    // set data - role
-    updateFormRoleOptions(roles);
-    await nextTick();
+    // update form value
+    await formApi.setFieldValue('pid', pid);
     await formApi.setFieldValue('roleCodes', codes); // 选中 已有的角色
   } finally {
     loadingData.value = false;
   }
 }
 
-// set tree data, for pid
-function updateSchemaPid(deptRoots: any) {
+// update schema
+function updateSchemaForDept(deptRoots: any, roles: any) {
+  // 获取所有可用角色
+  const roleOptions = roles.map((role: any) => ({
+    label: role.name,
+    value: role.code,
+  }));
+
   formApi.updateSchema([
     {
       component: 'TreeSelect',
@@ -148,26 +148,19 @@ function updateSchemaPid(deptRoots: any) {
       fieldName: 'pid',
       label: $t('system.dept.parentDept'),
     },
-  ]);
-}
-
-/**
- * update roles field's options
- * @param roles all roles
- */
-function updateFormRoleOptions(roles: any) {
-  // 获取所有可用角色
-  roleOptions.value = roles.map((role: any) => ({
-    label: role.name,
-    value: role.code,
-  }));
-
-  // 动态更新表单字段的选项
-  formApi.updateSchema([
     {
       fieldName: 'roleCodes',
+      component: 'TreeSelect',
+      label: $t('system.dept.roleCodes'),
       componentProps: {
-        options: roleOptions.value,
+        treeData: roleOptions,
+        allowClear: true,
+        class: 'w-full',
+        multiple: true, // 启用多选
+        treeCheckable: true,
+        showCheckedStrategy: 'SHOW_CHILD',
+        treeCheckStrictly: true, // 上/下 不关联, 可独立选择
+        treeDefaultExpandAll: true, // 默认展开所有
       },
     },
   ]);

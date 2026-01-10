@@ -50,8 +50,6 @@ export function useSchema(): VbenFormSchema[] {
       component: 'CheckboxGroup',
       fieldName: 'roleCodes',
       label: $t('system.dept.roleCodes'),
-      defaultValue: [],
-      componentProps: {},
     },
     {
       component: 'RadioGroup',
