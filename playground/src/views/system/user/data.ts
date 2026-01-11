@@ -13,14 +13,17 @@ export function useFormSchema(): VbenFormSchema[] {
     {
       component: 'Input',
       fieldName: 'username',
+      label: $t('system.user.username'),
     },
     {
       component: 'Input',
       fieldName: 'email',
+      label: $t('system.user.email'),
     },
     {
       component: 'InputPassword',
       fieldName: 'password',
+      label: $t('system.user.password'),
     },
     {
       component: 'Input',

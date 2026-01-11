@@ -6,6 +6,7 @@
   "type": "Type",
   "newChild": "New Child",
   "parent": "Parent",
+  "previewDetail": "Preview Detail",
   "messages": {
     "copy": "Copy",
     "copied": "Copied!",
