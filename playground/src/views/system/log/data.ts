@@ -2,7 +2,8 @@ import type { VbenFormSchema } from '#/adapter/form';
 import type { VxeTableGridOptions } from '#/adapter/vxe-table';
 
 import { $t } from '#/locales';
-import { formatBackendTime, formatJsonObj } from '#/utils/valueFormat';
+import { useCopyColumn } from '#/utils/use-copy-column';
+import { formatBackendTime } from '#/utils/value-format';
 
 // for search list
 export function useGridFormSchema(): VbenFormSchema[] {
@@ -35,13 +36,11 @@ export function useColumns(): VxeTableGridOptions['columns'] {
       title: $t('system.log.code'),
       width: 250,
     },
-    {
+    useCopyColumn({
       field: 'data',
       title: $t('system.log.data'),
       width: 300,
-      formatter: ({ cellValue }) => formatJsonObj(cellValue), // json -> string
-      slots: { default: 'copy_column' },
-    },
+    }),
     {
       field: 'createdAt',
       title: $t('system.log.createdAt'),

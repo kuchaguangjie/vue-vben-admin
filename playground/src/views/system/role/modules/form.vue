@@ -20,7 +20,7 @@ import {
   updateRole,
 } from '#/api/system/role';
 import { $t } from '#/locales';
-import { extractTreeValue } from '#/utils/valueFormat';
+import { extractTreeValue } from '#/utils/value-format';
 
 import {
   useFormSchema,

@@ -4,7 +4,7 @@ import type { SystemUserApi } from '#/api';
 
 import { z } from '#/adapter/form';
 import { $t } from '#/locales';
-import { formatBackendTime } from '#/utils/valueFormat';
+import { formatBackendTime } from '#/utils/value-format';
 
 // single - common fields
 export function useFormSchema(): VbenFormSchema[] {

@@ -13,7 +13,7 @@ import {
   updateUser,
 } from '#/api/system/user';
 import { $t } from '#/locales';
-import { extractTreeValue } from '#/utils/valueFormat';
+import { extractTreeValue } from '#/utils/value-format';
 
 import {
   useFormSchema,

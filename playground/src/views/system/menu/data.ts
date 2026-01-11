@@ -3,7 +3,7 @@ import type { SystemApiApi } from '#/api';
 import type { SystemMenuApi } from '#/api/system/menu';
 
 import { $t } from '#/locales';
-import { formatBackendTime } from '#/utils/valueFormat';
+import { formatBackendTime } from '#/utils/value-format';
 
 export function getMenuTypeOptions() {
   return [

@@ -6,7 +6,7 @@ import type { SystemDeptApi } from '#/api/system/dept';
 
 import { z } from '#/adapter/form';
 import { $t } from '#/locales';
-import { formatBackendTime } from '#/utils/valueFormat';
+import { formatBackendTime } from '#/utils/value-format';
 
 /**
  * 获取编辑表单的字段配置。如果没有使用多语言，可以直接export一个数组常量
