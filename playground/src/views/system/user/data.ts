@@ -4,6 +4,7 @@ import type { SystemUserApi } from '#/api';
 
 import { z } from '#/adapter/form';
 import { $t } from '#/locales';
+import { usePreviewLink } from '#/utils/use-preview-link';
 import { formatBackendTime } from '#/utils/value-format';
 
 // single - common fields
@@ -188,15 +189,19 @@ export function useGridFormSchema(): VbenFormSchema[] {
 
 export function useColumns<T = SystemUserApi.SystemUser>(
   onActionClick: OnActionClickFn<T>,
+  onPreview: (row: any) => void,
   onStatusChange?: (newStatus: any, row: T) => PromiseLike<boolean | undefined>,
 ): VxeTableGridOptions['columns'] {
   return [
-    {
-      field: 'id',
-      title: $t('system.user.id'),
-      width: 90,
-      sortable: true,
-    },
+    usePreviewLink(
+      {
+        field: 'id',
+        title: $t('system.user.id'),
+        width: 90,
+        sortable: true,
+      },
+      onPreview,
+    ),
     {
       field: 'username',
       title: $t('system.user.username'),

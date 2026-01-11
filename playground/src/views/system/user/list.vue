@@ -5,27 +5,30 @@ import type {
   OnActionClickParams,
   VxeTableGridOptions,
 } from '#/adapter/vxe-table';
+import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import type { SystemUserApi } from '#/api';
+import { deleteUser, getUserList, updateUserStatus } from '#/api';
 import type { PageParams } from '#/api/request';
+import { doPageQuery } from '#/api/request';
 
 import { Page, useVbenDrawer } from '@vben/common-ui';
 import { Plus } from '@vben/icons';
 
 import { Button, message } from 'ant-design-vue';
-
-import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import { deleteUser, getUserList, updateUserStatus } from '#/api';
-import { doPageQuery } from '#/api/request';
 import { $t } from '#/locales';
 import { confirmDialog } from '#/utils/dialog';
 import { usePagerConfig } from '#/utils/pager';
 
 import { useColumns, useGridFormSchema } from './data';
+import UserDetail from './modules/detail.vue';
 import Form from './modules/form.vue';
 
 const [FormDrawer, formDrawerApi] = useVbenDrawer({
   connectedComponent: Form,
   destroyOnClose: true,
+});
+const [DetailDrawer, detailDrawerApi] = useVbenDrawer({
+  connectedComponent: UserDetail,
 });
 
 const [Grid, gridApi] = useVbenVxeGrid({
@@ -35,7 +38,7 @@ const [Grid, gridApi] = useVbenVxeGrid({
     submitOnChange: true,
   },
   gridOptions: {
-    columns: useColumns(onActionClick, onStatusChange),
+    columns: useColumns(onActionClick, onPreview, onStatusChange),
     height: 'auto',
     keepSource: true,
     pagerConfig: usePagerConfig(),
@@ -142,10 +145,15 @@ function onRefresh() {
 function onCreate() {
   formDrawerApi.setData({}).open();
 }
+
+function onPreview(row: any) {
+  detailDrawerApi.setData(row).open();
+}
 </script>
 <template>
   <Page auto-content-height>
     <FormDrawer @success="onRefresh" />
+    <DetailDrawer />
     <Grid :table-title="$t('system.user.list')">
       <template #toolbar-tools>
         <Button type="primary" @click="onCreate">
