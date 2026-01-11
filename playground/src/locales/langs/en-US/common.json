@@ -7,6 +7,8 @@
   "newChild": "New Child",
   "parent": "Parent",
   "messages": {
+    "copy": "Copy",
+    "copied": "Copied!",
     "pidEqId": "Can't choose self as parent"
   }
 }

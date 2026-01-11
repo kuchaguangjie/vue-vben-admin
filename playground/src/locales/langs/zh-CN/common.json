@@ -7,6 +7,8 @@
   "newChild": "新增下级",
   "parent": "上级",
   "messages": {
+    "copy": "复制",
+    "copied": "复制成功",
     "pidEqId": "不可选择自己作为父节点"
   }
 }

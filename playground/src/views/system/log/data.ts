@@ -40,6 +40,7 @@ export function useColumns(): VxeTableGridOptions['columns'] {
       title: $t('system.log.data'),
       width: 300,
       formatter: ({ cellValue }) => formatJsonObj(cellValue), // json -> string
+      slots: { default: 'copy_column' },
     },
     {
       field: 'createdAt',
