@@ -27,11 +27,8 @@ const [Drawer, drawerApi] = useVbenDrawer({
       await formApi.removeSchemaByFields(useFormSchemaRemovePreview());
       await nextTick();
 
-      // 填充数据
-      const data = drawerApi.getData<any>();
-      await formApi.setValues(data);
-
-      await loadDetail(data.id);
+      const id = drawerApi.getData<any>().id;
+      await loadDetail(id);
     }
   },
 });
@@ -41,67 +38,17 @@ async function loadDetail(userId: number) {
   loadingData.value = true;
   try {
     // load data
-    const { deptRoots, deptIds, roles, codes } = await getDetailUser(userId);
+    const { user, roleNames, deptNames } = await getDetailUser(userId);
 
-    // set form option
-    updateSchemaForUser(deptRoots, roles);
-    await nextTick();
-
-    // set current value
-    if (codes && codes.length > 0)
-      await formApi.setFieldValue('roleCodes', codes);
-    if (deptIds && deptIds.length > 0)
-      await formApi.setFieldValue('deptIds', deptIds);
+    // 填充数据
+    await formApi.setValues(user);
+    if (roleNames && roleNames.length > 0)
+      await formApi.setFieldValue('roleCodes', roleNames);
+    if (deptNames && deptNames.length > 0)
+      await formApi.setFieldValue('deptIds', deptNames);
   } finally {
     loadingData.value = false;
   }
-}
-
-// set field options
-function updateSchemaForUser(deptRoots: any, roles: any) {
-  formApi.updateSchema([
-    {
-      fieldName: 'deptIds',
-      component: 'TreeSelect',
-      label: $t('system.user.dept'),
-      componentProps: {
-        treeData: deptRoots,
-        fieldNames: {
-          label: 'name', // 对应 labelField
-          value: 'id', // 对应 valueField
-          children: 'children', // 对应 childrenField
-          key: 'id', // 可选，节点的唯一标识
-        },
-        allowClear: true,
-        class: 'w-full',
-        multiple: true, // 启用多选
-        treeCheckable: true,
-        showCheckedStrategy: 'SHOW_CHILD',
-        treeCheckStrictly: true, // 上/下 不关联, 可独立选择
-        treeDefaultExpandAll: true, // 默认展开所有
-      },
-    },
-    {
-      fieldName: 'roleCodes',
-      component: 'TreeSelect',
-      label: $t('system.user.setRoles'),
-      componentProps: {
-        treeData: roles,
-        fieldNames: {
-          label: 'name', // 对应 labelField
-          value: 'code', // 对应 valueField
-          key: 'code', // 可选，节点的唯一标识
-        },
-        allowClear: true,
-        class: 'w-full',
-        multiple: true, // 启用多选
-        treeCheckable: true,
-        showCheckedStrategy: 'SHOW_CHILD',
-        treeCheckStrictly: true, // 上/下 不关联, 可独立选择
-        treeDefaultExpandAll: true, // 默认展开所有
-      },
-    },
-  ]);
 }
 </script>
 
