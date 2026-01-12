@@ -11,5 +11,8 @@
     "copy": "Copy",
     "copied": "Copied!",
     "pidEqId": "Can't choose self as parent"
+  },
+  "action": {
+    "close": "Close"
   }
 }

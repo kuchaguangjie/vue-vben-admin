@@ -1,8 +1,7 @@
 import type { VbenFormSchema } from '#/adapter/form';
+import { z } from '#/adapter/form';
 import type { OnActionClickFn, VxeTableGridOptions } from '#/adapter/vxe-table';
 import type { SystemUserApi } from '#/api';
-
-import { z } from '#/adapter/form';
 import { $t } from '#/locales';
 import { usePreviewLink } from '#/utils/use-preview-link';
 import { formatBackendTime } from '#/utils/value-format';
@@ -155,6 +154,11 @@ export function useFormSchemaRemoveEdit(): string[] {
 // single - new - remove fields
 export function useFormSchemaRemoveNew(): string[] {
   return [];
+}
+
+// single - preview - remove fields
+export function useFormSchemaRemovePreview(): string[] {
+  return ['password'];
 }
 
 // for search list

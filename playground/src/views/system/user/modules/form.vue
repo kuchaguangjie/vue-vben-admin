@@ -122,7 +122,7 @@ async function loadForUpdate(userId: number) {
   }
 }
 
-// set tree data, for deptIds
+// set field options
 function updateSchemaForUser(deptRoots: any, roles: any) {
   formApi.updateSchema([
     {

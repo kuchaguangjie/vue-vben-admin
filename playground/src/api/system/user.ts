@@ -70,6 +70,14 @@ async function deleteUser(id: number) {
 }
 
 /**
+ * 用户详情
+ * @param id 用户 ID
+ */
+async function getDetailUser(id: number) {
+  return requestClient.get(`/system/user/${id}`);
+}
+
+/**
  * create 前 获取数据.
  */
 async function preCreateUser() {
@@ -86,6 +94,7 @@ async function preUpdateUser(userId: number) {
 export {
   createUser,
   deleteUser,
+  getDetailUser,
   getUserList,
   getUserRoles,
   preCreateUser,
