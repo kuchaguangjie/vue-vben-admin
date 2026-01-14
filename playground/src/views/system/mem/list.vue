@@ -1,58 +1,33 @@
 <script lang="ts" setup>
-import type { VxeTableGridOptions } from '#/adapter/vxe-table';
-import type { SystemUserApi } from '#/api';
-import type { PageParams } from '#/api/request';
-
 import { Page } from '@vben/common-ui';
+import { $t } from '@vben/locales';
 
-import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import { doPageQuery } from '#/api/request';
-import { getMemList } from '#/api/system/mem';
-import { $t } from '#/locales';
-import { usePagerConfig } from '#/utils/pager';
+import { message } from 'ant-design-vue';
 
-import { useColumns, useGridFormSchema } from './data';
+import { useVbenForm } from '#/adapter/form';
+import { loadMemAll } from '#/api/system/mem';
 
-const [Grid] = useVbenVxeGrid({
-  formOptions: {
-    fieldMappingTime: [['createTime', ['startTime', 'endTime']]],
-    schema: useGridFormSchema(),
-    submitOnChange: true,
+const [BaseForm] = useVbenForm({
+  submitButtonOptions: {
+    content: $t('system.mem.btnLoadAll'),
   },
-  gridOptions: {
-    columns: useColumns(),
-    height: 'auto',
-    keepSource: true,
-    pagerConfig: usePagerConfig(),
-    proxyConfig: {
-      ajax: {
-        query: async (params: PageParams, formValues) =>
-          await doPageQuery(getMemList, params, formValues),
-      },
-    },
-    rowConfig: {
-      keyField: 'id',
-    },
-
-    toolbarConfig: {
-      custom: true,
-      export: false,
-      refresh: true,
-      search: true,
-      zoom: true,
-    },
-  } as VxeTableGridOptions<SystemUserApi.SystemUser>,
+  handleSubmit: onSubmit,
+  resetButtonOptions: {
+    show: false,
+  },
+  layout: 'horizontal',
+  schema: [],
 });
+
+async function onSubmit(values: Record<string, any>) {
+  await loadMemAll(values);
+  message.success($t('system.mem.loadSuccess'));
+  // 失败时 (e.g http 500), 自动从 显示错误提示 (result.message);
+}
 </script>
 <template>
   <Page auto-content-height>
-    <Grid :table-title="$t('system.mem.list')" />
+    <BaseForm />
   </Page>
 </template>
-<style scoped>
-/* 确保 pre 标签内的文字换行，防止撑爆弹窗 */
-pre {
-  word-wrap: break-word;
-  white-space: pre-wrap;
-}
-</style>
+<style scoped></style>

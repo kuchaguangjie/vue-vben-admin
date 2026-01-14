@@ -6,19 +6,17 @@ export namespace SystemMemApi {
   export interface SystemMem {
     [key: string]: any;
 
-    code: string;
-    data: string;
-    id: number;
+    modules: string[];
   }
 }
 
 /**
- * 获取cache列表数据
+ * 刷新 mem - all
  */
-async function getMemList(params: Recordable<any>) {
-  return requestClient.get<Array<SystemMemApi.SystemMem>>('/system/mem/page', {
+async function loadMemAll(params: Recordable<any>) {
+  return requestClient.get<Array<SystemMemApi.SystemMem>>('/system/mem/load', {
     params,
   });
 }
 
-export { getMemList };
+export { loadMemAll };
