@@ -38,25 +38,41 @@ async function handleLoad() {
     </div>
 
     <div class="p-4">
-      <div class="mb-4 flex items-center gap-4">
-        <span class="font-bold">{{ $t('system.mem.globalStatus') }}:</span>
-        <Tag :color="displayData?.config.Enable ? 'green' : 'red'">
-          {{
-            displayData?.config.Enable
-              ? $t('system.mem.enabled')
-              : $t('system.mem.disabled')
-          }}
-        </Tag>
+      <div class="mb-4 flex items-center justify-between">
+        <div class="flex items-center gap-4">
+          <span class="font-bold text-gray-700 dark:text-gray-200">
+            {{ $t('system.mem.globalStatus') }}:
+          </span>
+          <Tag :color="displayData?.config.enable ? 'green' : 'red'">
+            {{
+              displayData?.config.enable
+                ? $t('system.mem.enabled')
+                : $t('system.mem.disabled')
+            }}
+          </Tag>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <span class="text-sm text-gray-500 dark:text-gray-400">
+            {{ $t('system.mem.autoLoadInterval') }}:
+          </span>
+          <Tag v-if="displayData?.config?.autoLoadInterval > 0" color="blue">
+            {{ displayData.config.autoLoadInterval }}s
+          </Tag>
+          <Tag v-else color="default">
+            {{ $t('system.mem.disabled') }}
+          </Tag>
+        </div>
       </div>
 
       <Divider>{{ $t('system.mem.moduleStatus') }}</Divider>
 
       <div
         class="grid grid-cols-1 gap-4 md:grid-cols-2"
-        v-if="displayData?.config.Enable"
+        v-if="displayData?.config.enable"
       >
         <Card
-          v-for="(enable, key) in displayData?.config.Modules"
+          v-for="(enable, key) in displayData?.config.modules"
           :key="key"
           size="small"
           :title="key?.toUpperCase()"

@@ -111,6 +111,7 @@
   "mem": {
     "title": "Cache Management",
     "globalStatus": "Global cache status",
+    "autoLoadInterval": "Cache auto load interval",
     "moduleStatus": "Module cache status",
     "enabled": "Enabled",
     "disabled": "Disabled",
