@@ -1,33 +1,82 @@
 <script lang="ts" setup>
-import { Page } from '@vben/common-ui';
+import { onMounted, ref } from 'vue';
+
+import { Page, VbenButton } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { message } from 'ant-design-vue';
+import { Card, Divider, message, Tag } from 'ant-design-vue';
 
-import { useVbenForm } from '#/adapter/form';
-import { loadMemAll } from '#/api/system/mem';
+import { getMemStatus, loadMemAll } from '#/api/system/mem';
+import { formatBackendTime } from '#/utils/value-format';
 
-const [BaseForm] = useVbenForm({
-  submitButtonOptions: {
-    content: $t('system.mem.btnLoadAll'),
-  },
-  handleSubmit: onSubmit,
-  resetButtonOptions: {
-    show: false,
-  },
-  layout: 'horizontal',
-  schema: [],
+const displayData = ref<any>(null);
+onMounted(() => {
+  handleStatus();
 });
 
-async function onSubmit(values: Record<string, any>) {
-  await loadMemAll(values);
+async function handleStatus(showSuccess: boolean = false) {
+  displayData.value = await getMemStatus();
+  if (showSuccess) message.success($t('common.messages.success'));
+}
+
+async function handleLoad() {
+  await loadMemAll();
   message.success($t('system.mem.loadSuccess'));
   // 失败时 (e.g http 500), 自动从 显示错误提示 (result.message);
+  await handleStatus(); // 刷新状态
 }
 </script>
 <template>
   <Page auto-content-height>
-    <BaseForm />
+    <div class="flex w-full items-center justify-between p-4">
+      <VbenButton type="primary" @click="handleStatus(true)">
+        {{ $t('system.mem.btnGetStatus') }}
+      </VbenButton>
+      <VbenButton type="primary" @click="handleLoad()">
+        {{ $t('system.mem.btnLoadAll') }}
+      </VbenButton>
+    </div>
+
+    <div class="p-4">
+      <div class="mb-4 flex items-center gap-4">
+        <span class="font-bold">{{ $t('system.mem.globalStatus') }}:</span>
+        <Tag :color="displayData?.config.Enable ? 'green' : 'red'">
+          {{
+            displayData?.config.Enable
+              ? $t('system.mem.enabled')
+              : $t('system.mem.disabled')
+          }}
+        </Tag>
+      </div>
+
+      <Divider>{{ $t('system.mem.moduleStatus') }}</Divider>
+
+      <div
+        class="grid grid-cols-1 gap-4 md:grid-cols-2"
+        v-if="displayData?.config.Enable"
+      >
+        <Card
+          v-for="(enable, key) in displayData?.config.Modules"
+          :key="key"
+          size="small"
+          :title="key?.toUpperCase()"
+        >
+          <template #extra>
+            <Tag :color="enable ? 'blue' : 'default'">
+              {{
+                enable ? $t('system.mem.enabled') : $t('system.mem.disabled')
+              }}
+            </Tag>
+          </template>
+          <p class="text-sm text-gray-500" v-if="displayData?.status[key]">
+            {{ $t('common.updatedAt')}}:
+            <span class="font-bold">{{
+              formatBackendTime(displayData?.status[key]?.updatedAt)
+            }}</span>
+          </p>
+        </Card>
+      </div>
+    </div>
   </Page>
 </template>
 <style scoped></style>

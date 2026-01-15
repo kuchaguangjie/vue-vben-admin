@@ -1,5 +1,3 @@
-import type { Recordable } from '@vben/types';
-
 import { requestClient } from '#/api/request';
 
 export namespace SystemMemApi {
@@ -13,10 +11,15 @@ export namespace SystemMemApi {
 /**
  * 刷新 mem - all
  */
-async function loadMemAll(params: Recordable<any>) {
-  return requestClient.get<Array<SystemMemApi.SystemMem>>('/system/mem/load', {
-    params,
-  });
+async function loadMemAll() {
+  return requestClient.get<Array<SystemMemApi.SystemMem>>('/system/mem/load');
 }
 
-export { loadMemAll };
+/**
+ * 获取 mem status
+ */
+async function getMemStatus() {
+  return requestClient.get<Array<SystemMemApi.SystemMem>>('/system/mem/status');
+}
+
+export { getMemStatus, loadMemAll };

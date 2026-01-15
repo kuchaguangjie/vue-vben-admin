@@ -2,12 +2,14 @@
   "id": "ID",
   "createdAt": "创建时间",
   "createdBy": "创建人",
+  "updatedAt": "更新时间",
   "prefix": "前缀",
   "type": "类型",
   "newChild": "新增下级",
   "parent": "上级",
   "previewDetail": "详情预览",
   "messages": {
+    "success": "成功",
     "copy": "复制",
     "copied": "复制成功",
     "pidEqId": "不可选择自己作为父节点"

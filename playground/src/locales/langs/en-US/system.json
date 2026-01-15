@@ -110,7 +110,12 @@
   },
   "mem": {
     "title": "Cache Management",
+    "globalStatus": "Global cache status",
+    "moduleStatus": "Module cache status",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
     "btnLoadAll": "Load all cache",
+    "btnGetStatus": "Get cache status",
     "loadSuccess": "Load cache success"
   }
 }

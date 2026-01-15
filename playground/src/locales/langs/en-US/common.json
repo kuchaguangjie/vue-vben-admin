@@ -2,12 +2,14 @@
   "id": "ID",
   "createdAt": "Created At",
   "createdBy": "Created By",
+  "updatedAt": "Updated At",
   "prefix": "Prefix",
   "type": "Type",
   "newChild": "New Child",
   "parent": "Parent",
   "previewDetail": "Preview Detail",
   "messages": {
+    "success": "Success",
     "copy": "Copy",
     "copied": "Copied!",
     "pidEqId": "Can't choose self as parent"
