@@ -69,7 +69,7 @@ async function handleLoad() {
             </Tag>
           </template>
           <p class="text-sm text-gray-500" v-if="displayData?.status[key]">
-            {{ $t('common.updatedAt')}}:
+            {{ $t('common.updatedAt') }}:
             <span class="font-bold">{{
               formatBackendTime(displayData?.status[key]?.updatedAt)
             }}</span>
