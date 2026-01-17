@@ -179,7 +179,7 @@ async function handleStat() {
         </div>
       </div>
       <div v-else class="text-vben-text-secondary py-12 text-center">
-        暂无统计数据，请点击按钮获取
+              {{ $t('system.casbin.stat.needClick') }}
       </div>
     </Card>
   </Page>

@@ -134,6 +134,7 @@
     "stat": {
       "title": "统计",
       "btnStat": "获取 stat",
+      "needClick": "点击按钮获取",
       "statAt": "统计时间",
       "ruleCount": "规则数量",
       "pRuleCount": "规则数量 (p)",

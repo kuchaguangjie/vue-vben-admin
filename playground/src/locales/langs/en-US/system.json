@@ -132,6 +132,7 @@
     "stat": {
       "title": "Statistics",
       "btnStat": "Get Statistics",
+      "needClick": "Click button to get",
       "statAt": "statistic at",
       "ruleCount": "rule count",
       "pRuleCount": "rule count (p)",
