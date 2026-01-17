@@ -1,10 +1,10 @@
 import type { VbenFormSchema } from '#/adapter/form';
+import { z } from '#/adapter/form';
 import type { OnActionClickFn, VxeTableGridOptions } from '#/adapter/vxe-table';
 import type { SystemRoleApi } from '#/api';
-
-import { z } from '#/adapter/form';
 import { $t } from '#/locales';
 import { formatBackendTime } from '#/utils/value-format';
+import { usePreviewLink } from '#/utils/use-preview-link';
 
 // form - new/edit
 export function useFormSchema(): VbenFormSchema[] {
@@ -51,6 +51,9 @@ export function useFormSchema(): VbenFormSchema[] {
       fieldName: 'roleCodes',
       component: 'TreeSelect',
       label: $t('system.role.setInheritRoles'),
+      componentProps: {
+        multiple: true, // 启用多选
+      },
     },
     {
       component: 'Input',
@@ -109,6 +112,11 @@ export function useFormSchemaRemoveNew(): string[] {
   return [];
 }
 
+// single - preview - remove fields
+export function useFormSchemaRemovePreview(): string[] {
+  return [];
+}
+
 export function useGridFormSchema(): VbenFormSchema[] {
   return [
     {
@@ -146,9 +154,19 @@ export function useGridFormSchema(): VbenFormSchema[] {
 
 export function useColumns<T = SystemRoleApi.SystemRole>(
   onActionClick: OnActionClickFn<T>,
+  onPreview: (row: any) => void,
   onStatusChange?: (newStatus: any, row: T) => PromiseLike<boolean | undefined>,
 ): VxeTableGridOptions['columns'] {
   return [
+    usePreviewLink(
+      {
+        field: 'id',
+        title: $t('system.role.id'),
+        width: 90,
+        sortable: true,
+      },
+      onPreview,
+    ),
     {
       field: 'id',
       title: $t('system.role.id'),

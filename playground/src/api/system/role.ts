@@ -103,10 +103,19 @@ async function preUpdateRole(roleId: number) {
   return requestClient.get(`/system/role/preUpdate?id=${roleId}`);
 }
 
+/**
+ * 角色 详情
+ * @param id 角色 ID
+ */
+async function getDetailRole(id: number) {
+  return requestClient.get(`/system/role/${id}`);
+}
+
 export {
   allInheritRoles,
   createRole,
   deleteRole,
+  getDetailRole,
   getRoleAll,
   getRoleList,
   getRoleListWithMenu,

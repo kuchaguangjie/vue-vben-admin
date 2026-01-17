@@ -21,12 +21,20 @@ import { confirmDialog } from '#/utils/dialog';
 import { usePagerConfig } from '#/utils/pager';
 
 import { useColumns, useGridFormSchema } from './data';
+import RoleDetail from './modules/detail.vue';
 import Form from './modules/form.vue';
 
 const [FormDrawer, formDrawerApi] = useVbenDrawer({
   connectedComponent: Form,
   destroyOnClose: true,
 });
+const [DetailDrawer, detailDrawerApi] = useVbenDrawer({
+  connectedComponent: RoleDetail,
+});
+
+function onPreview(row: any) {
+  detailDrawerApi.setData(row).open();
+}
 
 const [Grid, gridApi] = useVbenVxeGrid({
   formOptions: {
@@ -35,7 +43,7 @@ const [Grid, gridApi] = useVbenVxeGrid({
     submitOnChange: true,
   },
   gridOptions: {
-    columns: useColumns(onActionClick, onStatusChange),
+    columns: useColumns(onActionClick, onPreview, onStatusChange),
     height: 'auto',
     keepSource: true,
     pagerConfig: usePagerConfig(),
@@ -144,6 +152,7 @@ function onCreate() {
 <template>
   <Page auto-content-height>
     <FormDrawer @success="onRefresh" />
+    <DetailDrawer />
     <Grid :table-title="$t('system.role.list')">
       <template #toolbar-tools>
         <Button type="primary" @click="onCreate">

@@ -65,6 +65,7 @@
     "operation": "Operation"
   },
   "role": {
+    "module": "Role",
     "title": "Role Management",
     "list": "Role List",
     "name": "Name",
