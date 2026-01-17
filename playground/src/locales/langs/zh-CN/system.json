@@ -123,9 +123,24 @@
   },
   "casbin": {
     "title": "Casbin 管理",
-    "btnGetStatus": "获取 casbin 状态",
-    "btnLoad": "加载 casbin 策略",
-    "loadSuccess": "casbin 加载成功",
-    "status": "Casbin 状态"
+    "manualStatus": {
+      "title": "手动加载 状态",
+      "loadSuccess": "casbin 加载成功",
+      "btnLoad": "加载 casbin 策略",
+      "btnGetStatus": "获取 casbin 状态",
+      "loadCount": "次数",
+      "loadAt": "最后时间"
+    },
+    "stat": {
+      "title": "统计",
+      "btnStat": "获取 stat",
+      "statAt": "统计时间",
+      "ruleCount": "规则数量",
+      "pRuleCount": "规则数量 (p)",
+      "gRuleCount": "规则数量 (g)",
+      "subCount": "subject 数量",
+      "userSubCount": "subject 数量 (用户)",
+      "roleSubCount": "subject 数量 (角色)"
+    }
   }
 }

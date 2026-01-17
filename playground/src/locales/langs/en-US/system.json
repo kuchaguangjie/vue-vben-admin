@@ -121,9 +121,24 @@
   },
   "casbin": {
     "title": "Casbin Management",
-    "btnGetStatus": "Get casbin status",
-    "btnLoad": "Load casbin policy",
-    "loadSuccess": "casbin load success",
-    "status": "Casbin status"
+    "manualStatus": {
+      "title": "Manual load status",
+      "loadSuccess": "casbin load success",
+      "btnLoad": "Load casbin policy",
+      "btnGetStatus": "Get casbin status",
+      "loadCount": "Times",
+      "loadAt": "Last time"
+    },
+    "stat": {
+      "title": "Statistics",
+      "btnStat": "Get Statistics",
+      "statAt": "statistic at",
+      "ruleCount": "rule count",
+      "pRuleCount": "rule count (p)",
+      "gRuleCount": "rule count (g)",
+      "subCount": "subject count",
+      "userSubCount": "subject count (user)",
+      "roleSubCount": "subject count (role)"
+    }
   }
 }
