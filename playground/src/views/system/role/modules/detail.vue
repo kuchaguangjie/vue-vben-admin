@@ -1,9 +1,13 @@
 <script lang="ts" setup>
 import type { DataNode } from 'ant-design-vue/es/tree';
 
-import { nextTick, ref } from 'vue'; // 复用已有的 Schema 定义
+import type { Recordable } from '@vben-core/typings';
 
-import { useVbenDrawer } from '@vben/common-ui';
+import { nextTick, ref } from 'vue'; // 复用已有的 Schema 定义
+import { Tree, useVbenDrawer } from '@vben/common-ui';
+import { IconifyIcon } from '@vben/icons';
+
+import { Spin } from 'ant-design-vue';
 
 import { useVbenForm } from '#/adapter/form';
 import { getDetailRole } from '#/api';
@@ -21,7 +25,7 @@ const [Form, formApi] = useVbenForm({
   schema: useFormSchema(),
   // 关键：设为只读模式, UI 会自动从输入框变为展示文本
   commonConfig: {
-    disabled: true,
+    wrapperClass: 'pointer-events-none opacity-60', // 不可点击
   },
   showDefaultActions: false,
 });
@@ -67,6 +71,15 @@ async function loadDetail(roleId: number) {
     loadingData.value = false;
   }
 }
+
+function getNodeClass(node: Recordable<any>) {
+  const classes: string[] = [];
+  if (node.value?.type === 'button') {
+    classes.push('inline-flex');
+  }
+
+  return classes.join(' ');
+}
 </script>
 
 <template>
@@ -76,7 +89,45 @@ async function loadDetail(roleId: number) {
     :show-confirm-button="false"
   >
     <div class="p-4">
-      <Form />
+      <Form>
+        <template #permissions="slotProps">
+          <Spin :spinning="loadingData" wrapper-class-name="w-full">
+            <Tree
+              :tree-data="menuOptions"
+              multiple
+              bordered
+              :default-expanded-level="2"
+              :get-node-class="getNodeClass"
+              v-bind="slotProps"
+              value-field="id"
+              label-field="meta.title"
+              icon-field="meta.icon"
+            >
+              <template #node="{ value }">
+                <IconifyIcon v-if="value.meta.icon" :icon="value.meta.icon" />
+                {{ $t(value.meta.title) }}
+              </template>
+            </Tree>
+          </Spin>
+        </template>
+        <template #apis="slotProps">
+          <Spin :spinning="loadingData" wrapper-class-name="w-full">
+            <Tree
+              :tree-data="apiOptions"
+              multiple
+              bordered
+              :default-expanded-level="2"
+              :get-node-class="getNodeClass"
+              v-bind="slotProps"
+              value-field="id"
+            >
+              <template #node="{ value }">
+                {{ $t(value.path) }} ({{ $t(value.action) }})
+              </template>
+            </Tree>
+          </Spin>
+        </template>
+      </Form>
     </div>
   </Drawer>
 </template>

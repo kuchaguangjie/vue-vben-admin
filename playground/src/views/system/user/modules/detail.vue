@@ -16,7 +16,8 @@ const [Form, formApi] = useVbenForm({
   schema: useFormSchema(),
   // 关键：设为只读模式, UI 会自动从输入框变为展示文本
   commonConfig: {
-    disabled: true,
+    // disabled: true,
+    wrapperClass: 'pointer-events-none opacity-60', // 不可点击
   },
   showDefaultActions: false,
 });
