@@ -118,5 +118,12 @@
     "btnLoadAll": "Load all cache",
     "btnGetStatus": "Get cache status",
     "loadSuccess": "Load cache success"
+  },
+  "casbin": {
+    "title": "Casbin Management",
+    "btnGetStatus": "Get casbin status",
+    "btnLoad": "Load casbin policy",
+    "loadSuccess": "casbin load success",
+    "status": "Casbin status"
   }
 }

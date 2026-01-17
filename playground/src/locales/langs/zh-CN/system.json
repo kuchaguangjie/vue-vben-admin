@@ -120,5 +120,12 @@
     "btnLoadAll": "刷新全部缓存",
     "btnGetStatus": "获取缓存状态",
     "loadSuccess": "缓存刷新成功"
+  },
+  "casbin": {
+    "title": "Casbin 管理",
+    "btnGetStatus": "获取 casbin 状态",
+    "btnLoad": "加载 casbin 策略",
+    "loadSuccess": "casbin 加载成功",
+    "status": "Casbin 状态"
   }
 }
