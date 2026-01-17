@@ -4,7 +4,7 @@ import { onMounted, ref } from 'vue';
 import { Page, VbenButton } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { Divider, message } from 'ant-design-vue';
+import { Card, message } from 'ant-design-vue';
 
 import {
   getCasbinManualStatus,
@@ -38,60 +38,150 @@ async function handleStat() {
 </script>
 <template>
   <Page auto-content-height>
-    <Divider>{{ $t('system.casbin.manualStatus.title') }}</Divider>
-    <div class="flex w-full items-center justify-between p-4">
-      <VbenButton type="primary" @click="handleManualStatus(true)">
-        {{ $t('system.casbin.manualStatus.btnGetStatus') }}
-      </VbenButton>
-      <VbenButton type="primary" @click="handleLoad()">
-        {{ $t('system.casbin.manualStatus.btnLoad') }}
-      </VbenButton>
-    </div>
+    <Card :title="$t('system.casbin.manualStatus.title')" class="mb-4">
+      <template #extra>
+        <div class="flex items-center gap-3">
+          <VbenButton
+            size="small"
+            class="h-8 border-white/10 bg-white/5 px-4 text-xs font-medium hover:bg-white/10"
+            @click="handleManualStatus(true)"
+          >
+            {{ $t('system.casbin.manualStatus.btnGetStatus') }}
+          </VbenButton>
+          <VbenButton
+            size="small"
+            type="primary"
+            class="h-8 px-4 text-xs font-medium"
+            @click="handleLoad()"
+          >
+            {{ $t('system.casbin.manualStatus.btnLoad') }}
+          </VbenButton>
+        </div>
+      </template>
 
-    <div>
-      <div>
-        {{ $t('system.casbin.manualStatus.loadCount') }}:
-        {{ manualStatusData?.loadCount }}
-      </div>
-      <div v-if="manualStatusData?.loadCount > 0">
-        {{ $t('system.casbin.manualStatus.loadAt') }}:
-        {{ formatBackendTime(manualStatusData?.loadAt) }}
-      </div>
-    </div>
+      <div class="flex justify-center py-6">
+        <table class="border-separate border-spacing-x-6 border-spacing-y-3">
+          <tbody>
+            <tr>
+              <td
+                class="text-vben-text-secondary text-right align-middle text-sm"
+              >
+                {{ $t('system.casbin.manualStatus.loadCount') }}:
+              </td>
+              <td class="text-center align-middle">
+                <span
+                  class="block text-4xl font-bold leading-none text-blue-500"
+                >
+                  {{ manualStatusData?.loadCount || 0 }}
+                </span>
+              </td>
+            </tr>
 
-    <Divider>{{ $t('system.casbin.stat.title') }}</Divider>
-    <div class="flex w-full items-center justify-between p-4">
-      <VbenButton type="primary" @click="handleStat()">
-        {{ $t('system.casbin.stat.btnStat') }}
-      </VbenButton>
-    </div>
+            <tr>
+              <td
+                class="text-vben-text-secondary text-right align-middle text-sm"
+              >
+                {{ $t('system.casbin.manualStatus.loadAt') }}:
+              </td>
+              <td class="text-center align-middle">
+                <span
+                  class="text-vben-text-primary block font-mono text-lg font-medium leading-none"
+                >
+                  {{
+                    manualStatusData?.loadAt
+                      ? formatBackendTime(manualStatusData.loadAt)
+                      : '-'
+                  }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </Card>
 
-    <div v-if="statData">
-      <div>
-        {{ $t('system.casbin.stat.statAt') }}:
-        {{ formatBackendTime(statData?.statAt) }}
+    <Card :title="$t('system.casbin.stat.title')">
+      <template #extra>
+        <VbenButton type="primary" ghost @click="handleStat()">
+          {{ $t('system.casbin.stat.btnStat') }}
+        </VbenButton>
+      </template>
+
+      <div v-if="statData" class="space-y-6">
+        <div class="flex items-center gap-2 text-sm text-gray-400">
+          <span class="icon-[ant-design--clock-circle-outlined]"></span>
+          {{ $t('system.casbin.stat.statAt') }}:
+          {{ formatBackendTime(statData.statAt) }}
+        </div>
+
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+          <div
+            class="bg-vben-background-secondary rounded-lg border-l-4 border-blue-500 p-4"
+          >
+            <div class="text-vben-text-secondary text-xs uppercase">
+              {{ $t('system.casbin.stat.ruleCount') }}
+            </div>
+            <div class="mt-1 text-2xl font-semibold">
+              {{ statData.ruleCount }}
+            </div>
+          </div>
+          <div
+            class="bg-vben-background-secondary rounded-lg border-l-4 border-purple-500 p-4"
+          >
+            <div class="text-vben-text-secondary text-xs uppercase">
+              {{ $t('system.casbin.stat.gRuleCount') }}
+            </div>
+            <div class="mt-1 text-2xl font-semibold">
+              {{ statData.gRuleCount }}
+            </div>
+          </div>
+          <div
+            class="bg-vben-background-secondary rounded-lg border-l-4 border-green-500 p-4"
+          >
+            <div class="text-vben-text-secondary text-xs uppercase">
+              {{ $t('system.casbin.stat.pRuleCount') }}
+            </div>
+            <div class="mt-1 text-2xl font-semibold">
+              {{ statData.pRuleCount }}
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+          <div
+            class="flex flex-col items-center justify-center rounded-xl border bg-slate-50/5 p-6 dark:bg-white/5"
+          >
+            <div class="text-4xl font-light">{{ statData.subCount }}</div>
+            <div class="text-vben-text-secondary mt-1 text-xs">
+              {{ $t('system.casbin.stat.subCount') }}
+            </div>
+          </div>
+          <div
+            class="flex flex-col items-center justify-center rounded-xl border bg-slate-50/5 p-6 dark:bg-white/5"
+          >
+            <div class="text-4xl font-light text-blue-400">
+              {{ statData.roleSubCount }}
+            </div>
+            <div class="text-vben-text-secondary mt-1 text-xs">
+              {{ $t('system.casbin.stat.roleSubCount') }}
+            </div>
+          </div>
+          <div
+            class="flex flex-col items-center justify-center rounded-xl border bg-slate-50/5 p-6 dark:bg-white/5"
+          >
+            <div class="text-4xl font-light text-orange-400">
+              {{ statData.userSubCount }}
+            </div>
+            <div class="text-vben-text-secondary mt-1 text-xs">
+              {{ $t('system.casbin.stat.userSubCount') }}
+            </div>
+          </div>
+        </div>
       </div>
-      <div>
-        {{ $t('system.casbin.stat.ruleCount') }}: {{ statData?.ruleCount }}
+      <div v-else class="text-vben-text-secondary py-12 text-center">
+        暂无统计数据，请点击按钮获取
       </div>
-      <div>
-        {{ $t('system.casbin.stat.gRuleCount') }}: {{ statData?.gRuleCount }}
-      </div>
-      <div>
-        {{ $t('system.casbin.stat.pRuleCount') }}: {{ statData?.pRuleCount }}
-      </div>
-      <div>
-        {{ $t('system.casbin.stat.subCount') }}: {{ statData?.subCount }}
-      </div>
-      <div>
-        {{ $t('system.casbin.stat.roleSubCount') }}:
-        {{ statData?.roleSubCount }}
-      </div>
-      <div>
-        {{ $t('system.casbin.stat.userSubCount') }}:
-        {{ statData?.userSubCount }}
-      </div>
-    </div>
+    </Card>
   </Page>
 </template>
 <style scoped></style>
