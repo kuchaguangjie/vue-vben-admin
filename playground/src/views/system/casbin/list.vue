@@ -5,6 +5,7 @@ import { Page, VbenButton } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
 import { Divider, message } from 'ant-design-vue';
+
 import { getCasbinStatus, loadCasbin } from '#/api/system/casbin';
 
 const displayData = ref<any>(null);
