@@ -42,14 +42,14 @@ async function handleStat() {
       <template #extra>
         <div class="flex items-center gap-3">
           <VbenButton
-            size="small"
+            size="sm"
             class="h-8 border-white/10 bg-white/5 px-4 text-xs font-medium hover:bg-white/10"
             @click="handleManualStatus(true)"
           >
             {{ $t('system.casbin.manualStatus.btnGetStatus') }}
           </VbenButton>
           <VbenButton
-            size="small"
+            size="sm"
             type="primary"
             class="h-8 px-4 text-xs font-medium"
             @click="handleLoad()"
@@ -179,7 +179,7 @@ async function handleStat() {
         </div>
       </div>
       <div v-else class="text-vben-text-secondary py-12 text-center">
-              {{ $t('system.casbin.stat.needClick') }}
+        {{ $t('system.casbin.stat.needClick') }}
       </div>
     </Card>
   </Page>
