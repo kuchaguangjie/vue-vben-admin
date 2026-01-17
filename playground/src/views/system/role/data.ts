@@ -3,8 +3,8 @@ import { z } from '#/adapter/form';
 import type { OnActionClickFn, VxeTableGridOptions } from '#/adapter/vxe-table';
 import type { SystemRoleApi } from '#/api';
 import { $t } from '#/locales';
-import { formatBackendTime } from '#/utils/value-format';
 import { usePreviewLink } from '#/utils/use-preview-link';
+import { formatBackendTime } from '#/utils/value-format';
 
 // form - new/edit
 export function useFormSchema(): VbenFormSchema[] {
@@ -18,6 +18,7 @@ export function useFormSchema(): VbenFormSchema[] {
     {
       component: 'Input',
       fieldName: 'code',
+      label: $t('system.role.code'),
     },
     {
       component: 'Input',

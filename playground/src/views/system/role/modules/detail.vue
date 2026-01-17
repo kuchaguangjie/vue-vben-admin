@@ -1,5 +1,8 @@
 <script lang="ts" setup>
+import type { DataNode } from 'ant-design-vue/es/tree';
+
 import { nextTick, ref } from 'vue'; // 复用已有的 Schema 定义
+
 import { useVbenDrawer } from '@vben/common-ui';
 
 import { useVbenForm } from '#/adapter/form';
@@ -7,7 +10,6 @@ import { getDetailRole } from '#/api';
 import { $t } from '#/locales';
 
 import { useFormSchema, useFormSchemaRemovePreview } from '../data';
-import type { DataNode } from 'ant-design-vue/es/tree';
 
 const loadingData = ref(false);
 
