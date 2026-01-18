@@ -4,17 +4,18 @@ import type { DataNode } from 'ant-design-vue/es/tree';
 import type { Recordable } from '@vben-core/typings';
 
 import { nextTick, ref } from 'vue'; // 复用已有的 Schema 定义
-
 import { Tree, useVbenDrawer } from '@vben/common-ui';
 import { IconifyIcon } from '@vben/icons';
 
-import { Spin } from 'ant-design-vue';
+import { Spin, Tabs } from 'ant-design-vue';
 
 import { useVbenForm } from '#/adapter/form';
 import { getDetailRole } from '#/api';
 import { $t } from '#/locales';
 
 import { useFormSchema, useFormSchemaRemovePreview } from '../data';
+
+const TabPane = Tabs.TabPane;
 
 const loadingData = ref(false);
 
@@ -52,7 +53,6 @@ async function loadDetail(roleId: number) {
       await getDetailRole(roleId);
 
     // 填充数据
-    // TODO
     await formApi.setValues(role);
     if (inheritCodes && inheritCodes.length > 0)
       await formApi.setFieldValue('roleCodes', inheritCodes);
@@ -89,46 +89,115 @@ function getNodeClass(node: Recordable<any>) {
     :cancel-text="$t('common.action.close')"
     :show-confirm-button="false"
   >
-    <div class="p-4">
-      <Form>
-        <template #permissions="slotProps">
-          <Spin :spinning="loadingData" wrapper-class-name="w-full">
-            <Tree
-              :tree-data="menuOptions"
-              multiple
-              bordered
-              :default-expanded-level="2"
-              :get-node-class="getNodeClass"
-              v-bind="slotProps"
-              value-field="id"
-              label-field="meta.title"
-              icon-field="meta.icon"
-            >
-              <template #node="{ value }">
-                <IconifyIcon v-if="value.meta.icon" :icon="value.meta.icon" />
-                {{ $t(value.meta.title) }}
+    <div class="h-full p-4">
+      <Tabs default-active-key="1" class="vben-tabs-card">
+        <TabPane key="1" tab="Form">
+          <div class="pt-4">
+            <Form>
+              <template #permissions="slotProps">
+                <Spin :spinning="loadingData" wrapper-class-name="w-full">
+                  <Tree
+                    :tree-data="menuOptions"
+                    multiple
+                    bordered
+                    :default-expanded-level="2"
+                    :get-node-class="getNodeClass"
+                    v-bind="slotProps"
+                    value-field="id"
+                    label-field="meta.title"
+                    icon-field="meta.icon"
+                  >
+                    <template #node="{ value }">
+                      <IconifyIcon
+                        v-if="value.meta.icon"
+                        :icon="value.meta.icon"
+                      />
+                      {{ $t(value.meta.title) }}
+                    </template>
+                  </Tree>
+                </Spin>
               </template>
-            </Tree>
-          </Spin>
-        </template>
-        <template #apis="slotProps">
-          <Spin :spinning="loadingData" wrapper-class-name="w-full">
-            <Tree
-              :tree-data="apiOptions"
-              multiple
-              bordered
-              :default-expanded-level="2"
-              :get-node-class="getNodeClass"
-              v-bind="slotProps"
-              value-field="id"
-            >
-              <template #node="{ value }">
-                {{ $t(value.path) }} ({{ $t(value.action) }})
+              <template #apis="slotProps">
+                <Spin :spinning="loadingData" wrapper-class-name="w-full">
+                  <Tree
+                    :tree-data="apiOptions"
+                    multiple
+                    bordered
+                    :default-expanded-level="2"
+                    :get-node-class="getNodeClass"
+                    v-bind="slotProps"
+                    value-field="id"
+                  >
+                    <template #node="{ value }">
+                      {{ $t(value.path) }} ({{ $t(value.action) }})
+                    </template>
+                  </Tree>
+                </Spin>
               </template>
-            </Tree>
-          </Spin>
-        </template>
-      </Form>
+            </Form>
+          </div>
+        </TabPane>
+
+        <TabPane key="2" tab="Usage">
+          <div class="pt-4">
+            <Tabs
+              tab-position="left"
+              default-active-key="2-0"
+              class="inner-usage-tabs"
+            >
+              <TabPane key="2-0" tab="统计 overview">
+                <div class="px-4">这里显示 usage 统计</div>
+              </TabPane>
+              <TabPane key="2-1" tab="Children Role">
+                <div class="px-4">这里显示 Children Role 的数据</div>
+              </TabPane>
+              <TabPane key="2-2" tab="Department">
+                <div class="px-4">这里显示 Dept 的关联信息</div>
+              </TabPane>
+              <TabPane key="2-3" tab="User">
+                <div class="px-4">这里显示关联的 User 列表</div>
+              </TabPane>
+            </Tabs>
+          </div>
+        </TabPane>
+        <TabPane key="3" tab="Effect Usage">
+          <div class="pt-4">
+            <Tabs
+              tab-position="right"
+              default-active-key="3-0"
+              class="inner-usage-tabs"
+            >
+              <TabPane key="3-0" tab="统计 overview">
+                <div class="px-4">这里显示 Effective usage 统计</div>
+              </TabPane>
+              <TabPane key="3-1" tab="Children Role">
+                <div class="px-4">这里显示 Effective Children Role 的数据</div>
+              </TabPane>
+              <TabPane key="3-2" tab="Department">
+                <div class="px-4">这里显示 Effective Dept 的关联信息</div>
+              </TabPane>
+              <TabPane key="3-3" tab="User">
+                <div class="px-4">这里显示关联的 Effective User 列表</div>
+              </TabPane>
+            </Tabs>
+          </div>
+        </TabPane>
+      </Tabs>
     </div>
   </Drawer>
 </template>
+<style scoped>
+/* 如果希望 Tab 占满高度，可以微调样式 */
+:deep(.ant-tabs-content) {
+  height: 100%;
+}
+
+/* 针对嵌套 Tabs 的微调，让左侧边栏更有质感 */
+:deep(.inner-usage-tabs .ant-tabs-nav) {
+  min-width: 120px;
+}
+
+:deep(.ant-tabs-tabpane) {
+  padding-left: 8px;
+}
+</style>
