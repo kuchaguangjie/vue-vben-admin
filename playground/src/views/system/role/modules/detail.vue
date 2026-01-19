@@ -4,7 +4,6 @@ import type { DataNode } from 'ant-design-vue/es/tree';
 import type { Recordable } from '@vben-core/typings';
 
 import { nextTick, ref } from 'vue'; // 复用已有的 Schema 定义
-
 import { Tree, useVbenDrawer } from '@vben/common-ui';
 import { IconifyIcon } from '@vben/icons';
 
@@ -331,18 +330,4 @@ const userColumns = [
     </div>
   </Drawer>
 </template>
-<style scoped>
-/* 如果希望 Tab 占满高度，可以微调样式 */
-:deep(.ant-tabs-content) {
-  height: 100%;
-}
-
-/* 针对嵌套 Tabs 的微调，让左侧边栏更有质感 */
-:deep(.inner-usage-tabs .ant-tabs-nav) {
-  min-width: 120px;
-}
-
-:deep(.ant-tabs-tabpane) {
-  padding-left: 8px;
-}
-</style>
+<style scoped></style>
