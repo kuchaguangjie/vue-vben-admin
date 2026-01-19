@@ -55,7 +55,7 @@ async function loadDetail(userId: number) {
 
 <template>
   <Drawer
-    :title="`${$t('system.user.name')} ${$t('common.previewDetail')}`"
+    :title="`${$t('system.user.module')} ${$t('common.previewDetail')}`"
     :cancel-text="$t('common.action.close')"
     :show-confirm-button="false"
   >

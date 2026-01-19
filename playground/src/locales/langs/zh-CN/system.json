@@ -1,10 +1,11 @@
 {
   "title": "系统管理",
   "dept": {
+    "module": "部门",
+    "id": "部门ID",
     "list": "部门列表",
     "createTime": "创建时间",
-    "deptName": "部门名称",
-    "name": "部门",
+    "name": "部门名称",
     "operation": "操作",
     "parentDept": "上级部门",
     "remark": "备注",
@@ -80,17 +81,29 @@
     "setInheritRoles": "角色继承 (api)",
     "setPermissions": "菜单",
     "setApis": "角色 APIs",
-    "codeValidation": "编码 长度 1-20, 可包含 'a-z A-Z 0-9 _'"
+    "codeValidation": "编码 长度 1-20, 可包含 'a-z A-Z 0-9 _'",
+    "detail": {
+      "tabBasic": "角色信息",
+      "tabUsage": "直接使用者",
+      "tabEffectUsage": "有效使用者",
+      "subTabStat": "统计信息",
+      "subTabRole": "子角色",
+      "subTabDept": "部门",
+      "subTabUser": "用户",
+      "statChildrenRoleCount": "子角色数",
+      "statDeptCount": "部门数",
+      "statUserCount": "用户数"
+    }
   },
   "user": {
-    "name": "用户",
+    "module": "用户",
+    "id": "用户ID",
     "title": "用户管理",
     "list": "用户列表",
     "nick": "昵称",
     "username": "用户名",
     "email": "邮箱",
     "password": "密码",
-    "id": "用户 ID",
     "dept": "部门",
     "status": "状态",
     "createdAt": "创建时间",

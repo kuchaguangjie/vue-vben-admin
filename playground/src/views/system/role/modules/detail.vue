@@ -7,7 +7,15 @@ import { nextTick, ref } from 'vue'; // 复用已有的 Schema 定义
 import { Tree, useVbenDrawer } from '@vben/common-ui';
 import { IconifyIcon } from '@vben/icons';
 
-import { Spin, Tabs } from 'ant-design-vue';
+import {
+  Col,
+  Row,
+  Spin,
+  Statistic,
+  Table,
+  Tabs,
+  Typography,
+} from 'ant-design-vue';
 
 import { useVbenForm } from '#/adapter/form';
 import { getDetailRole } from '#/api';
@@ -16,14 +24,15 @@ import { $t } from '#/locales';
 import { useFormSchema, useFormSchemaRemovePreview } from '../data';
 
 const TabPane = Tabs.TabPane;
+const Text = Typography.Text;
 
 const loadingData = ref(false);
 
 const menuOptions = ref<DataNode[]>([]);
 const apiOptions = ref<DataNode[]>([]);
 
-const roleUsage = ref<any>({});
-const roleEffectUsage = ref<any>({});
+const du = ref<any>({});
+const effectDu = ref<any>({});
 
 const [Form, formApi] = useVbenForm({
   // 直接复用 form.vue 的 schema，保持数据定义唯一
@@ -57,12 +66,12 @@ async function loadDetail(roleId: number) {
       inheritCodes,
       menuTreeWithChosen,
       apiTreeWithChosen,
-      usage,
-      effectUsage,
+      detailedUsage,
+      effectDetailedUsage,
     } = await getDetailRole(roleId);
 
-    roleUsage.value = usage;
-    roleEffectUsage.value = effectUsage;
+    du.value = detailedUsage;
+    effectDu.value = effectDetailedUsage;
 
     // 填充 数据 - form
     await formApi.setValues(role);
@@ -93,6 +102,26 @@ function getNodeClass(node: Recordable<any>) {
 
   return classes.join(' ');
 }
+
+// 角色列定义
+const roleColumns = [
+  { title: $t('system.role.id'), dataIndex: 'id', width: 80 },
+  { title: $t('system.role.name'), dataIndex: 'name' },
+  { title: $t('system.role.code'), dataIndex: 'code' },
+];
+
+// 部门列定义
+const deptColumns = [
+  { title: $t('system.dept.id'), dataIndex: 'id', width: 100 },
+  { title: $t('system.dept.name'), dataIndex: 'name' },
+];
+
+// 用户列定义
+const userColumns = [
+  { title: $t('system.user.id'), dataIndex: 'id', width: 80 },
+  { title: $t('system.user.nick'), dataIndex: 'nick' },
+  { title: $t('system.user.username'), dataIndex: 'username' },
+];
 </script>
 
 <template>
@@ -103,7 +132,7 @@ function getNodeClass(node: Recordable<any>) {
   >
     <div class="h-full p-4">
       <Tabs default-active-key="1" class="vben-tabs-card">
-        <TabPane key="1" tab="Form">
+        <TabPane key="1" :tab="$t('system.role.detail.tabBasic')">
           <div class="pt-4">
             <Form>
               <template #permissions="slotProps">
@@ -149,59 +178,150 @@ function getNodeClass(node: Recordable<any>) {
             </Form>
           </div>
         </TabPane>
+        <TabPane key="2" :tab="$t('system.role.detail.tabUsage')">
+          <div class="p-4">
+            <div class="mb-6 border-b border-gray-700 pb-4">
+              <Row :gutter="16">
+                <Col :span="8">
+                  <Statistic
+                    :title="$t('system.role.detail.statChildrenRoleCount')"
+                    :value="du?.childrenRoles?.length || 0"
+                    :value-style="{ color: '#3f51b5' }"
+                  />
+                </Col>
+                <Col :span="8">
+                  <Statistic
+                    :title="$t('system.role.detail.statDeptCount')"
+                    :value="du?.depts?.length || 0"
+                    :value-style="{ color: '#009688' }"
+                  />
+                </Col>
+                <Col :span="8">
+                  <Statistic
+                    :title="$t('system.role.detail.statUserCount')"
+                    :value="du?.users?.length || 0"
+                    :value-style="{ color: '#ff9800' }"
+                  />
+                </Col>
+              </Row>
+            </div>
 
-        <TabPane key="2" tab="Usage">
-          <div class="pt-4">
             <Tabs
               tab-position="left"
-              default-active-key="2-0"
+              default-active-key="2-1"
               class="inner-usage-tabs"
             >
-              <TabPane key="2-0" tab="统计 overview">
-                <div class="px-4">
-                  <div>
-                    直接 子角色数: {{ roleUsage?.childrenRoleNames?.length }}
-                  </div>
-                  <div>直接 部门数: {{ roleUsage?.deptIds?.length }}</div>
-                  <div>直接 用户数: {{ roleUsage?.userIds?.length }}</div>
+              <TabPane key="2-1" :tab="$t('system.role.detail.subTabRole')">
+                <div class="pl-4">
+                  <Table
+                    size="small"
+                    :pagination="false"
+                    :columns="roleColumns"
+                    :data-source="du?.childrenRoles"
+                  >
+                    <template #bodyCell="{ column, record }">
+                      <template v-if="column.dataIndex === 'code'">
+                        <Text code copyable>{{ record.code }}</Text>
+                      </template>
+                    </template>
+                  </Table>
                 </div>
               </TabPane>
-              <TabPane key="2-1" tab="Children Role">
-                <li v-for="rn in roleUsage?.childrenRoleNames" :key="rn">
-                  {{ rn }}
-                </li>
+
+              <TabPane key="2-2" :tab="$t('system.role.detail.subTabDept')">
+                <div class="pl-4">
+                  <Table
+                    size="small"
+                    :pagination="false"
+                    :columns="deptColumns"
+                    :data-source="du?.depts"
+                  />
+                </div>
               </TabPane>
-              <TabPane key="2-2" tab="Department">
-                <li v-for="deptId in roleUsage?.deptIds" :key="deptId">
-                  {{ deptId }}
-                </li>
-              </TabPane>
-              <TabPane key="2-3" tab="User">
-                <li v-for="userId in roleUsage?.userIds" :key="userId">
-                  {{ userId }}
-                </li>
+
+              <TabPane key="2-3" :tab="$t('system.role.detail.subTabUser')">
+                <div class="pl-4">
+                  <Table
+                    size="small"
+                    :pagination="false"
+                    :columns="userColumns"
+                    :data-source="du?.users"
+                  />
+                </div>
               </TabPane>
             </Tabs>
           </div>
         </TabPane>
-        <TabPane key="3" tab="Effect Usage">
-          <div class="pt-4">
+        <TabPane key="3" :tab="$t('system.role.detail.tabEffectUsage')">
+          <div class="p-4">
+            <div class="mb-6 border-b border-gray-700 pb-4">
+              <Row :gutter="16">
+                <Col :span="8">
+                  <Statistic
+                    :title="$t('system.role.detail.statChildrenRoleCount')"
+                    :value="effectDu?.childrenRoles?.length || 0"
+                    :value-style="{ color: '#3f51b5' }"
+                  />
+                </Col>
+                <Col :span="8">
+                  <Statistic
+                    :title="$t('system.role.detail.statDeptCount')"
+                    :value="effectDu?.depts?.length || 0"
+                    :value-style="{ color: '#009688' }"
+                  />
+                </Col>
+                <Col :span="8">
+                  <Statistic
+                    :title="$t('system.role.detail.statUserCount')"
+                    :value="effectDu?.users?.length || 0"
+                    :value-style="{ color: '#ff9800' }"
+                  />
+                </Col>
+              </Row>
+            </div>
+
             <Tabs
               tab-position="right"
-              default-active-key="3-0"
+              default-active-key="3-1"
               class="inner-usage-tabs"
             >
-              <TabPane key="3-0" tab="统计 overview">
-                <div class="px-4">这里显示 Effective usage 统计</div>
+              <TabPane key="3-1" :tab="$t('system.role.detail.subTabRole')">
+                <div class="pl-4">
+                  <Table
+                    size="small"
+                    :pagination="false"
+                    :columns="roleColumns"
+                    :data-source="effectDu?.childrenRoles"
+                  >
+                    <template #bodyCell="{ column, record }">
+                      <template v-if="column.dataIndex === 'code'">
+                        <Text code copyable>{{ record.code }}</Text>
+                      </template>
+                    </template>
+                  </Table>
+                </div>
               </TabPane>
-              <TabPane key="3-1" tab="Children Role">
-                <div class="px-4">这里显示 Effective Children Role 的数据</div>
+
+              <TabPane key="3-2" :tab="$t('system.role.detail.subTabDept')">
+                <div class="pl-4">
+                  <Table
+                    size="small"
+                    :pagination="false"
+                    :columns="deptColumns"
+                    :data-source="effectDu?.depts"
+                  />
+                </div>
               </TabPane>
-              <TabPane key="3-2" tab="Department">
-                <div class="px-4">这里显示 Effective Dept 的关联信息</div>
-              </TabPane>
-              <TabPane key="3-3" tab="User">
-                <div class="px-4">这里显示关联的 Effective User 列表</div>
+
+              <TabPane key="3-3" :tab="$t('system.role.detail.subTabUser')">
+                <div class="pl-4">
+                  <Table
+                    size="small"
+                    :pagination="false"
+                    :columns="userColumns"
+                    :data-source="effectDu?.users"
+                  />
+                </div>
               </TabPane>
             </Tabs>
           </div>

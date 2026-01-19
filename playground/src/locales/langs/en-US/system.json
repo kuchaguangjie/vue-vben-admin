@@ -1,9 +1,10 @@
 {
   "title": "System Management",
   "dept": {
-    "name": "Department",
+    "module": "Department",
+    "id": "ID",
     "title": "Department Management",
-    "deptName": "Department Name",
+    "name": "Name",
     "roleCodes": "Roles",
     "status": "Status",
     "createTime": "Create Time",
@@ -78,17 +79,29 @@
     "setInheritRoles": "Inherit roles (api)",
     "setPermissions": "Menus",
     "setApis": "Role APIs",
-    "codeValidation": "Code length 1-20, can contain 'a-z A-Z 0-9 _'"
+    "codeValidation": "Code length 1-20, can contain 'a-z A-Z 0-9 _'",
+    "detail": {
+      "tabBasic": "Role info",
+      "tabUsage": "Direct usage",
+      "tabEffectUsage": "Effective usage",
+      "subTabStat": "Stat",
+      "subTabRole": "Children Roles",
+      "subTabDept": "Departments",
+      "subTabUser": "Users",
+      "statChildrenRoleCount": "Children role count",
+      "statDeptCount": "Department count",
+      "statUserCount": "Use count"
+    }
   },
   "user": {
-    "name": "User",
+    "module": "User",
+    "id": "User ID",
     "title": "User Management",
     "list": "User List",
     "nick": "Nickname",
     "username": "Username",
     "email": "Email",
     "password": "Password",
-    "id": "User ID",
     "dept": "Department",
     "status": "Status",
     "createdAt": "Created At",

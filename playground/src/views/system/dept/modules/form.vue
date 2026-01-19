@@ -23,8 +23,8 @@ const emit = defineEmits(['success']);
 const formData = ref<SystemDeptApi.SystemDept>();
 const getTitle = computed(() => {
   return formData.value?.id
-    ? $t('ui.actionTitle.edit', [$t('system.dept.name')])
-    : $t('ui.actionTitle.create', [$t('system.dept.name')]);
+    ? $t('ui.actionTitle.edit', [$t('system.dept.module')])
+    : $t('ui.actionTitle.create', [$t('system.dept.module')]);
 });
 
 const [Form, formApi] = useVbenForm({

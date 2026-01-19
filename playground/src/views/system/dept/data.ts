@@ -16,13 +16,13 @@ export function useSchema(): VbenFormSchema[] {
     {
       component: 'Input',
       fieldName: 'name',
-      label: $t('system.dept.deptName'),
+      label: $t('system.dept.name'),
       rules: z
         .string()
-        .min(2, $t('ui.formRules.minLength', [$t('system.dept.deptName'), 2]))
+        .min(2, $t('ui.formRules.minLength', [$t('system.dept.name'), 2]))
         .max(
           20,
-          $t('ui.formRules.maxLength', [$t('system.dept.deptName'), 20]),
+          $t('ui.formRules.maxLength', [$t('system.dept.name'), 20]),
         ),
     },
     {
@@ -102,7 +102,7 @@ export function useColumns(
       align: 'left',
       field: 'name',
       fixed: 'left',
-      title: $t('system.dept.deptName'),
+      title: $t('system.dept.name'),
       treeNode: true,
       width: 150,
       sortable: true,
@@ -135,7 +135,7 @@ export function useColumns(
       cellRender: {
         attrs: {
           nameField: 'name',
-          nameTitle: $t('system.dept.name'),
+          nameTitle: $t('system.dept.module'),
           onClick: onActionClick,
         },
         name: 'CellOperation',

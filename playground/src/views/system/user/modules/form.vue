@@ -171,8 +171,8 @@ function updateSchemaForUser(deptRoots: any, roles: any) {
 
 const getDrawerTitle = computed(() => {
   return formData.value?.id
-    ? $t('common.edit', $t('system.user.name'))
-    : $t('common.create', $t('system.user.name'));
+    ? $t('common.edit', $t('system.user.module'))
+    : $t('common.create', $t('system.user.module'));
 });
 </script>
 

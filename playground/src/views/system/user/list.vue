@@ -159,7 +159,7 @@ function onPreview(row: any) {
       <template #toolbar-tools>
         <Button type="primary" @click="onCreate">
           <Plus class="size-5" />
-          {{ $t('ui.actionTitle.create', [$t('system.user.name')]) }}
+          {{ $t('ui.actionTitle.create', [$t('system.user.module')]) }}
         </Button>
       </template>
     </Grid>

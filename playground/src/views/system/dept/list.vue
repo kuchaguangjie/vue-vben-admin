@@ -170,7 +170,7 @@ const setExpandAll = (status: boolean) => {
       <template #toolbar-tools>
         <Button type="primary" @click="onCreate">
           <Plus class="size-5" />
-          {{ $t('ui.actionTitle.create', [$t('system.dept.name')]) }}
+          {{ $t('ui.actionTitle.create', [$t('system.dept.module')]) }}
         </Button>
         <Button type="primary" @click="triggerExpandAll" class="btn-space">
           {{
