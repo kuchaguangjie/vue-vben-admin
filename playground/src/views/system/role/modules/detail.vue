@@ -4,7 +4,6 @@ import type { DataNode } from 'ant-design-vue/es/tree';
 import type { Recordable } from '@vben-core/typings';
 
 import { nextTick, ref } from 'vue'; // 复用已有的 Schema 定义
-
 import { Tree, useVbenDrawer } from '@vben/common-ui';
 import { IconifyIcon } from '@vben/icons';
 
@@ -22,6 +21,9 @@ const loadingData = ref(false);
 
 const menuOptions = ref<DataNode[]>([]);
 const apiOptions = ref<DataNode[]>([]);
+
+const roleUsage = ref<any>({});
+const roleEffectUsage = ref<any>({});
 
 const [Form, formApi] = useVbenForm({
   // 直接复用 form.vue 的 schema，保持数据定义唯一
@@ -50,10 +52,19 @@ async function loadDetail(roleId: number) {
   loadingData.value = true;
   try {
     // load data
-    const { role, inheritCodes, menuTreeWithChosen, apiTreeWithChosen } =
-      await getDetailRole(roleId);
+    const {
+      role,
+      inheritCodes,
+      menuTreeWithChosen,
+      apiTreeWithChosen,
+      usage,
+      effectUsage,
+    } = await getDetailRole(roleId);
 
-    // 填充数据
+    roleUsage.value = usage;
+    roleEffectUsage.value = effectUsage;
+
+    // 填充 数据 - form
     await formApi.setValues(role);
     if (inheritCodes && inheritCodes.length > 0)
       await formApi.setFieldValue('roleCodes', inheritCodes);
@@ -147,16 +158,28 @@ function getNodeClass(node: Recordable<any>) {
               class="inner-usage-tabs"
             >
               <TabPane key="2-0" tab="统计 overview">
-                <div class="px-4">这里显示 usage 统计</div>
+                <div class="px-4">
+                  <div>
+                    直接 子角色数: {{ roleUsage?.childrenRoleNames?.length }}
+                  </div>
+                  <div>直接 部门数: {{ roleUsage?.deptIds?.length }}</div>
+                  <div>直接 用户数: {{ roleUsage?.userIds?.length }}</div>
+                </div>
               </TabPane>
               <TabPane key="2-1" tab="Children Role">
-                <div class="px-4">这里显示 Children Role 的数据</div>
+                <li v-for="rn in roleUsage?.childrenRoleNames" :key="rn">
+                  {{ rn }}
+                </li>
               </TabPane>
               <TabPane key="2-2" tab="Department">
-                <div class="px-4">这里显示 Dept 的关联信息</div>
+                <li v-for="deptId in roleUsage?.deptIds" :key="deptId">
+                  {{ deptId }}
+                </li>
               </TabPane>
               <TabPane key="2-3" tab="User">
-                <div class="px-4">这里显示关联的 User 列表</div>
+                <li v-for="userId in roleUsage?.userIds" :key="userId">
+                  {{ userId }}
+                </li>
               </TabPane>
             </Tabs>
           </div>
