@@ -11,7 +11,17 @@
     "remark": "备注",
     "roleCodes": "角色",
     "status": "状态",
-    "title": "部门管理"
+    "title": "部门管理",
+    "detail": {
+      "tabBasic": "部门信息",
+      "tabUsage": "直接使用者",
+      "tabEffectUsage": "有效使用者",
+      "subTabStat": "统计信息",
+      "subTabDept": "子部门",
+      "subTabUser": "用户",
+      "statChildrenDeptCount": "子部门数",
+      "statUserCount": "用户数"
+    }
   },
   "menu": {
     "list": "菜单列表",

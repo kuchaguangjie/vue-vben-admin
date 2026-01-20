@@ -29,6 +29,7 @@ const [FormDrawer, formDrawerApi] = useVbenDrawer({
   destroyOnClose: true,
 });
 const [DetailDrawer, detailDrawerApi] = useVbenDrawer({
+  destroyOnClose: true,
   connectedComponent: RoleDetail,
 });
 

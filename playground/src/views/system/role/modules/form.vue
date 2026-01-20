@@ -46,6 +46,7 @@ const apiOptions = ref<DataNode[]>([]);
 
 const id = ref();
 const [Drawer, drawerApi] = useVbenDrawer({
+  destroyOnClose: true,
   async onConfirm() {
     const { valid } = await formApi.validate();
     if (!valid) return;

@@ -1,17 +1,17 @@
 import type { VxeTableGridOptions } from '@vben/plugins/vxe-table';
 
 import type { VbenFormSchema } from '#/adapter/form';
+import { z } from '#/adapter/form';
 import type { OnActionClickFn } from '#/adapter/vxe-table';
 import type { SystemDeptApi } from '#/api/system/dept';
-
-import { z } from '#/adapter/form';
 import { $t } from '#/locales';
 import { formatBackendTime } from '#/utils/value-format';
+import { usePreviewLink } from '#/utils/use-preview-link';
 
 /**
  * 获取编辑表单的字段配置。如果没有使用多语言，可以直接export一个数组常量
  */
-export function useSchema(): VbenFormSchema[] {
+export function useFormSchema(): VbenFormSchema[] {
   return [
     {
       component: 'Input',
@@ -44,9 +44,12 @@ export function useSchema(): VbenFormSchema[] {
       label: $t('system.dept.parentDept'),
     },
     {
-      component: 'CheckboxGroup',
       fieldName: 'roleCodes',
-      label: $t('system.dept.roleCodes'),
+      component: 'TreeSelect',
+      label: $t('system.user.setRoles'),
+      componentProps: {
+        multiple: true, // 启用多选
+      },
     },
     {
       component: 'RadioGroup',
@@ -79,22 +82,31 @@ export function useSchema(): VbenFormSchema[] {
   ];
 }
 
+// single - preview - remove fields
+export function useFormSchemaRemovePreview(): string[] {
+  return [];
+}
+
 /**
  * 获取表格列配置
  * @description 使用函数的形式返回列数据而不是直接export一个Array常量，是为了响应语言切换时重新翻译表头
+ * @param onPreview
  * @param onActionClick 表格操作按钮点击事件
  */
 export function useColumns(
-  onActionClick?: OnActionClickFn<SystemDeptApi.SystemDept>,
+  onActionClick: OnActionClickFn<SystemDeptApi.SystemDept>,
+  onPreview: (row: any) => void,
 ): VxeTableGridOptions<SystemDeptApi.SystemDept>['columns'] {
   return [
-    {
-      field: 'id',
-      title: $t('common.id'),
-      fixed: 'left',
-      width: 75,
-      sortable: true,
-    },
+    usePreviewLink(
+      {
+        field: 'id',
+        title: $t('common.id'),
+        width: 75,
+        sortable: true,
+      },
+      onPreview,
+    ),
     {
       align: 'left',
       field: 'name',

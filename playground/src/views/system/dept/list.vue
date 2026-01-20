@@ -3,29 +3,37 @@ import type {
   OnActionClickParams,
   VxeTableGridOptions,
 } from '#/adapter/vxe-table';
+import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import type { PageParams } from '#/api/request';
+import { doPageQuery } from '#/api/request';
 import type { SystemDeptApi } from '#/api/system/dept';
+import { deleteDept, getDeptTree } from '#/api/system/dept';
 
 import { ref } from 'vue';
 
-import { Page, useVbenModal } from '@vben/common-ui';
+import { Page, useVbenDrawer, useVbenModal } from '@vben/common-ui';
 import { Plus } from '@vben/icons';
 
 import { Button, message } from 'ant-design-vue';
-
-import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import { doPageQuery } from '#/api/request';
-import { deleteDept, getDeptTree } from '#/api/system/dept';
 import { $t } from '#/locales';
 import { useDisabledPagerConfig } from '#/utils/pager';
 
 import { useColumns } from './data';
+import DeptDetail from './modules/detail.vue';
 import Form from './modules/form.vue';
 
 const [FormModal, formModalApi] = useVbenModal({
   connectedComponent: Form,
   destroyOnClose: true,
 });
+
+const [DetailDrawer, detailDrawerApi] = useVbenDrawer({
+  connectedComponent: DeptDetail,
+});
+
+function onPreview(row: any) {
+  detailDrawerApi.setData(row).open();
+}
 
 /**
  * 编辑部门
@@ -99,7 +107,7 @@ function onActionClick({
 const [Grid, gridApi] = useVbenVxeGrid({
   gridEvents: {},
   gridOptions: {
-    columns: useColumns(onActionClick),
+    columns: useColumns(onActionClick, onPreview),
     height: 'auto',
     keepSource: true,
     pagerConfig: useDisabledPagerConfig(),
@@ -181,6 +189,7 @@ const setExpandAll = (status: boolean) => {
         </Button>
       </template>
     </Grid>
+    <DetailDrawer />
   </Page>
 </template>
 

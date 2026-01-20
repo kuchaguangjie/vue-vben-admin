@@ -455,6 +455,7 @@ const [Form, formApi] = useVbenForm({
   wrapperClass: 'grid-cols-2 gap-x-4',
 });
 const [Drawer, drawerApi] = useVbenDrawer({
+  destroyOnClose: true,
   onConfirm: onSubmit,
   onOpenChange(isOpen) {
     if (isOpen) {

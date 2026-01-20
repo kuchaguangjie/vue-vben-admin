@@ -52,7 +52,7 @@ async function updateDept(
  * 删除部门
  * @param id 部门 ID
  */
-async function deleteDept(id: string) {
+async function deleteDept(id: number) {
   return requestClient.delete(`/system/dept/${id}`);
 }
 
@@ -70,10 +70,19 @@ async function preUpdateDept(id: number) {
   return requestClient.get(`/system/dept/preUpdate?id=${id}`);
 }
 
+/**
+ * 部门 详情
+ * @param id 角色 ID
+ */
+async function getDetailDept(id: number) {
+  return requestClient.get(`/system/dept/${id}`);
+}
+
 export {
   createDept,
   deleteDept,
   getDeptTree,
+  getDetailDept,
   preCreateDept,
   preUpdateDept,
   updateDept,

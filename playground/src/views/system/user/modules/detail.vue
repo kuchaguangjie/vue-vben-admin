@@ -23,6 +23,7 @@ const [Form, formApi] = useVbenForm({
 });
 
 const [Drawer, drawerApi] = useVbenDrawer({
+  destroyOnClose: true,
   async onOpenChange(isOpen) {
     if (isOpen) {
       await formApi.removeSchemaByFields(useFormSchemaRemovePreview());

@@ -10,7 +10,17 @@
     "createTime": "Create Time",
     "remark": "Remark",
     "operation": "Operation",
-    "parentDept": "Parent Department"
+    "parentDept": "Parent Department",
+    "detail": {
+      "tabBasic": "Dept info",
+      "tabUsage": "Direct usage",
+      "tabEffectUsage": "Effective usage",
+      "subTabStat": "Stat",
+      "subTabDept": "Children Depts",
+      "subTabUser": "Users",
+      "statChildrenDeptCount": "Children Dept count",
+      "statUserCount": "Use count"
+    }
   },
   "menu": {
     "title": "Menu Management",

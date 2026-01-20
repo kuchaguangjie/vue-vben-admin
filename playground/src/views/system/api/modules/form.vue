@@ -27,6 +27,7 @@ const [Form, formApi] = useVbenForm({
 });
 
 const [Drawer, drawerApi] = useVbenDrawer({
+  destroyOnClose: true,
   async onConfirm() {
     const { valid } = await formApi.validate();
     if (!valid) return;
@@ -54,7 +55,6 @@ const [Drawer, drawerApi] = useVbenDrawer({
       drawerApi.unlock();
     }
   },
-
   async onOpenChange(isOpen) {
     if (isOpen) {
       const data = drawerApi.getData<SystemApiApi.SystemApi>();
