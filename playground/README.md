@@ -22,6 +22,7 @@
   - sortDesc # boolean, false -> asc, true -> desc;
 
 ### form columns shared by actions: Create / Edit / Preview
+
 - default columns: all
 - adjust via functions defined in `data.ts` for each action:
   - for Create: need remove auto generated fields, like `id`, specified via `formFieldsToRemoveForCreate()`
