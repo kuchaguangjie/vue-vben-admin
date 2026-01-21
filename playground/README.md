@@ -32,3 +32,8 @@
   - for Preview
     - make the form unable to edit, either by disable it, or make it can't click via css class
     - remove some fields that can't be displayed, same as edit;
+
+## 常用组件
+- [容器]
+  - Drawer # 抽屉, 从侧边弹出, 大小不变; (大部分 form 和 preview 都是用的这个)
+  - Modal # 模态框, 从中间弹出, 可全屏; (dept 中用了这个显示 form)
