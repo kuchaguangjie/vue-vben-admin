@@ -40,7 +40,7 @@ const schema: VbenFormSchema[] = [
     label: '', // 空标签使其不显示
     componentProps: {
       style: { display: 'none' }, // 隐藏输入框
-      disabled: true, // 使其不可编辑
+      disabled: true, // 不可编辑
     },
   },
   {

@@ -11,7 +11,7 @@ import { useVbenForm } from '#/adapter/form';
 import { getDetailDept } from '#/api';
 import { $t } from '#/locales';
 
-import { useFormSchema, useFormSchemaRemovePreview } from '../data';
+import { formFieldsToRemoveForPreview, useFormSchema } from '../data';
 
 const TabPane = Tabs.TabPane;
 const Text = Typography.Text;
@@ -36,7 +36,7 @@ const [Drawer, drawerApi] = useVbenDrawer({
   async onOpenChange(isOpen) {
     if (isOpen) {
       // adjust ui fields
-      await formApi.removeSchemaByFields(useFormSchemaRemovePreview());
+      await formApi.removeSchemaByFields(formFieldsToRemoveForPreview());
       await nextTick();
 
       // load data & fill

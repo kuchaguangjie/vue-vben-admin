@@ -22,7 +22,7 @@ import { useVbenForm } from '#/adapter/form';
 import { getDetailRole } from '#/api';
 import { $t } from '#/locales';
 
-import { useFormSchema, useFormSchemaRemovePreview } from '../data';
+import { formFieldsToRemoveForPreview, useFormSchema } from '../data';
 
 const TabPane = Tabs.TabPane;
 const Text = Typography.Text;
@@ -49,7 +49,7 @@ const [Drawer, drawerApi] = useVbenDrawer({
   destroyOnClose: true,
   async onOpenChange(isOpen) {
     if (isOpen) {
-      await formApi.removeSchemaByFields(useFormSchemaRemovePreview());
+      await formApi.removeSchemaByFields(formFieldsToRemoveForPreview());
       await nextTick();
 
       const id = drawerApi.getData<any>().id;

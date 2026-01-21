@@ -12,6 +12,12 @@ export function useFormSchema(): VbenFormSchema[] {
   return [
     {
       component: 'Input',
+      fieldName: 'id',
+      label: $t('system.role.id'),
+      disabled: true, // 不可编辑
+    },
+    {
+      component: 'Input',
       fieldName: 'name',
       label: $t('system.role.name'),
       rules: 'required',
@@ -20,6 +26,20 @@ export function useFormSchema(): VbenFormSchema[] {
       component: 'Input',
       fieldName: 'code',
       label: $t('system.role.code'),
+      defaultValue: 'role_',
+      rules: z
+        .string()
+        .min(1, { message: '代码长度不能少于1个字符' })
+        .max(20, { message: '代码长度不能超过20个字符' })
+        // 限制 字符集: 字母、数字、下划线
+        .regex(/^\w+$/, {
+          message: $t('system.role.codeValidation'),
+        }),
+      componentProps: {
+        placeholder: '1 ~ 20 个字符',
+        maxlength: 20,
+        showCount: true,
+      },
     },
     {
       component: 'Input',
@@ -27,7 +47,7 @@ export function useFormSchema(): VbenFormSchema[] {
       label: '', // 空标签使其不显示
       componentProps: {
         style: { display: 'none' }, // 隐藏输入框
-        disabled: true, // 使其不可编辑
+        disabled: true, // 不可编辑
       },
     },
     {
@@ -74,48 +94,27 @@ export function useFormSchema(): VbenFormSchema[] {
   ];
 }
 
-// single - edit - set fields
-export function useFormSchemaExtraEdit(): VbenFormSchema[] {
-  return [];
-}
-
-// single - new - add fields
-export function useFormSchemaExtraNew(): VbenFormSchema[] {
+// form fields - to adjust - when edit
+export function formFieldsToAdjustForEdit(): VbenFormSchema[] {
   return [
     {
       component: 'Input',
       fieldName: 'code',
       label: $t('system.role.code'),
-      defaultValue: 'role_',
-      rules: z
-        .string()
-        .min(1, { message: '代码长度不能少于1个字符' })
-        .max(20, { message: '代码长度不能超过20个字符' })
-        // 限制 字符集: 字母、数字、下划线
-        .regex(/^\w+$/, {
-          message: $t('system.role.codeValidation'),
-        }),
       componentProps: {
-        placeholder: '1 ~ 20 个字符',
-        maxlength: 20,
-        showCount: true,
+        disabled: true, // 不可编辑
       },
     },
   ];
 }
 
-// single - edit - remove fields
-export function useFormSchemaRemoveEdit(): string[] {
-  return ['code'];
+// form fields - to remove - when create
+export function formFieldsToRemoveForCreate(): string[] {
+  return ['id'];
 }
 
-// single - new - remove fields
-export function useFormSchemaRemoveNew(): string[] {
-  return [];
-}
-
-// single - preview - remove fields
-export function useFormSchemaRemovePreview(): string[] {
+// form fields - to remove - when preview
+export function formFieldsToRemoveForPreview(): string[] {
   return [];
 }
 

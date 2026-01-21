@@ -176,7 +176,7 @@ const [SyncForm] = useVbenForm({
     {
       component: 'Input',
       componentProps: {
-        disabled: true,
+        disabled: true, // 不可编辑
       },
       dependencies: {
         trigger(values, form) {

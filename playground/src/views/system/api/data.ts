@@ -15,6 +15,12 @@ export function useFormSchema(): VbenFormSchema[] {
   return [
     {
       component: 'Input',
+      fieldName: 'id',
+      label: $t('system.api.id'),
+      disabled: true, // 不可编辑
+    },
+    {
+      component: 'Input',
       fieldName: 'path',
       label: $t('system.api.path'),
       rules: 'required',
@@ -28,6 +34,15 @@ export function useFormSchema(): VbenFormSchema[] {
     {
       component: 'Select',
       fieldName: 'type',
+      label: $t('common.type'),
+      componentProps: {
+        allowClear: true,
+        options: [
+          { label: $t('system.api.typeApi'), value: 0 },
+          { label: $t('system.api.typeDir'), value: 1 },
+        ],
+      },
+      rules: 'required',
     },
     {
       component: 'Input',
@@ -35,7 +50,7 @@ export function useFormSchema(): VbenFormSchema[] {
       label: '', // 空标签使其不显示
       componentProps: {
         style: { display: 'none' }, // 隐藏输入框
-        disabled: true, // 使其不可编辑
+        disabled: true, // 不可编辑
       },
     },
     {
@@ -73,53 +88,29 @@ export function useFormSchema(): VbenFormSchema[] {
   ];
 }
 
-// single - edit - set fields
-export function useFormSchemaExtraEdit(): VbenFormSchema[] {
+// form fields - to adjust - when edit
+export function formFieldsToAdjustForEdit(): VbenFormSchema[] {
   return [
     {
       component: 'Input',
       fieldName: 'path',
       componentProps: {
-        disabled: true, // 不可修改
+        disabled: true, // 不可编辑
       },
     },
     {
       component: 'Input',
       fieldName: 'action',
       componentProps: {
-        disabled: true, // 不可修改
+        disabled: true, // 不可编辑
       },
     },
   ];
 }
 
-// single - new - add fields
-export function useFormSchemaExtraNew(): VbenFormSchema[] {
-  return [
-    {
-      component: 'Select',
-      fieldName: 'type',
-      label: $t('common.type'),
-      componentProps: {
-        allowClear: true,
-        options: [
-          { label: $t('system.api.typeApi'), value: 0 },
-          { label: $t('system.api.typeDir'), value: 1 },
-        ],
-      },
-      rules: 'required',
-    },
-  ];
-}
-
-// single - edit - remove fields
-export function useFormSchemaRemoveEdit(): string[] {
-  return ['type'];
-}
-
-// single - new - remove fields
-export function useFormSchemaRemoveNew(): string[] {
-  return [];
+// form fields - to remove - when create
+export function formFieldsToRemoveForCreate(): string[] {
+  return ['id'];
 }
 
 export function useGridFormSchema(): VbenFormSchema[] {

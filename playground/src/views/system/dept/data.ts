@@ -16,6 +16,12 @@ export function useFormSchema(): VbenFormSchema[] {
   return [
     {
       component: 'Input',
+      fieldName: 'id',
+      label: $t('system.dept.id'),
+      disabled: true, // 不可编辑
+    },
+    {
+      component: 'Input',
       fieldName: 'name',
       label: $t('system.dept.name'),
       rules: z
@@ -29,7 +35,7 @@ export function useFormSchema(): VbenFormSchema[] {
       label: '', // 空标签使其不显示
       componentProps: {
         style: { display: 'none' }, // 隐藏输入框
-        disabled: true, // 使其不可编辑
+        disabled: true, // 不可编辑
       },
     },
     {
@@ -83,8 +89,18 @@ export function useFormSchema(): VbenFormSchema[] {
   ];
 }
 
-// single - preview - remove fields
-export function useFormSchemaRemovePreview(): string[] {
+// form fields - to remove - when create
+export function formFieldsToRemoveForCreate(): string[] {
+  return ['id'];
+}
+
+// form fields - to adjust - when edit
+export function formFieldsToAdjustForEdit(): VbenFormSchema[] {
+  return [];
+}
+
+// form fields - to remove - when preview
+export function formFieldsToRemoveForPreview(): string[] {
   return [];
 }
 

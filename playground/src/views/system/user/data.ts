@@ -14,89 +14,8 @@ export function useFormSchema(): VbenFormSchema[] {
       component: 'Input',
       fieldName: 'id',
       label: $t('system.user.id'),
-      disabled: true,
+      disabled: true, // 不可编辑
     },
-    {
-      component: 'Input',
-      fieldName: 'username',
-      label: $t('system.user.username'),
-    },
-    {
-      component: 'Input',
-      fieldName: 'email',
-      label: $t('system.user.email'),
-    },
-    {
-      component: 'InputPassword',
-      fieldName: 'password',
-      label: $t('system.user.password'),
-    },
-    {
-      component: 'Input',
-      fieldName: 'version',
-      label: '', // 空标签使其不显示
-      componentProps: {
-        style: { display: 'none' }, // 隐藏输入框
-        disabled: true, // 使其不可编辑
-      },
-    },
-    {
-      component: 'Input',
-      fieldName: 'nick',
-      label: $t('system.user.nick'),
-      rules: 'required',
-    },
-    {
-      component: 'RadioGroup',
-      componentProps: {
-        buttonStyle: 'solid',
-        options: [
-          { label: $t('common.enabled'), value: 1 },
-          { label: $t('common.disabled'), value: 0 },
-        ],
-        optionType: 'button',
-      },
-      defaultValue: 1,
-      fieldName: 'status',
-      label: $t('system.user.status'),
-    },
-    {
-      fieldName: 'deptIds',
-      component: 'TreeSelect',
-      label: $t('system.user.dept'),
-      componentProps: {
-        multiple: true, // 启用多选
-      },
-    },
-    {
-      fieldName: 'roleCodes',
-      component: 'TreeSelect',
-      label: $t('system.user.setRoles'),
-      componentProps: {
-        multiple: true, // 启用多选
-      },
-    },
-  ];
-}
-
-// single - edit - set fields
-export function useFormSchemaExtraEdit(): VbenFormSchema[] {
-  return [
-    {
-      component: 'Input',
-      fieldName: 'username',
-      label: '', // 空标签使其不显示
-      componentProps: {
-        style: { display: 'none' }, // 隐藏输入框
-        disabled: true, // 使其不可编辑
-      },
-    },
-  ];
-}
-
-// single - new - add fields
-export function useFormSchemaExtraNew(): VbenFormSchema[] {
-  return [
     {
       component: 'Input',
       fieldName: 'username',
@@ -140,21 +59,88 @@ export function useFormSchemaExtraNew(): VbenFormSchema[] {
           message: $t('system.user.passwordValidationComplexity'),
         }),
     },
+    {
+      component: 'Input',
+      fieldName: 'version',
+      label: '', // 空标签使其不显示
+      componentProps: {
+        style: { display: 'none' }, // 隐藏输入框
+        disabled: true, // 不可编辑
+      },
+    },
+    {
+      component: 'Input',
+      fieldName: 'nick',
+      label: $t('system.user.nick'),
+      rules: 'required',
+    },
+    {
+      component: 'RadioGroup',
+      componentProps: {
+        buttonStyle: 'solid',
+        options: [
+          { label: $t('common.enabled'), value: 1 },
+          { label: $t('common.disabled'), value: 0 },
+        ],
+        optionType: 'button',
+      },
+      defaultValue: 1,
+      fieldName: 'status',
+      label: $t('system.user.status'),
+    },
+    {
+      fieldName: 'deptIds',
+      component: 'TreeSelect',
+      label: $t('system.user.dept'),
+      componentProps: {
+        multiple: true, // 启用多选
+      },
+    },
+    {
+      fieldName: 'roleCodes',
+      component: 'TreeSelect',
+      label: $t('system.user.setRoles'),
+      componentProps: {
+        multiple: true, // 启用多选
+      },
+    },
   ];
 }
 
-// single - edit - remove fields
-export function useFormSchemaRemoveEdit(): string[] {
-  return ['email', 'password'];
+// form fields - to adjust - when edit
+export function formFieldsToAdjustForEdit(): VbenFormSchema[] {
+  return [
+    {
+      component: 'Input',
+      fieldName: 'username',
+      label: $t('system.user.username'),
+      componentProps: {
+        disabled: true, // 不可编辑
+      },
+    },
+    {
+      component: 'Input',
+      fieldName: 'email',
+      label: $t('system.user.email'),
+      componentProps: {
+        disabled: true, // 不可编辑
+      },
+    },
+  ];
 }
 
-// single - new - remove fields
-export function useFormSchemaRemoveNew(): string[] {
+// form fields - to remove - when edit
+export function formFieldsToRemoveForEdit(): string[] {
+  return ['password'];
+}
+
+// form fields - to remove - when create
+export function formFieldsToRemoveForCreate(): string[] {
   return ['id'];
 }
 
-// single - preview - remove fields
-export function useFormSchemaRemovePreview(): string[] {
+// form fields - to remove - when preview
+export function formFieldsToRemoveForPreview(): string[] {
   return ['password'];
 }
 

@@ -17,7 +17,11 @@ import {
 import { $t } from '#/locales';
 import { extractTreeValue } from '#/utils/value-format';
 
-import { useFormSchema } from '../data';
+import {
+  formFieldsToAdjustForEdit,
+  formFieldsToRemoveForCreate,
+  useFormSchema,
+} from '../data';
 
 const emit = defineEmits(['success']);
 const formData = ref<SystemDeptApi.SystemDept>();
@@ -65,7 +69,7 @@ const [Modal, modalApi] = useVbenModal({
         await modalApi.close();
         emit('success');
       } finally {
-        modalApi.lock(false);
+        modalApi.unlock();
       }
     }
   },
@@ -78,6 +82,15 @@ const [Modal, modalApi] = useVbenModal({
 
       // 判断 new / edit 模式
       const isEdit = data && data.id;
+
+      // update form fields
+      if (isEdit) {
+        formApi.updateSchema(formFieldsToAdjustForEdit());
+      } else {
+        await formApi.removeSchemaByFields(formFieldsToRemoveForCreate());
+      }
+      // Wait for Vue to flush DOM updates (form fields mounted)
+      await nextTick();
 
       // get data & update field value
       isEdit

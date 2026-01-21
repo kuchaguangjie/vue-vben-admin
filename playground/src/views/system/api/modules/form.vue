@@ -10,11 +10,9 @@ import { createApi, updateApi } from '#/api/system/api';
 import { $t } from '#/locales';
 
 import {
+  formFieldsToAdjustForEdit,
+  formFieldsToRemoveForCreate,
   useFormSchema,
-  useFormSchemaExtraEdit,
-  useFormSchemaExtraNew,
-  useFormSchemaRemoveEdit,
-  useFormSchemaRemoveNew,
 } from '../data';
 
 const emits = defineEmits(['success']);
@@ -65,11 +63,9 @@ const [Drawer, drawerApi] = useVbenDrawer({
       const isEdit = data && data.id;
       // adjust fields
       if (isEdit) {
-        formApi.updateSchema(useFormSchemaExtraEdit());
-        await formApi.removeSchemaByFields(useFormSchemaRemoveEdit());
+        formApi.updateSchema(formFieldsToAdjustForEdit());
       } else {
-        formApi.updateSchema(useFormSchemaExtraNew());
-        await formApi.removeSchemaByFields(useFormSchemaRemoveNew());
+        await formApi.removeSchemaByFields(formFieldsToRemoveForCreate());
       }
       // Wait for Vue to flush DOM updates (form fields mounted)
       await nextTick();

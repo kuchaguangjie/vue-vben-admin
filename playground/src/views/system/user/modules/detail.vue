@@ -7,7 +7,7 @@ import { useVbenForm } from '#/adapter/form';
 import { getDetailUser } from '#/api';
 import { $t } from '#/locales';
 
-import { useFormSchema, useFormSchemaRemovePreview } from '../data';
+import { formFieldsToRemoveForPreview, useFormSchema } from '../data';
 
 const loadingData = ref(false);
 
@@ -16,7 +16,7 @@ const [Form, formApi] = useVbenForm({
   schema: useFormSchema(),
   // 关键：设为只读模式, UI 会自动从输入框变为展示文本
   commonConfig: {
-    // disabled: true,
+    // disabled: true, // 不可编辑
     wrapperClass: 'pointer-events-none opacity-60', // 不可点击
   },
   showDefaultActions: false,
@@ -26,7 +26,7 @@ const [Drawer, drawerApi] = useVbenDrawer({
   destroyOnClose: true,
   async onOpenChange(isOpen) {
     if (isOpen) {
-      await formApi.removeSchemaByFields(useFormSchemaRemovePreview());
+      await formApi.removeSchemaByFields(formFieldsToRemoveForPreview());
       await nextTick();
 
       const id = drawerApi.getData<any>().id;

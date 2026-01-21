@@ -16,11 +16,10 @@ import { $t } from '#/locales';
 import { extractTreeValue } from '#/utils/value-format';
 
 import {
+  formFieldsToAdjustForEdit,
+  formFieldsToRemoveForCreate,
+  formFieldsToRemoveForEdit,
   useFormSchema,
-  useFormSchemaExtraEdit,
-  useFormSchemaExtraNew,
-  useFormSchemaRemoveEdit,
-  useFormSchemaRemoveNew,
 } from '../data';
 
 const emits = defineEmits(['success']);
@@ -68,11 +67,10 @@ const [Drawer, drawerApi] = useVbenDrawer({
       }
 
       if (isEdit) {
-        formApi.updateSchema(useFormSchemaExtraEdit());
-        await formApi.removeSchemaByFields(useFormSchemaRemoveEdit());
+        formApi.updateSchema(formFieldsToAdjustForEdit());
+        await formApi.removeSchemaByFields(formFieldsToRemoveForEdit());
       } else {
-        formApi.updateSchema(useFormSchemaExtraNew());
-        await formApi.removeSchemaByFields(useFormSchemaRemoveNew());
+        await formApi.removeSchemaByFields(formFieldsToRemoveForCreate());
       }
       // Wait for Vue to flush DOM updates (form fields mounted)
       await nextTick();
