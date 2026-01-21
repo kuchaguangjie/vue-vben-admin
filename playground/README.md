@@ -20,3 +20,14 @@
   -
   - sortBy # field name to sort, it's camelCase, should convert to snake_case in backend.
   - sortDesc # boolean, false -> asc, true -> desc;
+
+### form columns shared by actions: Create / Edit / Preview
+- default columns: all
+- adjust via functions defined in `data.ts` for each action:
+  - for Create: need remove auto generated fields, like `id`, specified via `formFieldsToRemoveForCreate()`
+  - for Edit:
+    - disable some fields that can't be changed, like `username`, specified via `formFieldsToAdjustForEdit()`
+    - remove some fields that can't be displayed, like `password`, specified via `formFieldsToRemoveForEdit()`
+  - for Preview
+    - make the form unable to edit, either by disable it, or make it can't click via css class
+    - remove some fields that can't be displayed, same as edit;

@@ -2,6 +2,8 @@
 
 基于 vben 的 playground 开发, 使用 antd.
 
+Refer: [playground/README.md](playground/README.md)
+
 ## Git branch
 
 |    分支    | 说明                                         |
