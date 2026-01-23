@@ -45,6 +45,8 @@ const coreRoutes: RouteRecordRaw[] = [
           title: '个人中心',
           icon: 'lucide:user',
           hideInMenu: true, // 隐藏在菜单栏，但路由依然存在
+          affixTab: true,
+          affixTabOrder: 0,
         },
       },
     ],
