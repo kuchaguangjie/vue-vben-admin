@@ -12,3 +12,6 @@ export async function getUserInfoApi() {
 export async function updateUserBasicInfoApi(data: any) {
   return requestClient.post<CustomUserInfo>('/user/updateBasicInfo', data);
 }
+export async function updateUserPassword(data: any) {
+  return requestClient.post<CustomUserInfo>('/user/updatePassword', data);
+}

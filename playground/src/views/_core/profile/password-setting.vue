@@ -6,6 +6,7 @@ import { computed, ref } from 'vue';
 import { ProfilePasswordSetting, z } from '@vben/common-ui';
 
 import { message } from 'ant-design-vue';
+import { updateUserPassword } from '#/api';
 
 const profilePasswordSettingRef = ref();
 
@@ -30,7 +31,7 @@ const formSchema = computed((): VbenFormSchema[] => {
     },
     {
       fieldName: 'confirmPassword',
-      label: '确认密码',
+      label: '确认新密码',
       component: 'VbenInputPassword',
       componentProps: {
         passwordStrength: true,
@@ -52,7 +53,13 @@ const formSchema = computed((): VbenFormSchema[] => {
   ];
 });
 
-function handleSubmit() {
+async function handleSubmit(values: any) {
+  await updateUserPassword(values);
+
+  // 成功后, 清空 form
+  const formApi = profilePasswordSettingRef.value?.getFormApi();
+  await formApi?.resetForm();
+
   message.success('密码修改成功');
 }
 </script>

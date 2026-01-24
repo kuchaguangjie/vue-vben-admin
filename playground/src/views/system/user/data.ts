@@ -89,6 +89,11 @@ export function useFormSchema(): VbenFormSchema[] {
       label: $t('system.user.status'),
     },
     {
+      fieldName: 'remark',
+      component: 'Textarea',
+      label: $t('system.user.remark'),
+    },
+    {
       fieldName: 'deptIds',
       component: 'TreeSelect',
       label: $t('system.user.dept'),

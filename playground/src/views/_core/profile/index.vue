@@ -20,17 +20,19 @@ const tabs = ref([
     value: 'basic',
   },
   {
-    label: $t('usercenter.tab.security'),
-    value: 'security',
-  },
-  {
     value: 'password',
     label: $t('usercenter.tab.updatePassword'),
+  },
+  /*
+  {
+    label: $t('usercenter.tab.security'),
+    value: 'security',
   },
   {
     value: 'notice',
     label: $t('usercenter.tab.notify'),
   },
+  */
 ]);
 </script>
 <template>

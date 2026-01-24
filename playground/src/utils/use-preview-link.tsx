@@ -12,12 +12,13 @@ export function usePreviewLink(
   options: PreviewOptions,
   onPreview: (row: any) => void,
 ) {
-  const { field, title, width = 120 } = options;
+  const { field, title, width = 120, sortable } = options;
 
   return {
     field,
     title,
     width,
+    sortable,
     slots: {
       default: ({ row }: any) => (
         <div
