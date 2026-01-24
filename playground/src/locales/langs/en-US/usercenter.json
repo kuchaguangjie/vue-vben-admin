@@ -1,0 +1,9 @@
+{
+  "tab": {
+    "basicInfo": "Basic profile",
+    "security": "Security",
+    "updatePassword": "Update Password",
+    "updateEmail": "Update Email",
+    "notify": "Notification"
+  }
+}

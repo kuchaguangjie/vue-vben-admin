@@ -1,0 +1,9 @@
+{
+  "tab": {
+    "basicInfo": "基本设置",
+    "security": "安全设置",
+    "updatePassword": "修改密码",
+    "updateEmail": "修改邮箱",
+    "notify": "消息提醒"
+  }
+}

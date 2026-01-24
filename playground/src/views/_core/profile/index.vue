@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 
 import { Profile } from '@vben/common-ui';
+import { $t } from '@vben/locales';
 import { useUserStore } from '@vben/stores';
 
 import ProfileBase from './base-setting.vue';
@@ -15,20 +16,20 @@ const tabsValue = ref<string>('basic');
 
 const tabs = ref([
   {
-    label: '基本设置',
+    label: $t('usercenter.tab.basicInfo'),
     value: 'basic',
   },
   {
-    label: '安全设置',
+    label: $t('usercenter.tab.security'),
     value: 'security',
   },
   {
-    label: '修改密码',
     value: 'password',
+    label: $t('usercenter.tab.updatePassword'),
   },
   {
-    label: '新消息提醒',
     value: 'notice',
+    label: $t('usercenter.tab.notify'),
   },
 ]);
 </script>

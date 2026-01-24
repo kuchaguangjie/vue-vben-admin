@@ -1,44 +1,37 @@
 <script setup lang="ts">
-import type { BasicOption } from '@vben/types';
-
 import type { VbenFormSchema } from '#/adapter/form';
 
 import { computed, onMounted, ref } from 'vue';
 
 import { ProfileBaseSetting } from '@vben/common-ui';
-
-import { getUserInfoApi, updateUserBasicInfoApi } from '#/api';
-import { message } from 'ant-design-vue';
 import { $t } from '@vben/locales';
 
-const profileBaseSettingRef = ref();
+import { message } from 'ant-design-vue';
 
-const MOCK_ROLES_OPTIONS: BasicOption[] = [
-  {
-    label: '管理员',
-    value: 'super',
-  },
-  {
-    label: '用户',
-    value: 'user',
-  },
-  {
-    label: '测试',
-    value: 'test',
-  },
-];
+import { getUserInfoApi, updateUserBasicInfoApi } from '#/api';
+
+const profileBaseSettingRef = ref();
 
 const formSchema = computed((): VbenFormSchema[] => {
   return [
     {
+      component: 'Input',
+      fieldName: 'version',
+      label: '', // 空标签使其不显示
+      componentProps: {
+        style: { display: 'none' }, // 隐藏输入框
+        disabled: true, // 不可编辑
+      },
+    },
+    {
       fieldName: 'realName',
       component: 'Input',
-      label: '姓名',
+      label: $t('system.user.nick'),
     },
     {
       fieldName: 'username',
       component: 'Input',
-      label: '用户名',
+      label: $t('system.user.username'),
       componentProps: {
         disabled: true,
       },
@@ -46,36 +39,42 @@ const formSchema = computed((): VbenFormSchema[] => {
     {
       fieldName: 'email',
       component: 'Input',
-      label: '邮箱',
+      label: $t('system.user.email'),
       componentProps: {
         disabled: true,
       },
     },
     {
-      fieldName: 'roles',
+      fieldName: 'roleNames', // 只读 角色名称 列表
       component: 'Select',
       componentProps: {
         disabled: true,
         mode: 'tags',
-        options: MOCK_ROLES_OPTIONS,
       },
-      label: '角色',
+      label: $t('system.user.role'),
     },
     {
       fieldName: 'remark',
       component: 'Textarea',
-      label: '个人简介',
+      label: $t('system.user.remark'),
     },
   ];
 });
 
-onMounted(async () => {
+onMounted(initUserInfo);
+
+async function initUserInfo() {
   const data = await getUserInfoApi();
   profileBaseSettingRef.value.getFormApi().setValues(data);
-});
+}
 
 async function handleUpdate(values: any) {
-  await updateUserBasicInfoApi(values);
+  await updateUserBasicInfoApi({
+    realName: values.realName,
+    remark: values.remark,
+    version: values.version,
+  });
+  await initUserInfo(); // 刷新
   message.success($t('common.messages.success'));
 }
 </script>

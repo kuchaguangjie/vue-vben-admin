@@ -113,6 +113,8 @@
     "email": "Email",
     "password": "Password",
     "dept": "Department",
+    "role": "Role",
+    "remark": "Remark",
     "status": "Status",
     "createdAt": "Created At",
     "operation": "Operation",

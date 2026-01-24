@@ -115,6 +115,8 @@
     "email": "邮箱",
     "password": "密码",
     "dept": "部门",
+    "role": "角色",
+    "remark": "备注",
     "status": "状态",
     "createdAt": "创建时间",
     "operation": "操作",
