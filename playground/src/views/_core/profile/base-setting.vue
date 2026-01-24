@@ -7,7 +7,9 @@ import { computed, onMounted, ref } from 'vue';
 
 import { ProfileBaseSetting } from '@vben/common-ui';
 
-import { getUserInfoApi } from '#/api';
+import { getUserInfoApi, updateUserBasicInfoApi } from '#/api';
+import { message } from 'ant-design-vue';
+import { $t } from '@vben/locales';
 
 const profileBaseSettingRef = ref();
 
@@ -37,18 +39,30 @@ const formSchema = computed((): VbenFormSchema[] => {
       fieldName: 'username',
       component: 'Input',
       label: '用户名',
+      componentProps: {
+        disabled: true,
+      },
+    },
+    {
+      fieldName: 'email',
+      component: 'Input',
+      label: '邮箱',
+      componentProps: {
+        disabled: true,
+      },
     },
     {
       fieldName: 'roles',
       component: 'Select',
       componentProps: {
+        disabled: true,
         mode: 'tags',
         options: MOCK_ROLES_OPTIONS,
       },
       label: '角色',
     },
     {
-      fieldName: 'introduction',
+      fieldName: 'remark',
       component: 'Textarea',
       label: '个人简介',
     },
@@ -59,7 +73,16 @@ onMounted(async () => {
   const data = await getUserInfoApi();
   profileBaseSettingRef.value.getFormApi().setValues(data);
 });
+
+async function handleUpdate(values: any) {
+  await updateUserBasicInfoApi(values);
+  message.success($t('common.messages.success'));
+}
 </script>
 <template>
-  <ProfileBaseSetting ref="profileBaseSettingRef" :form-schema="formSchema" />
+  <ProfileBaseSetting
+    ref="profileBaseSettingRef"
+    :form-schema="formSchema"
+    @submit="handleUpdate"
+  />
 </template>

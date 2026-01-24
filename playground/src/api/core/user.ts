@@ -1,4 +1,4 @@
-import type { UserInfo } from '@vben/types';
+import type { CustomUserInfo, UserInfo } from '@vben/types';
 
 import { requestClient } from '#/api/request';
 
@@ -7,4 +7,8 @@ import { requestClient } from '#/api/request';
  */
 export async function getUserInfoApi() {
   return requestClient.get<UserInfo>('/user/info');
+}
+
+export async function updateUserBasicInfoApi(data: any) {
+  return requestClient.post<CustomUserInfo>('/user/updateBasicInfo', data);
 }
