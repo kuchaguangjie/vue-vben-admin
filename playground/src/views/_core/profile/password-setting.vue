@@ -6,6 +6,7 @@ import { computed, ref } from 'vue';
 import { ProfilePasswordSetting, z } from '@vben/common-ui';
 
 import { message } from 'ant-design-vue';
+
 import { updateUserPassword } from '#/api';
 
 const profilePasswordSettingRef = ref();
