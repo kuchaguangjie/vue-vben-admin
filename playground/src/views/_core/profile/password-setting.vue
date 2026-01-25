@@ -4,11 +4,11 @@ import type { VbenFormSchema } from '#/adapter/form';
 import { computed, ref } from 'vue';
 
 import { ProfilePasswordSetting, z } from '@vben/common-ui';
+import { $t } from '@vben/locales';
 
 import { updateUserPassword } from '#/api';
 import { useAuthStore } from '#/store';
 import { countdownMsg } from '#/utils/message-util';
-import { $t } from '@vben/locales';
 
 const profilePasswordSettingRef = ref();
 
