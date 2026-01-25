@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { VbenFormSchema } from '#/adapter/form';
 
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 
 import { ProfilePasswordSetting, z } from '@vben/common-ui';
 import { $t } from '@vben/locales';
@@ -9,8 +9,6 @@ import { $t } from '@vben/locales';
 import { updateUserPassword } from '#/api';
 import { useAuthStore } from '#/store';
 import { countdownMsg } from '#/utils/message-util';
-
-const profilePasswordSettingRef = ref();
 
 const formSchema = computed((): VbenFormSchema[] => {
   return [
@@ -74,7 +72,6 @@ async function handleSubmit(values: any) {
 </script>
 <template>
   <ProfilePasswordSetting
-    ref="profilePasswordSettingRef"
     class="w-1/3"
     :form-schema="formSchema"
     @submit="handleSubmit"
