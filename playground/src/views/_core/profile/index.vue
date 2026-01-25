@@ -16,21 +16,21 @@ const tabsValue = ref<string>('basic');
 
 const tabs = ref([
   {
-    label: $t('usercenter.tab.basicInfo'),
+    label: $t('profile.tab.basicInfo'),
     value: 'basic',
   },
   {
     value: 'password',
-    label: $t('usercenter.tab.updatePassword'),
+    label: $t('profile.tab.updatePassword'),
   },
   /*
   {
-    label: $t('usercenter.tab.security'),
+    label: $t('profile.tab.security'),
     value: 'security',
   },
   {
     value: 'notice',
-    label: $t('usercenter.tab.notify'),
+    label: $t('profile.tab.notify'),
   },
   */
 ]);
@@ -38,7 +38,7 @@ const tabs = ref([
 <template>
   <Profile
     v-model:model-value="tabsValue"
-    title="个人中心"
+    :title="$t('page.auth.profile')"
     :user-info="userStore.userInfo"
     :tabs="tabs"
   >

@@ -14,24 +14,24 @@ const formSchema = computed((): VbenFormSchema[] => {
   return [
     {
       fieldName: 'oldPassword',
-      label: $t('usercenter.updatePassword.label.oldPassword'),
+      label: $t('profile.updatePassword.label.oldPassword'),
       component: 'VbenInputPassword',
       componentProps: {
-        placeholder: $t('usercenter.updatePassword.placeholder.oldPassword'),
+        placeholder: $t('profile.updatePassword.placeholder.oldPassword'),
       },
     },
     {
       fieldName: 'newPassword',
-      label: $t('usercenter.updatePassword.label.newPassword'),
+      label: $t('profile.updatePassword.label.newPassword'),
       component: 'VbenInputPassword',
       componentProps: {
         passwordStrength: true,
-        placeholder: $t('usercenter.updatePassword.placeholder.newPassword'),
+        placeholder: $t('profile.updatePassword.placeholder.newPassword'),
       },
     },
     {
       fieldName: 'confirmPassword',
-      label: $t('usercenter.updatePassword.label.confirmPassword'),
+      label: $t('profile.updatePassword.label.confirmPassword'),
       component: 'VbenInputPassword',
       componentProps: {
         passwordStrength: true,
@@ -49,10 +49,10 @@ const formSchema = computed((): VbenFormSchema[] => {
               ),
             })
             .min(1, {
-              message: $t('usercenter.updatePassword.error.confirmPassword'),
+              message: $t('profile.updatePassword.error.confirmPassword'),
             })
             .refine((value) => value === newPassword, {
-              message: $t('usercenter.updatePassword.error.passwordMismatch'),
+              message: $t('profile.updatePassword.error.passwordMismatch'),
             });
         },
         triggerFields: ['newPassword'],
