@@ -35,18 +35,14 @@ const formSchema = computed((): VbenFormSchema[] => {
       component: 'VbenInputPassword',
       componentProps: {
         passwordStrength: true,
-        placeholder: $t(
-          'usercenter.placeholder.confirmPassword',
-        ),
+        placeholder: $t('usercenter.placeholder.confirmPassword'),
       },
       dependencies: {
         rules(values) {
           const { newPassword } = values;
           return z
             .string({
-              required_error: $t(
-                'usercenter.placeholder.confirmPassword',
-              ),
+              required_error: $t('usercenter.placeholder.confirmPassword'),
             })
             .min(1, {
               message: $t('profile.error.confirmPassword'),
