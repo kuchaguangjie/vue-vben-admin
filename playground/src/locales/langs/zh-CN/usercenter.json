@@ -5,5 +5,21 @@
     "updateEmail": "修改邮箱",
     "security": "安全设置",
     "notify": "消息提醒"
+  },
+  "updatePassword": {
+    "label": {
+      "oldPassword": "旧密码",
+      "newPassword": "新密码",
+      "confirmPassword": "确认新密码"
+    },
+    "placeholder": {
+      "oldPassword": "请输入旧密码",
+      "newPassword": "请输入新密码",
+      "confirmPassword": "请再次输入新密码"
+    },
+    "error": {
+      "confirmPassword": "请再次输入新密码",
+      "passwordMismatch": "2次输入密码不同"
+    }
   }
 }
