@@ -42,7 +42,7 @@ const coreRoutes: RouteRecordRaw[] = [
         path: '/profile',
         component: () => import('#/views/_core/profile/index.vue'),
         meta: {
-          title: '个人中心',
+          title: $t('page.auth.profile'),
           icon: 'lucide:user',
           hideInMenu: true, // 隐藏在菜单栏，但路由依然存在
           affixTab: true,
