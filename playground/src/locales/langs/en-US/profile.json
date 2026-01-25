@@ -6,20 +6,18 @@
     "security": "Security",
     "notify": "Notification"
   },
-  "updatePassword": {
-    "label": {
-      "oldPassword": "Old Password",
-      "newPassword": "New Password",
-      "confirmPassword": "Confirm Password"
-    },
-    "placeholder": {
-      "oldPassword": "Please input old password",
-      "newPassword": "Please input new password",
-      "confirmPassword": "Please input new password again"
-    },
-    "error": {
-      "confirmPassword": "Please input new password again",
-      "passwordMismatch": "2 passwords don't match"
-    }
+  "label": {
+    "oldPassword": "Old Password",
+    "newPassword": "New Password",
+    "confirmPassword": "Confirm Password"
+  },
+  "placeholder": {
+    "oldPassword": "Please input old password",
+    "newPassword": "Please input new password",
+    "confirmPassword": "Please input new password again"
+  },
+  "error": {
+    "confirmPassword": "Please input new password again",
+    "passwordMismatch": "2 passwords don't match"
   }
 }

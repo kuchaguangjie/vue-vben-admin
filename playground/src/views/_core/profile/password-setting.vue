@@ -14,29 +14,29 @@ const formSchema = computed((): VbenFormSchema[] => {
   return [
     {
       fieldName: 'oldPassword',
-      label: $t('profile.updatePassword.label.oldPassword'),
+      label: $t('profile.label.oldPassword'),
       component: 'VbenInputPassword',
       componentProps: {
-        placeholder: $t('profile.updatePassword.placeholder.oldPassword'),
+        placeholder: $t('profile.placeholder.oldPassword'),
       },
     },
     {
       fieldName: 'newPassword',
-      label: $t('profile.updatePassword.label.newPassword'),
+      label: $t('profile.label.newPassword'),
       component: 'VbenInputPassword',
       componentProps: {
         passwordStrength: true,
-        placeholder: $t('profile.updatePassword.placeholder.newPassword'),
+        placeholder: $t('profile.placeholder.newPassword'),
       },
     },
     {
       fieldName: 'confirmPassword',
-      label: $t('profile.updatePassword.label.confirmPassword'),
+      label: $t('profile.label.confirmPassword'),
       component: 'VbenInputPassword',
       componentProps: {
         passwordStrength: true,
         placeholder: $t(
-          'usercenter.updatePassword.placeholder.confirmPassword',
+          'usercenter.placeholder.confirmPassword',
         ),
       },
       dependencies: {
@@ -45,14 +45,14 @@ const formSchema = computed((): VbenFormSchema[] => {
           return z
             .string({
               required_error: $t(
-                'usercenter.updatePassword.placeholder.confirmPassword',
+                'usercenter.placeholder.confirmPassword',
               ),
             })
             .min(1, {
-              message: $t('profile.updatePassword.error.confirmPassword'),
+              message: $t('profile.error.confirmPassword'),
             })
             .refine((value) => value === newPassword, {
-              message: $t('profile.updatePassword.error.passwordMismatch'),
+              message: $t('profile.error.passwordMismatch'),
             });
         },
         triggerFields: ['newPassword'],
