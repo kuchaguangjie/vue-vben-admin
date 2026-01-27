@@ -11,7 +11,7 @@ export namespace AuthApi {
   export interface LoginResult {
     accessToken: string;
     refreshToken: string;
-    removedOldSessions?: number;
+    removedOldSessions: number;
   }
 
   export interface RefreshTokenResult {
