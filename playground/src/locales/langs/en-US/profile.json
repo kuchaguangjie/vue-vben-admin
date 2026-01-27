@@ -21,6 +21,7 @@
     "passwordMismatch": "2 passwords don't match"
   },
   "msg": {
+    "passwordUpdated": "Password updated, please login again",
     "removedOldSessions": "Deleted old session count: {num}"
   }
 }

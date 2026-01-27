@@ -9,6 +9,7 @@ import { $t } from '@vben/locales';
 import { updateUserPassword } from '#/api';
 import { useAuthStore } from '#/store';
 import { countdownMsg } from '#/utils/message-util';
+import { message, notification } from 'ant-design-vue';
 
 const formSchema = computed((): VbenFormSchema[] => {
   return [
@@ -35,14 +36,14 @@ const formSchema = computed((): VbenFormSchema[] => {
       component: 'VbenInputPassword',
       componentProps: {
         passwordStrength: true,
-        placeholder: $t('usercenter.placeholder.confirmPassword'),
+        placeholder: $t('profile.placeholder.confirmPassword'),
       },
       dependencies: {
         rules(values) {
           const { newPassword } = values;
           return z
             .string({
-              required_error: $t('usercenter.placeholder.confirmPassword'),
+              required_error: $t('profile.placeholder.confirmPassword'),
             })
             .min(1, {
               message: $t('profile.error.confirmPassword'),
@@ -58,12 +59,23 @@ const formSchema = computed((): VbenFormSchema[] => {
 });
 
 async function handleSubmit(values: any) {
-  await updateUserPassword(values);
+  const { removedOldSessions } = await updateUserPassword(values);
 
-  countdownMsg('密码修改成功, 请重新登录', 3, () => {
-    const authStore = useAuthStore();
-    authStore.logout();
-  });
+  const removedOldSessionsTip =
+    removedOldSessions > 0
+      ? `(${$t('profile.msg.removedOldSessions', { num: removedOldSessions })})`
+      : '';
+
+  if (removedOldSessionsTip) {
+    message.info({
+      duration: 2,
+      content: removedOldSessionsTip,
+    });
+  }
+
+  countdownMsg($t('profile.msg.passwordUpdated'), 3, () =>
+    useAuthStore().logout(),
+  );
 }
 </script>
 <template>
