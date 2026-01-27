@@ -19,5 +19,8 @@
   "error": {
     "confirmPassword": "请再次输入新密码",
     "passwordMismatch": "2次输入密码不同"
+  },
+  "msg": {
+    "removedOldSessions": "已剔除 旧session 数量: {num}"
   }
 }

@@ -1,6 +1,6 @@
 import type { Recordable, UserInfo } from '@vben/types';
 
-import { ref } from 'vue';
+import { h, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 import { LOGIN_PATH } from '@vben/constants';
@@ -34,7 +34,7 @@ export const useAuthStore = defineStore('auth', () => {
     let userInfo: null | UserInfo = null;
     try {
       loginLoading.value = true;
-      const { accessToken } = await loginApi(params);
+      const { accessToken, removedOldSessions } = await loginApi(params);
 
       // 如果成功获取到 accessToken
       if (accessToken) {
@@ -62,10 +62,18 @@ export const useAuthStore = defineStore('auth', () => {
         }
 
         if (userInfo?.realName) {
+          const removedOldSessionsTip =
+            removedOldSessions > 0
+              ? `(${$t('profile.msg.removedOldSessions', { num: removedOldSessions })})`
+              : '';
           notification.success({
-            description: `${$t('authentication.loginSuccessDesc')}:${userInfo?.realName}`,
             duration: 3,
             message: $t('authentication.loginSuccess'),
+            description: h('div', [
+              `${$t('authentication.loginSuccessDesc')}:${userInfo?.realName}`,
+              removedOldSessionsTip ? h('br') : '',
+              removedOldSessionsTip,
+            ]),
           });
         }
       }

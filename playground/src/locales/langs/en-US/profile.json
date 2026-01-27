@@ -19,5 +19,8 @@
   "error": {
     "confirmPassword": "Please input new password again",
     "passwordMismatch": "2 passwords don't match"
+  },
+  "msg": {
+    "removedOldSessions": "Deleted old session count: {num}"
   }
 }
