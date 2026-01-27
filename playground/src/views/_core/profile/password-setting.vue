@@ -6,10 +6,11 @@ import { computed } from 'vue';
 import { ProfilePasswordSetting, z } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
+import { message } from 'ant-design-vue';
+
 import { updateUserPassword } from '#/api';
 import { useAuthStore } from '#/store';
 import { countdownMsg } from '#/utils/message-util';
-import { message, notification } from 'ant-design-vue';
 
 const formSchema = computed((): VbenFormSchema[] => {
   return [
