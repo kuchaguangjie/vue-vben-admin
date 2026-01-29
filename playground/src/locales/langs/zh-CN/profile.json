@@ -2,6 +2,7 @@
   "tab": {
     "basicInfo": "基本信息",
     "updatePassword": "修改密码",
+    "session": "已登陆设备",
     "updateEmail": "修改邮箱",
     "security": "安全设置",
     "notify": "消息提醒"

@@ -1,4 +1,4 @@
-import type { CustomUserInfo, UserInfo } from '@vben/types';
+import type { UserInfo } from '@vben/types';
 
 import { requestClient } from '#/api/request';
 
@@ -10,8 +10,19 @@ export async function getUserInfoApi() {
 }
 
 export async function updateUserBasicInfoApi(data: any) {
-  return requestClient.post<CustomUserInfo>('/user/updateBasicInfo', data);
+  return requestClient.post<UserInfo>('/user/updateBasicInfo', data);
 }
+
 export async function updateUserPassword(data: any) {
-  return requestClient.post<CustomUserInfo>('/user/updatePassword', data);
+  return requestClient.post<UserInfo>('/user/updatePassword', data);
+}
+
+// get all user sessions
+export async function getUserSessionsApi() {
+  return requestClient.get<any>('/user/sessions');
+}
+
+// delete 1 user session
+export async function deleteUserSessionApi(sid: string) {
+  return requestClient.delete<any>(`/user/session?sid=${sid}`);
 }

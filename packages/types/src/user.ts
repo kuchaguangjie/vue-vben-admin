@@ -17,4 +17,19 @@ interface UserInfo extends BasicUserInfo {
   token: string;
 }
 
-export type { UserInfo };
+interface ClientInfo {
+  os: string;
+  browser: string;
+  browserVersion: string;
+  device: string;
+  ip: string;
+  city: string;
+  cityCn: string;
+}
+
+interface UserSession extends ClientInfo {
+  sid: string;
+  createdMs: number;
+}
+
+export type { ClientInfo, UserInfo, UserSession };

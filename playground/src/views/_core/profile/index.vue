@@ -9,6 +9,7 @@ import ProfileBase from './base-setting.vue';
 import ProfileNotificationSetting from './notification-setting.vue';
 import ProfilePasswordSetting from './password-setting.vue';
 import ProfileSecuritySetting from './security-setting.vue';
+import SessionManage from './session-manage.vue';
 
 const userStore = useUserStore();
 
@@ -20,8 +21,12 @@ const tabs = ref([
     value: 'basic',
   },
   {
-    value: 'password',
     label: $t('profile.tab.updatePassword'),
+    value: 'password',
+  },
+  {
+    label: $t('profile.tab.session'),
+    value: 'session',
   },
   /*
   {
@@ -45,6 +50,7 @@ const tabs = ref([
     <template #content>
       <ProfileBase v-if="tabsValue === 'basic'" />
       <ProfileSecuritySetting v-if="tabsValue === 'security'" />
+      <SessionManage v-if="tabsValue === 'session'" />
       <ProfilePasswordSetting v-if="tabsValue === 'password'" />
       <ProfileNotificationSetting v-if="tabsValue === 'notice'" />
     </template>

@@ -2,6 +2,7 @@
   "tab": {
     "basicInfo": "Basic Profile",
     "updatePassword": "Update Password",
+    "session": "Logged-in Session",
     "updateEmail": "Update Email",
     "security": "Security",
     "notify": "Notification"
