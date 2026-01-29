@@ -45,7 +45,6 @@ function getDeviceIcon(os: string = '') {
   return 'mdi:monitor';
 }
 </script>
-
 <template>
   <div class="m-4 rounded-xl border border-border bg-card p-6 shadow-sm">
     <div
@@ -68,16 +67,15 @@ function getDeviceIcon(os: string = '') {
         <List.Item
           class="group my-1 rounded-lg border border-transparent px-4 transition-all hover:border-border hover:bg-muted/50"
         >
-          <List.Item.Meta>
-            <template #avatar>
-              <div
-                class="flex size-12 items-center justify-center rounded-full bg-secondary text-secondary-foreground transition-colors group-hover:bg-primary/10 group-hover:text-primary"
-              >
-                <IconifyIcon :icon="getDeviceIcon(item.os)" class="size-7" />
-              </div>
-            </template>
-            <template #title>
-              <div class="flex items-center gap-3">
+          <div class="flex w-full items-center">
+            <div
+              class="mr-4 flex size-12 flex-shrink-0 items-center justify-center rounded-full bg-secondary text-secondary-foreground transition-colors group-hover:bg-primary/10 group-hover:text-primary"
+            >
+              <IconifyIcon :icon="getDeviceIcon(item.os)" class="size-7" />
+            </div>
+
+            <div class="flex-1">
+              <div class="mb-1 flex items-center gap-3">
                 <span class="text-base font-medium">{{
                   `${item.os} · ${item.browser}`
                 }}</span>
@@ -90,47 +88,68 @@ function getDeviceIcon(os: string = '') {
                   当前会话
                 </Tag>
               </div>
-            </template>
-            <template #description>
+
               <div
-                class="mt-1 flex flex-col text-sm opacity-80 sm:flex-row sm:gap-6"
+                class="grid grid-cols-1 gap-x-4 text-sm opacity-80 lg:grid-cols-4"
               >
-                <span class="flex items-center gap-1">
-                  <IconifyIcon icon="mdi:ip-network" class="size-3.5" />
-                  {{ item.ip }}
+                <span class="flex items-center gap-1 truncate" title="IP 地址">
+                  <IconifyIcon
+                    icon="mdi:ip-network"
+                    class="size-3.5 flex-shrink-0"
+                  />
+                  <span class="truncate">{{ item.ip }}</span>
                 </span>
-                <span class="flex items-center gap-1">
-                  <IconifyIcon icon="mdi:clock-outline" class="size-3.5" />
-                  {{ formatBackendTime(item.createdAt) }}
+
+                <span class="flex items-center gap-1 truncate" title="地理位置">
+                  <IconifyIcon icon="mdi:city" class="size-3.5 flex-shrink-0" />
+                  <span class="truncate">{{
+                    `${item.city || 'Local'} (${item.cityCn || '局域网'})`
+                  }}</span>
                 </span>
+
+                <span class="flex items-center gap-1 truncate" title="登录时间">
+                  <IconifyIcon
+                    icon="mdi:clock-outline"
+                    class="size-3.5 flex-shrink-0"
+                  />
+                  <span class="truncate text-xs">{{
+                    formatBackendTime(item.createdAt)
+                  }}</span>
+                </span>
+
                 <Tooltip title="Session ID">
-                  <span class="flex cursor-help items-center gap-1">
-                    <IconifyIcon icon="mdi:identifier" class="size-3.5" />
-                    {{ item.sid }}
+                  <span class="flex cursor-help items-center gap-1 truncate">
+                    <IconifyIcon
+                      icon="mdi:identifier"
+                      class="size-3.5 flex-shrink-0"
+                    />
+                    <span class="truncate font-mono text-[10px]">{{
+                      item.sid
+                    }}</span>
                   </span>
                 </Tooltip>
               </div>
-            </template>
-          </List.Item.Meta>
+            </div>
 
-          <template #actions>
-            <Popconfirm
-              v-if="!item.isCurrent"
-              title="确定要强制该设备下线吗？"
-              @confirm="handleDelete(item.sid)"
-              placement="left"
-              ok-danger
-            >
-              <Button
-                variant="outline"
-                size="sm"
-                class="transition-all hover:bg-destructive hover:text-destructive-foreground"
+            <div class="ml-4 w-24 text-right">
+              <Popconfirm
+                v-if="!item.isCurrent"
+                title="确定要强制该设备下线吗？"
+                @confirm="handleDelete(item.sid)"
+                placement="left"
+                ok-danger
               >
-                <IconifyIcon icon="mdi:logout-variant" class="mr-1 size-4" />
-                下线
-              </Button>
-            </Popconfirm>
-          </template>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  class="transition-all hover:bg-destructive hover:text-destructive-foreground"
+                >
+                  <IconifyIcon icon="mdi:logout-variant" class="mr-1 size-4" />
+                  下线
+                </Button>
+              </Popconfirm>
+            </div>
+          </div>
         </List.Item>
       </template>
     </List>
