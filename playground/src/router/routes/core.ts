@@ -42,6 +42,7 @@ const coreRoutes: RouteRecordRaw[] = [
         path: '/profile',
         component: () => import('#/views/_core/profile/index.vue'),
         meta: {
+          requiresAuth: true, // 明确标记需要权限
           title: $t('page.auth.profile'),
           icon: 'lucide:user',
           hideInMenu: true, // 隐藏在菜单栏，但路由依然存在
