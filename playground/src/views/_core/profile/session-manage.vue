@@ -75,7 +75,7 @@ function getDeviceIcon(os: string = '') {
                 <span
                   class="mr-4 inline-block w-48 flex-shrink-0 truncate text-base font-medium"
                 >
-                  {{ `${item.os} · ${item.browser}` }}
+                  {{ `${item.os} (${item.device}) · ${item.browser}` }}
                 </span>
 
                 <div class="mr-4 flex min-w-0 flex-1 items-center">
@@ -138,8 +138,8 @@ function getDeviceIcon(os: string = '') {
                     class="size-3.5 flex-shrink-0"
                   />
                   <span class="truncate text-xs">{{
-                      formatBackendTime(item.createdAt)
-                    }}</span>
+                    formatBackendTime(item.createdAt)
+                  }}</span>
                 </span>
               </div>
             </div>
