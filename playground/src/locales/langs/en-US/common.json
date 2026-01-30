@@ -10,6 +10,7 @@
   "previewDetail": "Preview Detail",
   "messages": {
     "success": "Success",
+    "loading": "Loading ..",
     "copy": "Copy",
     "copied": "Copied!",
     "pidEqId": "Can't choose self as parent"
