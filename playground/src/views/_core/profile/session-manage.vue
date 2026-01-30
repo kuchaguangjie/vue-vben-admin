@@ -104,7 +104,7 @@ function getDeviceIcon(os: string = '') {
             <div class="mr-4 flex min-w-0 flex-1 items-center">
               <span
                 class="inline-flex max-w-[120px] items-center gap-1 truncate rounded bg-muted/60 px-1.5 font-mono text-[10px] opacity-40"
-                :title="item.sid"
+                :title="$t('profile.tabSession.hover.sid')"
               >
                 <IconifyIcon
                   icon="mdi:identifier"

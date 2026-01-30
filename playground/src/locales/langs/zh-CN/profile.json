@@ -30,6 +30,7 @@
     "currentSession": "当前 Session",
     "offline": "下线",
     "hover": {
+      "sid": "Session ID",
       "ip": "IP 地址",
       "city": "地理位置",
       "loginAt": "登录时间"

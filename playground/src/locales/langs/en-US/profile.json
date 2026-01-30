@@ -30,6 +30,7 @@
     "currentSession": "Current session",
     "offline": "Delete",
     "hover": {
+      "sid": "Session ID",
       "ip": "IP",
       "city": "City",
       "loginAt": "Login time"
