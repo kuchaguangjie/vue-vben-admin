@@ -7,7 +7,7 @@ import { $t } from '@vben/locales';
 
 import { Button } from '@vben-core/shadcn-ui';
 
-import { Badge, List, message, Popconfirm, Tag, Tooltip } from 'ant-design-vue';
+import { List, message, Popconfirm, Tag } from 'ant-design-vue';
 
 import { deleteUserSessionApi, getUserSessionsApi } from '#/api';
 import { formatBackendTime } from '#/utils/value-format';
@@ -53,13 +53,9 @@ function getDeviceIcon(os: string = '') {
       <div class="flex items-center gap-2">
         <IconifyIcon icon="mdi:devices" class="size-6 text-primary" />
         <h2 class="text-lg font-semibold tracking-tight">
-          {{ $t('已登录设备') }}
+          {{ $t('profile.tabSession.title', { num: userSessionsRef.length }) }}
         </h2>
       </div>
-      <Badge
-        status="processing"
-        :text="`共 ${userSessionsRef.length} 个活跃会话`"
-      />
     </div>
 
     <List :data-source="userSessionsRef" :loading="loading">
@@ -74,25 +70,44 @@ function getDeviceIcon(os: string = '') {
               <IconifyIcon :icon="getDeviceIcon(item.os)" class="size-7" />
             </div>
 
-            <div class="flex-1">
-              <div class="mb-1 flex items-center gap-3">
-                <span class="text-base font-medium">{{
-                  `${item.os} · ${item.browser}`
-                }}</span>
-                <Tag
-                  v-if="item.isCurrent"
-                  color="processing"
-                  class="flex items-center gap-1"
+            <div class="min-w-0 flex-1">
+              <div class="mb-1 flex items-center">
+                <span
+                  class="mr-4 inline-block w-48 flex-shrink-0 truncate text-base font-medium"
                 >
-                  <IconifyIcon icon="mdi:check-circle" class="size-3" />
-                  当前会话
-                </Tag>
+                  {{ `${item.os} · ${item.browser}` }}
+                </span>
+
+                <div class="mr-4 flex min-w-0 flex-1 items-center">
+                  <span
+                    class="inline-flex max-w-[120px] items-center gap-1 truncate rounded bg-muted px-1.5 font-mono text-[10px] opacity-40"
+                    :title="item.sid"
+                  >
+                    <IconifyIcon
+                      icon="mdi:identifier"
+                      class="size-3 flex-shrink-0"
+                    />
+                    {{ item.sid }}
+                  </span>
+                </div>
+
+                <div class="w-44 flex-shrink-0">
+                  <Tag
+                    v-if="item.isCurrent"
+                    color="processing"
+                    class="m-0 flex w-fit items-center gap-1"
+                  >
+                    <IconifyIcon icon="mdi:check-circle" class="size-3" />
+                    {{ $t('profile.tabSession.currentSession') }}
+                  </Tag>
+                </div>
               </div>
 
-              <div
-                class="grid grid-cols-1 gap-x-4 text-sm opacity-80 lg:grid-cols-4"
-              >
-                <span class="flex items-center gap-1 truncate" title="IP 地址">
+              <div class="flex items-center text-sm opacity-80">
+                <span
+                  class="mr-4 flex w-48 flex-shrink-0 items-center gap-1"
+                  :title="$t('profile.tabSession.hover.ip')"
+                >
                   <IconifyIcon
                     icon="mdi:ip-network"
                     class="size-3.5 flex-shrink-0"
@@ -100,41 +115,38 @@ function getDeviceIcon(os: string = '') {
                   <span class="truncate">{{ item.ip }}</span>
                 </span>
 
-                <span class="flex items-center gap-1 truncate" title="地理位置">
+                <span
+                  class="mr-4 flex min-w-0 flex-1 items-center gap-1"
+                  :title="$t('profile.tabSession.hover.city')"
+                >
                   <IconifyIcon icon="mdi:city" class="size-3.5 flex-shrink-0" />
-                  <span class="truncate">{{
-                    `${item.city || 'Local'} (${item.cityCn || '局域网'})`
-                  }}</span>
+                  <span class="truncate">
+                    {{
+                      item.city
+                        ? `${item.city} (${item.cityCn})`
+                        : $t('profile.tabSession.defaultCity')
+                    }}
+                  </span>
                 </span>
 
-                <span class="flex items-center gap-1 truncate" title="登录时间">
+                <span
+                  class="flex w-44 flex-shrink-0 items-center gap-1"
+                  :title="$t('profile.tabSession.hover.loginAt')"
+                >
                   <IconifyIcon
                     icon="mdi:clock-outline"
                     class="size-3.5 flex-shrink-0"
                   />
                   <span class="truncate text-xs">{{
-                    formatBackendTime(item.createdAt)
-                  }}</span>
-                </span>
-
-                <Tooltip title="Session ID">
-                  <span class="flex cursor-help items-center gap-1 truncate">
-                    <IconifyIcon
-                      icon="mdi:identifier"
-                      class="size-3.5 flex-shrink-0"
-                    />
-                    <span class="truncate font-mono text-[10px]">{{
-                      item.sid
+                      formatBackendTime(item.createdAt)
                     }}</span>
-                  </span>
-                </Tooltip>
+                </span>
               </div>
             </div>
-
-            <div class="ml-4 w-24 text-right">
+            <div class="ml-4 w-24 flex-shrink-0 text-right">
               <Popconfirm
                 v-if="!item.isCurrent"
-                title="确定要强制该设备下线吗？"
+                :title="$t('profile.tabSession.confirmOffline')"
                 @confirm="handleDelete(item.sid)"
                 placement="left"
                 ok-danger
@@ -145,7 +157,7 @@ function getDeviceIcon(os: string = '') {
                   class="transition-all hover:bg-destructive hover:text-destructive-foreground"
                 >
                   <IconifyIcon icon="mdi:logout-variant" class="mr-1 size-4" />
-                  下线
+                  {{ $t('profile.tabSession.offline') }}
                 </Button>
               </Popconfirm>
             </div>

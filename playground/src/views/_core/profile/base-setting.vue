@@ -79,9 +79,11 @@ async function handleUpdate(values: any) {
 }
 </script>
 <template>
-  <ProfileBaseSetting
-    ref="profileBaseSettingRef"
-    :form-schema="formSchema"
-    @submit="handleUpdate"
-  />
+  <div class="max-w-2xl">
+    <ProfileBaseSetting
+      ref="profileBaseSettingRef"
+      :form-schema="formSchema"
+      @submit="handleUpdate"
+    />
+  </div>
 </template>

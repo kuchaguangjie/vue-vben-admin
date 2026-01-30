@@ -24,5 +24,17 @@
   "msg": {
     "passwordUpdated": "密码修改成功, 请重新登陆",
     "removedOldSessions": "已剔除 旧session 数量: {num}"
+  },
+  "tabSession": {
+    "title": "已登陆 Session [{num}]",
+    "currentSession": "当前 Session",
+    "offline": "下线",
+    "hover": {
+      "ip": "IP 地址",
+      "city": "地理位置",
+      "loginAt": "登录时间"
+    },
+    "defaultCity": "局域网",
+    "confirmOffline": "确定要强制该设备下线吗?"
   }
 }

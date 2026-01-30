@@ -24,5 +24,17 @@
   "msg": {
     "passwordUpdated": "Password updated, please login again",
     "removedOldSessions": "Deleted old session count: {num}"
+  },
+  "tabSession": {
+    "title": "Login Sessions [{num}]",
+    "currentSession": "Current session",
+    "offline": "Delete",
+    "hover": {
+      "ip": "IP",
+      "city": "City",
+      "loginAt": "Login time"
+    },
+    "defaultCity": "Local",
+    "confirmOffline": "Are you sure to delete this session?"
   }
 }
