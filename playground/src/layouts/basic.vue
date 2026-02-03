@@ -1,5 +1,11 @@
 <script lang="ts" setup>
 import type { NotificationItem } from '@vben/layouts';
+import {
+  BasicLayout,
+  LockScreen,
+  Notification,
+  UserDropdown,
+} from '@vben/layouts';
 
 import { computed, onBeforeMount, onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
@@ -8,19 +14,13 @@ import { AuthenticationLoginExpiredModal } from '@vben/common-ui';
 import { VBEN_DOC_URL, VBEN_GITHUB_URL } from '@vben/constants';
 import { useWatermark } from '@vben/hooks';
 import { BookOpenText, CircleHelp, SvgGithubIcon } from '@vben/icons';
-import {
-  BasicLayout,
-  LockScreen,
-  Notification,
-  UserDropdown,
-} from '@vben/layouts';
 import { preferences } from '@vben/preferences';
 import { useAccessStore, useTabbarStore, useUserStore } from '@vben/stores';
 import { openWindow } from '@vben/utils';
 
+import { useWs } from '#/hooks/common/use-ws';
 import { $t } from '#/locales';
 import { useAuthStore } from '#/store';
-import { useSocket } from '#/store/ws';
 import LoginForm from '#/views/_core/authentication/login.vue';
 
 const { setMenuList } = useTabbarStore();
@@ -185,11 +185,10 @@ watch(
   },
 );
 
-// 建立 WebSocket 武装
-const { connect } = useSocket();
+const { connect } = useWs();
 
 onMounted(() => {
-  connect();
+  connect(); // websocket 连接
 });
 
 onBeforeMount(() => {

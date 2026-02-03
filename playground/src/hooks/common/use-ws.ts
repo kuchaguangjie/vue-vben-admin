@@ -7,7 +7,7 @@ import { useWebSocket } from '@vueuse/core';
 /**
  * WebSocket 处理逻辑 (VueUse 重构版)
  */
-export function useSocket() {
+export function useWs() {
   const accessStore = useAccessStore();
 
   // 1. 动态计算 URL，确保 Token 更新时能重新准备
