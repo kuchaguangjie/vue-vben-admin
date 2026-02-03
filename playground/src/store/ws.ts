@@ -25,8 +25,7 @@ export function useSocket() {
       delay: 5000, // 每次重连间隔 5s
     },
 
-    // 关键配置：禁用前端主动发心跳
-    heartbeat: false,
+    heartbeat: false, // 前端主动心跳
 
     // 监听连接成功
     onConnected() {
