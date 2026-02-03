@@ -70,7 +70,7 @@ export function useSocket() {
    * 手动触发连接
    */
   function connect() {
-    if (!wsUrl.value) return;
+    if (!wsUrl.value) return; // 有 token 才 连接;
     open();
   }
 
