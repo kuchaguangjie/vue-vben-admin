@@ -25,7 +25,7 @@ export function useSocket() {
       delay: 5000, // 每次重连间隔 5s
     },
 
-    heartbeat: false, // 前端主动心跳
+    heartbeat: false, // 前端主动心跳; 如果后端 主动 ping, 则这里不要 重复开启;
 
     // 监听连接成功
     onConnected() {
