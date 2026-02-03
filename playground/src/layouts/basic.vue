@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { NotificationItem } from '@vben/layouts';
 
-import { computed, onBeforeMount, ref, watch } from 'vue';
+import { computed, onBeforeMount, onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
 import { AuthenticationLoginExpiredModal } from '@vben/common-ui';
@@ -20,6 +20,7 @@ import { openWindow } from '@vben/utils';
 
 import { $t } from '#/locales';
 import { useAuthStore } from '#/store';
+import { useSocket } from '#/store/ws';
 import LoginForm from '#/views/_core/authentication/login.vue';
 
 const { setMenuList } = useTabbarStore();
@@ -183,6 +184,13 @@ watch(
     immediate: true,
   },
 );
+
+// 建立 WebSocket 武装
+const { connect } = useSocket();
+
+onMounted(() => {
+  connect();
+});
 
 onBeforeMount(() => {
   if (preferences.app.watermark) {
