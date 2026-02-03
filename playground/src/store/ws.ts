@@ -22,7 +22,7 @@ export function useSocket() {
     immediate: false, // 不要在导入时立即连接，由我们手动触发或根据 Token 触发
     autoReconnect: {
       retries: 10, // 重连尝试次数
-      delay: 5000, // 每次重连间隔 5s
+      delay: 6000, // 每次重连间隔, in ms;
     },
 
     heartbeat: false, // 前端主动心跳; 如果后端 主动 ping, 则这里不要 重复开启;
@@ -40,7 +40,7 @@ export function useSocket() {
     },
 
     // 处理消息逻辑
-    onMessage(ws, event) {
+    onMessage(_ws, event) {
       try {
         const msg = JSON.parse(event.data);
 
