@@ -39,18 +39,10 @@ export function useSocket() {
       console.info('[WS] Disconnected');
     },
 
-    // 处理消息逻辑
+    // 处理 data frame
     onMessage(_ws, event) {
       try {
         const msg = JSON.parse(event.data);
-
-        // 逻辑：如果服务端发来的是应用层 ping (JSON)，我们回一个 pong
-        // 注意：如果你服务端发的是协议层 Ping (0x9)，这里是捕获不到的，浏览器会自动回 Pong
-        if (msg.type === 'ping') {
-          send(JSON.stringify({ type: 'pong', timestamp: Date.now() }));
-          return;
-        }
-
         // 处理业务数据
         handleBusinessData(msg);
       } catch (error) {
@@ -74,5 +66,5 @@ export function useSocket() {
     open();
   }
 
-  return { connect, status, close };
+  return { connect, send, status, close };
 }
