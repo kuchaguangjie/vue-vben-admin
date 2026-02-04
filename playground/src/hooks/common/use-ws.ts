@@ -4,6 +4,10 @@ import { useAccessStore } from '@vben/stores';
 
 import { useWebSocket } from '@vueuse/core';
 
+import { useAuthStore } from '#/store';
+
+const authStore = useAuthStore();
+
 /**
  * WebSocket 处理逻辑 (VueUse 重构版)
  */
@@ -52,13 +56,19 @@ export function useWs() {
   });
 
   // 3. 业务数据处理
-  function handleBusinessData(msg: any) {
+  async function handleBusinessData(msg: any) {
     // eslint-disable-next-line no-console
     console.debug('[WS] Received Business Data:', msg);
     switch (msg.action) {
       case 'hello': {
         // eslint-disable-next-line no-console
         console.debug('[WS] hello');
+        break;
+      }
+      case 'kickout': {
+        // eslint-disable-next-line no-console
+        console.debug('[WS] kicked out');
+        await authStore.logout(); // 下线
         break;
       }
       default: {
