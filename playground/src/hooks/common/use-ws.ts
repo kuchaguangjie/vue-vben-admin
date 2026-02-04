@@ -52,10 +52,21 @@ export function useWs() {
   });
 
   // 3. 业务数据处理
-  function handleBusinessData(data: any) {
+  function handleBusinessData(msg: any) {
     // eslint-disable-next-line no-console
-    console.info('[WS] Received Business Data:', data);
-    // 这里可以配合 Pinia 或 mitt 处理
+    console.debug('[WS] Received Business Data:', msg);
+    switch (msg.action) {
+      case 'hello': {
+        // eslint-disable-next-line no-console
+        console.debug('[WS] hello');
+        break;
+      }
+      default: {
+        // eslint-disable-next-line no-console
+        console.debug('[WS] other action:', msg.action);
+        break;
+      }
+    }
   }
 
   /**
