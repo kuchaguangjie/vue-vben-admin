@@ -15,8 +15,7 @@ export namespace AuthApi {
   }
 
   export interface RefreshTokenResult {
-    data: string;
-    status: number;
+    accessToken: string;
   }
 }
 
@@ -38,6 +37,7 @@ export async function refreshTokenApi() {
     null,
     {
       withCredentials: true,
+      isRefresh: true, // use refresh token
     },
   );
 }

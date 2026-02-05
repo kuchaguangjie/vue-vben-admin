@@ -2,17 +2,17 @@
  * 该文件可自行根据业务逻辑进行调整
  */
 import type { AxiosResponseHeaders, RequestClientOptions } from '@vben/request';
-
-import type { Recordable } from '@vben-core/typings';
-
-import { useAppConfig } from '@vben/hooks';
-import { preferences } from '@vben/preferences';
 import {
   authenticateResponseInterceptor,
   defaultResponseInterceptor,
   errorMessageResponseInterceptor,
   RequestClient,
 } from '@vben/request';
+
+import type { Recordable } from '@vben-core/typings';
+
+import { useAppConfig } from '@vben/hooks';
+import { preferences } from '@vben/preferences';
 import { useAccessStore } from '@vben/stores';
 import { cloneDeep } from '@vben/utils';
 
@@ -67,7 +67,7 @@ function createRequestClient(baseURL: string, options?: RequestClientOptions) {
   async function doRefreshToken() {
     const accessStore = useAccessStore();
     const resp = await refreshTokenApi();
-    const newToken = resp.data;
+    const newToken = resp.accessToken;
     accessStore.setAccessToken(newToken);
     return newToken;
   }
@@ -81,7 +81,11 @@ function createRequestClient(baseURL: string, options?: RequestClientOptions) {
     fulfilled: async (config) => {
       const accessStore = useAccessStore();
 
-      config.headers.Authorization = formatToken(accessStore.accessToken);
+      const token = config.isRefresh
+        ? accessStore.refreshToken
+        : accessStore.accessToken;
+      config.headers.Authorization = formatToken(token);
+
       config.headers['Accept-Language'] = preferences.app.locale;
       return config;
     },
