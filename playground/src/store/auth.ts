@@ -34,7 +34,8 @@ export const useAuthStore = defineStore('auth', () => {
     let userInfo: null | UserInfo = null;
     try {
       loginLoading.value = true;
-      const { refreshToken, accessToken, removedOldSessions } = await loginApi(params);
+      const { refreshToken, accessToken, removedOldSessions } =
+        await loginApi(params);
 
       // 如果成功获取到 accessToken
       if (accessToken) {
@@ -116,8 +117,7 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   async function fetchUserInfo() {
-    let userInfo: null | UserInfo = null;
-    userInfo = await getUserInfoApi();
+    const userInfo: null | UserInfo = await getUserInfoApi();
     userStore.setUserInfo(userInfo);
     return userInfo;
   }
