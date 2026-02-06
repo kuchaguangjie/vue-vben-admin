@@ -1,6 +1,6 @@
-import { baseRequestClient, requestClient } from '#/api/request';
-
 import { useAccessStore } from '@vben/stores';
+
+import { baseRequestClient, requestClient } from '#/api/request';
 import { formatToken } from '#/utils/token-util';
 
 export namespace AuthApi {
@@ -40,7 +40,6 @@ export async function refreshTokenApi() {
     '/auth/refresh',
     null,
     {
-      withCredentials: true,
       headers: {
         Authorization: formatToken(accessStore.refreshToken),
       },
@@ -55,7 +54,6 @@ export async function refreshTokenApi() {
 export async function logoutApi() {
   const accessStore = useAccessStore();
   const resp = await baseRequestClient.post<string[]>('/auth/logout', null, {
-    withCredentials: true,
     headers: {
       Authorization: formatToken(accessStore.accessToken),
     },
