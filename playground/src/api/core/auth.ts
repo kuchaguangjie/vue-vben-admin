@@ -36,16 +36,16 @@ export async function loginApi(data: AuthApi.LoginParams) {
  */
 export async function refreshTokenApi() {
   const accessStore = useAccessStore();
-  const resp = await baseRequestClient.post<AuthApi.RefreshTokenResult>(
+  return await baseRequestClient.post<AuthApi.RefreshTokenResult>(
     '/auth/refresh',
     null,
     {
+      withCredentials: true,
       headers: {
         Authorization: formatToken(accessStore.refreshToken),
       },
     },
   );
-  return resp.data; // root json body
 }
 
 /**
@@ -53,12 +53,12 @@ export async function refreshTokenApi() {
  */
 export async function logoutApi() {
   const accessStore = useAccessStore();
-  const resp = await baseRequestClient.post<string[]>('/auth/logout', null, {
+  return await baseRequestClient.post<string[]>('/auth/logout', null, {
+    withCredentials: true,
     headers: {
       Authorization: formatToken(accessStore.accessToken),
     },
   });
-  return resp.data; // root json body, if any;
 }
 
 /**
