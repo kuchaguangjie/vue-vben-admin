@@ -2,15 +2,15 @@
  * 该文件可自行根据业务逻辑进行调整
  */
 import type { AxiosResponseHeaders, RequestClientOptions } from '@vben/request';
-
-import { useAppConfig } from '@vben/hooks';
-import { preferences } from '@vben/preferences';
 import {
   authenticateResponseInterceptor,
   defaultResponseInterceptor,
   errorMessageResponseInterceptor,
   RequestClient,
 } from '@vben/request';
+
+import { useAppConfig } from '@vben/hooks';
+import { preferences } from '@vben/preferences';
 import { useAccessStore } from '@vben/stores';
 import { cloneDeep } from '@vben/utils';
 
@@ -61,17 +61,16 @@ function createRequestClient(baseURL: string, options?: RequestClientOptions) {
 
   /**
    * 刷新token逻辑
+   * return: 新的 access token
    */
   async function doRefreshToken() {
-    try {
-      const accessStore = useAccessStore();
-      const resp = await refreshTokenApi();
-      const newToken = resp.accessToken;
-      accessStore.setAccessToken(newToken);
-      return newToken;
-    } catch {
-      await authStore.logout();
-    }
+    const accessStore = useAccessStore();
+    const resp = await refreshTokenApi();
+    // console.log('resp: ', resp);
+    const newToken = resp.data.accessToken;
+    // console.log('new access token prefix: ', newToken.substring(0, 10));
+    accessStore.setAccessToken(newToken);
+    return newToken;
   }
 
   function formatToken(token: null | string) {
@@ -82,18 +81,7 @@ function createRequestClient(baseURL: string, options?: RequestClientOptions) {
   client.addRequestInterceptor({
     fulfilled: async (config) => {
       const accessStore = useAccessStore();
-
-      // 1. 识别是否是 refresh token 操作
-      const isRefresh = config.url === '/auth/refresh';
-
-      // 2. 根据判定结果选择 Token
-      const token = isRefresh
-        ? accessStore.refreshToken
-        : accessStore.accessToken;
-
-      // console.log(`请求路径: ${config.url} | 是否是 refresh: ${isRefresh}`);
-
-      config.headers.Authorization = formatToken(token);
+      config.headers.Authorization = formatToken(accessStore.accessToken);
       config.headers['Accept-Language'] = preferences.app.locale;
       return config;
     },

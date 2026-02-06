@@ -1,4 +1,7 @@
-import { requestClient } from '#/api/request';
+import { baseRequestClient, requestClient } from '#/api/request';
+
+import { useAccessStore } from '@vben/stores';
+import { formatToken } from '#/utils/token-util';
 
 export namespace AuthApi {
   /** 登录接口参数 */
@@ -32,16 +35,32 @@ export async function loginApi(data: AuthApi.LoginParams) {
  * 刷新accessToken
  */
 export async function refreshTokenApi() {
-  return requestClient.post<AuthApi.RefreshTokenResult>('/auth/refresh', null, {
-    withCredentials: true,
-  });
+  const accessStore = useAccessStore();
+  const resp = await baseRequestClient.post<AuthApi.RefreshTokenResult>(
+    '/auth/refresh',
+    null,
+    {
+      withCredentials: true,
+      headers: {
+        Authorization: formatToken(accessStore.refreshToken),
+      },
+    },
+  );
+  return resp.data; // root json body
 }
 
 /**
  * 退出登录
  */
 export async function logoutApi() {
-  return requestClient.post<string[]>('/auth/logout');
+  const accessStore = useAccessStore();
+  const resp = await baseRequestClient.post<string[]>('/auth/logout', null, {
+    withCredentials: true,
+    headers: {
+      Authorization: formatToken(accessStore.accessToken),
+    },
+  });
+  return resp.data; // root json body, if any;
 }
 
 /**
