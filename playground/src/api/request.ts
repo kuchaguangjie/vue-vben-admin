@@ -2,15 +2,15 @@
  * 该文件可自行根据业务逻辑进行调整
  */
 import type { AxiosResponseHeaders, RequestClientOptions } from '@vben/request';
-
-import { useAppConfig } from '@vben/hooks';
-import { preferences } from '@vben/preferences';
 import {
   authenticateResponseInterceptor,
   defaultResponseInterceptor,
   errorMessageResponseInterceptor,
   RequestClient,
 } from '@vben/request';
+
+import { useAppConfig } from '@vben/hooks';
+import { preferences } from '@vben/preferences';
 import { useAccessStore } from '@vben/stores';
 import { cloneDeep } from '@vben/utils';
 
@@ -63,11 +63,15 @@ function createRequestClient(baseURL: string, options?: RequestClientOptions) {
    * 刷新token逻辑
    */
   async function doRefreshToken() {
-    const accessStore = useAccessStore();
-    const resp = await refreshTokenApi();
-    const newToken = resp.accessToken;
-    accessStore.setAccessToken(newToken);
-    return newToken;
+    try {
+      const accessStore = useAccessStore();
+      const resp = await refreshTokenApi();
+      const newToken = resp.accessToken;
+      accessStore.setAccessToken(newToken);
+      return newToken;
+    } catch {
+      await authStore.logout();
+    }
   }
 
   function formatToken(token: null | string) {
@@ -79,16 +83,21 @@ function createRequestClient(baseURL: string, options?: RequestClientOptions) {
     fulfilled: async (config) => {
       const accessStore = useAccessStore();
 
-      const token = config.isRefresh
+      // 1. 识别是否是 refresh token 操作
+      const isRefresh = config.url === '/auth/refresh';
+
+      // 2. 根据判定结果选择 Token
+      const token = isRefresh
         ? accessStore.refreshToken
         : accessStore.accessToken;
-      config.headers.Authorization = formatToken(token);
 
+      // console.log(`请求路径: ${config.url} | 是否是 refresh: ${isRefresh}`);
+
+      config.headers.Authorization = formatToken(token);
       config.headers['Accept-Language'] = preferences.app.locale;
       return config;
     },
   });
-
   // 处理返回的响应数据格式
   client.addResponseInterceptor(
     defaultResponseInterceptor({
@@ -108,6 +117,8 @@ function createRequestClient(baseURL: string, options?: RequestClientOptions) {
       formatToken,
     }),
   );
+
+  // console.log('🛡️ 拦截器配置 - enableRefreshToken:', preferences.app.enableRefreshToken);
 
   // 通用的错误处理,如果没有进入上面的错误处理逻辑，就会进入这里
   client.addResponseInterceptor(

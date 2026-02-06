@@ -6,8 +6,6 @@ import type {
 } from 'axios';
 
 type ExtendOptions<T = any> = {
-  // 是否 refresh token, true -> 使用 refresh token, false -> 使用 access token;
-  isRefresh?: boolean;
   /**
    * 参数序列化方式。预置的有
    * - brackets: ids[]=1&ids[]=2&ids[]=3
