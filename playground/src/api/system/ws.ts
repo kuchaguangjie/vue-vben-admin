@@ -11,6 +11,7 @@ export namespace SystemWsApi {
       sidCount: number;
       userCount: number;
     };
+    statAt: string;
   }
 }
 

@@ -184,6 +184,7 @@
     },
     "config": {
       "maxConnPerSid": "每个 Session 最大连接数"
-    }
+    },
+    "statAt": "统计时间"
   }
 }

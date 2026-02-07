@@ -3,6 +3,7 @@
   "createdAt": "Created At",
   "createdBy": "Created By",
   "updatedAt": "Updated At",
+  "statAt": "Stat At",
   "prefix": "Prefix",
   "type": "Type",
   "newChild": "New Child",

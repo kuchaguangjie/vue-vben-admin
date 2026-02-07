@@ -9,6 +9,7 @@ import { $t } from '@vben/locales';
 import { message } from 'ant-design-vue';
 
 import { getWsStat } from '#/api/system/ws';
+import { formatBackendTime } from '#/utils/value-format';
 
 const displayData = ref<null | SystemWsApi.SystemWsStat>(null);
 onMounted(() => {
@@ -27,23 +28,31 @@ async function handleStat(showSuccess: boolean = false) {
         {{ $t('system.ws.btnGetStat') }}
       </VbenButton>
     </div>
-    <div>
-      <div>{{ $t('system.ws.section.stat') }}</div>
+    <div v-if="displayData">
       <div>
-        {{ $t('system.ws.stat.connCount') }}: {{ displayData?.stat?.connCount }}
+        {{ $t('common.statAt') }}:
+        {{ formatBackendTime(displayData.statAt) }}
       </div>
       <div>
-        {{ $t('system.ws.stat.userCount') }}: {{ displayData?.stat?.userCount }}
+        <div>{{ $t('system.ws.section.stat') }}</div>
+        <div>
+          {{ $t('system.ws.stat.connCount') }}:
+          {{ displayData.stat?.connCount }}
+        </div>
+        <div>
+          {{ $t('system.ws.stat.userCount') }}:
+          {{ displayData.stat?.userCount }}
+        </div>
+        <div>
+          {{ $t('system.ws.stat.sidCount') }}: {{ displayData.stat?.sidCount }}
+        </div>
       </div>
       <div>
-        {{ $t('system.ws.stat.sidCount') }}: {{ displayData?.stat?.sidCount }}
-      </div>
-    </div>
-    <div>
-      <div>{{ $t('system.ws.section.config') }}</div>
-      <div>
-        {{ $t('system.ws.config.maxConnPerSid') }}:
-        {{ displayData?.config.maxConnPerSid }}
+        <div>{{ $t('system.ws.section.config') }}</div>
+        <div>
+          {{ $t('system.ws.config.maxConnPerSid') }}:
+          {{ displayData.config.maxConnPerSid }}
+        </div>
       </div>
     </div>
   </Page>

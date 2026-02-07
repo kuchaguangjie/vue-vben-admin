@@ -3,6 +3,7 @@
   "createdAt": "创建时间",
   "createdBy": "创建人",
   "updatedAt": "更新时间",
+  "statAt": "统计时间",
   "prefix": "前缀",
   "type": "类型",
   "newChild": "新增下级",
