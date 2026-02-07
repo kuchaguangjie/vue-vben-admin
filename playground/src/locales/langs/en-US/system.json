@@ -167,5 +167,21 @@
       "userSubCount": "subject count (user)",
       "roleSubCount": "subject count (role)"
     }
+  },
+  "ws": {
+    "title": "WS Management",
+    "btnGetStat": "Refresh stat",
+    "section": {
+      "stat": "Stat",
+      "config": "Config"
+    },
+    "stat": {
+      "connCount": "Total connections",
+      "userCount": "Total connected users",
+      "sidCount": "Total connected sessions"
+    },
+    "config": {
+      "maxConnPerSid": "Max Connections per session"
+    }
   }
 }

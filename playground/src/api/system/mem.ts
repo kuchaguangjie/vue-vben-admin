@@ -12,14 +12,14 @@ export namespace SystemMemApi {
  * 刷新 mem - all
  */
 async function loadMemAll() {
-  return requestClient.get<Array<SystemMemApi.SystemMem>>('/system/mem/load');
+  return requestClient.get<any>('/system/mem/load');
 }
 
 /**
  * 获取 mem status
  */
 async function getMemStatus() {
-  return requestClient.get<Array<SystemMemApi.SystemMem>>('/system/mem/status');
+  return requestClient.get<any>('/system/mem/status');
 }
 
 export { getMemStatus, loadMemAll };

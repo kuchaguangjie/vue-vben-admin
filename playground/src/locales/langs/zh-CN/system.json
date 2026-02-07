@@ -169,5 +169,21 @@
       "userSubCount": "subject 数量 (用户)",
       "roleSubCount": "subject 数量 (角色)"
     }
+  },
+  "ws": {
+    "title": "WS 管理",
+    "btnGetStat": "刷新 统计",
+    "section": {
+      "stat": "统计",
+      "config": "配置"
+    },
+    "stat": {
+      "connCount": "连接总数",
+      "userCount": "连接用户总数",
+      "sidCount": "连接 Session 总数"
+    },
+    "config": {
+      "maxConnPerSid": "每个 Session 最大连接数"
+    }
   }
 }
