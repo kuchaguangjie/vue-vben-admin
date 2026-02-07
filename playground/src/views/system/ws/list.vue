@@ -140,13 +140,6 @@ async function handleStat(showSuccess: boolean = false) {
 </template>
 
 <style scoped>
-/* 统计数值居中样式优化 */
-:deep(.ant-statistic-content) {
-  display: flex;
-  align-items: baseline;
-  justify-content: center;
-}
-
 /* 状态标签自定义样式 */
 .status-tag {
   display: inline-flex;
@@ -166,10 +159,5 @@ async function handleStat(showSuccess: boolean = false) {
   margin-right: 6px;
   background-color: currentcolor;
   border-radius: 50%;
-}
-
-/* 让 Description Label 宽度固定一点更好看 */
-:deep(.ant-descriptions-item-label) {
-  width: 200px;
 }
 </style>
