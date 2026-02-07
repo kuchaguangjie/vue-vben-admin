@@ -183,7 +183,12 @@
       "sidCount": "连接 Session 总数"
     },
     "config": {
-      "maxConnPerSid": "每个 Session 最大连接数"
+      "maxConnPerSid": "每个 Session 最大连接数",
+      "rateLimit": {
+        "title": "频率限制",
+        "rate": "平均频率 (每秒)",
+        "burst": "冲刺频率 (每秒)"
+      }
     },
     "statAt": "统计时间"
   }

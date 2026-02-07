@@ -5,6 +5,11 @@ export namespace SystemWsApi {
     [key: string]: any;
     config: {
       maxConnPerSid: number;
+      rateLimit: {
+        burst: number;
+        enable: boolean;
+        rate: number;
+      };
     };
     stat: {
       connCount: number;

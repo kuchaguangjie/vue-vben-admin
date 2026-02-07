@@ -181,7 +181,12 @@
       "sidCount": "Total connected sessions"
     },
     "config": {
-      "maxConnPerSid": "Max Connections per session"
+      "maxConnPerSid": "Max Connections per session",
+      "rateLimit": {
+        "title": "Rate Limit",
+        "rate": "Avg Freq (per second)",
+        "burst": "Burst Freq (per second)"
+      }
     }
   }
 }

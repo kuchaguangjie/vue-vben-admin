@@ -18,5 +18,9 @@
   },
   "action": {
     "close": "Close"
+  },
+  "enableStatus": {
+    "enabled": "Enabled",
+    "disabled": "Disabled"
   }
 }
