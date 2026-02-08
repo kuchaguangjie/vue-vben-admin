@@ -5,6 +5,7 @@ import { useAccessStore } from '@vben/stores';
 import { useWebSocket } from '@vueuse/core';
 
 import { useAuthStore } from '#/store';
+import { notification } from 'ant-design-vue';
 
 const authStore = useAuthStore();
 
@@ -69,6 +70,16 @@ export function useWs() {
         // eslint-disable-next-line no-console
         console.debug('[WS] kicked out');
         await authStore.logout(); // 下线
+        break;
+      }
+      case 'notice': {
+        // eslint-disable-next-line no-console
+        console.debug('[WS] notice:', msg.data);
+        notification.info({
+          message: `公告 【${msg.data.title}】`,
+          description: `请到 [公告管理] 查看详情`,
+          duration: 0,
+        });
         break;
       }
       default: {
