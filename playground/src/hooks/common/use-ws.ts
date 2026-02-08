@@ -3,9 +3,9 @@ import { computed } from 'vue';
 import { useAccessStore } from '@vben/stores';
 
 import { useWebSocket } from '@vueuse/core';
+import { notification } from 'ant-design-vue';
 
 import { useAuthStore } from '#/store';
-import { notification } from 'ant-design-vue';
 
 const authStore = useAuthStore();
 
