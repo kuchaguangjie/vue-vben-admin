@@ -191,5 +191,18 @@
       }
     },
     "statAt": "统计时间"
+  },
+  "notice": {
+    "module": "公告管理",
+    "moduleShort": "公告",
+    "list": "公告列表",
+    "title": "标题",
+    "category": "分类",
+    "push": "是否推送",
+    "tags": "标签",
+    "statusOption": {
+      "draft": "草稿",
+      "published": "发布"
+    }
   }
 }

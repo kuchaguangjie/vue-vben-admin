@@ -1,6 +1,6 @@
 import type { VbenFormSchema } from '#/adapter/form';
 import type { OnActionClickFn, VxeTableGridOptions } from '#/adapter/vxe-table';
-import type { SystemRoleApi } from '#/api';
+import type { SystemNoticeApi } from '#/api';
 
 import { z } from '#/adapter/form';
 import { $t } from '#/locales';
@@ -13,27 +13,27 @@ export function useFormSchema(): VbenFormSchema[] {
     {
       component: 'Input',
       fieldName: 'id',
-      label: $t('system.role.id'),
+      label: $t('system.notice.id'),
       disabled: true, // 不可编辑
     },
     {
       component: 'Input',
-      fieldName: 'name',
-      label: $t('system.role.name'),
+      fieldName: 'title',
+      label: $t('system.notice.title'),
       rules: 'required',
     },
     {
       component: 'Input',
       fieldName: 'code',
-      label: $t('system.role.code'),
-      defaultValue: 'role_',
+      label: $t('system.notice.code'),
+      defaultValue: 'notice_',
       rules: z
         .string()
         .min(1, { message: '代码长度不能少于1个字符' })
         .max(20, { message: '代码长度不能超过20个字符' })
         // 限制 字符集: 字母、数字、下划线
         .regex(/^\w+$/, {
-          message: $t('system.role.codeValidation'),
+          message: $t('system.notice.codeValidation'),
         }),
       componentProps: {
         placeholder: '1 ~ 20 个字符',
@@ -62,17 +62,17 @@ export function useFormSchema(): VbenFormSchema[] {
       },
       defaultValue: 1,
       fieldName: 'status',
-      label: $t('system.role.status'),
+      label: $t('common.status'),
     },
     {
       component: 'Textarea',
       fieldName: 'remark',
-      label: $t('system.role.remark'),
+      label: $t('system.notice.remark'),
     },
     {
-      fieldName: 'roleCodes',
+      fieldName: 'noticeCodes',
       component: 'TreeSelect',
-      label: $t('system.role.setInheritRoles'),
+      label: $t('system.notice.setInheritNotices'),
       componentProps: {
         multiple: true, // 启用多选
       },
@@ -81,14 +81,14 @@ export function useFormSchema(): VbenFormSchema[] {
       component: 'Input',
       fieldName: 'permissions',
       formItemClass: 'items-start',
-      label: $t('system.role.setPermissions'),
+      label: $t('system.notice.setPermissions'),
       modelPropName: 'modelValue',
     },
     {
       component: 'Input',
       fieldName: 'apis',
       formItemClass: 'items-start',
-      label: $t('system.role.setApis'),
+      label: $t('system.notice.setApis'),
       modelPropName: 'modelValue',
     },
   ];
@@ -100,7 +100,7 @@ export function formFieldsToAdjustForEdit(): VbenFormSchema[] {
     {
       component: 'Input',
       fieldName: 'code',
-      label: $t('system.role.code'),
+      label: $t('system.notice.code'),
       componentProps: {
         disabled: true, // 不可编辑
       },
@@ -122,24 +122,40 @@ export function useGridFormSchema(): VbenFormSchema[] {
   return [
     {
       component: 'Input',
-      fieldName: 'name',
-      label: $t('system.role.name'),
+      fieldName: 'title',
+      label: $t('system.notice.title'),
       componentProps: {
         placeholder: $t('common.prefix'),
+        allowClear: true,
       },
     },
-    { component: 'Input', fieldName: 'id', label: $t('system.role.id') },
+    {
+      component: 'Input',
+      fieldName: 'category',
+      label: $t('system.notice.category'),
+      componentProps: {
+        allowClear: true,
+      },
+    },
+    {
+      component: 'Input',
+      fieldName: 'id',
+      label: $t('common.id'),
+      componentProps: {
+        allowClear: true,
+      },
+    },
     {
       component: 'Select',
       componentProps: {
         allowClear: true,
         options: [
-          { label: $t('common.enabled'), value: 1 },
-          { label: $t('common.disabled'), value: 0 },
+          { label: $t('system.notice.statusOption.draft'), value: 1 },
+          { label: $t('system.notice.statusOption.published'), value: 2 },
         ],
       },
       fieldName: 'status',
-      label: $t('system.role.status'),
+      label: $t('common.status'),
     },
     {
       component: 'RangePicker',
@@ -153,47 +169,49 @@ export function useGridFormSchema(): VbenFormSchema[] {
   ];
 }
 
-export function useColumns<T = SystemRoleApi.SystemRole>(
+export function useColumns<T = SystemNoticeApi.SystemNotice>(
   onActionClick: OnActionClickFn<T>,
   onPreview: (row: any) => void,
-  onStatusChange?: (newStatus: any, row: T) => PromiseLike<boolean | undefined>,
+  // onStatusChange?: (newStatus: any, row: T) => PromiseLike<boolean | undefined>,
 ): VxeTableGridOptions['columns'] {
   return [
     usePreviewLink(
       {
         field: 'id',
-        title: $t('system.role.id'),
+        title: $t('common.id'),
         width: 90,
         sortable: true,
       },
       onPreview,
     ),
     {
-      field: 'name',
-      title: $t('system.role.name'),
+      field: 'title',
+      title: $t('system.notice.title'),
       width: 200,
       sortable: true,
     },
     {
-      field: 'code',
-      title: $t('system.role.code'),
-      width: 200,
-      sortable: true,
-    },
-    {
-      cellRender: {
-        attrs: { beforeChange: onStatusChange },
-        name: onStatusChange ? 'CellSwitch' : 'CellTag',
-      },
-      field: 'status',
-      title: $t('system.role.status'),
+      field: 'category',
+      title: $t('system.notice.category'),
       width: 100,
       sortable: true,
     },
     {
-      field: 'remark',
-      minWidth: 150,
-      title: $t('system.role.remark'),
+      field: 'push',
+      title: $t('system.notice.push'),
+      width: 90,
+      sortable: true,
+    },
+    {
+      field: 'tags',
+      title: $t('system.notice.tags'),
+      width: 100,
+    },
+    {
+      field: 'status',
+      title: $t('common.status'),
+      width: 100,
+      sortable: true,
     },
     {
       field: 'createdAt',
@@ -208,18 +226,29 @@ export function useColumns<T = SystemRoleApi.SystemRole>(
       width: 100,
     },
     {
+      field: 'publishedAt',
+      title: $t('common.publishedAt'),
+      width: 100,
+      sortable: true,
+    },
+    {
+      field: 'publishedBy',
+      title: $t('common.publishedBy'),
+      width: 100,
+    },
+    {
       align: 'center',
       cellRender: {
         attrs: {
           nameField: 'name',
-          nameTitle: $t('system.role.name'),
+          nameTitle: $t('system.notice.module'),
           onClick: onActionClick,
         },
         name: 'CellOperation',
       },
       field: 'operation',
       fixed: 'right',
-      title: $t('system.role.operation'),
+      title: $t('common.operation'),
       width: 130,
     },
   ];

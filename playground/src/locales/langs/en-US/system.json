@@ -1,9 +1,9 @@
 {
-  "title": "System Management",
+  "title": "System Mgr",
   "dept": {
     "module": "Department",
     "id": "ID",
-    "title": "Department Management",
+    "title": "Department Mgr",
     "name": "Name",
     "roleCodes": "Roles",
     "status": "Status",
@@ -23,7 +23,7 @@
     }
   },
   "menu": {
-    "title": "Menu Management",
+    "title": "Menu Mgr",
     "parent": "Parent Menu",
     "menuTitle": "Title",
     "menuName": "Menu Name",
@@ -63,7 +63,7 @@
   },
   "api": {
     "menuName": "api",
-    "title": "api Management",
+    "title": "api Mgr",
     "list": "api List",
     "path": "Path",
     "action": "api Action",
@@ -77,7 +77,7 @@
   },
   "role": {
     "module": "Role",
-    "title": "Role Management",
+    "title": "Role Mgr",
     "list": "Role List",
     "name": "Name",
     "code": "Code",
@@ -106,7 +106,7 @@
   "user": {
     "module": "User",
     "id": "User ID",
-    "title": "User Management",
+    "title": "User Mgr",
     "list": "User List",
     "nick": "Nickname",
     "username": "Username",
@@ -128,14 +128,14 @@
   "log": {
     "code": "Code",
     "data": "Data",
-    "title": "Log Management",
+    "title": "Log Mgr",
     "list": "Log List",
     "id": "Log ID",
     "createdBy": "Created By [ID]",
     "createdAt": "Created At"
   },
   "mem": {
-    "title": "Cache Management",
+    "title": "Cache Mgr",
     "globalStatus": "Global cache status",
     "autoLoadInterval": "Cache auto load interval",
     "moduleStatus": "Module cache status",
@@ -146,7 +146,7 @@
     "loadSuccess": "Load cache success"
   },
   "casbin": {
-    "title": "Casbin Management",
+    "title": "Casbin Mgr",
     "manualStatus": {
       "title": "Manual load status",
       "loadSuccess": "casbin load success",
@@ -169,7 +169,7 @@
     }
   },
   "ws": {
-    "title": "WS Management",
+    "title": "WS Mgr",
     "btnGetStat": "Refresh stat",
     "section": {
       "stat": "Stat",
@@ -187,6 +187,19 @@
         "rate": "Avg Freq (per second)",
         "burst": "Burst Freq (per second)"
       }
+    }
+  },
+  "notice": {
+    "module": "Notice Mgr",
+    "moduleShort": "Notice",
+    "title": "Title",
+    "list": "Notice List",
+    "category": "Category",
+    "push": "Is Push",
+    "tags": "tags",
+    "statusOption": {
+      "draft": "Draft",
+      "published": "Published"
     }
   }
 }

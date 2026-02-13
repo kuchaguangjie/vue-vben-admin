@@ -3,7 +3,11 @@
   "createdAt": "创建时间",
   "createdBy": "创建人",
   "updatedAt": "更新时间",
+  "updatedBy": "更新人",
+  "publishedAt": "发布时间",
+  "publishedBy": "发布人",
   "statAt": "统计时间",
+  "status": "状态",
   "prefix": "前缀",
   "type": "类型",
   "newChild": "新增下级",
@@ -16,6 +20,7 @@
     "copied": "复制成功",
     "pidEqId": "不可选择自己作为父节点"
   },
+  "operation": "操作",
   "action": {
     "close": "关闭"
   },
