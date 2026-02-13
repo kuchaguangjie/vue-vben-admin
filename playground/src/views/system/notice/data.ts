@@ -1,5 +1,4 @@
 import type { VbenFormSchema } from '#/adapter/form';
-import { z } from '#/adapter/form';
 import type { OnActionClickFn, VxeTableGridOptions } from '#/adapter/vxe-table';
 import type { SystemNoticeApi } from '#/api';
 import { $t } from '#/locales';
@@ -12,7 +11,7 @@ export function useFormSchema(): VbenFormSchema[] {
     {
       component: 'Input',
       fieldName: 'id',
-      label: $t('system.notice.id'),
+      label: $t('common.id'),
       disabled: true, // 不可编辑
     },
     {
@@ -23,22 +22,24 @@ export function useFormSchema(): VbenFormSchema[] {
     },
     {
       component: 'Input',
-      fieldName: 'code',
-      label: $t('system.notice.code'),
-      defaultValue: 'notice_',
-      rules: z
-        .string()
-        .min(1, { message: '代码长度不能少于1个字符' })
-        .max(20, { message: '代码长度不能超过20个字符' })
-        // 限制 字符集: 字母、数字、下划线
-        .regex(/^\w+$/, {
-          message: $t('system.notice.codeValidation'),
-        }),
+      fieldName: 'category',
+      label: $t('system.notice.category'),
+      rules: 'required',
+      defaultValue: 'general',
+    },
+    {
+      component: 'RadioGroup',
       componentProps: {
-        placeholder: '1 ~ 20 个字符',
-        maxlength: 20,
-        showCount: true,
+        buttonStyle: 'solid',
+        options: [
+          { label: $t('common.boolOptions.yes'), value: true },
+          { label: $t('common.boolOptions.no'), value: false },
+        ],
+        optionType: 'button',
       },
+      defaultValue: false,
+      fieldName: 'push',
+      label: $t('system.notice.push'),
     },
     {
       component: 'Input',
@@ -50,12 +51,30 @@ export function useFormSchema(): VbenFormSchema[] {
       },
     },
     {
+      component: 'Select',
+      fieldName: 'tags',
+      label: '标签',
+      // 使用 colProps 确保表单项有足够的宽度，避免缩成一团
+      componentProps: {
+        mode: 'tags',
+        placeholder: '请选择或输入标签...',
+        style: { width: '90%', minWidth: '100px' },
+        allowClear: true,
+        showArrow: true,
+        options: [
+          { label: 'holiday', value: 'holiday' },
+          { label: 'bonus', value: 'bonus' },
+        ],
+        maxTagCount: 'responsive', // 自动响应式隐藏多余标签，避免撑爆高度
+      },
+    },
+    {
       component: 'RadioGroup',
       componentProps: {
         buttonStyle: 'solid',
         options: [
-          { label: $t('common.enabled'), value: 1 },
-          { label: $t('common.disabled'), value: 0 },
+          { label: $t('system.notice.statusOption.draft'), value: 1 },
+          { label: $t('system.notice.statusOption.published'), value: 2 },
         ],
         optionType: 'button',
       },
@@ -65,46 +84,15 @@ export function useFormSchema(): VbenFormSchema[] {
     },
     {
       component: 'Textarea',
-      fieldName: 'remark',
-      label: $t('system.notice.remark'),
-    },
-    {
-      fieldName: 'noticeCodes',
-      component: 'TreeSelect',
-      label: $t('system.notice.setInheritNotices'),
-      componentProps: {
-        multiple: true, // 启用多选
-      },
-    },
-    {
-      component: 'Input',
-      fieldName: 'permissions',
-      formItemClass: 'items-start',
-      label: $t('system.notice.setPermissions'),
-      modelPropName: 'modelValue',
-    },
-    {
-      component: 'Input',
-      fieldName: 'apis',
-      formItemClass: 'items-start',
-      label: $t('system.notice.setApis'),
-      modelPropName: 'modelValue',
+      fieldName: 'data',
+      label: $t('system.notice.data'),
     },
   ];
 }
 
 // form fields - to adjust - when edit
 export function formFieldsToAdjustForEdit(): VbenFormSchema[] {
-  return [
-    {
-      component: 'Input',
-      fieldName: 'code',
-      label: $t('system.notice.code'),
-      componentProps: {
-        disabled: true, // 不可编辑
-      },
-    },
-  ];
+  return [];
 }
 
 // form fields - to remove - when create
@@ -231,6 +219,7 @@ export function useColumns<T = SystemNoticeApi.SystemNotice>(
       field: 'publishedAt',
       title: $t('common.publishedAt'),
       width: 100,
+      formatter: ({ cellValue }) => formatBackendTime(cellValue), // 时间格式转换
       sortable: true,
     },
     {

@@ -107,7 +107,7 @@ function getNodeClass(node: Recordable<any>) {
 
 // 角色列定义
 const noticeColumns = [
-  { title: $t('system.notice.id'), dataIndex: 'id', width: 80 },
+  { title: $t('common.id'), dataIndex: 'id', width: 80 },
   { title: $t('system.notice.title'), dataIndex: 'title' },
   { title: $t('system.notice.code'), dataIndex: 'code' },
 ];

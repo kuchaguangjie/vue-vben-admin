@@ -200,6 +200,7 @@
     "statusOption": {
       "draft": "Draft",
       "published": "Published"
-    }
+    },
+    "data": "Content"
   }
 }

@@ -1,16 +1,11 @@
 <script lang="ts" setup>
 import type { DataNode } from 'ant-design-vue/es/tree';
 
-import type { Recordable } from '@vben/types';
-
 import type { SystemNoticeApi } from '#/api/system/notice';
 
 import { computed, nextTick, ref } from 'vue';
 
-import { Tree, useVbenDrawer } from '@vben/common-ui';
-import { IconifyIcon } from '@vben/icons';
-
-import { Spin } from 'ant-design-vue';
+import { useVbenDrawer } from '@vben/common-ui';
 
 import { useVbenForm } from '#/adapter/form';
 import {
@@ -185,73 +180,10 @@ const getDrawerTitle = computed(() => {
     ? $t('common.edit', $t('system.notice.moduleShort'))
     : $t('common.create', $t('system.notice.moduleShort'));
 });
-
-function getNodeClass(node: Recordable<any>) {
-  const classes: string[] = [];
-  if (node.value?.type === 'button') {
-    classes.push('inline-flex');
-  }
-
-  return classes.join(' ');
-}
 </script>
 <template>
   <Drawer :title="getDrawerTitle">
-    <Form>
-      <template #permissions="slotProps">
-        <Spin :spinning="loadingData" wrapper-class-name="w-full">
-          <Tree
-            :tree-data="menuOptions"
-            multiple
-            bordered
-            :default-expanded-level="2"
-            :get-node-class="getNodeClass"
-            v-bind="slotProps"
-            value-field="id"
-            label-field="meta.title"
-            icon-field="meta.icon"
-          >
-            <template #node="{ value }">
-              <IconifyIcon v-if="value.meta.icon" :icon="value.meta.icon" />
-              {{ $t(value.meta.title) }}
-            </template>
-          </Tree>
-        </Spin>
-      </template>
-      <template #apis="slotProps">
-        <Spin :spinning="loadingData" wrapper-class-name="w-full">
-          <Tree
-            :tree-data="apiOptions"
-            multiple
-            bordered
-            :default-expanded-level="2"
-            :get-node-class="getNodeClass"
-            v-bind="slotProps"
-            value-field="id"
-          >
-            <template #node="{ value }">
-              {{ $t(value.path) }} ({{ $t(value.action) }})
-            </template>
-          </Tree>
-        </Spin>
-      </template>
-    </Form>
+    <Form />
   </Drawer>
 </template>
-<style lang="css" scoped>
-:deep(.ant-tree-title) {
-  .tree-actions {
-    display: none;
-    margin-left: 20px;
-  }
-}
-
-:deep(.ant-tree-title:hover) {
-  .tree-actions {
-    display: flex;
-    flex: auto;
-    justify-content: flex-end;
-    margin-left: 20px;
-  }
-}
-</style>
+<style lang="css" scoped></style>
