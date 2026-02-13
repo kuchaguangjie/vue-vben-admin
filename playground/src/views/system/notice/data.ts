@@ -1,8 +1,7 @@
 import type { VbenFormSchema } from '#/adapter/form';
+import { z } from '#/adapter/form';
 import type { OnActionClickFn, VxeTableGridOptions } from '#/adapter/vxe-table';
 import type { SystemNoticeApi } from '#/api';
-
-import { z } from '#/adapter/form';
 import { $t } from '#/locales';
 import { usePreviewLink } from '#/utils/use-preview-link';
 import { formatBackendTime } from '#/utils/value-format';
@@ -200,6 +199,8 @@ export function useColumns<T = SystemNoticeApi.SystemNotice>(
       field: 'push',
       title: $t('system.notice.push'),
       width: 90,
+      formatter: ({ cellValue }) =>
+        cellValue ? $t('common.boolOptions.yes') : $t('common.boolOptions.no'),
       sortable: true,
     },
     {
@@ -211,6 +212,7 @@ export function useColumns<T = SystemNoticeApi.SystemNotice>(
       field: 'status',
       title: $t('common.status'),
       width: 100,
+      formatter: ({ cellValue }) => noticeStatusToI18n(cellValue), // 时间格式转换
       sortable: true,
     },
     {
@@ -252,4 +254,22 @@ export function useColumns<T = SystemNoticeApi.SystemNotice>(
       width: 130,
     },
   ];
+}
+
+function noticeStatusToI18n(status: number): any {
+  let result: any;
+  switch (status) {
+    case 1: {
+      result = $t('system.notice.statusOption.draft');
+      break;
+    }
+    case 2: {
+      result = $t('system.notice.statusOption.published');
+      break;
+    }
+    default: {
+      result = status;
+    }
+  }
+  return result;
 }

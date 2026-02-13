@@ -202,7 +202,7 @@
     "tags": "标签",
     "statusOption": {
       "draft": "草稿",
-      "published": "发布"
+      "published": "已发布"
     }
   }
 }

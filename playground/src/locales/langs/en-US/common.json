@@ -27,5 +27,9 @@
   "enableStatus": {
     "enabled": "Enabled",
     "disabled": "Disabled"
+  },
+  "boolOptions": {
+    "yes": "Yes",
+    "no": "No"
   }
 }

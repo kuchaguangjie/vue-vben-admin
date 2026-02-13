@@ -27,5 +27,9 @@
   "enableStatus": {
     "enabled": "已启用",
     "disabled": "未启用"
+  },
+  "boolOptions": {
+    "yes": "是",
+    "no": "否"
   }
 }
