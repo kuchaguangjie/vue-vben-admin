@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { nextTick, ref } from 'vue'; // 复用已有的 Schema 定义
+
 import { useVbenDrawer } from '@vben/common-ui';
 
 import { useVbenForm } from '#/adapter/form';
@@ -55,7 +56,7 @@ async function loadDetail(noticeId: number) {
     :show-confirm-button="false"
   >
     <div class="h-full p-4">
-      <Form></Form>
+      <Form />
     </div>
   </Drawer>
 </template>
