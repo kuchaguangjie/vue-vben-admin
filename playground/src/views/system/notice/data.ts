@@ -22,11 +22,21 @@ export function useFormSchema(): VbenFormSchema[] {
       rules: 'required',
     },
     {
-      component: 'Input',
+      component: 'Select',
       fieldName: 'category',
       label: $t('system.notice.category'),
       rules: 'required',
-      defaultValue: 'general',
+      // 使用 colProps 确保表单项有足够的宽度，避免缩成一团
+      componentProps: {
+        multiple: false, // 单选
+        style: { width: '90%', minWidth: '100px' },
+        allowClear: true,
+        showArrow: true,
+        options: [
+          { label: 'holiday', value: 'holiday' },
+          { label: 'bonus', value: 'bonus' },
+        ],
+      },
     },
     {
       component: 'RadioGroup',

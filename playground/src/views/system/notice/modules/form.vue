@@ -11,7 +11,6 @@ import { useVbenForm } from '#/adapter/form';
 import {
   createNotice,
   preCreateNotice,
-  preUpdateNotice,
   updateNotice,
 } from '#/api/system/notice';
 import { $t } from '#/locales';
@@ -33,9 +32,6 @@ const [Form, formApi] = useVbenForm({
 });
 
 const loadingData = ref(false);
-
-const menuOptions = ref<DataNode[]>([]);
-const apiOptions = ref<DataNode[]>([]);
 
 const id = ref();
 const [Drawer, drawerApi] = useVbenDrawer({
@@ -84,7 +80,7 @@ const [Drawer, drawerApi] = useVbenDrawer({
       // get data & update field value
       if (isEdit) {
         await formApi.setValues(data);
-        await loadForUpdate(data.id, data.code); // load data, for update
+        await loadForUpdate(); // load data, for update
       } else {
         await loadForCreate(); // load data, for create
       }
@@ -97,79 +93,43 @@ async function loadForCreate() {
   loadingData.value = true;
   try {
     // load data
-    const { notices, menuRoots, apiRoots } = await preCreateNotice();
+    const { categoryList } = await preCreateNotice();
 
     // set data - notice
-    updateSchemaForNotice(notices);
-
-    // set data - menu
-    menuOptions.value = menuRoots as unknown as DataNode[];
-
-    // set data - api
-    apiOptions.value = apiRoots as unknown as DataNode[];
+    updateSchemaForNotice(categoryList);
   } finally {
     loadingData.value = false;
   }
 }
 
 // for edit, load data & update form value.
-async function loadForUpdate(id: number, code: string) {
-  loadingData.value = true;
-  try {
-    // load data
-    const { notices, inheritCodes, menuTreeWithChosen, apiTreeWithChosen } =
-      await preUpdateNotice(id);
-
-    // set data - notice
-    updateSchemaForNotice(notices, code);
-    await nextTick();
-    if (inheritCodes && inheritCodes.length > 0)
-      await formApi.setFieldValue('noticeCodes', inheritCodes); // 选中 继承的角色
-
-    // set data - menu
-    const { roots: menuRoots, chosenIds: menuChosenIds } = menuTreeWithChosen;
-    menuOptions.value = menuRoots as unknown as DataNode[];
-    await nextTick();
-    await formApi.setFieldValue('permissions', menuChosenIds); // 选中 已有的 menu
-
-    // set data - api
-    const { roots: apiRoots, chosenIds: apiChosenIds } = apiTreeWithChosen;
-    apiOptions.value = apiRoots as unknown as DataNode[];
-    await nextTick();
-    await formApi.setFieldValue('apis', apiChosenIds); // 选中 已有的 api
-  } finally {
-    loadingData.value = false;
-  }
+async function loadForUpdate() {
+  return loadForCreate();
 }
 
 /**
  * update schema
- * @param notices all notices
- * @param code current notice's code, for create it's not provided.
  */
-function updateSchemaForNotice(notices: any, code?: string) {
-  // 角色选项
-  const noticeOptions = notices.map((notice: any) => ({
-    label: notice.name,
-    value: notice.code,
-    disabled: notice.code === code, // 不可选中自己
+function updateSchemaForNotice(categoryList: any[]) {
+  const categoryOptions = categoryList.map((category: any) => ({
+    label: category,
+    value: category,
   }));
 
   // 动态更新表单字段的选项
   formApi.updateSchema([
     {
-      fieldName: 'noticeCodes',
-      component: 'TreeSelect',
-      label: $t('system.notice.setInheritNotices'),
+      component: 'Select',
+      fieldName: 'category',
+      label: $t('system.notice.category'),
+      rules: 'required',
+      // 使用 colProps 确保表单项有足够的宽度，避免缩成一团
       componentProps: {
-        treeData: noticeOptions,
+        multiple: false, // 单选
+        style: { width: '90%', minWidth: '100px' },
         allowClear: true,
-        class: 'w-full',
-        multiple: true, // 启用多选
-        treeCheckable: true,
-        showCheckedStrategy: 'SHOW_CHILD',
-        treeCheckStrictly: true, // 上/下 不关联, 可独立选择
-        treeDefaultExpandAll: true, // 默认展开所有
+        showArrow: true,
+        options: categoryOptions,
       },
     },
   ]);
