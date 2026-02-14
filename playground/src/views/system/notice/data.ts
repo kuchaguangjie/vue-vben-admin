@@ -219,7 +219,7 @@ export function useColumns<T = SystemNoticeApi.SystemNotice>(
     {
       field: 'publishedAt',
       title: $t('common.publishedAt'),
-      width: 100,
+      width: 160,
       formatter: ({ cellValue }) => formatBackendTime(cellValue), // 时间格式转换
       sortable: true,
     },
