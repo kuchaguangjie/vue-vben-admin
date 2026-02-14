@@ -13,6 +13,7 @@
   "newChild": "New Child",
   "parent": "Parent",
   "previewDetail": "Preview Detail",
+  "inputOrSelect": "Please input or select ..",
   "messages": {
     "success": "Success",
     "loading": "Loading ..",

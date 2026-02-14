@@ -13,6 +13,7 @@
   "newChild": "新增下级",
   "parent": "上级",
   "previewDetail": "详情预览",
+  "inputOrSelect": "请选择或输入..",
   "messages": {
     "success": "成功",
     "loading": "加载中",

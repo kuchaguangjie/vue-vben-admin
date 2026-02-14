@@ -64,11 +64,11 @@ export function useFormSchema(): VbenFormSchema[] {
     {
       component: 'Select',
       fieldName: 'tags',
-      label: '标签',
+      label: $t('system.notice.tags'),
       // 使用 colProps 确保表单项有足够的宽度，避免缩成一团
       componentProps: {
         mode: 'tags',
-        placeholder: '请选择或输入标签...',
+        placeholder: $t('common.inputOrSelect'),
         style: { width: '90%', minWidth: '100px' },
         allowClear: true,
         showArrow: true,
