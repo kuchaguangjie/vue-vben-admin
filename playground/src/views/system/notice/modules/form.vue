@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import type { DataNode } from 'ant-design-vue/es/tree';
-
 import type { SystemNoticeApi } from '#/api/system/notice';
 
 import { computed, nextTick, ref } from 'vue';
