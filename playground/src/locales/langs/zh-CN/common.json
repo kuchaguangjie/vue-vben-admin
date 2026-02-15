@@ -20,7 +20,8 @@
     "loadFailure": "加载失败",
     "copy": "复制",
     "copied": "复制成功",
-    "pidEqId": "不可选择自己作为父节点"
+    "pidEqId": "不可选择自己作为父节点",
+    "pleaseSelect": "请选择"
   },
   "operation": "操作",
   "operationItems":{

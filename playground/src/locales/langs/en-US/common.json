@@ -20,7 +20,8 @@
     "loadFailure": "Load Failure",
     "copy": "Copy",
     "copied": "Copied!",
-    "pidEqId": "Can't choose self as parent"
+    "pidEqId": "Can't choose self as parent",
+    "pleaseSelect": "Please select"
   },
   "operation": "Operation",
   "operationItems":{

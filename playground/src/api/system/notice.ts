@@ -9,12 +9,14 @@ export namespace SystemNoticeApi {
     [key: string]: any;
 
     category: string;
+    categoryList: string[]; // 分类列表
     data: string;
     id: number;
     push: boolean;
     status: number;
     tags: string[];
     title: string;
+    totalUnread: number; // 总未读数量 (for user)
     version: number;
   }
 }

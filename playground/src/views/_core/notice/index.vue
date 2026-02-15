@@ -8,13 +8,7 @@ import { Page, useVbenModal } from '@vben/common-ui';
 import { Button, message, Tag } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import {
-  countUnreadNotice,
-  getNoticeCategoryList,
-  getNoticeDetail,
-  getNoticePage,
-  readNotice,
-} from '#/api/core/notice';
+import { getNoticeDetail, getNoticePage, readNotice } from '#/api/core/notice';
 import { $t } from '#/locales';
 import { formatBackendTime } from '#/utils/value-format';
 
@@ -22,29 +16,8 @@ const [NoticeModal, modalApi] = useVbenModal();
 const currentDetail = ref<any>(null);
 const unreadCount = ref(0);
 
-// 更新未读总数
-async function updateUnreadCount() {
-  try {
-    const res = await countUnreadNotice();
-    unreadCount.value = res.totalUnread || 0;
-  } catch (error) {
-    console.error('获取未读数失败', error);
-  }
-}
-
-// 获取分类列表
-async function fetchCategories() {
-  try {
-    const list = await getNoticeCategoryList();
-    const options = list.map((item) => ({ label: item, value: item }));
-    gridApi.formApi.updateSchema([
-      {
-        fieldName: 'category',
-        componentProps: { options },
-      },
-    ]);
-  } catch {}
-}
+// 用于追踪分类是否已填充，避免重复更新 schema
+const isCategoryFilled = ref(false);
 
 const [Grid, gridApi] = useVbenVxeGrid({
   formOptions: {
@@ -68,6 +41,7 @@ const [Grid, gridApi] = useVbenVxeGrid({
         label: $t('system.notice.category'),
         componentProps: {
           allowClear: true,
+          placeholder: $t('common.messages.pleaseSelect'),
         },
       },
     ],
@@ -84,11 +58,9 @@ const [Grid, gridApi] = useVbenVxeGrid({
     onSortChange() {
       gridApi.query();
     },
-    // 【关键修改 1】: 如果不使用工具栏按钮，直接禁用 toolbar 以消除占位
     toolbarConfig: {
       enabled: false,
     },
-    // 【关键修改 2】: 最小高度设为 0，防止 Grid 自动撑开
     minHeight: 0,
     size: 'small',
     columns: [
@@ -132,6 +104,7 @@ const [Grid, gridApi] = useVbenVxeGrid({
             page: page.currentPage,
             pageSize: page.pageSize,
             ...formData,
+            includeTotalUnread: true, // 请求总未读数
           };
 
           if (sort && sort.field) {
@@ -139,10 +112,32 @@ const [Grid, gridApi] = useVbenVxeGrid({
             params.sortDesc = sort.order === 'desc';
           }
 
-          return await getNoticePage(params);
+          const result = await getNoticePage(params);
+
+          // 1. 同步全站未读总数
+          if (result && typeof result.totalUnread === 'number') {
+            unreadCount.value = result.totalUnread;
+          }
+
+          // 2. 动态填充分类下拉框
+          if (result?.categoryList && !isCategoryFilled.value) {
+            const options = result.categoryList.map((item: string) => ({
+              label: item,
+              value: item,
+            }));
+            gridApi.formApi.updateSchema([
+              {
+                fieldName: 'category',
+                componentProps: { options },
+              },
+            ]);
+            // 如果分类列表是动态可变的，可以去掉 isCategoryFilled 的判断，每次都更新
+            isCategoryFilled.value = true;
+          }
+
+          return result;
         },
       },
-      // 这里已经删除了 afterQuery，保持“静默”
     },
   } as VxeTableGridOptions,
 });
@@ -155,7 +150,7 @@ async function handleView(row: any) {
 
     if (row.isRead === false || row.readStatus === 2) {
       const res = await readNotice(row.id);
-      // 利用 readNotice 返回的 totalUnread 同步，不再发送 countUnread 请求
+      // 直接同步 read 接口返回的最新未读数
       if (res && typeof res.totalUnread === 'number') {
         unreadCount.value = res.totalUnread;
       }
@@ -168,8 +163,7 @@ async function handleView(row: any) {
 }
 
 onMounted(() => {
-  fetchCategories();
-  updateUnreadCount();
+  // 保持沉默，所有数据初始加载都交给 Grid 的 ajax.query
 });
 </script>
 
@@ -220,14 +214,16 @@ onMounted(() => {
           </Tag>
         </div>
         <hr class="my-4" />
-        <div class="prose prose-sm max-w-none dark:prose-invert"></div>
+        <div
+          class="prose prose-sm max-w-none dark:prose-invert"
+          v-html="currentDetail.data"
+        ></div>
       </div>
     </NoticeModal>
   </Page>
 </template>
 
 <style scoped>
-/* 【关键修改 3】: 强制移除 Vben 组件内部残留的间距 */
 :deep(.vben-vxe-grid) {
   padding-top: 0 !important;
 }
@@ -237,7 +233,6 @@ onMounted(() => {
   margin-bottom: 0 !important;
 }
 
-/* 移除工具栏占位高度 */
 :deep(.vxe-tools--wrapper),
 :deep(.vxe-toolbar) {
   display: none !important;
