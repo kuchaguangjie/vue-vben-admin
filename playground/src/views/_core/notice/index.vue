@@ -8,7 +8,11 @@ import { Page, useVbenModal } from '@vben/common-ui';
 import { Button, message, Tag } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import { getNoticeDetailForUser, getNoticePageForUser, readNotice } from '#/api/core/notice';
+import {
+  getNoticeDetailForUser,
+  getNoticePageForUser,
+  readNotice,
+} from '#/api/core/notice';
 import { $t } from '#/locales';
 import { formatBackendTime } from '#/utils/value-format';
 
@@ -222,27 +226,3 @@ onMounted(() => {
     </NoticeModal>
   </Page>
 </template>
-
-<style scoped>
-:deep(.vben-vxe-grid) {
-  padding-top: 0 !important;
-}
-
-:deep(.vben-vxe-grid__form-wrapper) {
-  padding-bottom: 0 !important;
-  margin-bottom: 0 !important;
-}
-
-:deep(.vxe-tools--wrapper),
-:deep(.vxe-toolbar) {
-  display: none !important;
-  height: 0 !important;
-  min-height: 0 !important;
-  padding: 0 !important;
-  margin: 0 !important;
-}
-
-:deep(.ant-form) {
-  padding-bottom: 8px !important;
-}
-</style>
