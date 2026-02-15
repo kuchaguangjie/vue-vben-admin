@@ -50,6 +50,15 @@ const coreRoutes: RouteRecordRaw[] = [
           affixTabOrder: 0,
         },
       },
+      {
+        name: 'Notice',
+        path: '/notice',
+        component: () => import('#/views/_core/notice/index.vue'),
+        meta: {
+          title: '消息通知',
+          icon: 'ant-design:bell-outlined',
+        },
+      },
     ],
   },
   {

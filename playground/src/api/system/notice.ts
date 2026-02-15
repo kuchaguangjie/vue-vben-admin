@@ -84,14 +84,14 @@ async function preUpdateNotice(noticeId: number) {
  * 公告 详情
  * @param id 公告 ID
  */
-async function getDetailNotice(id: number) {
+async function getNoticeDetail(id: number) {
   return requestClient.get(`/system/notice/${id}`);
 }
 
 export {
   createNotice,
   deleteNotice,
-  getDetailNotice,
+  getNoticeDetail,
   getNoticeList,
   preCreateNotice,
   preUpdateNotice,

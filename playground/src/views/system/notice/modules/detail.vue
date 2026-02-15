@@ -4,7 +4,7 @@ import { nextTick, ref } from 'vue'; // 复用已有的 Schema 定义
 import { useVbenDrawer } from '@vben/common-ui';
 
 import { useVbenForm } from '#/adapter/form';
-import { getDetailNotice } from '#/api';
+import { getNoticeDetail } from '#/api';
 import { $t } from '#/locales';
 
 import { formFieldsToRemoveForPreview, useFormSchema } from '../data';
@@ -39,7 +39,7 @@ async function loadDetail(noticeId: number) {
   loadingData.value = true;
   try {
     // load data
-    const notice = await getDetailNotice(noticeId);
+    const notice = await getNoticeDetail(noticeId);
 
     // 填充 数据 - form
     await formApi.setValues(notice);

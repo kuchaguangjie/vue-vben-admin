@@ -108,6 +108,13 @@ const menus = computed(() => [
   },
   {
     handler: () => {
+      router.push({ name: 'Notice' });
+    },
+    icon: 'lucide:user',
+    text: $t('page.notice'),
+  },
+  {
+    handler: () => {
       openWindow(VBEN_DOC_URL, {
         target: '_blank',
       });
