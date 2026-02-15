@@ -13,6 +13,9 @@ async function getNoticePage(params: Recordable<any>) {
 async function getNoticeCategoryList() {
   return requestClient.get<Array<string>>('/notice/categoryList');
 }
+async function countUnreadNotice() {
+  return requestClient.get<any>('/notice/countUnread');
+}
 async function getNoticeDetail(id: number) {
   return requestClient.get(`/notice/${id}`);
 }
@@ -20,4 +23,10 @@ async function readNotice(id: number) {
   return requestClient.post(`/notice/read/${id}`);
 }
 
-export { getNoticeCategoryList, getNoticeDetail, getNoticePage, readNotice };
+export {
+  countUnreadNotice,
+  getNoticeCategoryList,
+  getNoticeDetail,
+  getNoticePage,
+  readNotice,
+};
