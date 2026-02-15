@@ -1,10 +1,12 @@
-import { computed } from 'vue';
+import { computed, h } from 'vue';
 
+import { $t } from '@vben/locales'; // 确保引入了路由实例
 import { useAccessStore } from '@vben/stores';
 
 import { useWebSocket } from '@vueuse/core';
 import { notification } from 'ant-design-vue';
 
+import { router } from '#/router';
 import { useAuthStore } from '#/store';
 
 const authStore = useAuthStore();
@@ -34,14 +36,12 @@ export function useWs() {
 
     // 监听连接成功
     onConnected() {
-      // eslint-disable-next-line no-console
-      console.info('[WS] Connected');
+      // console.info('[WS] Connected');
     },
 
     // 监听连接断开
     onDisconnected() {
-      // eslint-disable-next-line no-console
-      console.info('[WS] Disconnected');
+      // console.info('[WS] Disconnected');
     },
 
     // 处理 data frame
@@ -58,33 +58,47 @@ export function useWs() {
 
   // 3. 业务数据处理
   async function handleBusinessData(msg: any) {
-    // eslint-disable-next-line no-console
-    console.debug('[WS] Received Business Data:', msg);
+    // console.debug('[WS] Received Business Data:', msg);
     switch (msg.action) {
       case 'hello': {
-        // eslint-disable-next-line no-console
-        console.debug('[WS] hello');
+        console.warn('[WS] hello');
         break;
       }
       case 'kickout': {
-        // eslint-disable-next-line no-console
-        console.debug('[WS] kicked out');
+        console.warn('[WS] kicked out');
         await authStore.logout(); // 下线
         break;
       }
       case 'notice': {
-        // eslint-disable-next-line no-console
-        console.debug('[WS] notice:', msg.data);
         notification.info({
-          message: `公告 【${msg.data.title}】`,
-          description: `请到 [公告管理] 查看详情`,
+          message: `${$t('system.notice.moduleShort')} 【${msg.data.title}】`,
+          description: () =>
+            h('div', [
+              `${$t('system.notice.jumpTip.part1')} `,
+              h(
+                'a',
+                {
+                  class: 'text-primary underline cursor-pointer',
+                  onClick: async (e: Event) => {
+                    e.preventDefault();
+                    await router.push({
+                      // path: '/notice',
+                      name: 'Notice',
+                    });
+
+                    notification.destroy();
+                  },
+                },
+                `[${$t('system.notice.moduleShort')}]`,
+              ),
+              ` ${$t('system.notice.jumpTip.part2')}`,
+            ]),
           duration: 0,
         });
         break;
       }
       default: {
-        // eslint-disable-next-line no-console
-        console.debug('[WS] other action:', msg.action);
+        console.warn('[WS] unknown action:', msg.action);
         break;
       }
     }

@@ -8,7 +8,7 @@ import { Page, useVbenModal } from '@vben/common-ui';
 import { Button, message, Tag } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import { getNoticeDetail, getNoticePage, readNotice } from '#/api/core/notice';
+import { getNoticeDetailForUser, getNoticePageForUser, readNotice } from '#/api/core/notice';
 import { $t } from '#/locales';
 import { formatBackendTime } from '#/utils/value-format';
 
@@ -112,7 +112,7 @@ const [Grid, gridApi] = useVbenVxeGrid({
             params.sortDesc = sort.order === 'desc';
           }
 
-          const result = await getNoticePage(params);
+          const result = await getNoticePageForUser(params);
 
           // 1. 同步全站未读总数
           if (result && typeof result.totalUnread === 'number') {
@@ -144,7 +144,7 @@ const [Grid, gridApi] = useVbenVxeGrid({
 
 async function handleView(row: any) {
   try {
-    const detail = await getNoticeDetail(row.id);
+    const detail = await getNoticeDetailForUser(row.id);
     currentDetail.value = detail;
     modalApi.open();
 

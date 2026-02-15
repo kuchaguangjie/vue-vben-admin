@@ -4,19 +4,16 @@ import type { SystemNoticeApi } from '#/api';
 
 import { requestClient } from '#/api/request';
 
-async function getNoticePage(params: Recordable<any>) {
+async function getNoticePageForUser(params: Recordable<any>) {
   return requestClient.get<Array<SystemNoticeApi.SystemNotice>>(
     '/notice/page',
     { params },
   );
 }
-async function getNoticeCategoryList() {
-  return requestClient.get<Array<string>>('/notice/categoryList');
-}
 async function countUnreadNotice() {
   return requestClient.get<any>('/notice/countUnread');
 }
-async function getNoticeDetail(id: number) {
+async function getNoticeDetailForUser(id: number) {
   return requestClient.get(`/notice/${id}`);
 }
 async function readNotice(id: number) {
@@ -25,8 +22,7 @@ async function readNotice(id: number) {
 
 export {
   countUnreadNotice,
-  getNoticeCategoryList,
-  getNoticeDetail,
-  getNoticePage,
+  getNoticeDetailForUser,
+  getNoticePageForUser,
   readNotice,
 };

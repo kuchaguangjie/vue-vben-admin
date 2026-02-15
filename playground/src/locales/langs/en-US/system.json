@@ -208,6 +208,10 @@
       "read": "Read",
       "unread": "Unread"
     },
+    "jumpTip": {
+      "part1": "Please go to",
+      "part2": "to view"
+    },
     "data": "Content"
   }
 }

@@ -4,7 +4,7 @@ import { nextTick, ref } from 'vue'; // 复用已有的 Schema 定义
 import { useVbenDrawer } from '@vben/common-ui';
 
 import { useVbenForm } from '#/adapter/form';
-import { getNoticeDetail } from '#/api';
+import { getNoticeDetail } from '#/api/system/notice';
 import { $t } from '#/locales';
 
 import { formFieldsToRemoveForPreview, useFormSchema } from '../data';
