@@ -14,6 +14,9 @@
     "analytics": "分析页",
     "workspace": "工作台"
   },
+  "misc": {
+    "notice": "公告"
+  },
   "dummy": {
     "title": "虚拟"
   }

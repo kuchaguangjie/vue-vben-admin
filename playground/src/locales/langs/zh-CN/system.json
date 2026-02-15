@@ -195,6 +195,7 @@
   "notice": {
     "module": "公告管理",
     "moduleShort": "公告",
+    "detail": "公告详情",
     "list": "公告列表",
     "title": "标题",
     "category": "分类",
@@ -203,6 +204,12 @@
     "statusOption": {
       "draft": "草稿",
       "published": "发布"
+    },
+    "readStatus": "已读状态",
+    "readStatusOption": {
+      "all": "全部",
+      "read": "已读",
+      "unread": "未读"
     },
     "data": "内容"
   }

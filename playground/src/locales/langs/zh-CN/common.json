@@ -17,11 +17,15 @@
   "messages": {
     "success": "成功",
     "loading": "加载中",
+    "loadFailure": "加载失败",
     "copy": "复制",
     "copied": "复制成功",
     "pidEqId": "不可选择自己作为父节点"
   },
   "operation": "操作",
+  "operationItems":{
+    "open": "查看"
+  },
   "action": {
     "close": "关闭"
   },

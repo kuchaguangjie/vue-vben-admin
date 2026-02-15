@@ -15,6 +15,8 @@ import {
   getNoticePage,
   readNotice,
 } from '#/api/core/notice';
+import { $t } from '#/locales';
+import { formatBackendTime } from '#/utils/value-format';
 
 const [NoticeModal, modalApi] = useVbenModal();
 const currentDetail = ref<any>(null);
@@ -52,58 +54,72 @@ const [Grid, gridApi] = useVbenVxeGrid({
         component: 'Select',
         componentProps: {
           options: [
-            { label: '全部', value: null },
-            { label: '已读', value: 1 },
-            { label: '未读', value: 2 }, // 修正：后端通常 0 是未读，如果是 2 请按实际修改
+            { label: $t('system.notice.readStatusOption.all'), value: null },
+            { label: $t('system.notice.readStatusOption.read'), value: 1 },
+            { label: $t('system.notice.readStatusOption.unread'), value: 2 },
           ],
         },
         fieldName: 'readStatus',
-        label: '状态',
+        label: $t('system.notice.readStatus'),
       },
       {
         component: 'Select',
         fieldName: 'category',
-        label: '分类',
+        label: $t('system.notice.category'),
         componentProps: {
-          placeholder: '请选择分类',
           allowClear: true,
         },
       },
     ],
   },
   gridOptions: {
-    // 关键：开启远程排序
     sortConfig: {
-      remote: true, // 远程排序
-      trigger: 'default', // 点击表头触发
-      orders: ['asc', 'desc', null], // 排序顺序
+      remote: true,
+      trigger: 'default',
+      orders: ['asc', 'desc', null],
     },
-    // 启用远程模式
     remote: {
-      sort: true, // 远程排序
+      sort: true,
     },
-    // 排序变化事件
     onSortChange() {
       gridApi.query();
     },
+    // 【关键修改 1】: 如果不使用工具栏按钮，直接禁用 toolbar 以消除占位
     toolbarConfig: {
-      slots: {
-        buttons: 'toolbar-buttons', // 自定义工具栏左侧按钮
-      },
+      enabled: false,
     },
+    // 【关键修改 2】: 最小高度设为 0，防止 Grid 自动撑开
+    minHeight: 0,
+    size: 'small',
     columns: [
       { title: 'ID', field: 'id', width: 80, sortable: true },
-      { title: '标题', field: 'title', minWidth: 200, sortable: true },
-      { title: '分类', field: 'category', width: 120, sortable: true },
       {
-        title: '状态',
+        title: $t('system.notice.title'),
+        field: 'title',
+        minWidth: 200,
+        sortable: true,
+      },
+      {
+        title: $t('system.notice.category'),
+        field: 'category',
+        width: 120,
+        sortable: true,
+      },
+      {
+        title: $t('system.notice.readStatus'),
         field: 'isRead',
         width: 100,
         slots: { default: 'status' },
       },
-      { title: '发布时间', field: 'publishedAt', width: 180, sortable: true },
       {
-        title: '操作',
+        title: $t('common.publishedAt'),
+        field: 'publishedAt',
+        width: 180,
+        sortable: true,
+        formatter: ({ cellValue }) => formatBackendTime(cellValue),
+      },
+      {
+        title: $t('common.operation'),
         width: 80,
         fixed: 'right',
         slots: { default: 'action' },
@@ -118,7 +134,6 @@ const [Grid, gridApi] = useVbenVxeGrid({
             ...formData,
           };
 
-          // 排序处理：点击排序图标时会触发此 query
           if (sort && sort.field) {
             params.sortBy = sort.field;
             params.sortDesc = sort.order === 'desc';
@@ -127,9 +142,7 @@ const [Grid, gridApi] = useVbenVxeGrid({
           return await getNoticePage(params);
         },
       },
-      afterQuery: () => {
-        updateUnreadCount();
-      },
+      // 这里已经删除了 afterQuery，保持“静默”
     },
   } as VxeTableGridOptions,
 });
@@ -140,15 +153,17 @@ async function handleView(row: any) {
     currentDetail.value = detail;
     modalApi.open();
 
-    // 如果未读则标记已读
-    if (row.isRead === false || row.status === 0) {
-      await readNotice(row.id);
+    if (row.isRead === false || row.readStatus === 2) {
+      const res = await readNotice(row.id);
+      // 利用 readNotice 返回的 totalUnread 同步，不再发送 countUnread 请求
+      if (res && typeof res.totalUnread === 'number') {
+        unreadCount.value = res.totalUnread;
+      }
       row.isRead = true;
-      row.status = 1;
-      updateUnreadCount();
+      row.readStatus = 1;
     }
   } catch {
-    message.error('详情加载失败');
+    message.error($t('common.messages.loadFailure'));
   }
 }
 
@@ -159,11 +174,12 @@ onMounted(() => {
 </script>
 
 <template>
-  <Page title="公告">
+  <Page :title="$t('system.notice.moduleShort')" content-class="p-2">
     <template #extra>
       <div v-if="unreadCount > 0" class="flex items-center">
         <Tag color="red" class="cursor-default">
-          {{ unreadCount }} 条未读消息
+          {{ unreadCount }}
+          {{ $t('system.notice.readStatusOption.unread') }}
         </Tag>
       </div>
     </template>
@@ -171,22 +187,31 @@ onMounted(() => {
     <Grid>
       <template #status="{ row }">
         <Tag :color="row.isRead ? 'default' : 'red'">
-          {{ row.isRead ? '已读' : '未读' }}
+          {{
+            row.isRead
+              ? $t('system.notice.readStatusOption.read')
+              : $t('system.notice.readStatusOption.unread')
+          }}
         </Tag>
       </template>
 
       <template #action="{ row }">
-        <Button type="link" size="small" @click="handleView(row)">查看</Button>
+        <Button type="link" size="small" @click="handleView(row)">
+          {{ $t('common.operationItems.open') }}
+        </Button>
       </template>
     </Grid>
 
-    <NoticeModal title="公告详情" :footer="false">
+    <NoticeModal :title="$t('system.notice.detail')" :footer="false">
       <div v-if="currentDetail" class="max-h-[70vh] overflow-y-auto p-4">
         <div class="mb-4">
           <h2 class="text-xl font-bold">{{ currentDetail.title }}</h2>
           <div class="mt-2 flex items-center gap-3 text-xs text-gray-400">
             <span>ID: {{ currentDetail.id }}</span>
-            <span>发布时间: {{ currentDetail.publishedAt }}</span>
+            <span>
+              {{ $t('common.publishedAt') }}:
+              {{ formatBackendTime(currentDetail.publishedAt) }}
+            </span>
           </div>
         </div>
         <div class="mb-4 flex gap-2">
@@ -195,11 +220,34 @@ onMounted(() => {
           </Tag>
         </div>
         <hr class="my-4" />
-        <div
-          class="prose prose-sm max-w-none dark:prose-invert"
-          v-html="currentDetail.data"
-        ></div>
+        <div class="prose prose-sm max-w-none dark:prose-invert"></div>
       </div>
     </NoticeModal>
   </Page>
 </template>
+
+<style scoped>
+/* 【关键修改 3】: 强制移除 Vben 组件内部残留的间距 */
+:deep(.vben-vxe-grid) {
+  padding-top: 0 !important;
+}
+
+:deep(.vben-vxe-grid__form-wrapper) {
+  padding-bottom: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+/* 移除工具栏占位高度 */
+:deep(.vxe-tools--wrapper),
+:deep(.vxe-toolbar) {
+  display: none !important;
+  height: 0 !important;
+  min-height: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+:deep(.ant-form) {
+  padding-bottom: 8px !important;
+}
+</style>

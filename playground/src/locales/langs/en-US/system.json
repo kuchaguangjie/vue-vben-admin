@@ -192,6 +192,7 @@
   "notice": {
     "module": "Notice Mgr",
     "moduleShort": "Notice",
+    "detail": "Notice Detail",
     "title": "Title",
     "list": "Notice List",
     "category": "Category",
@@ -200,6 +201,12 @@
     "statusOption": {
       "draft": "Draft",
       "published": "Published"
+    },
+    "readStatus": "Read Status",
+    "readStatusOption": {
+      "all": "All",
+      "read": "Read",
+      "unread": "Unread"
     },
     "data": "Content"
   }

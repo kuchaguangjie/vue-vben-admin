@@ -17,11 +17,15 @@
   "messages": {
     "success": "Success",
     "loading": "Loading ..",
+    "loadFailure": "Load Failure",
     "copy": "Copy",
     "copied": "Copied!",
     "pidEqId": "Can't choose self as parent"
   },
   "operation": "Operation",
+  "operationItems":{
+    "open": "Open"
+  },
   "action": {
     "close": "Close"
   },

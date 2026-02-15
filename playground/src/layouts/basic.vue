@@ -110,8 +110,8 @@ const menus = computed(() => [
     handler: () => {
       router.push({ name: 'Notice' });
     },
-    icon: 'lucide:user',
-    text: $t('page.notice'),
+    icon: 'lucide:megaphone',
+    text: $t('page.misc.notice'),
   },
   {
     handler: () => {
