@@ -4,7 +4,6 @@ import type { VxeTableGridOptions } from '#/adapter/vxe-table';
 import { onMounted, ref } from 'vue';
 
 import { Page, useVbenModal } from '@vben/common-ui';
-import { BookOpenText } from '@vben/icons';
 
 import { Button, message, Tag } from 'ant-design-vue';
 
