@@ -20,4 +20,4 @@ async function readNotice(id: number) {
   return requestClient.post(`/notice/read/${id}`);
 }
 
-export { getNoticeDetail, getNoticePage, readNotice, getNoticeCategoryList };
+export { getNoticeCategoryList, getNoticeDetail, getNoticePage, readNotice };
