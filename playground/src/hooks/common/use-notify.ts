@@ -1,5 +1,6 @@
-import { ref } from 'vue';
 import type { NotificationItem } from '@vben/layouts';
+
+import { ref } from 'vue';
 
 export const notifications = ref<NotificationItem[]>([
   /*

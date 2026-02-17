@@ -6,9 +6,9 @@ import { useAccessStore } from '@vben/stores';
 import { useWebSocket } from '@vueuse/core';
 import { notification } from 'ant-design-vue';
 
+import { notifications } from '#/hooks/common/use-notify';
 import { router } from '#/router';
 import { useAuthStore } from '#/store';
-import { notifications } from '#/hooks/common/use-notify';
 
 const authStore = useAuthStore();
 

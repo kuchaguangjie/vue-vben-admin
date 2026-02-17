@@ -2,10 +2,11 @@ import type { VbenFormSchema } from '#/adapter/form';
 import type { OnActionClickFn, VxeTableGridOptions } from '#/adapter/vxe-table';
 import type { SystemNoticeApi } from '#/api';
 
+import { ref } from 'vue';
+
 import { $t } from '#/locales';
 import { usePreviewLink } from '#/utils/use-preview-link';
 import { formatBackendTime } from '#/utils/value-format';
-import { ref } from 'vue';
 
 export const categoryMap = ref<Record<number, string>>({}); // id > name
 export function categoryIdToMap(id: number): string {
