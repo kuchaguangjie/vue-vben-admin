@@ -75,20 +75,20 @@ const [Grid, gridApi] = useVbenVxeGrid({
       {
         title: $t('system.notice.title'),
         field: 'title',
-        minWidth: 200,
+        minWidth: 160, // 自适应宽度
         sortable: true,
       },
       {
         title: $t('system.notice.category'),
         field: 'categoryId',
-        width: 120,
+        width: 140,
         sortable: true,
         formatter: ({ cellValue }) => categoryIdToNameMap(cellValue),
       },
       {
         title: $t('system.notice.readStatus'),
         field: 'isRead',
-        width: 100,
+        width: 90,
         slots: { default: 'status' },
       },
       {
