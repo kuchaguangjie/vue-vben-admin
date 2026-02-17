@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 import type { SystemNoticeApi } from '#/api/system/notice';
-import { createNotice, updateNotice } from '#/api/system/notice';
 
 import { computed, nextTick, ref } from 'vue';
 
 import { useVbenDrawer } from '@vben/common-ui';
 
 import { useVbenForm } from '#/adapter/form';
+import { createNotice, updateNotice } from '#/api/system/notice';
 import { $t } from '#/locales';
 import { extractTreeValue } from '#/utils/value-format';
 

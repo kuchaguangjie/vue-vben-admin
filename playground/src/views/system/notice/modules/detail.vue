@@ -7,11 +7,7 @@ import { useVbenForm } from '#/adapter/form';
 import { getNoticeDetail } from '#/api/system/notice';
 import { $t } from '#/locales';
 
-import {
-  categoryIdToNameMap,
-  formFieldsToRemoveForPreview,
-  useFormSchema,
-} from '../data';
+import { formFieldsToRemoveForPreview, useFormSchema } from '../data';
 
 const loadingData = ref(false);
 

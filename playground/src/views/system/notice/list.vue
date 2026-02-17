@@ -5,16 +5,17 @@ import type {
   OnActionClickParams,
   VxeTableGridOptions,
 } from '#/adapter/vxe-table';
-import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import type { SystemNoticeApi } from '#/api';
-import { deleteNotice, getNoticeList, updateNoticeStatus } from '#/api';
 import type { PageParams } from '#/api/request';
-import { doPageQuery } from '#/api/request';
 
 import { Page, useVbenDrawer } from '@vben/common-ui';
 import { Plus } from '@vben/icons';
 
 import { Button, message } from 'ant-design-vue';
+
+import { useVbenVxeGrid } from '#/adapter/vxe-table';
+import { deleteNotice, getNoticeList, updateNoticeStatus } from '#/api';
+import { doPageQuery } from '#/api/request';
 import { $t } from '#/locales';
 import { confirmDialog } from '#/utils/dialog';
 import { usePagerConfig } from '#/utils/pager';
