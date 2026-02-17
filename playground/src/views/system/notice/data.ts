@@ -9,7 +9,7 @@ import { usePreviewLink } from '#/utils/use-preview-link';
 import { formatBackendTime } from '#/utils/value-format';
 
 export const categoryMap = ref<Record<number, string>>({}); // id > name
-export function categoryIdToMap(id: number): string {
+export function categoryIdToNameMap(id: number): string {
   return categoryMap.value[id] || '';
 }
 
@@ -39,10 +39,6 @@ export function useFormSchema(): VbenFormSchema[] {
         style: { width: '90%', minWidth: '100px' },
         allowClear: true,
         showArrow: true,
-        options: [
-          { label: 'holiday', value: 'holiday' },
-          { label: 'bonus', value: 'bonus' },
-        ],
       },
     },
     {
@@ -136,7 +132,7 @@ export function useGridFormSchema(): VbenFormSchema[] {
     },
     {
       component: 'Input',
-      fieldName: 'category',
+      fieldName: 'categoryId',
       label: $t('system.notice.category'),
       componentProps: {
         allowClear: true,
@@ -196,10 +192,11 @@ export function useColumns<T = SystemNoticeApi.SystemNotice>(
       sortable: true,
     },
     {
-      field: 'category',
+      field: 'categoryId',
       title: $t('system.notice.category'),
       width: 100,
       sortable: true,
+      formatter: ({ cellValue }) => categoryIdToNameMap(cellValue),
     },
     {
       field: 'push',

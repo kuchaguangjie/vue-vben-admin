@@ -1,13 +1,16 @@
 <script lang="ts" setup>
 import { nextTick, ref } from 'vue'; // 复用已有的 Schema 定义
-
 import { useVbenDrawer } from '@vben/common-ui';
 
 import { useVbenForm } from '#/adapter/form';
 import { getNoticeDetail } from '#/api/system/notice';
 import { $t } from '#/locales';
 
-import { formFieldsToRemoveForPreview, useFormSchema } from '../data';
+import {
+  categoryIdToNameMap,
+  formFieldsToRemoveForPreview,
+  useFormSchema,
+} from '../data';
 
 const loadingData = ref(false);
 
@@ -40,6 +43,7 @@ async function loadDetail(noticeId: number) {
   try {
     // load data
     const notice = await getNoticeDetail(noticeId);
+    notice.categoryId = categoryIdToNameMap(notice.categoryId); // id > name 转换, 没有 option 选项, 直接显示;
 
     // 填充 数据 - form
     await formApi.setValues(notice);

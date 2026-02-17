@@ -22,7 +22,7 @@ const currentDetail = ref<any>(null);
 const unreadCount = ref(0);
 
 const categoryMap = ref<Record<number, string>>({}); // id > name
-function categoryIdToMap(id: number): string {
+function categoryIdToNameMap(id: number): string {
   return categoryMap.value[id] || '';
 }
 
@@ -83,7 +83,7 @@ const [Grid, gridApi] = useVbenVxeGrid({
         field: 'categoryId',
         width: 120,
         sortable: true,
-        formatter: ({ cellValue }) => categoryIdToMap(cellValue),
+        formatter: ({ cellValue }) => categoryIdToNameMap(cellValue),
       },
       {
         title: $t('system.notice.readStatus'),
@@ -216,7 +216,7 @@ onMounted(() => {
             <span>ID: {{ currentDetail.id }}</span>
             <span>
               {{ $t('system.notice.category') }}:
-              {{ categoryIdToMap(currentDetail.categoryId) }}
+              {{ categoryIdToNameMap(currentDetail.categoryId) }}
             </span>
             <span>
               {{ $t('common.publishedAt') }}:

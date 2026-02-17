@@ -1,16 +1,16 @@
 <script lang="ts" setup>
 import type { SystemNoticeApi } from '#/api/system/notice';
+import {
+  createNotice,
+  preCreateNotice,
+  updateNotice,
+} from '#/api/system/notice';
 
 import { computed, nextTick, ref } from 'vue';
 
 import { useVbenDrawer } from '@vben/common-ui';
 
 import { useVbenForm } from '#/adapter/form';
-import {
-  createNotice,
-  preCreateNotice,
-  updateNotice,
-} from '#/api/system/notice';
 import { $t } from '#/locales';
 import { extractTreeValue } from '#/utils/value-format';
 
@@ -109,9 +109,9 @@ async function loadForUpdate() {
  * update schema
  */
 function updateSchemaForNotice(categoryList: any[]) {
-  const categoryOptions = categoryList.map((category: any) => ({
-    label: category.name,
-    value: category.id,
+  const categoryOptions = categoryList.map((item: any) => ({
+    label: item.name,
+    value: item.id,
   }));
 
   // 动态更新表单字段的选项
