@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import type { VxeTableGridOptions } from '#/adapter/vxe-table';
-import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import type { SystemNoticeApi } from '#/api';
 
 import { onMounted, ref } from 'vue';
@@ -8,6 +7,8 @@ import { onMounted, ref } from 'vue';
 import { Page, useVbenModal } from '@vben/common-ui';
 
 import { Button, message, Tag } from 'ant-design-vue';
+
+import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import {
   getNoticeDetailForUser,
   getNoticePageForUser,

@@ -56,7 +56,7 @@ const coreRoutes: RouteRecordRaw[] = [
         component: () => import('#/views/_core/notice/index.vue'),
         meta: {
           title: $t('page.misc.notice'),
-          icon: 'ant-design:bell-outlined',
+          icon: 'lucide:megaphone',
         },
       },
     ],
