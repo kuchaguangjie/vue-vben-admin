@@ -16,12 +16,12 @@ import { preferences } from '@vben/preferences';
 import { useAccessStore, useTabbarStore, useUserStore } from '@vben/stores';
 import { openWindow } from '@vben/utils';
 
+import { countUnreadNotice } from '#/api';
 import { notifications } from '#/hooks/common/use-notify';
 import { useWs } from '#/hooks/common/use-ws';
 import { $t } from '#/locales';
 import { useAuthStore } from '#/store';
 import LoginForm from '#/views/_core/authentication/login.vue';
-import { countUnreadNotice } from '#/api';
 
 const { setMenuList } = useTabbarStore();
 setMenuList([
