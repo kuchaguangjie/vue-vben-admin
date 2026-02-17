@@ -5,6 +5,12 @@ import type { SystemNoticeApi } from '#/api';
 import { $t } from '#/locales';
 import { usePreviewLink } from '#/utils/use-preview-link';
 import { formatBackendTime } from '#/utils/value-format';
+import { ref } from 'vue';
+
+export const categoryMap = ref<Record<number, string>>({}); // id > name
+export function categoryIdToMap(id: number): string {
+  return categoryMap.value[id] || '';
+}
 
 // form - new/edit
 export function useFormSchema(): VbenFormSchema[] {
@@ -23,7 +29,7 @@ export function useFormSchema(): VbenFormSchema[] {
     },
     {
       component: 'Select',
-      fieldName: 'category',
+      fieldName: 'categoryId',
       label: $t('system.notice.category'),
       rules: 'required',
       // 使用 colProps 确保表单项有足够的宽度，避免缩成一团

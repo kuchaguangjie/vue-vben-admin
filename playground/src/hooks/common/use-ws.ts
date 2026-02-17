@@ -8,6 +8,7 @@ import { notification } from 'ant-design-vue';
 
 import { router } from '#/router';
 import { useAuthStore } from '#/store';
+import { notifications } from '#/hooks/common/use-notify';
 
 const authStore = useAuthStore();
 
@@ -70,6 +71,15 @@ export function useWs() {
         break;
       }
       case 'notice': {
+        notifications.value.push({
+          id: `notify:${msg.data.id}`,
+          avatar: 'lucide:megaphone',
+          date: '',
+          isRead: false,
+          link: '/notice',
+          message: `${msg.data.title}`,
+          title: '收到了 1个新公告',
+        });
         notification.info({
           message: `${$t('system.notice.moduleShort')} 【${msg.data.title}】`,
           description: () =>
@@ -104,9 +114,6 @@ export function useWs() {
     }
   }
 
-  /**
-   * 手动触发连接
-   */
   function connect() {
     if (!wsUrl.value) return; // 有 token 才 连接;
     open();

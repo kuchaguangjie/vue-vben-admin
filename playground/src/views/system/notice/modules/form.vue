@@ -110,15 +110,15 @@ async function loadForUpdate() {
  */
 function updateSchemaForNotice(categoryList: any[]) {
   const categoryOptions = categoryList.map((category: any) => ({
-    label: category,
-    value: category,
+    label: category.name,
+    value: category.id,
   }));
 
   // 动态更新表单字段的选项
   formApi.updateSchema([
     {
       component: 'Select',
-      fieldName: 'category',
+      fieldName: 'categoryId',
       label: $t('system.notice.category'),
       rules: 'required',
       // 使用 colProps 确保表单项有足够的宽度，避免缩成一团
