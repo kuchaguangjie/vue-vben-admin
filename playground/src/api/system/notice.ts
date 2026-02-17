@@ -5,11 +5,14 @@ import type { CommonType } from '#/api';
 import { requestClient } from '#/api/request';
 
 export namespace SystemNoticeApi {
-  export interface SystemNotice {
-    [key: string]: any;
+  export interface SystemNoticeCategory {
+    id: number;
+    name: string;
+  }
 
-    category: string;
-    categoryList: string[]; // 分类列表
+  export interface SystemNotice {
+    categoryId: number;
+    categoryList: SystemNoticeCategory[]; // 分类列表
     data: string;
     id: number;
     push: boolean;

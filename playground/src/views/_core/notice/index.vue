@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import type { VxeTableGridOptions } from '#/adapter/vxe-table';
+import { useVbenVxeGrid } from '#/adapter/vxe-table';
+import type { SystemNoticeApi } from '#/api';
 
 import { onMounted, ref } from 'vue';
 
 import { Page, useVbenModal } from '@vben/common-ui';
 
 import { Button, message, Tag } from 'ant-design-vue';
-
-import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import {
   getNoticeDetailForUser,
   getNoticePageForUser,
@@ -20,8 +20,10 @@ const [NoticeModal, modalApi] = useVbenModal();
 const currentDetail = ref<any>(null);
 const unreadCount = ref(0);
 
-// 用于追踪分类是否已填充，避免重复更新 schema
-const isCategoryFilled = ref(false);
+const categoryMap = ref<Record<number, string>>({}); // id > name
+function categoryIdToMap(id: number): string {
+  return categoryMap.value[id] || '';
+}
 
 const [Grid, gridApi] = useVbenVxeGrid({
   formOptions: {
@@ -41,7 +43,7 @@ const [Grid, gridApi] = useVbenVxeGrid({
       },
       {
         component: 'Select',
-        fieldName: 'category',
+        fieldName: 'categoryId',
         label: $t('system.notice.category'),
         componentProps: {
           allowClear: true,
@@ -77,9 +79,10 @@ const [Grid, gridApi] = useVbenVxeGrid({
       },
       {
         title: $t('system.notice.category'),
-        field: 'category',
+        field: 'categoryId',
         width: 120,
         sortable: true,
+        formatter: ({ cellValue }) => categoryIdToMap(cellValue),
       },
       {
         title: $t('system.notice.readStatus'),
@@ -124,19 +127,23 @@ const [Grid, gridApi] = useVbenVxeGrid({
           }
 
           // 2. 动态填充分类下拉框
-          if (result?.categoryList && !isCategoryFilled.value) {
-            const options = result.categoryList.map((item: string) => ({
-              label: item,
-              value: item,
-            }));
+          if (result?.categoryList) {
+            for (const item of result.categoryList) {
+              categoryMap.value[item.id] = item.name;
+            }
+            const options = result.categoryList.map(
+              (item: SystemNoticeApi.SystemNoticeCategory) => ({
+                label: item.name,
+                value: item.id,
+              }),
+            );
             gridApi.formApi.updateSchema([
               {
-                fieldName: 'category',
+                fieldName: 'categoryId',
                 componentProps: { options },
               },
             ]);
             // 如果分类列表是动态可变的，可以去掉 isCategoryFilled 的判断，每次都更新
-            isCategoryFilled.value = true;
           }
 
           return result;
@@ -206,6 +213,10 @@ onMounted(() => {
           <h2 class="text-xl font-bold">{{ currentDetail.title }}</h2>
           <div class="mt-2 flex items-center gap-3 text-xs text-gray-400">
             <span>ID: {{ currentDetail.id }}</span>
+            <span>
+              {{ $t('system.notice.category') }}:
+              {{ categoryIdToMap(currentDetail.categoryId) }}
+            </span>
             <span>
               {{ $t('common.publishedAt') }}:
               {{ formatBackendTime(currentDetail.publishedAt) }}
