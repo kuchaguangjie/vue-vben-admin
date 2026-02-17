@@ -44,7 +44,6 @@ async function loadDetail(noticeId: number) {
   try {
     // load data
     const notice = await getNoticeDetail(noticeId);
-    notice.categoryId = categoryIdToNameMap(notice.categoryId); // id > name 转换, 没有 option 选项, 直接显示;
 
     // 填充 数据 - form
     await formApi.setValues(notice);
@@ -56,7 +55,7 @@ async function loadDetail(noticeId: number) {
 
 <template>
   <Drawer
-    :title="`${$t('system.notice.module')} ${$t('common.previewDetail')}`"
+    :title="`${$t('system.notice.moduleShort')} ${$t('common.previewDetail')}`"
     :cancel-text="$t('common.action.close')"
     :show-confirm-button="false"
   >

@@ -1,16 +1,12 @@
 <script lang="ts" setup>
 import type { SystemNoticeApi } from '#/api/system/notice';
+import { createNotice, updateNotice } from '#/api/system/notice';
 
 import { computed, nextTick, ref } from 'vue';
 
 import { useVbenDrawer } from '@vben/common-ui';
 
 import { useVbenForm } from '#/adapter/form';
-import {
-  createNotice,
-  preCreateNotice,
-  updateNotice,
-} from '#/api/system/notice';
 import { $t } from '#/locales';
 import { extractTreeValue } from '#/utils/value-format';
 
@@ -90,11 +86,7 @@ const [Drawer, drawerApi] = useVbenDrawer({
 async function loadForCreate() {
   loadingData.value = true;
   try {
-    // load data
-    const { categoryList } = await preCreateNotice();
-
-    // set data - notice
-    updateSchemaForNotice(categoryList);
+    updateSchemaForNotice();
   } finally {
     loadingData.value = false;
   }
@@ -108,30 +100,7 @@ async function loadForUpdate() {
 /**
  * update schema
  */
-function updateSchemaForNotice(categoryList: any[]) {
-  const categoryOptions = categoryList.map((item: any) => ({
-    label: item.name,
-    value: item.id,
-  }));
-
-  // 动态更新表单字段的选项
-  formApi.updateSchema([
-    {
-      component: 'Select',
-      fieldName: 'categoryId',
-      label: $t('system.notice.category'),
-      rules: 'required',
-      // 使用 colProps 确保表单项有足够的宽度，避免缩成一团
-      componentProps: {
-        multiple: false, // 单选
-        style: { width: '90%', minWidth: '100px' },
-        allowClear: true,
-        showArrow: true,
-        options: categoryOptions,
-      },
-    },
-  ]);
-}
+function updateSchemaForNotice() {}
 
 const getDrawerTitle = computed(() => {
   return formData.value?.id

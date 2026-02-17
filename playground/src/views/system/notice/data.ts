@@ -8,7 +8,9 @@ import { $t } from '#/locales';
 import { usePreviewLink } from '#/utils/use-preview-link';
 import { formatBackendTime } from '#/utils/value-format';
 
-export const categoryMap = ref<Record<number, string>>({}); // id > name
+export const categoryList = ref<SystemNoticeApi.SystemNoticeCategory[]>([]); // category 列表
+export const categoryOptions = ref<any[]>([]); // category 下拉选项
+export const categoryMap = ref<Record<number, string>>({}); // category, id > name
 export function categoryIdToNameMap(id: number): string {
   return categoryMap.value[id] || '';
 }
@@ -39,6 +41,7 @@ export function useFormSchema(): VbenFormSchema[] {
         style: { width: '90%', minWidth: '100px' },
         allowClear: true,
         showArrow: true,
+        options: categoryOptions,
       },
     },
     {
@@ -131,11 +134,12 @@ export function useGridFormSchema(): VbenFormSchema[] {
       },
     },
     {
-      component: 'Input',
+      component: 'Select',
       fieldName: 'categoryId',
       label: $t('system.notice.category'),
       componentProps: {
         allowClear: true,
+        options: categoryOptions,
       },
     },
     {
