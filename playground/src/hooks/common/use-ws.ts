@@ -72,7 +72,7 @@ export function useWs() {
       }
       case 'notice': {
         notifications.value.push({
-          id: `notify:${msg.data.id}`,
+          id: `notice:${msg.data.id}`,
           avatar: 'lucide:megaphone',
           date: '',
           isRead: false,

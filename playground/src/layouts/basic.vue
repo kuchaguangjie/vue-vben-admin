@@ -21,6 +21,7 @@ import { useWs } from '#/hooks/common/use-ws';
 import { $t } from '#/locales';
 import { useAuthStore } from '#/store';
 import LoginForm from '#/views/_core/authentication/login.vue';
+import { countUnreadNotice } from '#/api';
 
 const { setMenuList } = useTabbarStore();
 setMenuList([
@@ -140,8 +141,20 @@ watch(
 
 const { connect } = useWs();
 
-onMounted(() => {
+onMounted(async () => {
   connect(); // websocket 连接
+  const { totalUnread } = await countUnreadNotice();
+  if (totalUnread > 0) {
+    notifications.value.push({
+      id: `notice:hasUnread`,
+      avatar: 'lucide:megaphone',
+      date: '',
+      isRead: false,
+      link: '/notice',
+      message: `您有 ${totalUnread} 个未读公告`,
+      title: '有未读公告',
+    });
+  }
 });
 
 onBeforeMount(() => {

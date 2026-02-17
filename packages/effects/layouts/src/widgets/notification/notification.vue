@@ -3,7 +3,13 @@ import type { NotificationItem } from './types';
 
 import { useRouter } from 'vue-router';
 
-import { Bell, CircleCheckBig, CircleX, MailCheck } from '@vben/icons';
+import {
+  Bell,
+  CircleCheckBig,
+  CircleX,
+  IconifyIcon,
+  MailCheck,
+} from '@vben/icons';
 import { $t } from '@vben/locales';
 
 import {
@@ -62,6 +68,8 @@ function handleClear() {
 }
 
 function handleClick(item: NotificationItem) {
+  emit('read', item); // 标记为已读
+
   // 如果通知项有链接，点击时跳转
   if (item.link) {
     navigateTo(item.link, item.query, item.state);
@@ -129,7 +137,17 @@ function navigateTo(
               <span
                 class="relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full"
               >
+                <IconifyIcon
+                  v-if="
+                    item.avatar &&
+                    !item.avatar.startsWith('http') && // 网络图片
+                    !item.avatar.startsWith('/') // 本地图片
+                  "
+                  :icon="item.avatar"
+                  class="size-6 text-blue-500"
+                />
                 <img
+                  v-else
                   :src="item.avatar"
                   class="aspect-square h-full w-full object-cover"
                 />
