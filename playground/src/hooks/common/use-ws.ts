@@ -10,6 +10,8 @@ import { notifications } from '#/hooks/common/use-notify';
 import { router } from '#/router';
 import { useAuthStore } from '#/store';
 
+const wsApiPath = '/ws/v1';
+
 const authStore = useAuthStore();
 
 /**
@@ -21,7 +23,9 @@ export function useWs() {
   // 1. 动态计算 URL，确保 Token 更新时能重新准备
   const wsUrl = computed(() => {
     const token = accessStore.accessToken;
-    return token ? `${import.meta.env.VITE_GLOB_WS_URL}/ws?token=${token}` : '';
+    return token
+      ? `${import.meta.env.VITE_GLOB_WS_URL}${wsApiPath}?token=${token}`
+      : '';
   });
 
   // 2. 初始化 useWebSocket
