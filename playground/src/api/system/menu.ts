@@ -104,6 +104,14 @@ async function getMenuTree(params: Recordable<any>) {
   );
 }
 
+async function getMenuTreeWithUserCore(params: Recordable<any>) {
+  return requestClient.get<
+    CommonType.TreeWithUserCore<SystemMenuApi.SystemMenu>
+  >('/system/menu/treeWithUserCore', {
+    params,
+  });
+}
+
 async function isMenuNameExists(
   name: string,
   id?: SystemMenuApi.SystemMenu['id'],
@@ -165,6 +173,7 @@ export {
   createMenu,
   deleteMenu,
   getMenuTree,
+  getMenuTreeWithUserCore,
   isMenuNameExists,
   isMenuPathExists,
   updateMenu,

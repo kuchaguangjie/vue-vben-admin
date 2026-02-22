@@ -5,7 +5,9 @@ import type {
   OnActionClickParams,
   VxeTableGridOptions,
 } from '#/adapter/vxe-table';
+import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import type { PageParams } from '#/api/request';
+import { doPageQuery } from '#/api/request';
 
 import { ref } from 'vue';
 
@@ -16,19 +18,16 @@ import { $t } from '@vben/locales';
 import { MenuBadge } from '@vben-core/menu-ui';
 
 import { Button, message } from 'ant-design-vue';
-
-import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import { doPageQuery } from '#/api/request';
 import {
   deleteMenu,
-  getMenuTree,
+  getMenuTreeWithUserCore,
   SystemMenuApi,
   updateMenuStatus,
 } from '#/api/system/menu';
 import { confirmDialog } from '#/utils/dialog';
 import { useDisabledPagerConfig } from '#/utils/pager';
 
-import { useColumns } from './data';
+import { useColumns, userCoreMapRef } from './data';
 import Form from './modules/form.vue';
 
 const [FormDrawer, formDrawerApi] = useVbenDrawer({
@@ -46,7 +45,9 @@ const [Grid, gridApi] = useVbenVxeGrid({
       ajax: {
         query: async (params: PageParams) => {
           isExpend.value = false; // not expend on load
-          return await doPageQuery(getMenuTree, params);
+          const result = await doPageQuery(getMenuTreeWithUserCore, params);
+          userCoreMapRef.value = result.userCoreMap;
+          return result.topItems;
         },
       },
     },

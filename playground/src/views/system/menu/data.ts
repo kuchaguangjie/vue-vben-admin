@@ -1,9 +1,15 @@
 import type { OnActionClickFn, VxeTableGridOptions } from '#/adapter/vxe-table';
-import type { SystemApiApi } from '#/api';
+import type { SystemApiApi, SystemUserApi } from '#/api';
 import type { SystemMenuApi } from '#/api/system/menu';
 
 import { $t } from '#/locales';
 import { formatBackendTime } from '#/utils/value-format';
+import { ref, type Ref } from 'vue';
+import { useUserCoreColumn } from '#/utils/user-core';
+
+export const userCoreMapRef: Ref<Record<number, SystemUserApi.UserCore>> = ref(
+  {},
+);
 
 export function getMenuTypeOptions() {
   return [
@@ -102,11 +108,14 @@ export function useColumns<T = SystemMenuApi.SystemMenu>(
       formatter: ({ cellValue }) => formatBackendTime(cellValue), // 时间格式转换
       sortable: true,
     },
-    {
-      field: 'createdBy',
-      title: $t('common.createdBy'),
-      width: 100,
-    },
+    useUserCoreColumn(
+      {
+        field: 'createdBy',
+        title: $t('common.createdBy'),
+        width: 120,
+      },
+      userCoreMapRef,
+    ),
     {
       align: 'right',
       cellRender: {
