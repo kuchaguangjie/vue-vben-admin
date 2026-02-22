@@ -1,6 +1,6 @@
 import type { Recordable } from '@vben/types';
 
-import { type CommonType } from '#/api';
+import type { CommonType } from '#/api';
 
 import { requestClient } from '#/api/request';
 

@@ -1,13 +1,15 @@
+import type { Ref } from 'vue';
+
 import type { VbenFormSchema } from '#/adapter/form';
 import type { OnActionClickFn, VxeTableGridOptions } from '#/adapter/vxe-table';
 import type { SystemNoticeApi, SystemUserApi } from '#/api';
 
-import { type Ref, ref } from 'vue';
+import { ref } from 'vue';
 
 import { $t } from '#/locales';
 import { usePreviewLink } from '#/utils/use-preview-link';
-import { formatBackendTime } from '#/utils/value-format';
 import { useUserCoreColumn } from '#/utils/user-core';
+import { formatBackendTime } from '#/utils/value-format';
 
 export const categoryList = ref<SystemNoticeApi.SystemNoticeCategory[]>([]); // category 列表
 export const categoryOptions = ref<any[]>([]); // category 下拉选项

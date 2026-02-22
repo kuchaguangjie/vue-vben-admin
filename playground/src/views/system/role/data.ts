@@ -1,11 +1,20 @@
+import type { Ref } from 'vue';
+
 import type { VbenFormSchema } from '#/adapter/form';
 import type { OnActionClickFn, VxeTableGridOptions } from '#/adapter/vxe-table';
-import type { SystemRoleApi } from '#/api';
+import type { SystemRoleApi, SystemUserApi } from '#/api';
+
+import { ref } from 'vue';
 
 import { z } from '#/adapter/form';
 import { $t } from '#/locales';
 import { usePreviewLink } from '#/utils/use-preview-link';
+import { useUserCoreColumn } from '#/utils/user-core';
 import { formatBackendTime } from '#/utils/value-format';
+
+export const userCoreMapRef: Ref<Record<number, SystemUserApi.UserCore>> = ref(
+  {},
+);
 
 // form - new/edit
 export function useFormSchema(): VbenFormSchema[] {
@@ -202,11 +211,14 @@ export function useColumns<T = SystemRoleApi.SystemRole>(
       formatter: ({ cellValue }) => formatBackendTime(cellValue), // 时间格式转换
       sortable: true,
     },
-    {
-      field: 'createdBy',
-      title: $t('common.createdBy'),
-      width: 100,
-    },
+    useUserCoreColumn(
+      {
+        field: 'createdBy',
+        title: $t('common.createdBy'),
+        width: 120,
+      },
+      userCoreMapRef,
+    ),
     {
       align: 'center',
       cellRender: {

@@ -38,7 +38,7 @@ export function useUserCoreColumn(
     slots: {
       default: ({ row, column }: any) => {
         const userId = row[column.field] as number;
-        const userCore = userCoreMapRef.value[userId];
+        const userCore = userCoreMapRef?.value[userId];
         const displayName = getUserCoreDisplay(userId, userCore);
 
         return userCore ? (

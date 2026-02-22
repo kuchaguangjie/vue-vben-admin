@@ -18,14 +18,21 @@ export namespace SystemRoleApi {
   }
 }
 
-/**
- * 获取角色列表数据
- */
 async function getRoleList(params: Recordable<any>) {
-  return requestClient.get<Array<SystemRoleApi.SystemRole>>(
+  return requestClient.get<CommonType.Page<SystemRoleApi.SystemRole>>(
     '/system/role/page',
-    { params },
+    {
+      params,
+    },
   );
+}
+
+async function getRoleListWithUserCore(params: Recordable<any>) {
+  return requestClient.get<
+    CommonType.PageWithUserCore<SystemRoleApi.SystemRole>
+  >('/system/role/pageWithUserCore', {
+    params,
+  });
 }
 
 /**
@@ -119,6 +126,7 @@ export {
   getRoleAll,
   getRoleList,
   getRoleListWithMenu,
+  getRoleListWithUserCore,
   preCreateRole,
   preUpdateRole,
   updateRole,
