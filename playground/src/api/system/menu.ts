@@ -104,20 +104,6 @@ async function getMenuTree(params: Recordable<any>) {
   );
 }
 
-/**
- * 获得 菜单 tree & 角色 菜单 ids (含 parent id).
- */
-async function getMenuTreeForRole(roleId: number) {
-  return requestClient.get(`/system/menu/treeForRole?id=${roleId}`);
-}
-
-/**
- * 获得角色 的 菜单 ids
- */
-async function getRoleMenus(roleId: number) {
-  return requestClient.get(`/system/menu/getRoleMenus?id=${roleId}`);
-}
-
 async function isMenuNameExists(
   name: string,
   id?: SystemMenuApi.SystemMenu['id'],
@@ -179,8 +165,6 @@ export {
   createMenu,
   deleteMenu,
   getMenuTree,
-  getMenuTreeForRole,
-  getRoleMenus,
   isMenuNameExists,
   isMenuPathExists,
   updateMenu,
