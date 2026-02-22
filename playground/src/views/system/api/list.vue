@@ -16,7 +16,7 @@ import { Plus } from '@vben/icons';
 import { Button, message } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import { deleteApi, getApiTree, updateApiStatus } from '#/api';
+import { deleteApi, getApiTreeWithUserCore, updateApiStatus } from '#/api';
 import { doPageQuery } from '#/api/request';
 import { $t } from '#/locales';
 import { confirmDialog } from '#/utils/dialog';
@@ -52,7 +52,11 @@ const [Grid, gridApi] = useVbenVxeGrid({
         query: async (params: PageParams, formValues) => {
           formValues = removeEmptyFields(formValues);
           hasQueryParam.value = !checkAllFieldsEmpty(formValues);
-          const result = await doPageQuery(getApiTree, params, formValues);
+          const result = await doPageQuery(
+            getApiTreeWithUserCore,
+            params,
+            formValues,
+          );
           userCoreMap.value = result.userCoreMap;
           return result.topItems;
         },

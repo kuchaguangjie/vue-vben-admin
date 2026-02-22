@@ -19,12 +19,14 @@ export namespace SystemApiApi {
   }
 }
 
-/**
- * 获取 api tree
- */
 async function getApiTree(params: Recordable<any>) {
+  return requestClient.get<Array<SystemApiApi.SystemApi>>('/system/api/tree', {
+    params,
+  });
+}
+async function getApiTreeWithUserCore(params: Recordable<any>) {
   return requestClient.get<CommonType.TreeWithUserCore<SystemApiApi.SystemApi>>(
-    '/system/api/tree',
+    '/system/api/treeWithUserCore',
     {
       params,
     },
@@ -32,8 +34,7 @@ async function getApiTree(params: Recordable<any>) {
 }
 
 async function getApiTreeDirOnly() {
-  const result = await getApiTree({ type: 1 });
-  return result?.topItems;
+  return await getApiTree({ type: 1 });
 }
 
 /**
@@ -75,6 +76,7 @@ export {
   deleteApi,
   getApiTree,
   getApiTreeDirOnly,
+  getApiTreeWithUserCore,
   updateApi,
   updateApiStatus,
 };
