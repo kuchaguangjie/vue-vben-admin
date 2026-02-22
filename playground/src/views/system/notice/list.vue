@@ -14,7 +14,11 @@ import { Plus } from '@vben/icons';
 import { Button, message } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import { deleteNotice, getNoticeList, updateNoticeStatus } from '#/api';
+import {
+  deleteNotice,
+  getNoticeListWithUserCore,
+  updateNoticeStatus,
+} from '#/api';
 import { doPageQuery } from '#/api/request';
 import { $t } from '#/locales';
 import { confirmDialog } from '#/utils/dialog';
@@ -26,6 +30,7 @@ import {
   categoryOptions,
   useColumns,
   useGridFormSchema,
+  userCoreMapRef,
 } from './data';
 import NoticeDetail from './modules/detail.vue';
 import Form from './modules/form.vue';
@@ -57,7 +62,11 @@ const [Grid, gridApi] = useVbenVxeGrid({
     proxyConfig: {
       ajax: {
         query: async (params: PageParams, formValues) => {
-          const result = await doPageQuery(getNoticeList, params, formValues);
+          const result = await doPageQuery(
+            getNoticeListWithUserCore,
+            params,
+            formValues,
+          );
           if (result.categoryList) {
             categoryList.value = result.categoryList;
             categoryOptions.value = result.categoryList.map((item: any) => ({
@@ -68,6 +77,7 @@ const [Grid, gridApi] = useVbenVxeGrid({
               categoryMap.value[item.id] = item.name;
             }
           }
+          userCoreMapRef.value = result.userCoreMap;
           return result;
         },
       },

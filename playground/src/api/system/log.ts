@@ -26,7 +26,7 @@ async function getLogList(params: Recordable<any>) {
   );
 }
 
-async function getLogTreeWithUserCore(params: Recordable<any>) {
+async function getLogListWithUserCore(params: Recordable<any>) {
   return requestClient.get<CommonType.PageWithUserCore<SystemLogApi.SystemLog>>(
     '/system/log/pageWithUserCore',
     {
@@ -35,4 +35,4 @@ async function getLogTreeWithUserCore(params: Recordable<any>) {
   );
 }
 
-export { getLogList, getLogTreeWithUserCore };
+export { getLogList, getLogListWithUserCore };

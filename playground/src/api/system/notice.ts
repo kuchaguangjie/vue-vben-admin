@@ -1,6 +1,6 @@
 import type { Recordable } from '@vben/types';
 
-import type { CommonType } from '#/api';
+import { type CommonType } from '#/api';
 
 import { requestClient } from '#/api/request';
 
@@ -24,14 +24,12 @@ export namespace SystemNoticeApi {
   }
 }
 
-/**
- * 获取公告列表数据
- */
-async function getNoticeList(params: Recordable<any>) {
-  return requestClient.get<Array<SystemNoticeApi.SystemNotice>>(
-    '/system/notice/page',
-    { params },
-  );
+async function getNoticeListWithUserCore(params: Recordable<any>) {
+  return requestClient.get<
+    CommonType.PageWithUserCore<SystemNoticeApi.SystemNotice>
+  >('/system/notice/pageWithUserCore', {
+    params,
+  });
 }
 
 /**
@@ -97,7 +95,7 @@ export {
   createNotice,
   deleteNotice,
   getNoticeDetail,
-  getNoticeList,
+  getNoticeListWithUserCore,
   preCreateNotice,
   preUpdateNotice,
   updateNotice,

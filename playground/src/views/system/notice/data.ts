@@ -1,12 +1,13 @@
 import type { VbenFormSchema } from '#/adapter/form';
 import type { OnActionClickFn, VxeTableGridOptions } from '#/adapter/vxe-table';
-import type { SystemNoticeApi } from '#/api';
+import type { SystemNoticeApi, SystemUserApi } from '#/api';
 
-import { ref } from 'vue';
+import { type Ref, ref } from 'vue';
 
 import { $t } from '#/locales';
 import { usePreviewLink } from '#/utils/use-preview-link';
 import { formatBackendTime } from '#/utils/value-format';
+import { useUserCoreColumn } from '#/utils/user-core';
 
 export const categoryList = ref<SystemNoticeApi.SystemNoticeCategory[]>([]); // category 列表
 export const categoryOptions = ref<any[]>([]); // category 下拉选项
@@ -14,6 +15,10 @@ export const categoryMap = ref<Record<number, string>>({}); // category, id > na
 export function categoryIdToNameMap(id: number): string {
   return categoryMap.value[id] || '';
 }
+
+export const userCoreMapRef: Ref<Record<number, SystemUserApi.UserCore>> = ref(
+  {},
+);
 
 // form - new/edit
 export function useFormSchema(): VbenFormSchema[] {
@@ -229,11 +234,14 @@ export function useColumns<T = SystemNoticeApi.SystemNotice>(
       formatter: ({ cellValue }) => formatBackendTime(cellValue), // 时间格式转换
       sortable: true,
     },
-    {
-      field: 'createdBy',
-      title: $t('common.createdBy'),
-      width: 100,
-    },
+    useUserCoreColumn(
+      {
+        field: 'createdBy',
+        title: $t('common.createdBy'),
+        width: 120,
+      },
+      userCoreMapRef,
+    ),
     {
       field: 'publishedAt',
       title: $t('common.publishedAt'),
@@ -241,11 +249,14 @@ export function useColumns<T = SystemNoticeApi.SystemNotice>(
       formatter: ({ cellValue }) => formatBackendTime(cellValue), // 时间格式转换
       sortable: true,
     },
-    {
-      field: 'publishedBy',
-      title: $t('common.publishedBy'),
-      width: 100,
-    },
+    useUserCoreColumn(
+      {
+        field: 'publishedBy',
+        title: $t('common.publishedBy'),
+        width: 120,
+      },
+      userCoreMapRef,
+    ),
     {
       align: 'center',
       cellRender: {

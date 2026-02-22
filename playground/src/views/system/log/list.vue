@@ -6,7 +6,7 @@ import type { PageParams } from '#/api/request';
 import { Page } from '@vben/common-ui';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import { getLogTreeWithUserCore } from '#/api';
+import { getLogListWithUserCore } from '#/api';
 import { doPageQuery } from '#/api/request';
 import { $t } from '#/locales';
 import { usePagerConfig } from '#/utils/pager';
@@ -28,7 +28,7 @@ const [Grid] = useVbenVxeGrid({
       ajax: {
         query: async (params: PageParams, formValues) => {
           const result = await doPageQuery(
-            getLogTreeWithUserCore,
+            getLogListWithUserCore,
             params,
             formValues,
           );
