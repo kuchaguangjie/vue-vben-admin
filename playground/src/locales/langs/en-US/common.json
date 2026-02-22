@@ -19,7 +19,9 @@
     "loading": "Loading ..",
     "loadFailure": "Load Failure",
     "copy": "Copy",
+    "copyId": "Copy ID",
     "copied": "Copied!",
+    "copiedId": "ID Copied!",
     "pidEqId": "Can't choose self as parent",
     "pleaseSelect": "Please select"
   },

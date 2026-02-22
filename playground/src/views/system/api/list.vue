@@ -23,7 +23,12 @@ import { confirmDialog } from '#/utils/dialog';
 import { checkAllFieldsEmpty, removeEmptyFields } from '#/utils/object';
 import { useDisabledPagerConfig } from '#/utils/pager';
 
-import { hasQueryParam, useColumns, useGridFormSchema } from './data';
+import {
+  hasQueryParam,
+  useColumns,
+  useGridFormSchema,
+  userCoreMap,
+} from './data';
 import Form from './modules/form.vue';
 
 const [FormDrawer, formDrawerApi] = useVbenDrawer({
@@ -48,7 +53,8 @@ const [Grid, gridApi] = useVbenVxeGrid({
           formValues = removeEmptyFields(formValues);
           const result = await doPageQuery(getApiTree, params, formValues);
           hasQueryParam.value = !checkAllFieldsEmpty(formValues);
-          return result;
+          userCoreMap.value = result.userCoreMap;
+          return result.topItems;
         },
       },
     },
@@ -60,7 +66,6 @@ const [Grid, gridApi] = useVbenVxeGrid({
       custom: true,
       export: false,
       refresh: true,
-      search: true,
       zoom: true,
     },
     treeConfig: {

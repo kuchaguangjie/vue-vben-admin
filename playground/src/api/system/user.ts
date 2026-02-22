@@ -14,6 +14,13 @@ export namespace SystemUserApi {
     permissions?: string[];
     status: number;
   }
+  export interface UserCore {
+    [key: string]: any;
+
+    id: number;
+    nick: string;
+    username: string;
+  }
 }
 
 /**

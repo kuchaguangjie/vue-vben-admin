@@ -1,15 +1,20 @@
+import type { Ref } from 'vue';
+
 import type { VbenFormSchema } from '#/adapter/form';
 import type { OnActionClickFn, VxeTableGridOptions } from '#/adapter/vxe-table';
-import type { SystemApiApi } from '#/api';
+import type { SystemApiApi, SystemUserApi } from '#/api';
 
 import { ref } from 'vue';
 
 import { getApiTreeDirOnly } from '#/api';
 import { $t } from '#/locales';
+import { useUserCoreColumn } from '#/utils/user-core';
 import { formatBackendTime } from '#/utils/value-format';
 
 // is there any query param
 export const hasQueryParam = ref(false);
+
+export const userCoreMap: Ref<Record<number, SystemUserApi.UserCore>> = ref({});
 
 export function useFormSchema(): VbenFormSchema[] {
   return [
@@ -256,11 +261,14 @@ export function useColumns<T = SystemApiApi.SystemApi>(
       formatter: ({ cellValue }) => formatBackendTime(cellValue), // 时间格式转换
       sortable: true,
     },
-    {
-      field: 'createdBy',
-      title: $t('common.createdBy'),
-      width: 100,
-    },
+    useUserCoreColumn(
+      {
+        field: 'createdBy',
+        title: $t('common.createdBy'),
+        width: 100,
+      },
+      userCoreMap,
+    ),
     {
       align: 'center',
       cellRender: {

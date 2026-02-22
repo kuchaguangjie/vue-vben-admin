@@ -1,10 +1,15 @@
 import type { Recordable } from '@vben/types';
 
-import type { CommonType } from '#/api';
+import type { CommonType, SystemUserApi } from '#/api';
 
 import { requestClient } from '#/api/request';
 
 export namespace SystemApiApi {
+  export interface ApiTreeResp {
+    [key: string]: any;
+    topItems: SystemApi[];
+    userCoreMap: Record<number, SystemUserApi.UserCore>;
+  }
   export interface SystemApi {
     [key: string]: any;
 
@@ -32,13 +37,14 @@ async function getApiList(params: Recordable<any>) {
  * 获取 api tree
  */
 async function getApiTree(params: Recordable<any>) {
-  return requestClient.get<Array<SystemApiApi.SystemApi>>('/system/api/tree', {
+  return requestClient.get<SystemApiApi.ApiTreeResp>('/system/api/tree', {
     params,
   });
 }
 
 async function getApiTreeDirOnly() {
-  return await getApiTree({ type: 1 });
+  const result = await getApiTree({ type: 1 });
+  return result?.topItems;
 }
 
 /**
