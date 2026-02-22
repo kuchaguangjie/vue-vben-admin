@@ -15,11 +15,11 @@ import { Button, message } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { doPageQuery } from '#/api/request';
-import { deleteDept, getDeptTree } from '#/api/system/dept';
+import { deleteDept, getDeptTreeWithUserCore } from '#/api/system/dept';
 import { $t } from '#/locales';
 import { useDisabledPagerConfig } from '#/utils/pager';
 
-import { useColumns } from './data';
+import { useColumns, userCoreMapRef } from './data';
 import DeptDetail from './modules/detail.vue';
 import Form from './modules/form.vue';
 
@@ -116,7 +116,9 @@ const [Grid, gridApi] = useVbenVxeGrid({
       ajax: {
         query: async (params: PageParams) => {
           isExpend.value = false; // not expend on load
-          return await doPageQuery(getDeptTree, params);
+          const result = await doPageQuery(getDeptTreeWithUserCore, params);
+          userCoreMapRef.value = result.userCoreMap;
+          return result.topItems;
         },
       },
     },

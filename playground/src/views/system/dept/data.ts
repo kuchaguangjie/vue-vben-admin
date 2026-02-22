@@ -1,13 +1,23 @@
+import type { Ref } from 'vue';
+
 import type { VxeTableGridOptions } from '@vben/plugins/vxe-table';
 
 import type { VbenFormSchema } from '#/adapter/form';
 import type { OnActionClickFn } from '#/adapter/vxe-table';
+import type { SystemUserApi } from '#/api';
 import type { SystemDeptApi } from '#/api/system/dept';
+
+import { ref } from 'vue';
 
 import { z } from '#/adapter/form';
 import { $t } from '#/locales';
 import { usePreviewLink } from '#/utils/use-preview-link';
+import { useUserCoreColumn } from '#/utils/user-core';
 import { formatBackendTime } from '#/utils/value-format';
+
+export const userCoreMapRef: Ref<Record<number, SystemUserApi.UserCore>> = ref(
+  {},
+);
 
 /**
  * 获取编辑表单的字段配置。如果没有使用多语言，可以直接export一个数组常量
@@ -151,11 +161,14 @@ export function useColumns(
       formatter: ({ cellValue }) => formatBackendTime(cellValue), // 时间格式转换
       sortable: true,
     },
-    {
-      field: 'createdBy',
-      title: $t('common.createdBy'),
-      width: 100,
-    },
+    useUserCoreColumn(
+      {
+        field: 'createdBy',
+        title: $t('common.createdBy'),
+        width: 120,
+      },
+      userCoreMapRef,
+    ),
     {
       align: 'right',
       cellRender: {

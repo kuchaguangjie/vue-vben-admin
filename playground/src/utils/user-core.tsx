@@ -1,3 +1,5 @@
+import type { Ref } from 'vue';
+
 import type { SystemUserApi } from '#/api/system/user';
 
 import { IconifyIcon } from '@vben/icons';
@@ -20,7 +22,7 @@ export function useUserCoreColumn(
     title: string;
     width?: number | string;
   },
-  userCoreMap: any,
+  userCoreMapRef: Ref,
 ) {
   const { copy } = useClipboard();
 
@@ -36,7 +38,7 @@ export function useUserCoreColumn(
     slots: {
       default: ({ row, column }: any) => {
         const userId = row[column.field] as number;
-        const userCore = userCoreMap.value[userId];
+        const userCore = userCoreMapRef.value[userId];
         const displayName = getUserCoreDisplay(userId, userCore);
 
         return userCore ? (

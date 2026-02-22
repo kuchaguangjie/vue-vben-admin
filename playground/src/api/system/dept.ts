@@ -1,6 +1,7 @@
 import type { Recordable } from '@vben-core/typings';
 
 import { requestClient } from '#/api/request';
+import { type CommonType } from '#/api';
 
 export namespace SystemDeptApi {
   export interface SystemDept {
@@ -23,6 +24,13 @@ async function getDeptTree(params: Recordable<any>) {
     '/system/dept/tree',
     { params },
   );
+}
+async function getDeptTreeWithUserCore(params: Recordable<any>) {
+  return requestClient.get<
+    CommonType.TreeWithUserCore<SystemDeptApi.SystemDept>
+  >('/system/dept/treeWithUserCore', {
+    params,
+  });
 }
 
 /**
@@ -82,6 +90,7 @@ export {
   createDept,
   deleteDept,
   getDeptTree,
+  getDeptTreeWithUserCore,
   getDetailDept,
   preCreateDept,
   preUpdateDept,

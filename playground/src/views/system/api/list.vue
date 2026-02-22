@@ -27,7 +27,7 @@ import {
   hasQueryParam,
   useColumns,
   useGridFormSchema,
-  userCoreMap,
+  userCoreMapRef,
 } from './data';
 import Form from './modules/form.vue';
 
@@ -57,7 +57,7 @@ const [Grid, gridApi] = useVbenVxeGrid({
             params,
             formValues,
           );
-          userCoreMap.value = result.userCoreMap;
+          userCoreMapRef.value = result.userCoreMap;
           return result.topItems;
         },
       },

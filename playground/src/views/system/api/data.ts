@@ -14,7 +14,9 @@ import { formatBackendTime } from '#/utils/value-format';
 // is there any query param
 export const hasQueryParam = ref(false);
 
-export const userCoreMap: Ref<Record<number, SystemUserApi.UserCore>> = ref({});
+export const userCoreMapRef: Ref<Record<number, SystemUserApi.UserCore>> = ref(
+  {},
+);
 
 export function useFormSchema(): VbenFormSchema[] {
   return [
@@ -265,9 +267,9 @@ export function useColumns<T = SystemApiApi.SystemApi>(
       {
         field: 'createdBy',
         title: $t('common.createdBy'),
-        width: 100,
+        width: 120,
       },
-      userCoreMap,
+      userCoreMapRef,
     ),
     {
       align: 'center',
