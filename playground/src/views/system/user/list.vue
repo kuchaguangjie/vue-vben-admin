@@ -5,7 +5,7 @@ import type {
   OnActionClickParams,
   VxeTableGridOptions,
 } from '#/adapter/vxe-table';
-import type { SystemUserApi } from '#/api';
+import { getUserListWithUserCore, type SystemUserApi } from '#/api';
 import type { PageParams } from '#/api/request';
 
 import { Page, useVbenDrawer } from '@vben/common-ui';
@@ -14,13 +14,13 @@ import { Plus } from '@vben/icons';
 import { Button, message } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import { deleteUser, getUserList, updateUserStatus } from '#/api';
+import { deleteUser, updateUserStatus } from '#/api';
 import { doPageQuery } from '#/api/request';
 import { $t } from '#/locales';
 import { confirmDialog } from '#/utils/dialog';
 import { usePagerConfig } from '#/utils/pager';
 
-import { useColumns, useGridFormSchema } from './data';
+import { useColumns, useGridFormSchema, userCoreMapRef } from './data';
 import UserDetail from './modules/detail.vue';
 import Form from './modules/form.vue';
 
@@ -46,8 +46,15 @@ const [Grid, gridApi] = useVbenVxeGrid({
     pagerConfig: usePagerConfig(),
     proxyConfig: {
       ajax: {
-        query: async (params: PageParams, formValues) =>
-          await doPageQuery(getUserList, params, formValues),
+        query: async (params: PageParams, formValues) => {
+          const result = await doPageQuery(
+            getUserListWithUserCore,
+            params,
+            formValues,
+          );
+          userCoreMapRef.value = result.userCoreMap;
+          return result;
+        },
       },
     },
     rowConfig: {

@@ -33,6 +33,14 @@ async function getUserList(params: Recordable<any>) {
   );
 }
 
+async function getUserListWithUserCore(params: Recordable<any>) {
+  return requestClient.get<
+    CommonType.PageWithUserCore<SystemUserApi.SystemUser>
+  >('/system/user/pageWithUserCore', {
+    params,
+  });
+}
+
 /**
  * 创建用户
  * @param data 用户数据
@@ -103,6 +111,7 @@ export {
   deleteUser,
   getDetailUser,
   getUserList,
+  getUserListWithUserCore,
   getUserRoles,
   preCreateUser,
   preUpdateUser,

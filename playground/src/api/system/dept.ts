@@ -1,4 +1,4 @@
-import type { Recordable } from '@vben-core/typings';
+import type { Recordable } from '@vben/types';
 
 import type { CommonType } from '#/api';
 

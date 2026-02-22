@@ -6,6 +6,12 @@ import { z } from '#/adapter/form';
 import { $t } from '#/locales';
 import { usePreviewLink } from '#/utils/use-preview-link';
 import { formatBackendTime } from '#/utils/value-format';
+import { ref, type Ref } from 'vue';
+import { useUserCoreColumn } from '#/utils/user-core';
+
+export const userCoreMapRef: Ref<Record<number, SystemUserApi.UserCore>> = ref(
+  {},
+);
 
 // single - common fields
 export function useFormSchema(): VbenFormSchema[] {
@@ -231,11 +237,14 @@ export function useColumns<T = SystemUserApi.SystemUser>(
       formatter: ({ cellValue }) => formatBackendTime(cellValue), // 时间格式转换
       sortable: true,
     },
-    {
-      field: 'createdBy',
-      title: $t('common.createdBy'),
-      width: 100,
-    },
+    useUserCoreColumn(
+      {
+        field: 'createdBy',
+        title: $t('common.createdBy'),
+        width: 120,
+      },
+      userCoreMapRef,
+    ),
     {
       field: 'operation',
       align: 'center',
