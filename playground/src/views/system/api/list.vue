@@ -51,8 +51,8 @@ const [Grid, gridApi] = useVbenVxeGrid({
       ajax: {
         query: async (params: PageParams, formValues) => {
           formValues = removeEmptyFields(formValues);
-          const result = await doPageQuery(getApiTree, params, formValues);
           hasQueryParam.value = !checkAllFieldsEmpty(formValues);
+          const result = await doPageQuery(getApiTree, params, formValues);
           userCoreMap.value = result.userCoreMap;
           return result.topItems;
         },
