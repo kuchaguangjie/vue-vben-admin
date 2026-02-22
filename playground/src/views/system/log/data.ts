@@ -4,6 +4,13 @@ import type { VxeTableGridOptions } from '#/adapter/vxe-table';
 import { $t } from '#/locales';
 import { useCopyColumn } from '#/utils/use-copy-column';
 import { formatBackendTime } from '#/utils/value-format';
+import { ref, type Ref } from 'vue';
+import type { SystemUserApi } from '#/api';
+import { useUserCoreColumn } from '#/utils/user-core';
+
+export const userCoreMapRef: Ref<Record<number, SystemUserApi.UserCore>> = ref(
+  {},
+);
 
 // for search list
 export function useGridFormSchema(): VbenFormSchema[] {
@@ -47,10 +54,13 @@ export function useColumns(): VxeTableGridOptions['columns'] {
       width: 160,
       formatter: ({ cellValue }) => formatBackendTime(cellValue), // 时间格式转换
     },
-    {
-      field: 'createdBy',
-      title: $t('system.log.createdBy'),
-      width: 150,
-    },
+    useUserCoreColumn(
+      {
+        field: 'createdBy',
+        title: $t('common.createdBy'),
+        width: 120,
+      },
+      userCoreMapRef,
+    ),
   ];
 }

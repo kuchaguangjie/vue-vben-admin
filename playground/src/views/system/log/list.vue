@@ -1,17 +1,15 @@
 <script lang="ts" setup>
 import type { VxeTableGridOptions } from '#/adapter/vxe-table';
-import type { SystemUserApi } from '#/api';
+import { useVbenVxeGrid } from '#/adapter/vxe-table';
+import { getLogTreeWithUserCore, type SystemUserApi } from '#/api';
 import type { PageParams } from '#/api/request';
+import { doPageQuery } from '#/api/request';
 
 import { Page } from '@vben/common-ui';
-
-import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import { doPageQuery } from '#/api/request';
-import { getLogList } from '#/api/system/log';
 import { $t } from '#/locales';
 import { usePagerConfig } from '#/utils/pager';
 
-import { useColumns, useGridFormSchema } from './data';
+import { useColumns, useGridFormSchema, userCoreMapRef } from './data';
 
 const [Grid] = useVbenVxeGrid({
   formOptions: {
@@ -26,8 +24,15 @@ const [Grid] = useVbenVxeGrid({
     pagerConfig: usePagerConfig(),
     proxyConfig: {
       ajax: {
-        query: async (params: PageParams, formValues) =>
-          await doPageQuery(getLogList, params, formValues),
+        query: async (params: PageParams, formValues) => {
+          const result = await doPageQuery(
+            getLogTreeWithUserCore,
+            params,
+            formValues,
+          );
+          userCoreMapRef.value = result.userCoreMap;
+          return result;
+        },
       },
     },
     rowConfig: {
