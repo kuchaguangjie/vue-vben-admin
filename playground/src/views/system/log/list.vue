@@ -1,11 +1,13 @@
 <script lang="ts" setup>
 import type { VxeTableGridOptions } from '#/adapter/vxe-table';
-import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import { getLogTreeWithUserCore, type SystemUserApi } from '#/api';
+import type { SystemUserApi } from '#/api';
 import type { PageParams } from '#/api/request';
-import { doPageQuery } from '#/api/request';
 
 import { Page } from '@vben/common-ui';
+
+import { useVbenVxeGrid } from '#/adapter/vxe-table';
+import { getLogTreeWithUserCore } from '#/api';
+import { doPageQuery } from '#/api/request';
 import { $t } from '#/locales';
 import { usePagerConfig } from '#/utils/pager';
 
@@ -57,7 +59,7 @@ const [Grid] = useVbenVxeGrid({
 <style scoped>
 /* 确保 pre 标签内的文字换行，防止撑爆弹窗 */
 pre {
-  word-wrap: break-word;
+  overflow-wrap: break-word;
   white-space: pre-wrap;
 }
 </style>
