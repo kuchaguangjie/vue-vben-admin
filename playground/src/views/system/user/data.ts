@@ -1,13 +1,16 @@
+import type { Ref } from 'vue';
+
 import type { VbenFormSchema } from '#/adapter/form';
 import type { OnActionClickFn, VxeTableGridOptions } from '#/adapter/vxe-table';
 import type { SystemUserApi } from '#/api';
 
+import { ref } from 'vue';
+
 import { z } from '#/adapter/form';
 import { $t } from '#/locales';
 import { usePreviewLink } from '#/utils/use-preview-link';
-import { formatBackendTime } from '#/utils/value-format';
-import { ref, type Ref } from 'vue';
 import { useUserCoreColumn } from '#/utils/user-core';
+import { formatBackendTime } from '#/utils/value-format';
 
 export const userCoreMapRef: Ref<Record<number, SystemUserApi.UserCore>> = ref(
   {},

@@ -5,7 +5,7 @@ import type {
   OnActionClickParams,
   VxeTableGridOptions,
 } from '#/adapter/vxe-table';
-import { getUserListWithUserCore, type SystemUserApi } from '#/api';
+import type { SystemUserApi } from '#/api';
 import type { PageParams } from '#/api/request';
 
 import { Page, useVbenDrawer } from '@vben/common-ui';
@@ -14,7 +14,7 @@ import { Plus } from '@vben/icons';
 import { Button, message } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import { deleteUser, updateUserStatus } from '#/api';
+import { deleteUser, getUserListWithUserCore, updateUserStatus } from '#/api';
 import { doPageQuery } from '#/api/request';
 import { $t } from '#/locales';
 import { confirmDialog } from '#/utils/dialog';
