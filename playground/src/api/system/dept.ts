@@ -1,7 +1,8 @@
 import type { Recordable } from '@vben-core/typings';
 
+import type { CommonType } from '#/api';
+
 import { requestClient } from '#/api/request';
-import { type CommonType } from '#/api';
 
 export namespace SystemDeptApi {
   export interface SystemDept {
