@@ -1,11 +1,14 @@
+import type { Ref } from 'vue';
+
 import type { OnActionClickFn, VxeTableGridOptions } from '#/adapter/vxe-table';
 import type { SystemApiApi, SystemUserApi } from '#/api';
 import type { SystemMenuApi } from '#/api/system/menu';
 
+import { ref } from 'vue';
+
 import { $t } from '#/locales';
-import { formatBackendTime } from '#/utils/value-format';
-import { ref, type Ref } from 'vue';
 import { useUserCoreColumn } from '#/utils/user-core';
+import { formatBackendTime } from '#/utils/value-format';
 
 export const userCoreMapRef: Ref<Record<number, SystemUserApi.UserCore>> = ref(
   {},

@@ -5,9 +5,7 @@ import type {
   OnActionClickParams,
   VxeTableGridOptions,
 } from '#/adapter/vxe-table';
-import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import type { PageParams } from '#/api/request';
-import { doPageQuery } from '#/api/request';
 
 import { ref } from 'vue';
 
@@ -18,6 +16,9 @@ import { $t } from '@vben/locales';
 import { MenuBadge } from '@vben-core/menu-ui';
 
 import { Button, message } from 'ant-design-vue';
+
+import { useVbenVxeGrid } from '#/adapter/vxe-table';
+import { doPageQuery } from '#/api/request';
 import {
   deleteMenu,
   getMenuTreeWithUserCore,
