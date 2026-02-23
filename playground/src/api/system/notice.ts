@@ -70,20 +70,6 @@ async function deleteNotice(id: number) {
 }
 
 /**
- * create 公告前 获取数据.
- */
-async function preCreateNotice() {
-  return requestClient.get(`/system/notice/preCreate`);
-}
-
-/**
- * update 公告前 获取数据.
- */
-async function preUpdateNotice(noticeId: number) {
-  return requestClient.get(`/system/notice/preUpdate?id=${noticeId}`);
-}
-
-/**
  * 公告 详情
  * @param id 公告 ID
  */
@@ -96,8 +82,6 @@ export {
   deleteNotice,
   getNoticeDetail,
   getNoticeListWithUserCore,
-  preCreateNotice,
-  preUpdateNotice,
   updateNotice,
   updateNoticeStatus,
 };

@@ -70,13 +70,6 @@ async function updateUserStatus(data: CommonType.UpdateStatus) {
 }
 
 /**
- * 获得用户 角色
- */
-async function getUserRoles(userId: number) {
-  return requestClient.get(`/system/user/getUserRoles?id=${userId}`);
-}
-
-/**
  * 删除用户
  * @param id 用户 ID
  */
@@ -112,7 +105,6 @@ export {
   getDetailUser,
   getUserList,
   getUserListWithUserCore,
-  getUserRoles,
   preCreateUser,
   preUpdateUser,
   updateUser,

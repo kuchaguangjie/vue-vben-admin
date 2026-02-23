@@ -2,6 +2,7 @@
  * 该文件可自行根据业务逻辑进行调整
  */
 import type { AxiosResponseHeaders, RequestClientOptions } from '@vben/request';
+import type { Recordable } from '@vben/types';
 
 import { useAppConfig } from '@vben/hooks';
 import { preferences } from '@vben/preferences';

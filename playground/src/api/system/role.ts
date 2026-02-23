@@ -90,13 +90,6 @@ async function deleteRole(id: number) {
 }
 
 /**
- * 获得角色 已继承的角色
- */
-async function allInheritRoles(code: string) {
-  return requestClient.get(`/system/role/allInheritRoles?code=${code}`);
-}
-
-/**
  * create 角色前 获取数据.
  */
 async function preCreateRole() {
@@ -119,7 +112,6 @@ async function getDetailRole(id: number) {
 }
 
 export {
-  allInheritRoles,
   createRole,
   deleteRole,
   getDetailRole,
