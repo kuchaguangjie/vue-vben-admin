@@ -1,7 +1,7 @@
 import type { Recordable } from '@vben/types';
 
 import type { CommonType } from '#/api';
-
+import { getTreeAsRoots } from '#/api';
 import { requestClient } from '#/api/request';
 
 export namespace SystemApiApi {
@@ -20,10 +20,17 @@ export namespace SystemApiApi {
 }
 
 async function getApiTree(params: Recordable<any>) {
-  return requestClient.get<Array<SystemApiApi.SystemApi>>('/system/api/tree', {
-    params,
-  });
+  return requestClient.get<CommonType.Tree<SystemApiApi.SystemApi>>(
+    '/system/api/tree',
+    {
+      params,
+    },
+  );
 }
+async function getApiTreeRoots(params: Recordable<any>) {
+  return getTreeAsRoots(getApiTree, params);
+}
+
 async function getApiTreeWithUserCore(params: Recordable<any>) {
   return requestClient.get<CommonType.TreeWithUserCore<SystemApiApi.SystemApi>>(
     '/system/api/treeWithUserCore',
@@ -34,7 +41,7 @@ async function getApiTreeWithUserCore(params: Recordable<any>) {
 }
 
 async function getApiTreeDirOnly() {
-  return await getApiTree({ type: 1 });
+  return await getApiTreeRoots({ type: 1 });
 }
 
 /**
@@ -76,6 +83,7 @@ export {
   deleteApi,
   getApiTree,
   getApiTreeDirOnly,
+  getApiTreeRoots,
   getApiTreeWithUserCore,
   updateApi,
   updateApiStatus,

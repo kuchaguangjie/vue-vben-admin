@@ -9,7 +9,7 @@ import { generateAccessible } from '@vben/access';
 
 import { message } from 'ant-design-vue';
 
-import { getAllMenusApi } from '#/api';
+import { getAllMenusApiRoots } from '#/api';
 import { BasicLayout, IFrameView } from '#/layouts';
 import { $t } from '#/locales';
 
@@ -36,7 +36,7 @@ async function generateAccess(options: GenerateMenuAndRoutesOptions) {
         duration: 1.5,
       });
 
-      return await getAllMenusApi();
+      return await getAllMenusApiRoots();
     },
     // 可以指定没有权限跳转403页面
     forbiddenComponent,

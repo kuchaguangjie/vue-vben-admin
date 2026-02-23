@@ -1,6 +1,6 @@
 import type { Recordable } from '@vben/types';
 
-import type { CommonType } from '#/api';
+import { type CommonType, getApiTree, getTreeAsRoots } from '#/api';
 
 import { requestClient } from '#/api/request';
 
@@ -98,10 +98,13 @@ export namespace SystemMenuApi {
  * 获取 菜单 tree
  */
 async function getMenuTree(params: Recordable<any>) {
-  return requestClient.get<Array<SystemMenuApi.SystemMenu>>(
+  return requestClient.get<CommonType.Tree<SystemMenuApi.SystemMenu>>(
     '/system/menu/tree',
     { params },
   );
+}
+async function getMenuTreeRoots(params: Recordable<any>) {
+  return getTreeAsRoots(getMenuTree, params);
 }
 
 async function getMenuTreeWithUserCore(params: Recordable<any>) {
@@ -173,6 +176,7 @@ export {
   createMenu,
   deleteMenu,
   getMenuTree,
+  getMenuTreeRoots,
   getMenuTreeWithUserCore,
   isMenuNameExists,
   isMenuPathExists,

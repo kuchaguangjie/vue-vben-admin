@@ -48,7 +48,7 @@ const [Grid, gridApi] = useVbenVxeGrid({
           isExpend.value = false; // not expend on load
           const result = await doPageQuery(getMenuTreeWithUserCore, params);
           userCoreMapRef.value = result.userCoreMap;
-          return result.topItems;
+          return result.roots;
         },
       },
     },

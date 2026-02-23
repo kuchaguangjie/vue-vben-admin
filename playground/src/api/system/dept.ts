@@ -1,6 +1,6 @@
 import type { Recordable } from '@vben/types';
 
-import type { CommonType } from '#/api';
+import { type CommonType, getApiTree, getTreeAsRoots } from '#/api';
 
 import { requestClient } from '#/api/request';
 
@@ -21,11 +21,15 @@ export namespace SystemDeptApi {
  * 获取部门列表数据
  */
 async function getDeptTree(params: Recordable<any>) {
-  return requestClient.get<Array<SystemDeptApi.SystemDept>>(
+  return requestClient.get<CommonType.Tree<SystemDeptApi.SystemDept>>(
     '/system/dept/tree',
     { params },
   );
 }
+async function getDeptTreeRoots(params: Recordable<any>) {
+  return getTreeAsRoots(getDeptTree, params);
+}
+
 async function getDeptTreeWithUserCore(params: Recordable<any>) {
   return requestClient.get<
     CommonType.TreeWithUserCore<SystemDeptApi.SystemDept>
@@ -91,6 +95,7 @@ export {
   createDept,
   deleteDept,
   getDeptTree,
+  getDeptTreeRoots,
   getDeptTreeWithUserCore,
   getDetailDept,
   preCreateDept,

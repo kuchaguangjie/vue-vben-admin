@@ -10,7 +10,7 @@ import { Button, Card, message, Spin, Tag } from 'ant-design-vue';
 import dayjs from 'dayjs';
 
 import { useVbenForm, z } from '#/adapter/form';
-import { getAllMenusApi } from '#/api';
+import { getAllMenusApiRoots } from '#/api';
 import { upload_file } from '#/api/examples/upload';
 import { $t } from '#/locales';
 
@@ -80,7 +80,7 @@ const [BaseForm, baseFormApi] = useVbenForm({
           }));
         },
         // 菜单接口
-        api: getAllMenusApi,
+        api: getAllMenusApiRoots,
         autoSelect: 'first',
       },
       // 字段名
@@ -125,7 +125,7 @@ const [BaseForm, baseFormApi] = useVbenForm({
       // 对应组件的参数
       componentProps: {
         // 菜单接口
-        api: getAllMenusApi,
+        api: getAllMenusApiRoots,
         // 菜单接口转options格式
         labelField: 'name',
         valueField: 'path',

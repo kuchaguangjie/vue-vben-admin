@@ -10,14 +10,13 @@ import { computed, h, ref } from 'vue';
 import { useVbenDrawer } from '@vben/common-ui';
 import { IconifyIcon } from '@vben/icons';
 import { $te } from '@vben/locales';
-import { getPopupContainer } from '@vben/utils';
 
 import { breakpointsTailwind, useBreakpoints } from '@vueuse/core';
 
 import { useVbenForm, z } from '#/adapter/form';
 import {
   createMenu,
-  getMenuTree,
+  getMenuTreeRoots,
   isMenuNameExists,
   isMenuPathExists,
   SystemMenuApi,
@@ -79,18 +78,9 @@ const schema: VbenFormSchema[] = [
   {
     component: 'ApiTreeSelect',
     componentProps: {
-      api: getMenuTree,
+      api: getMenuTreeRoots,
       allowClear: true,
       class: 'w-full',
-      filterTreeNode(input: string, node: Recordable<any>) {
-        if (!input || input.length === 0) {
-          return true;
-        }
-        const title: string = node.meta?.title ?? '';
-        if (!title) return false;
-        return title.includes(input) || $t(title).includes(input);
-      },
-      getPopupContainer,
       labelField: 'meta.title',
       showSearch: true,
       treeDefaultExpandAll: true,

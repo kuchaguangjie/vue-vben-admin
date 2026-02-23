@@ -58,7 +58,7 @@ const [Grid, gridApi] = useVbenVxeGrid({
             formValues,
           );
           userCoreMapRef.value = result.userCoreMap;
-          return result.topItems;
+          return result.roots;
         },
       },
     },
