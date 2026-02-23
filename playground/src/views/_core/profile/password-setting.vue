@@ -8,7 +8,7 @@ import { $t } from '@vben/locales';
 
 import { message } from 'ant-design-vue';
 
-import { updateUserPassword } from '#/api';
+import { updateUserPasswordApi } from '#/api';
 import { useAuthStore } from '#/store';
 import { countdownMsg } from '#/utils/message-util';
 
@@ -60,7 +60,7 @@ const formSchema = computed((): VbenFormSchema[] => {
 });
 
 async function handleSubmit(values: any) {
-  const { removedOldSessions } = await updateUserPassword(values);
+  const { removedOldSessions } = await updateUserPasswordApi(values);
 
   const removedOldSessionsTip =
     removedOldSessions > 0

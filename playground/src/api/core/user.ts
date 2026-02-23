@@ -14,6 +14,9 @@ export namespace UserApi {
     os: string;
     sid: string;
   }
+  export interface AvatarInfo {
+    avatarUrl: string;
+  }
 }
 
 /**
@@ -27,8 +30,12 @@ export async function updateUserBasicInfoApi(data: any) {
   return requestClient.post<UserInfo>('/user/updateBasicInfo', data);
 }
 
-export async function updateUserPassword(data: any) {
+export async function updateUserPasswordApi(data: any) {
   return requestClient.post<UserInfo>('/user/updatePassword', data);
+}
+
+export async function updateUserAvatarApi(data: any) {
+  return requestClient.post<UserApi.AvatarInfo>('/user/updateAvatar', data);
 }
 
 // get all user sessions

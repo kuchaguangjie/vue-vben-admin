@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
-import { Profile } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 import { useUserStore } from '@vben/stores';
 
 import ProfileBase from './base-setting.vue';
 import ProfileNotificationSetting from './notification-setting.vue';
 import ProfilePasswordSetting from './password-setting.vue';
+import Profile from './profile.vue';
 import ProfileSecuritySetting from './security-setting.vue';
 import SessionManage from './session-manage.vue';
 
