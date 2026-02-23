@@ -1,6 +1,7 @@
 import type { Recordable } from '@vben/types';
 
-import type { CommonType } from '#/api';
+import { type CommonType, SystemMenuApi } from '#/api';
+
 import { getTreeAsRoots } from '#/api';
 import { requestClient } from '#/api/request';
 
@@ -28,7 +29,7 @@ async function getApiTree(params: Recordable<any>) {
   );
 }
 async function getApiTreeRoots(params: Recordable<any>) {
-  return getTreeAsRoots(getApiTree, params);
+  return getTreeAsRoots<SystemApiApi.SystemApi>(getApiTree, params);
 }
 
 async function getApiTreeWithUserCore(params: Recordable<any>) {

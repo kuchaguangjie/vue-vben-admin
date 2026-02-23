@@ -1,7 +1,7 @@
 import type { RouteRecordStringComponent } from '@vben/types';
 
-import { requestClient } from '#/api/request';
 import { getTreeAsRoots } from '#/api';
+import { requestClient } from '#/api/request';
 
 /**
  * 获取用户所有菜单

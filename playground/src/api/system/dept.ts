@@ -1,7 +1,8 @@
 import type { Recordable } from '@vben/types';
 
-import { type CommonType, getApiTree, getTreeAsRoots } from '#/api';
+import { type CommonType, SystemMenuApi } from '#/api';
 
+import { getTreeAsRoots } from '#/api';
 import { requestClient } from '#/api/request';
 
 export namespace SystemDeptApi {
@@ -27,7 +28,7 @@ async function getDeptTree(params: Recordable<any>) {
   );
 }
 async function getDeptTreeRoots(params: Recordable<any>) {
-  return getTreeAsRoots(getDeptTree, params);
+  return getTreeAsRoots<SystemDeptApi.SystemDept>(getDeptTree, params);
 }
 
 async function getDeptTreeWithUserCore(params: Recordable<any>) {
