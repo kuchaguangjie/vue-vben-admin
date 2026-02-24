@@ -15,7 +15,7 @@ export namespace UserApi {
     sid: string;
   }
   export interface AvatarInfo {
-    avatarUrl: string;
+    avatar: string;
   }
 }
 

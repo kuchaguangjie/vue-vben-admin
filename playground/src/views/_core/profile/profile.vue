@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import type { Props } from '@vben/common-ui';
 
+import { computed } from 'vue';
+
 import { Page } from '@vben/common-ui';
 import { preferences } from '@vben/preferences';
+import { useUserStore } from '@vben/stores';
 
 import {
   Card,
@@ -26,15 +29,17 @@ withDefaults(defineProps<Props>(), {
 
 const tabsValue = defineModel<string>('modelValue');
 
+const userStore = useUserStore();
+const userInfo = computed(() => userStore.userInfo);
 const uploadMode = true;
-function handleAvatarSuccess(newAvatarUrl: string) {
-  console.warn(newAvatarUrl);
-  // TODO
-  // 1. 立即更新当前页面的头像显示
-  // userInfo.value.avatar = newUrl;
-  // 2. 更新全局 Store，这样右上角图标会立即变化
-  // userStore.setUserInfo({ ...userInfo.value, avatar: newUrl });
-  // 3. (可选) 调用后端 update-profile 接口持久化 avatar 字段
+// 处理头像上传成功
+function handleAvatarSuccess(newAvatarUrl?: string) {
+  if (!newAvatarUrl || !userStore.userInfo) return;
+  const updatedUserInfo = {
+    ...userStore.userInfo,
+    avatar: newAvatarUrl,
+  };
+  userStore.setUserInfo(updatedUserInfo);
 }
 </script>
 <template>

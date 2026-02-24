@@ -15,8 +15,10 @@ import { updateUserAvatarApi } from '#/api';
 defineProps<{
   currentAvatar: string;
 }>();
+const emit = defineEmits<{
+  success: [avatarUrl: string]; // 定义事件和参数类型
+}>();
 
-const emit = defineEmits(['updateSuccess']);
 const MAX_SIZE = 400; // 最大尺寸, (边长);
 
 const showModal = ref(false);
@@ -81,7 +83,7 @@ async function handleConfirmUpdate() {
       try {
         uploading.value = true;
         const res = await updateUserAvatarApi(avatarFile);
-        emit('updateSuccess', res.avatarUrl);
+        emit('success', res.avatar);
         message.success($t('profile.msg.avatarUploadSuccess'));
         showModal.value = false;
       } catch (error) {
