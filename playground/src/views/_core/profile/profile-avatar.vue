@@ -43,58 +43,56 @@ function handleFileChange(e: Event) {
 }
 
 // 2. crop & 上传
+// 提取出的工具函数，让主函数更清爽
+const getCanvasBlob = (canvas: HTMLCanvasElement): Promise<Blob | null> =>
+  new Promise((resolve) => canvas.toBlob(resolve, 'image/jpeg', 0.85));
+
 async function handleConfirmUpdate() {
-  if (!cropperRef.value) return;
+  // 1. 同步加锁，防止穿透
+  if (uploading.value) return;
+  uploading.value = true;
 
-  const result = cropperRef.value.getResult();
-  const { canvas, coordinates } = result; // coordinates 是用户在原图上选取的像素坐标
-  if (!canvas || !coordinates) return;
+  try {
+    // 2. 校验
+    if (!cropperRef.value) return;
+    const { canvas, coordinates } = cropperRef.value.getResult();
+    if (!canvas || !coordinates) return;
 
-  const originalWidth = coordinates.width;
-  const outputSize = Math.min(originalWidth, MAX_SIZE);
-  console.warn(
-    `[crop] original size: ${originalWidth}px, output size: ${outputSize}px`,
-  );
+    // 3. 图像处理 (Canvas 绘制)
+    const outputSize = Math.min(coordinates.width, MAX_SIZE);
+    const drawCanvas = document.createElement('canvas');
+    drawCanvas.width = drawCanvas.height = outputSize;
+    const ctx = drawCanvas.getContext('2d');
+    if (!ctx) throw new Error('Canvas context error');
 
-  // resize
-  const drawCanvas = document.createElement('canvas');
-  drawCanvas.width = outputSize;
-  drawCanvas.height = outputSize;
-  const ctx = drawCanvas.getContext('2d');
-  if (ctx) {
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = 'high';
-    // 将 result.canvas 绘制到我们的 drawCanvas 上，自动完成缩放
     ctx.drawImage(canvas, 0, 0, outputSize, outputSize);
+
+    // 4. 异步处理转线性 (核心点)
+    const blob = await getCanvasBlob(drawCanvas);
+    if (!blob) throw new Error('Blob generation failed');
+
+    const fileName = `avatar_${Date.now()}.jpg`;
+    const avatarFile = new File([blob], fileName, { type: 'image/jpeg' });
+
+    // 5. API 请求
+    const res = await updateUserAvatarApi(avatarFile);
+
+    // 6. 成功反馈
+    emit('success', res.avatar);
+    message.success($t('profile.msg.avatarUploadSuccess'));
+    showModal.value = false;
+  } catch (error: any) {
+    // 统一处理所有阶段的错误
+    console.error('[AvatarUpdate Error]:', error);
+    message.error(
+      $t('common.messages.uploadFailed', { error: error.message || error }),
+    );
+  } finally {
+    // 7. 就像 defer 一样，无论如何都会解锁
+    uploading.value = false;
   }
-
-  drawCanvas.toBlob(
-    async (blob: Blob | null) => {
-      if (!blob) return;
-
-      // convert to file, with given name
-      const fileName = `avatar_${Date.now()}.jpg`;
-      // 将 blob 转换为 File 对象，第二个参数就是你想要的文件名
-      const avatarFile = new File([blob], fileName, {
-        type: 'image/jpeg',
-      });
-
-      // upload
-      try {
-        uploading.value = true;
-        const res = await updateUserAvatarApi(avatarFile);
-        emit('success', res.avatar);
-        message.success($t('profile.msg.avatarUploadSuccess'));
-        showModal.value = false;
-      } catch (error) {
-        message.error($t('common.messages.uploadFailed', { error }));
-      } finally {
-        uploading.value = false;
-      }
-    },
-    'image/jpeg',
-    0.85,
-  );
 }
 </script>
 
