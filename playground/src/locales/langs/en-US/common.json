@@ -23,14 +23,18 @@
     "copied": "Copied!",
     "copiedId": "ID Copied!",
     "pidEqId": "Can't choose self as parent",
-    "pleaseSelect": "Please select"
+    "pleaseSelect": "Please select",
+    "uploadSuccess": "Upload Success",
+    "uploadFailed": "Upload failed: {error}"
   },
   "operation": "Operation",
   "operationItems":{
     "open": "Open"
   },
   "action": {
-    "close": "Close"
+    "close": "Close",
+    "confirm": "Confirm",
+    "cancel": "Cancel"
   },
   "enableStatus": {
     "enabled": "Enabled",

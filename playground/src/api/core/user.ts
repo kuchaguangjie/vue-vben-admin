@@ -34,8 +34,10 @@ export async function updateUserPasswordApi(data: any) {
   return requestClient.post<UserInfo>('/user/updatePassword', data);
 }
 
-export async function updateUserAvatarApi(data: any) {
-  return requestClient.post<UserApi.AvatarInfo>('/user/updateAvatar', data);
+export async function updateUserAvatarApi(file: Blob) {
+  return requestClient.upload<UserApi.AvatarInfo>('/user/updateAvatar', {
+    file,
+  });
 }
 
 // get all user sessions

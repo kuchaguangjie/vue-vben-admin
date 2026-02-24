@@ -8,6 +8,7 @@
     "notify": "Notification"
   },
   "label": {
+    "changeAvatar": "Upload new",
     "oldPassword": "Old Password",
     "newPassword": "New Password",
     "confirmPassword": "Confirm Password"
@@ -23,7 +24,8 @@
   },
   "msg": {
     "passwordUpdated": "Password updated, please login again",
-    "removedOldSessions": "Deleted old session count: {num}"
+    "removedOldSessions": "Deleted old session count: {num}",
+    "avatarUploadSuccess": "Avatar upload success"
   },
   "tabSession": {
     "title": "Login Sessions [{num}]",
@@ -37,5 +39,9 @@
     },
     "defaultCity": "Local",
     "confirmOffline": "Are you sure to delete this session?"
+  },
+  "crop": {
+    "title": "crop image",
+    "saving": "saving..."
   }
 }

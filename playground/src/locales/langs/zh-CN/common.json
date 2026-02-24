@@ -23,14 +23,18 @@
     "copied": "复制成功",
     "copiedId": "ID 复制成功",
     "pidEqId": "不可选择自己作为父节点",
-    "pleaseSelect": "请选择"
+    "pleaseSelect": "请选择",
+    "uploadSuccess": "上传成功",
+    "uploadFailed": "上传失败: {error}"
   },
   "operation": "操作",
   "operationItems": {
     "open": "查看"
   },
   "action": {
-    "close": "关闭"
+    "close": "关闭",
+    "confirm": "确定",
+    "cancel": "取消"
   },
   "enableStatus": {
     "enabled": "已启用",

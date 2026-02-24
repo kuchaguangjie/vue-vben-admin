@@ -8,6 +8,7 @@
     "notify": "消息提醒"
   },
   "label": {
+    "changeAvatar": "更换头像",
     "oldPassword": "旧密码",
     "newPassword": "新密码",
     "confirmPassword": "确认新密码"
@@ -23,7 +24,8 @@
   },
   "msg": {
     "passwordUpdated": "密码修改成功, 请重新登陆",
-    "removedOldSessions": "已剔除 旧session 数量: {num}"
+    "removedOldSessions": "已剔除 旧session 数量: {num}",
+    "avatarUploadSuccess": "头像上传成功"
   },
   "tabSession": {
     "title": "已登陆 Session [{num}]",
@@ -37,5 +39,9 @@
     },
     "defaultCity": "局域网",
     "confirmOffline": "确定要强制该设备下线吗?"
+  },
+  "crop": {
+    "title": "裁剪图片",
+    "saving": "正在保存..."
   }
 }
