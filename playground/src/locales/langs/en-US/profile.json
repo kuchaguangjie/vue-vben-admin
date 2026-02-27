@@ -41,7 +41,7 @@
     "confirmOffline": "Are you sure to delete this session?"
   },
   "crop": {
-    "title": "crop image",
-    "saving": "saving..."
+    "title": "Crop Image",
+    "saving": "Saving ..."
   }
 }

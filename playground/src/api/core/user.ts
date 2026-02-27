@@ -24,6 +24,12 @@ export namespace UserApi {
   export interface GetSysAvatarListResp {
     avatarList: AvatarPreviewItem[];
   }
+  export enum AvatarUpdateType {
+    /** 系统预设头像 */
+    SYSTEM = 0,
+    /** 用户手动上传 */
+    UPLOAD = 1,
+  }
 }
 
 /**
@@ -48,17 +54,17 @@ export async function updateUserPasswordApi(data: any) {
 }
 
 export async function updateUserAvatarApi(
-  avatarType: number,
+  avatarType: UserApi.AvatarUpdateType,
   avatar: Blob | string,
 ) {
   const body = {} as Record<string, any> & { file: Blob };
   body.avatarType = avatarType;
 
   // set avatar
-  if (avatarType === 0) {
+  if (avatarType === UserApi.AvatarUpdateType.SYSTEM) {
     // choose system avatar
     body.sysAvatar = avatar as string;
-  } else if (avatarType === 1) {
+  } else if (avatarType === UserApi.AvatarUpdateType.UPLOAD) {
     // user upload
     body.file = avatar as Blob;
   } else {

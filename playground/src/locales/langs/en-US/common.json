@@ -34,7 +34,11 @@
   "action": {
     "close": "Close",
     "confirm": "Confirm",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "choose": "Choose",
+    "userUpload": "User Upload",
+    "uploadImage": "Choose Image",
+    "chooseSystemImage": "Use System Image"
   },
   "enableStatus": {
     "enabled": "Enabled",

@@ -34,7 +34,11 @@
   "action": {
     "close": "关闭",
     "confirm": "确定",
-    "cancel": "取消"
+    "cancel": "取消",
+    "choose": "选择",
+    "userUpload": "用户上传",
+    "uploadImage": "选择图片",
+    "chooseSystemImage": "使用系统头像"
   },
   "enableStatus": {
     "enabled": "已启用",
