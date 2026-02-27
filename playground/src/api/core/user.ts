@@ -17,6 +17,13 @@ export namespace UserApi {
   export interface AvatarInfo {
     avatar: string;
   }
+  export interface AvatarPreviewItem {
+    relativePath: string;
+    url: string;
+  }
+  export interface GetSysAvatarListResp {
+    avatarList: AvatarPreviewItem[];
+  }
 }
 
 /**
@@ -24,6 +31,12 @@ export namespace UserApi {
  */
 export async function getUserInfoApi() {
   return requestClient.get<UserInfo>('/user/info');
+}
+
+export async function getSysAvatarListApi() {
+  return requestClient.get<UserApi.GetSysAvatarListResp>(
+    '/user/getSysAvatarList',
+  );
 }
 
 export async function updateUserBasicInfoApi(data: any) {
@@ -34,10 +47,25 @@ export async function updateUserPasswordApi(data: any) {
   return requestClient.post<UserInfo>('/user/updatePassword', data);
 }
 
-export async function updateUserAvatarApi(file: Blob) {
-  return requestClient.upload<UserApi.AvatarInfo>('/user/updateAvatar', {
-    file,
-  });
+export async function updateUserAvatarApi(
+  avatarType: number,
+  avatar: Blob | string,
+) {
+  const body = {} as Record<string, any> & { file: Blob };
+  body.avatarType = avatarType;
+
+  // set avatar
+  if (avatarType === 0) {
+    // choose system avatar
+    body.sysAvatar = avatar as string;
+  } else if (avatarType === 1) {
+    // user upload
+    body.file = avatar as Blob;
+  } else {
+    throw new Error(`invalid avatar type: ${avatarType}`);
+  }
+
+  return requestClient.upload<UserApi.AvatarInfo>('/user/updateAvatar', body);
 }
 
 // get all user sessions

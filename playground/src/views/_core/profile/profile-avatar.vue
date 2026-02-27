@@ -77,7 +77,7 @@ async function handleConfirmUpdate() {
     const avatarFile = new File([blob], fileName, { type: 'image/jpeg' });
 
     // 5. API 请求
-    const res = await updateUserAvatarApi(avatarFile);
+    const res = await updateUserAvatarApi(1, avatarFile);
 
     // 6. 成功反馈
     emit('success', res.avatar);
