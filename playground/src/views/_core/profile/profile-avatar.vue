@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { CircleStencil, Cropper } from 'vue-advanced-cropper';
 import 'vue-advanced-cropper/dist/style.css';
 
@@ -18,6 +18,11 @@ const emit = defineEmits<{
   success: [avatarUrl: string];
 }>();
 
+// tabs
+const UPLOAD_TAB_NAME = 'upload';
+const SYSTEM_TAB_NAME = 'system';
+const DEFAULT_TAB_NAME = UPLOAD_TAB_NAME;
+
 const MAX_SIZE = 400;
 const showModal = ref(false);
 const previewImage = ref('');
@@ -27,30 +32,46 @@ const uploading = ref(false);
 // --- 系统头像相关状态 ---
 const sysAvatarList = ref<UserApi.AvatarPreviewItem[]>([]);
 const loadingSysList = ref(false);
-const activeTab = ref('upload'); // 'upload' | 'system'
+const activeTab = ref(DEFAULT_TAB_NAME);
 
-// 1. 打开弹窗逻辑增强
-async function openAvatarModal() {
-  showModal.value = true;
-  // 默认进入上传 tab
-  activeTab.value = 'upload';
-  // 预加载系统列表
-  if (sysAvatarList.value.length === 0) {
-    await loadSystemAvatars();
+/**
+ * 1. 延迟加载：基于常量判断
+ */
+watch(activeTab, (newTab) => {
+  if (newTab === SYSTEM_TAB_NAME && sysAvatarList.value.length === 0) {
+    loadSystemAvatars();
   }
-}
+});
 
 async function loadSystemAvatars() {
+  if (loadingSysList.value) return;
   loadingSysList.value = true;
   try {
     const res = await getSysAvatarListApi();
     sysAvatarList.value = res.avatarList;
+  } catch (error) {
+    console.error('Failed to sync system avatars:', error);
+    message.error($t('common.messages.loadFailed'));
   } finally {
     loadingSysList.value = false;
   }
 }
 
-// 2. 处理本地文件选择
+/**
+ * 2. 状态清理逻辑
+ */
+function closeModal() {
+  showModal.value = false;
+  sysAvatarList.value = [];
+  previewImage.value = '';
+  activeTab.value = DEFAULT_TAB_NAME;
+}
+
+function openAvatarModal() {
+  showModal.value = true;
+  activeTab.value = DEFAULT_TAB_NAME;
+}
+
 function handleFileChange(e: Event) {
   const file = (e.target as HTMLInputElement).files?.[0];
   if (!file) return;
@@ -58,7 +79,7 @@ function handleFileChange(e: Event) {
   const reader = new FileReader();
   reader.addEventListener('load', (event) => {
     previewImage.value = event.target?.result as string;
-    activeTab.value = 'upload';
+    activeTab.value = UPLOAD_TAB_NAME;
     showModal.value = true;
   });
   reader.readAsDataURL(file);
@@ -67,7 +88,6 @@ function handleFileChange(e: Event) {
 const getCanvasBlob = (canvas: HTMLCanvasElement): Promise<Blob | null> =>
   new Promise((resolve) => canvas.toBlob(resolve, 'image/jpeg', 0.85));
 
-// 3. 核心：统一确认更新逻辑
 async function handleConfirmUpdate(sysAvatarPath?: string) {
   if (uploading.value) return;
   uploading.value = true;
@@ -75,13 +95,11 @@ async function handleConfirmUpdate(sysAvatarPath?: string) {
   try {
     let res;
     if (sysAvatarPath) {
-      // 分支 0: 选择系统头像 (直接传路径字符串)
       res = await updateUserAvatarApi(
         UserApi.AvatarUpdateType.SYSTEM,
         sysAvatarPath,
       );
     } else {
-      // 分支 1: 裁剪上传
       if (!cropperRef.value) return;
       const { canvas, coordinates } = cropperRef.value.getResult();
       if (!canvas || !coordinates) return;
@@ -107,8 +125,7 @@ async function handleConfirmUpdate(sysAvatarPath?: string) {
 
     emit('success', res.avatar);
     message.success($t('profile.msg.avatarUploadSuccess'));
-    showModal.value = false;
-    previewImage.value = ''; // 清空预览
+    closeModal();
   } catch (error: any) {
     message.error(
       $t('common.messages.uploadFailed', { error: error.message || error }),
@@ -124,7 +141,6 @@ async function handleConfirmUpdate(sysAvatarPath?: string) {
     class="group relative size-20 cursor-pointer overflow-hidden rounded-full border border-secondary shadow-sm"
   >
     <VbenAvatar :src="currentAvatar" class="size-full object-cover" />
-
     <div
       class="absolute inset-0 flex flex-col items-center justify-center bg-black/50 opacity-0 transition-all duration-300 group-hover:opacity-100"
       @click="openAvatarModal"
@@ -136,15 +152,18 @@ async function handleConfirmUpdate(sysAvatarPath?: string) {
 
     <div
       v-if="showModal"
-      class="fixed inset-0 z-[999] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
-      @click.self="showModal = false"
+      class="fixed inset-0 z-[999] flex items-center justify-center bg-black/60 p-4"
+      @click.self="closeModal"
     >
       <div
         class="w-full max-w-lg overflow-hidden rounded-xl bg-white shadow-2xl dark:bg-zinc-900"
       >
         <div class="px-4 pt-4">
           <Tabs v-model:active-key="activeTab">
-            <TabPane key="upload" :tab="$t('common.action.userUpload')">
+            <TabPane
+              :key="UPLOAD_TAB_NAME"
+              :tab="$t('common.action.userUpload')"
+            >
               <div class="flex flex-col items-center py-4">
                 <div
                   v-if="!previewImage"
@@ -166,7 +185,7 @@ async function handleConfirmUpdate(sysAvatarPath?: string) {
                     }}
                   </label>
                 </div>
-                <div v-else class="h-80 w-full bg-zinc-100 dark:bg-zinc-800">
+                <div v-else class="h-80 w-full overflow-hidden">
                   <Cropper
                     ref="cropperRef"
                     class="h-full w-full"
@@ -178,25 +197,33 @@ async function handleConfirmUpdate(sysAvatarPath?: string) {
               </div>
             </TabPane>
 
-            <TabPane key="system" :tab="$t('common.action.chooseSystemImage')">
-              <div class="grid h-80 grid-cols-4 gap-4 overflow-y-auto p-4">
+            <TabPane
+              :key="SYSTEM_TAB_NAME"
+              :tab="$t('common.action.chooseSystemImage')"
+            >
+              <div class="grid h-80 grid-cols-4 gap-3 overflow-y-auto p-4">
                 <div
                   v-if="loadingSysList"
-                  class="col-span-4 flex justify-center py-10"
+                  class="col-span-4 flex flex-col items-center justify-center py-10"
                 >
-                  <span class="animate-spin">🌀</span>
+                  <div
+                    class="mb-2 h-8 w-8 animate-spin rounded-full border-4 border-blue-600 border-t-transparent"
+                  ></div>
+                  <span class="text-sm text-gray-500">{{
+                    $t('common.action.loading')
+                  }}</span>
                 </div>
                 <div
                   v-for="item in sysAvatarList"
                   :key="item.relativePath"
-                  class="group relative aspect-square cursor-pointer overflow-hidden rounded-lg border-2 border-transparent hover:border-blue-500"
+                  class="group relative aspect-square cursor-pointer overflow-hidden rounded-lg border border-gray-100 transition-all hover:border-blue-500 hover:shadow-lg dark:border-zinc-800"
                   @click="handleConfirmUpdate(item.relativePath)"
                 >
                   <img :src="item.url" class="size-full object-cover" />
                   <div
-                    class="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 group-hover:opacity-100"
+                    class="absolute inset-x-0 bottom-0 flex h-8 items-end justify-center bg-gradient-to-t from-black/70 to-transparent pb-1 opacity-0 transition-opacity group-hover:opacity-100"
                   >
-                    <span class="text-xs text-white">{{
+                    <span class="text-[11px] font-bold text-white shadow-sm">{{
                       $t('common.action.choose')
                     }}</span>
                   </div>
@@ -207,12 +234,12 @@ async function handleConfirmUpdate(sysAvatarPath?: string) {
         </div>
 
         <div
-          v-if="activeTab === 'upload'"
+          v-if="activeTab === UPLOAD_TAB_NAME"
           class="flex justify-end gap-3 bg-gray-50 p-4 dark:bg-zinc-800/50"
         >
           <button
-            @click="showModal = false"
-            class="px-4 py-2 text-sm text-gray-600 hover:text-gray-800"
+            @click="closeModal"
+            class="px-4 py-2 text-sm text-gray-600 transition-colors hover:text-gray-800"
             :disabled="uploading"
           >
             {{ $t('common.action.cancel') }}
@@ -221,7 +248,7 @@ async function handleConfirmUpdate(sysAvatarPath?: string) {
             v-if="previewImage"
             @click="handleConfirmUpdate()"
             :disabled="uploading"
-            class="flex items-center rounded-lg bg-blue-600 px-6 py-2 text-sm font-semibold text-white disabled:opacity-50"
+            class="flex items-center rounded-lg bg-blue-600 px-6 py-2 text-sm font-semibold text-white transition-all hover:bg-blue-700 disabled:opacity-50"
           >
             <span
               v-if="uploading"
