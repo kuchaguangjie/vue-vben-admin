@@ -44,16 +44,21 @@
 - 添加页面: 1. 提供 api; 2. 创建 menu, 创建 api, 分配给角色; 3. 开发页面;
 
 ## Run
+
 - dev
   ```bash
   pnpm dev:play
+  ```
 
 ## Build
+
 - prod
   ```bash
   pnpm build:play
+  ```
 
 ## caddy 代理
+
 - dev
   - 在`.env.development`, 修改:
     > VITE_BASE=/ui
