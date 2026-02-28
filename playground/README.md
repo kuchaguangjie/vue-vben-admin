@@ -66,7 +66,6 @@
     > import UI_DEV
   - 访问: http://localhost/ui/
 - prod
-- dev
   - 在`.env.production`, 修改:
     > VITE_BASE=/ui
   - build 后, 解压到 `/var/www/fiber-crud-ui/`
