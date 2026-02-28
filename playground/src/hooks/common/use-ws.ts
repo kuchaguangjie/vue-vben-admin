@@ -10,7 +10,7 @@ import { notifications } from '#/hooks/common/use-notify';
 import { router } from '#/router';
 import { useAuthStore } from '#/store';
 
-const wsApiPath = '/ws/v1';
+const wsApiPath = '/';
 
 const authStore = useAuthStore();
 
