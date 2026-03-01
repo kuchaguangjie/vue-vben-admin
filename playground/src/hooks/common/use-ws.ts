@@ -107,7 +107,7 @@ export function useWs() {
               ),
               ` ${$t('system.notice.jumpTip.part2')}`,
             ]),
-          duration: 0,
+          duration: 10,
         });
         break;
       }
