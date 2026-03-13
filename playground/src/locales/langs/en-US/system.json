@@ -126,6 +126,7 @@
     "passwordValidationComplexity": "Must contain both alphabet and number"
   },
   "log": {
+    "instance": "Instance",
     "code": "Code",
     "data": "Data",
     "title": "Log Mgr",

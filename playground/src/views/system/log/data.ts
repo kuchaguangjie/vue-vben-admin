@@ -1,10 +1,9 @@
 import type { Ref } from 'vue';
+import { ref } from 'vue';
 
 import type { VbenFormSchema } from '#/adapter/form';
 import type { VxeTableGridOptions } from '#/adapter/vxe-table';
 import type { SystemUserApi } from '#/api';
-
-import { ref } from 'vue';
 
 import { $t } from '#/locales';
 import { useCopyColumn } from '#/utils/use-copy-column';
@@ -18,6 +17,15 @@ export const userCoreMapRef: Ref<Record<number, SystemUserApi.UserCore>> = ref(
 // for search list
 export function useGridFormSchema(): VbenFormSchema[] {
   return [
+    {
+      component: 'Input',
+      fieldName: 'instance',
+      label: $t('system.log.instance'),
+      componentProps: {
+        placeholder: $t('common.prefix'),
+        allowClear: true,
+      },
+    },
     {
       component: 'Input',
       fieldName: 'code',
@@ -39,7 +47,12 @@ export function useColumns(): VxeTableGridOptions['columns'] {
     {
       field: 'id',
       title: $t('system.log.id'),
-      width: 150,
+      width: 120,
+    },
+    {
+      field: 'instance',
+      title: $t('system.log.instance'),
+      width: 200,
     },
     {
       field: 'code',

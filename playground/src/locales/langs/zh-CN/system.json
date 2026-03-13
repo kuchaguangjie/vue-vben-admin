@@ -128,6 +128,7 @@
     "passwordValidationComplexity": "必须同时包含 字母 数字"
   },
   "log": {
+    "instance": "实例",
     "code": "操作码",
     "data": "数据",
     "title": "日志管理",
