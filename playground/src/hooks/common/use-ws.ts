@@ -4,7 +4,7 @@ import { $t } from '@vben/locales'; // 确保引入了路由实例
 import { useAccessStore } from '@vben/stores';
 
 import { useWebSocket } from '@vueuse/core';
-import { notification } from 'ant-design-vue';
+import { message, notification } from 'ant-design-vue';
 
 import { notifications } from '#/hooks/common/use-notify';
 import { router } from '#/router';
@@ -41,12 +41,18 @@ export function useWs() {
 
     // 监听连接成功
     onConnected() {
-      // console.info('[WS] Connected');
+      // eslint-disable-next-line no-console
+      console.info('[WS] Connected');
     },
 
     // 监听连接断开
-    onDisconnected() {
-      // console.info('[WS] Disconnected');
+    onDisconnected(_, event) {
+      console.warn('[WS] Disconnected');
+      message.error(
+        $t('common.messages.wsConnFailed', {
+          error: `(${event.code}) ${event.reason}`,
+        }),
+      );
     },
 
     // 处理 data frame
@@ -66,7 +72,8 @@ export function useWs() {
     // console.debug('[WS] Received Business Data:', msg);
     switch (msg.action) {
       case 'hello': {
-        console.warn('[WS] hello');
+        // eslint-disable-next-line no-console
+        console.info('[WS] hello');
         break;
       }
       case 'kickout': {

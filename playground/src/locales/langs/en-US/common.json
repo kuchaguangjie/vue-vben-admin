@@ -25,7 +25,9 @@
     "pidEqId": "Can't choose self as parent",
     "pleaseSelect": "Please select",
     "uploadSuccess": "Upload Success",
-    "uploadFailed": "Upload failed: {error}"
+    "uploadFailed": "Upload failed: {error}",
+    "wsConnSuccess": "ws connect success",
+    "wsConnFailed": "ws connect failed: {error}"
   },
   "operation": "Operation",
   "operationItems":{
