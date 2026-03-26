@@ -35,6 +35,10 @@ export function useWs() {
     autoReconnect: {
       retries: 10, // 重连尝试次数
       delay: 6000, // 每次重连间隔, in ms;
+      onFailed: () => {
+        console.warn('[WS] All reconnects failed, stop retry.');
+        message.error($t('common.messages.wsConnFailedFinal'), 0); // 不自动消失
+      },
     },
 
     heartbeat: false, // 前端主动心跳; 如果后端 主动 ping, 则这里不要 重复开启;

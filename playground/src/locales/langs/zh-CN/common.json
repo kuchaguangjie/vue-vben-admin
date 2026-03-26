@@ -27,7 +27,8 @@
     "uploadSuccess": "上传成功",
     "uploadFailed": "上传失败: {error}",
     "wsConnSuccess": "ws 连接成功",
-    "wsConnFailed": "ws 连接失败: {error}"
+    "wsConnFailed": "ws 连接失败: {error}",
+    "wsConnFailedFinal": "ws 重试 连接全部失败, 请手动刷新后重试"
   },
   "operation": "操作",
   "operationItems": {

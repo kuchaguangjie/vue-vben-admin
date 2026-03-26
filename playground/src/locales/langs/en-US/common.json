@@ -27,10 +27,11 @@
     "uploadSuccess": "Upload Success",
     "uploadFailed": "Upload failed: {error}",
     "wsConnSuccess": "ws connect success",
-    "wsConnFailed": "ws connect failed: {error}"
+    "wsConnFailed": "ws connect failed: {error}",
+    "wsConnFailedFinal": "ws reconnect all failed, please manually refresh to try again"
   },
   "operation": "Operation",
-  "operationItems":{
+  "operationItems": {
     "open": "Open"
   },
   "action": {
