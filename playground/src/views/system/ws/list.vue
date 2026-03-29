@@ -80,9 +80,18 @@ async function handleStat(showSuccess: boolean = false) {
 
       <Card :title="$t('system.ws.section.config')" class="shadow-sm">
         <Descriptions bordered :column="1" size="small">
+          <Descriptions.Item :label="$t('system.ws.config.isCluster')">
+            <span class="font-medium">{{
+              displayData.config.isCluster
+                ? $t('common.enableStatus.enabled')
+                : $t('common.enableStatus.disabled')
+            }}</span>
+          </Descriptions.Item>
           <Descriptions.Item :label="$t('system.ws.config.maxConnPerSid')">
             <span class="font-medium">{{
-              displayData.config.maxConnPerSid
+              displayData.config.isCluster
+                ? 1
+                : displayData.config.maxConnPerSid
             }}</span>
           </Descriptions.Item>
 

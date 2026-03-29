@@ -182,6 +182,7 @@
       "sidCount": "Total connected sessions"
     },
     "config": {
+      "isCluster": "Is cluster",
       "maxConnPerSid": "Max Connections per session",
       "rateLimit": {
         "title": "Rate Limit",
