@@ -54,21 +54,28 @@ async function handleStat(showSuccess: boolean = false) {
     <div v-if="displayData" class="p-4 pt-0">
       <Card :title="$t('system.ws.section.stat')" class="mb-4 shadow-sm">
         <Row :gutter="16">
-          <Col :span="8">
+          <Col :span="5">
+            <Statistic
+              :title="$t('system.ws.stat.instanceCount')"
+              :value="displayData.stat?.instanceCount"
+              class="text-center"
+            />
+          </Col>
+          <Col :span="5">
             <Statistic
               :title="$t('system.ws.stat.connCount')"
               :value="displayData.stat?.connCount"
               class="text-center"
             />
           </Col>
-          <Col :span="8">
+          <Col :span="5">
             <Statistic
               :title="$t('system.ws.stat.userCount')"
               :value="displayData.stat?.userCount"
               class="text-center"
             />
           </Col>
-          <Col :span="8">
+          <Col :span="5">
             <Statistic
               :title="$t('system.ws.stat.sidCount')"
               :value="displayData.stat?.sidCount"

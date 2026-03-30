@@ -179,6 +179,7 @@
       "config": "配置"
     },
     "stat": {
+      "instanceCount": "ws服务 实例数",
       "connCount": "连接总数",
       "userCount": "连接用户总数",
       "sidCount": "连接 Session 总数"

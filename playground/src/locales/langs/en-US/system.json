@@ -177,6 +177,7 @@
       "config": "Config"
     },
     "stat": {
+      "instanceCount": "ws server count",
       "connCount": "Total connections",
       "userCount": "Total connected users",
       "sidCount": "Total connected sessions"

@@ -14,6 +14,7 @@ export namespace SystemWsApi {
     };
     stat: {
       connCount: number;
+      instanceCount: number;
       sidCount: number;
       userCount: number;
     };
