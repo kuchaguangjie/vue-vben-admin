@@ -70,15 +70,15 @@ async function handleStat(showSuccess: boolean = false) {
           </Col>
           <Col :span="5">
             <Statistic
-              :title="$t('system.ws.stat.userCount')"
-              :value="displayData.stat?.userCount"
+              :title="$t('system.ws.stat.sidCount')"
+              :value="displayData.stat?.sidCount"
               class="text-center"
             />
           </Col>
-          <Col :span="5">
+          <Col :span="5" v-if="!displayData.config.isCluster">
             <Statistic
-              :title="$t('system.ws.stat.sidCount')"
-              :value="displayData.stat?.sidCount"
+              :title="$t('system.ws.stat.userCount')"
+              :value="displayData.stat?.userCount"
               class="text-center"
             />
           </Col>
