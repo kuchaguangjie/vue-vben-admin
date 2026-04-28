@@ -11,16 +11,12 @@ import { usePreviewLink } from '#/utils/use-preview-link';
 import { useUserCoreColumn } from '#/utils/user-core';
 import { formatBackendTime } from '#/utils/value-format';
 
-export const categoryList = ref<SystemNoticeApi.SystemNoticeCategory[]>([]); // category 列表
-export const categoryOptions = ref<any[]>([]); // category 下拉选项
-export const categoryMap = ref<Record<number, string>>({}); // category, id > name
+export const categoryList = ref<SystemNoticeApi.SystemNoticeCategory[]>([]);
+export const categoryOptions = ref<any[]>([]);
+export const categoryMap = ref<Record<number, string>>({});
 export function categoryIdToNameMap(id: number): string {
   return categoryMap.value[id] || '';
 }
-
-export const userCoreMapRef: Ref<Record<number, SystemUserApi.UserCore>> = ref(
-  {},
-);
 
 // form - new/edit
 export function useFormSchema(): VbenFormSchema[] {
@@ -184,7 +180,7 @@ export function useGridFormSchema(): VbenFormSchema[] {
 export function useColumns<T = SystemNoticeApi.SystemNotice>(
   onActionClick: OnActionClickFn<T>,
   onPreview: (row: any) => void,
-  // onStatusChange?: (newStatus: any, row: T) => PromiseLike<boolean | undefined>,
+  userCoreMap: Ref<Record<number, SystemUserApi.UserCore>>,
 ): VxeTableGridOptions['columns'] {
   return [
     usePreviewLink(
@@ -226,14 +222,14 @@ export function useColumns<T = SystemNoticeApi.SystemNotice>(
       field: 'status',
       title: $t('common.status'),
       width: 100,
-      formatter: ({ cellValue }) => noticeStatusToI18n(cellValue), // 时间格式转换
+      formatter: ({ cellValue }) => noticeStatusToI18n(cellValue),
       sortable: true,
     },
     {
       field: 'createdAt',
       title: $t('common.createdAt'),
       width: 160,
-      formatter: ({ cellValue }) => formatBackendTime(cellValue), // 时间格式转换
+      formatter: ({ cellValue }) => formatBackendTime(cellValue),
       sortable: true,
     },
     useUserCoreColumn(
@@ -242,13 +238,13 @@ export function useColumns<T = SystemNoticeApi.SystemNotice>(
         title: $t('common.createdBy'),
         width: 120,
       },
-      userCoreMapRef,
+      userCoreMap,
     ),
     {
       field: 'publishedAt',
       title: $t('common.publishedAt'),
       width: 160,
-      formatter: ({ cellValue }) => formatBackendTime(cellValue), // 时间格式转换
+      formatter: ({ cellValue }) => formatBackendTime(cellValue),
       sortable: true,
     },
     useUserCoreColumn(
@@ -257,7 +253,7 @@ export function useColumns<T = SystemNoticeApi.SystemNotice>(
         title: $t('common.publishedBy'),
         width: 120,
       },
-      userCoreMapRef,
+      userCoreMap,
     ),
     {
       align: 'center',

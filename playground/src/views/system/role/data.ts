@@ -4,17 +4,11 @@ import type { VbenFormSchema } from '#/adapter/form';
 import type { OnActionClickFn, VxeTableGridOptions } from '#/adapter/vxe-table';
 import type { SystemRoleApi, SystemUserApi } from '#/api';
 
-import { ref } from 'vue';
-
 import { z } from '#/adapter/form';
 import { $t } from '#/locales';
 import { usePreviewLink } from '#/utils/use-preview-link';
 import { useUserCoreColumn } from '#/utils/user-core';
 import { formatBackendTime } from '#/utils/value-format';
-
-export const userCoreMapRef: Ref<Record<number, SystemUserApi.UserCore>> = ref(
-  {},
-);
 
 // form - new/edit
 export function useFormSchema(): VbenFormSchema[] {
@@ -165,6 +159,7 @@ export function useGridFormSchema(): VbenFormSchema[] {
 export function useColumns<T = SystemRoleApi.SystemRole>(
   onActionClick: OnActionClickFn<T>,
   onPreview: (row: any) => void,
+  userCoreMap: Ref<Record<number, SystemUserApi.UserCore>>,
   onStatusChange?: (newStatus: any, row: T) => PromiseLike<boolean | undefined>,
 ): VxeTableGridOptions['columns'] {
   return [
@@ -208,7 +203,7 @@ export function useColumns<T = SystemRoleApi.SystemRole>(
       field: 'createdAt',
       title: $t('common.createdAt'),
       width: 160,
-      formatter: ({ cellValue }) => formatBackendTime(cellValue), // 时间格式转换
+      formatter: ({ cellValue }) => formatBackendTime(cellValue),
       sortable: true,
     },
     useUserCoreColumn(
@@ -217,7 +212,7 @@ export function useColumns<T = SystemRoleApi.SystemRole>(
         title: $t('common.createdBy'),
         width: 120,
       },
-      userCoreMapRef,
+      userCoreMap,
     ),
     {
       align: 'center',

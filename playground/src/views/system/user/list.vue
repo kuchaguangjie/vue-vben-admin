@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import type { Recordable } from '@vben/types';
-
 import type {
   OnActionClickParams,
   VxeTableGridOptions,
@@ -11,16 +9,18 @@ import type { PageParams } from '#/api/request';
 import { Page, useVbenDrawer } from '@vben/common-ui';
 import { Plus } from '@vben/icons';
 
-import { Button, message } from 'ant-design-vue';
+import { Button } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { deleteUser, getUserListWithUserCore, updateUserStatus } from '#/api';
 import { doPageQuery } from '#/api/request';
+import { useDeleteAction } from '#/hooks/common/use-delete-action';
+import { useStatusToggle } from '#/hooks/common/use-status-toggle';
+import { useUserCoreMap } from '#/hooks/common/use-user-core-map';
 import { $t } from '#/locales';
-import { confirmDialog } from '#/utils/dialog';
 import { usePagerConfig } from '#/utils/pager';
 
-import { useColumns, useGridFormSchema, userCoreMapRef } from './data';
+import { useColumns, useGridFormSchema } from './data';
 import UserDetail from './modules/detail.vue';
 import Form from './modules/form.vue';
 
@@ -33,6 +33,20 @@ const [DetailDrawer, detailDrawerApi] = useVbenDrawer({
   connectedComponent: UserDetail,
 });
 
+const { userCoreMap, setUserCoreMap } = useUserCoreMap();
+
+const { onStatusChange } = useStatusToggle({
+  getRowName: (row) => row.username,
+  updateStatus: updateUserStatus,
+  onRefresh: () => gridApi.query(),
+});
+
+const { onDelete } = useDeleteAction({
+  getRowName: (row) => row.username,
+  deleteApi: deleteUser,
+  onRefresh: () => gridApi.query(),
+});
+
 const [Grid, gridApi] = useVbenVxeGrid({
   formOptions: {
     fieldMappingTime: [['createTime', ['startTime', 'endTime']]],
@@ -40,7 +54,7 @@ const [Grid, gridApi] = useVbenVxeGrid({
     submitOnChange: true,
   },
   gridOptions: {
-    columns: useColumns(onActionClick, onPreview, onStatusChange),
+    columns: useColumns(onActionClick, onPreview, userCoreMap, onStatusChange),
     height: 'auto',
     keepSource: true,
     pagerConfig: usePagerConfig(),
@@ -52,7 +66,7 @@ const [Grid, gridApi] = useVbenVxeGrid({
             params,
             formValues,
           );
-          userCoreMapRef.value = result.userCoreMap;
+          setUserCoreMap(result.userCoreMap);
           return result;
         },
       },
@@ -69,15 +83,13 @@ const [Grid, gridApi] = useVbenVxeGrid({
       zoom: true,
     },
     sortConfig: {
-      remote: true, // 远程排序
-      trigger: 'default', // 点击表头触发
-      orders: ['asc', 'desc', null], // 排序顺序
+      remote: true,
+      trigger: 'default',
+      orders: ['asc', 'desc', null],
     },
-    // 启用远程模式
     remote: {
-      sort: true, // 远程排序
+      sort: true,
     },
-    // 排序变化事件
     onSortChange() {
       gridApi.query();
     },
@@ -97,54 +109,8 @@ function onActionClick(e: OnActionClickParams<SystemUserApi.SystemUser>) {
   }
 }
 
-/**
- * 状态开关即将改变
- * @param newStatus 期望改变的状态值
- * @param row 行数据
- * @returns 返回false则中止改变，返回其他值（undefined、true）则允许改变
- */
-async function onStatusChange(
-  newStatus: number,
-  row: SystemUserApi.SystemUser,
-) {
-  const status: Recordable<string> = {
-    0: '禁用',
-    1: '启用',
-  };
-  try {
-    await confirmDialog(
-      `你要将${row.username}的状态切换为 【${status[newStatus.toString()]}】 吗？`,
-      `切换状态`,
-    );
-    await updateUserStatus({ id: row.id, status: newStatus });
-    onRefresh();
-    return true;
-  } catch {
-    return false;
-  }
-}
-
 function onEdit(row: SystemUserApi.SystemUser) {
   formDrawerApi.setData(row).open();
-}
-
-function onDelete(row: SystemUserApi.SystemUser) {
-  const hideLoading = message.loading({
-    content: $t('ui.actionMessage.deleting', [row.name]),
-    duration: 0,
-    key: 'action_process_msg',
-  });
-  deleteUser(row.id)
-    .then(() => {
-      message.success({
-        content: $t('ui.actionMessage.deleteSuccess', [row.name]),
-        key: 'action_process_msg',
-      });
-      onRefresh();
-    })
-    .catch(() => {
-      hideLoading();
-    });
 }
 
 function onRefresh() {

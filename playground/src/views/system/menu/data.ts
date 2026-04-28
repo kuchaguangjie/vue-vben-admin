@@ -4,15 +4,9 @@ import type { OnActionClickFn, VxeTableGridOptions } from '#/adapter/vxe-table';
 import type { SystemApiApi, SystemUserApi } from '#/api';
 import type { SystemMenuApi } from '#/api/system/menu';
 
-import { ref } from 'vue';
-
 import { $t } from '#/locales';
 import { useUserCoreColumn } from '#/utils/user-core';
 import { formatBackendTime } from '#/utils/value-format';
-
-export const userCoreMapRef: Ref<Record<number, SystemUserApi.UserCore>> = ref(
-  {},
-);
 
 export function getMenuTypeOptions() {
   return [
@@ -34,6 +28,7 @@ export function getMenuTypeOptions() {
 
 export function useColumns<T = SystemMenuApi.SystemMenu>(
   onActionClick: OnActionClickFn<SystemMenuApi.SystemMenu>,
+  userCoreMap: Ref<Record<number, SystemUserApi.UserCore>>,
   onStatusChange?: (newStatus: any, row: T) => PromiseLike<boolean | undefined>,
 ): VxeTableGridOptions<SystemMenuApi.SystemMenu>['columns'] {
   return [
@@ -108,7 +103,7 @@ export function useColumns<T = SystemMenuApi.SystemMenu>(
       field: 'createdAt',
       title: $t('common.createdAt'),
       width: 160,
-      formatter: ({ cellValue }) => formatBackendTime(cellValue), // 时间格式转换
+      formatter: ({ cellValue }) => formatBackendTime(cellValue),
       sortable: true,
     },
     useUserCoreColumn(
@@ -117,7 +112,7 @@ export function useColumns<T = SystemMenuApi.SystemMenu>(
         title: $t('common.createdBy'),
         width: 120,
       },
-      userCoreMapRef,
+      userCoreMap,
     ),
     {
       align: 'right',
@@ -132,9 +127,9 @@ export function useColumns<T = SystemMenuApi.SystemMenu>(
             code: 'append',
             text: $t('common.newChild'),
           },
-          'edit', // 默认的编辑按钮
+          'edit',
           {
-            code: 'delete', // 默认的删除按钮, 有 children 不可删除;
+            code: 'delete',
             disabled: (row: SystemApiApi.SystemApi) => {
               return !!(row.children && row.children.length > 0);
             },

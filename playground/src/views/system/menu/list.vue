@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import type { Recordable } from '@vben-core/typings';
-
 import type {
   OnActionClickParams,
   VxeTableGridOptions,
@@ -15,7 +13,7 @@ import { $t } from '@vben/locales';
 
 import { MenuBadge } from '@vben-core/menu-ui';
 
-import { Button, message } from 'ant-design-vue';
+import { Button } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { doPageQuery } from '#/api/request';
@@ -25,10 +23,12 @@ import {
   SystemMenuApi,
   updateMenuStatus,
 } from '#/api/system/menu';
-import { confirmDialog } from '#/utils/dialog';
+import { useDeleteAction } from '#/hooks/common/use-delete-action';
+import { useStatusToggle } from '#/hooks/common/use-status-toggle';
+import { useUserCoreMap } from '#/hooks/common/use-user-core-map';
 import { useDisabledPagerConfig } from '#/utils/pager';
 
-import { useColumns, userCoreMapRef } from './data';
+import { useColumns } from './data';
 import Form from './modules/form.vue';
 
 const [FormDrawer, formDrawerApi] = useVbenDrawer({
@@ -36,18 +36,32 @@ const [FormDrawer, formDrawerApi] = useVbenDrawer({
   destroyOnClose: true,
 });
 
+const { userCoreMap, setUserCoreMap } = useUserCoreMap();
+
+const { onStatusChange } = useStatusToggle({
+  getRowName: (row) => row.meta?.title || row.name,
+  updateStatus: updateMenuStatus,
+  onRefresh: () => gridApi.query(),
+});
+
+const { onDelete } = useDeleteAction({
+  getRowName: (row) => row.meta?.title || row.name,
+  deleteApi: deleteMenu,
+  onRefresh: () => gridApi.query(),
+});
+
 const [Grid, gridApi] = useVbenVxeGrid({
   gridOptions: {
-    columns: useColumns(onActionClick, onStatusChange),
+    columns: useColumns(onActionClick, userCoreMap, onStatusChange),
     height: 'auto',
     keepSource: true,
     pagerConfig: useDisabledPagerConfig(),
     proxyConfig: {
       ajax: {
         query: async (params: PageParams) => {
-          isExpend.value = false; // not expend on load
+          isExpend.value = false;
           const result = await doPageQuery(getMenuTreeWithUserCore, params);
-          userCoreMapRef.value = result.userCoreMap;
+          setUserCoreMap(result.userCoreMap);
           return result.roots;
         },
       },
@@ -66,20 +80,17 @@ const [Grid, gridApi] = useVbenVxeGrid({
       parentField: 'pid',
       childrenField: 'children',
       transform: false,
-      showIcon: true, // 显示树节点图标
-      trigger: 'default', // 'default'（点击图标）或 'row'（点击整行）
-      // 是否显示展开/折叠图标
+      showIcon: true,
+      trigger: 'default',
     },
     sortConfig: {
-      remote: true, // 远程排序
-      trigger: 'default', // 点击表头触发
-      orders: ['asc', 'desc', null], // 排序顺序
+      remote: true,
+      trigger: 'default',
+      orders: ['asc', 'desc', null],
     },
-    // 启用远程模式
     remote: {
-      sort: true, // 远程排序
+      sort: true,
     },
-    // 排序变化事件
     onSortChange() {
       gridApi.query();
     },
@@ -103,36 +114,6 @@ function onActionClick({
       onEdit(row);
       break;
     }
-    default: {
-      break;
-    }
-  }
-}
-
-/**
- * 状态开关即将改变
- * @param newStatus 期望改变的状态值
- * @param row 行数据
- * @returns 返回false则中止改变，返回其他值（undefined、true）则允许改变
- */
-async function onStatusChange(
-  newStatus: number,
-  row: SystemMenuApi.SystemMenu,
-) {
-  const status: Recordable<string> = {
-    0: '禁用',
-    1: '启用',
-  };
-  try {
-    await confirmDialog(
-      `你要将 ${row.meta?.title} 的状态切换为 【${status[newStatus.toString()]}】 吗？`,
-      `切换状态`,
-    );
-    await updateMenuStatus({ id: row.id, status: newStatus });
-    onRefresh();
-    return true;
-  } catch {
-    return false;
   }
 }
 
@@ -152,28 +133,8 @@ function onAppend(row: SystemMenuApi.SystemMenu) {
   formDrawerApi.setData({ pid: row.id }).open();
 }
 
-function onDelete(row: SystemMenuApi.SystemMenu) {
-  const hideLoading = message.loading({
-    content: $t('ui.actionMessage.deleting', [row.name]),
-    duration: 0,
-    key: 'action_process_msg',
-  });
-  deleteMenu(row.id)
-    .then(() => {
-      message.success({
-        content: $t('ui.actionMessage.deleteSuccess', [row.name]),
-        key: 'action_process_msg',
-      });
-      onRefresh();
-    })
-    .catch(() => {
-      hideLoading();
-    });
-}
-
 const isExpend = ref(false);
 
-// toggle 全部节点 展开/折叠
 async function triggerExpandAll() {
   await setExpandAll(!isExpend.value);
 }

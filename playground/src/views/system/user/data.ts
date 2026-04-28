@@ -4,17 +4,11 @@ import type { VbenFormSchema } from '#/adapter/form';
 import type { OnActionClickFn, VxeTableGridOptions } from '#/adapter/vxe-table';
 import type { SystemUserApi } from '#/api';
 
-import { ref } from 'vue';
-
 import { z } from '#/adapter/form';
 import { $t } from '#/locales';
 import { usePreviewLink } from '#/utils/use-preview-link';
 import { useUserCoreColumn } from '#/utils/user-core';
 import { formatBackendTime } from '#/utils/value-format';
-
-export const userCoreMapRef: Ref<Record<number, SystemUserApi.UserCore>> = ref(
-  {},
-);
 
 // single - common fields
 export function useFormSchema(): VbenFormSchema[] {
@@ -194,6 +188,7 @@ export function useGridFormSchema(): VbenFormSchema[] {
 export function useColumns<T = SystemUserApi.SystemUser>(
   onActionClick: OnActionClickFn<T>,
   onPreview: (row: any) => void,
+  userCoreMap: Ref<Record<number, SystemUserApi.UserCore>>,
   onStatusChange?: (newStatus: any, row: T) => PromiseLike<boolean | undefined>,
 ): VxeTableGridOptions['columns'] {
   return [
@@ -237,7 +232,7 @@ export function useColumns<T = SystemUserApi.SystemUser>(
       field: 'createdAt',
       title: $t('common.createdAt'),
       width: 160,
-      formatter: ({ cellValue }) => formatBackendTime(cellValue), // 时间格式转换
+      formatter: ({ cellValue }) => formatBackendTime(cellValue),
       sortable: true,
     },
     useUserCoreColumn(
@@ -246,7 +241,7 @@ export function useColumns<T = SystemUserApi.SystemUser>(
         title: $t('common.createdBy'),
         width: 120,
       },
-      userCoreMapRef,
+      userCoreMap,
     ),
     {
       field: 'operation',
@@ -258,18 +253,7 @@ export function useColumns<T = SystemUserApi.SystemUser>(
           onClick: onActionClick,
         },
         name: 'CellOperation',
-        options: [
-          'edit', // 默认的编辑按钮
-          // 不可删除 用户
-          /*
-          {
-            code: 'delete', // 默认的删除按钮, 有 children 不可删除;
-            disabled: (row: SystemApiApi.SystemApi) => {
-              return !!(row.children && row.children.length > 0);
-            },
-          },
-          */
-        ],
+        options: ['edit'],
       },
       fixed: 'right',
       title: $t('system.user.operation'),

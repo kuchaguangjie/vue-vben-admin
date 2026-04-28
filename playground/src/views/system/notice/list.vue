@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import type { Recordable } from '@vben/types';
-
 import type {
   OnActionClickParams,
   VxeTableGridOptions,
@@ -11,17 +9,17 @@ import type { PageParams } from '#/api/request';
 import { Page, useVbenDrawer } from '@vben/common-ui';
 import { Plus } from '@vben/icons';
 
-import { Button, message } from 'ant-design-vue';
+import { Button } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import {
   deleteNotice,
   getNoticeListWithUserCore,
-  updateNoticeStatus,
 } from '#/api';
 import { doPageQuery } from '#/api/request';
+import { useDeleteAction } from '#/hooks/common/use-delete-action';
+import { useUserCoreMap } from '#/hooks/common/use-user-core-map';
 import { $t } from '#/locales';
-import { confirmDialog } from '#/utils/dialog';
 import { usePagerConfig } from '#/utils/pager';
 
 import {
@@ -30,7 +28,6 @@ import {
   categoryOptions,
   useColumns,
   useGridFormSchema,
-  userCoreMapRef,
 } from './data';
 import NoticeDetail from './modules/detail.vue';
 import Form from './modules/form.vue';
@@ -44,6 +41,14 @@ const [DetailDrawer, detailDrawerApi] = useVbenDrawer({
   connectedComponent: NoticeDetail,
 });
 
+const { userCoreMap, setUserCoreMap } = useUserCoreMap();
+
+const { onDelete } = useDeleteAction({
+  getRowName: (row) => row.title || row.name,
+  deleteApi: deleteNotice,
+  onRefresh: () => gridApi.query(),
+});
+
 function onPreview(row: any) {
   detailDrawerApi.setData(row).open();
 }
@@ -55,7 +60,7 @@ const [Grid, gridApi] = useVbenVxeGrid({
     submitOnChange: true,
   },
   gridOptions: {
-    columns: useColumns(onActionClick, onPreview, onStatusChange),
+    columns: useColumns(onActionClick, onPreview, userCoreMap),
     height: 'auto',
     keepSource: true,
     pagerConfig: usePagerConfig(),
@@ -77,7 +82,7 @@ const [Grid, gridApi] = useVbenVxeGrid({
               categoryMap.value[item.id] = item.name;
             }
           }
-          userCoreMapRef.value = result.userCoreMap;
+          setUserCoreMap(result.userCoreMap);
           return result;
         },
       },
@@ -93,15 +98,13 @@ const [Grid, gridApi] = useVbenVxeGrid({
       zoom: true,
     },
     sortConfig: {
-      remote: true, // 远程排序
-      trigger: 'default', // 点击表头触发
-      orders: ['asc', 'desc', null], // 排序顺序
+      remote: true,
+      trigger: 'default',
+      orders: ['asc', 'desc', null],
     },
-    // 启用远程模式
     remote: {
-      sort: true, // 远程排序
+      sort: true,
     },
-    // 排序变化事件
     onSortChange() {
       gridApi.query();
     },
@@ -121,53 +124,8 @@ function onActionClick(e: OnActionClickParams<SystemNoticeApi.SystemNotice>) {
   }
 }
 
-/**
- * 状态开关即将改变
- * @param newStatus 期望改变的状态值
- * @param row 行数据
- * @returns 返回false则中止改变，返回其他值（undefined、true）则允许改变
- */
-async function onStatusChange(
-  newStatus: number,
-  row: SystemNoticeApi.SystemNotice,
-) {
-  const status: Recordable<string> = {
-    0: '禁用',
-    1: '启用',
-  };
-  try {
-    await confirmDialog(
-      `你要将${row.name}的状态切换为 【${status[newStatus.toString()]}】 吗？`,
-      `切换状态`,
-    );
-    await updateNoticeStatus({ id: row.id, status: newStatus });
-    return true;
-  } catch {
-    return false;
-  }
-}
-
 function onEdit(row: SystemNoticeApi.SystemNotice) {
   formDrawerApi.setData(row).open();
-}
-
-function onDelete(row: SystemNoticeApi.SystemNotice) {
-  const hideLoading = message.loading({
-    content: $t('ui.actionMessage.deleting', [row.name]),
-    duration: 0,
-    key: 'action_process_msg',
-  });
-  deleteNotice(row.id)
-    .then(() => {
-      message.success({
-        content: $t('ui.actionMessage.deleteSuccess', [row.name]),
-        key: 'action_process_msg',
-      });
-      onRefresh();
-    })
-    .catch(() => {
-      hideLoading();
-    });
 }
 
 function onRefresh() {

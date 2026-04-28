@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import type { Recordable } from '@vben/types';
-
 import type {
   OnActionClickParams,
   VxeTableGridOptions,
@@ -13,13 +11,15 @@ import { ref } from 'vue';
 import { Page, useVbenDrawer } from '@vben/common-ui';
 import { Plus } from '@vben/icons';
 
-import { Button, message } from 'ant-design-vue';
+import { Button } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { deleteApi, getApiTreeWithUserCore, updateApiStatus } from '#/api';
 import { doPageQuery } from '#/api/request';
+import { useDeleteAction } from '#/hooks/common/use-delete-action';
+import { useStatusToggle } from '#/hooks/common/use-status-toggle';
+import { useUserCoreMap } from '#/hooks/common/use-user-core-map';
 import { $t } from '#/locales';
-import { confirmDialog } from '#/utils/dialog';
 import { checkAllFieldsEmpty, removeEmptyFields } from '#/utils/object';
 import { useDisabledPagerConfig } from '#/utils/pager';
 
@@ -27,13 +27,26 @@ import {
   hasQueryParam,
   useColumns,
   useGridFormSchema,
-  userCoreMapRef,
 } from './data';
 import Form from './modules/form.vue';
 
 const [FormDrawer, formDrawerApi] = useVbenDrawer({
   connectedComponent: Form,
   destroyOnClose: true,
+});
+
+const { userCoreMap, setUserCoreMap } = useUserCoreMap();
+
+const { onStatusChange } = useStatusToggle({
+  getRowName: (row) => row.path || row.name,
+  updateStatus: updateApiStatus,
+  onRefresh: () => gridApi.query(),
+});
+
+const { onDelete } = useDeleteAction({
+  getRowName: (row) => row.path || row.name,
+  deleteApi: deleteApi,
+  onRefresh: () => gridApi.query(),
 });
 
 const [Grid, gridApi] = useVbenVxeGrid({
@@ -43,7 +56,7 @@ const [Grid, gridApi] = useVbenVxeGrid({
     submitOnChange: true,
   },
   gridOptions: {
-    columns: useColumns(onActionClick, onStatusChange),
+    columns: useColumns(onActionClick, userCoreMap, onStatusChange),
     height: 'auto',
     keepSource: true,
     pagerConfig: useDisabledPagerConfig(),
@@ -57,7 +70,7 @@ const [Grid, gridApi] = useVbenVxeGrid({
             params,
             formValues,
           );
-          userCoreMapRef.value = result.userCoreMap;
+          setUserCoreMap(result.userCoreMap);
           return result.roots;
         },
       },
@@ -65,7 +78,6 @@ const [Grid, gridApi] = useVbenVxeGrid({
     rowConfig: {
       keyField: 'id',
     },
-
     toolbarConfig: {
       custom: true,
       export: false,
@@ -77,20 +89,17 @@ const [Grid, gridApi] = useVbenVxeGrid({
       parentField: 'pid',
       childrenField: 'children',
       transform: false,
-      showIcon: true, // 显示树节点图标
-      trigger: 'default', // 'default'（点击图标）或 'row'（点击整行）
-      // 是否显示展开/折叠图标
+      showIcon: true,
+      trigger: 'default',
     },
     sortConfig: {
-      remote: true, // 远程排序
-      trigger: 'default', // 点击表头触发
-      orders: ['asc', 'desc', null], // 排序顺序
+      remote: true,
+      trigger: 'default',
+      orders: ['asc', 'desc', null],
     },
-    // 启用远程模式
     remote: {
-      sort: true, // 远程排序
+      sort: true,
     },
-    // 排序变化事件
     onSortChange() {
       gridApi.query();
     },
@@ -114,54 +123,12 @@ function onActionClick(e: OnActionClickParams<SystemApiApi.SystemApi>) {
   }
 }
 
-/**
- * 状态开关即将改变
- * @param newStatus 期望改变的状态值
- * @param row 行数据
- * @returns 返回false则中止改变，返回其他值（undefined、true）则允许改变
- */
-async function onStatusChange(newStatus: number, row: SystemApiApi.SystemApi) {
-  const status: Recordable<string> = {
-    0: '禁用',
-    1: '启用',
-  };
-  try {
-    await confirmDialog(
-      `你要将${row.name}的状态切换为 【${status[newStatus.toString()]}】 吗？`,
-      `切换状态`,
-    );
-    await updateApiStatus({ id: row.id, status: newStatus });
-    return true;
-  } catch {
-    return false;
-  }
-}
-
 function onAppend(row: SystemApiApi.SystemApi) {
   formDrawerApi.setData({ pid: row.id }).open();
 }
 
 function onEdit(row: SystemApiApi.SystemApi) {
   formDrawerApi.setData(row).open();
-}
-
-function onDelete(row: SystemApiApi.SystemApi) {
-  const hideLoading = message.loading({
-    content: $t('ui.actionMessage.deleting', [row.name]),
-    duration: 0,
-    key: 'action_process_msg',
-  });
-  deleteApi(row.id)
-    .then(() => {
-      message.success({
-        content: $t('ui.actionMessage.deleteSuccess', [row.name]),
-        key: 'action_process_msg',
-      });
-      onRefresh();
-    })
-    .catch(() => {
-      hideLoading();
-    });
 }
 
 function onRefresh() {
@@ -173,7 +140,6 @@ function onCreate() {
 }
 
 const isExpend = ref(false);
-// toggle 全部节点 展开/折叠
 const triggerExpandAll = () => {
   setExpandAll(!isExpend.value);
 };

@@ -1,0 +1,40 @@
+{
+  "confirm": {
+    "title": "确认",
+    "deleteTitle": "确认删除",
+    "statusChange": "你要将 {0} 的状态切换为【{1}】吗？",
+    "deleteContent": "确定要删除 {0} 吗？",
+    "cancelled": "已取消"
+  },
+  "actionTitle": {
+    "create": "新建 {0}",
+    "edit": "编辑 {0}",
+    "expend": "展开",
+    "collapse": "折叠"
+  },
+  "actionMessage": {
+    "deleting": "正在删除 {0}...",
+    "deleteSuccess": "{0} 删除成功",
+    "updating": "正在更新...",
+    "updateSuccess": "更新成功",
+    "creating": "正在创建...",
+    "createSuccess": "创建成功",
+    "loading": "加载中..."
+  },
+  "formRules": {
+    "required": "此字段为必填项",
+    "minLength": "{0} 长度至少 {1} 个字符",
+    "maxLength": "{0} 长度不能超过 {1} 个字符",
+    "invalidEmail": "请输入有效的邮箱地址",
+    "invalidFormat": "格式不正确",
+    "alreadyExists": "{0} 已存在",
+    "startWith": "{0} 必须以 \"{1}\" 开头",
+    "invalidURL": "请输入有效的 URL"
+  },
+  "error": {
+    "unknown": "未知错误",
+    "operationFailed": "操作失败",
+    "networkError": "网络错误",
+    "serverError": "服务器错误"
+  }
+}

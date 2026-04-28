@@ -14,6 +14,8 @@
   "parent": "上级",
   "previewDetail": "详情预览",
   "inputOrSelect": "请选择或输入..",
+  "enabled": "启用",
+  "disabled": "禁用",
   "messages": {
     "success": "成功",
     "loading": "加载中",
