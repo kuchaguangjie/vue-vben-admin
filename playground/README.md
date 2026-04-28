@@ -43,10 +43,10 @@ pnpm build:play
 
 ### 环境变量配置
 
-开发环境变量文件: `.env.development`
-生产环境变量文件: `.env.production`
+开发环境变量文件: `.env.development` 生产环境变量文件: `.env.production`
 
 关键变量:
+
 ```env
 # 应用基础路径
 VITE_BASE=/
@@ -384,7 +384,10 @@ export function useColumns<T>(
 
 ```vue
 <script lang="ts" setup>
-import type { OnActionClickParams, VxeTableGridOptions } from '#/adapter/vxe-table';
+import type {
+  OnActionClickParams,
+  VxeTableGridOptions,
+} from '#/adapter/vxe-table';
 import type { PageParams } from '#/api/request';
 import type { SystemXxxApi } from '#/api/system/xxx';
 
@@ -394,11 +397,7 @@ import { Button, message } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { doPageQuery } from '#/api/request';
-import { 
-  deleteXxx, 
-  getXxxList, 
-  updateXxxStatus 
-} from '#/api/system/xxx';
+import { deleteXxx, getXxxList, updateXxxStatus } from '#/api/system/xxx';
 import { $t } from '#/locales';
 import { confirmDialog } from '#/utils/dialog';
 import { usePagerConfig } from '#/utils/pager';
@@ -446,23 +445,26 @@ const [Grid, gridApi] = useVbenVxeGrid({
     },
     sortConfig: { remote: true },
     remote: { sort: true },
-    onSortChange() { gridApi.query(); },
+    onSortChange() {
+      gridApi.query();
+    },
   } as VxeTableGridOptions<SystemXxxApi.SystemXxx>,
 });
 
 // 3. 操作按钮处理
 function onActionClick(e: OnActionClickParams<SystemXxxApi.SystemXxx>) {
   switch (e.code) {
-    case 'delete': onDelete(e.row); break;
-    case 'edit': onEdit(e.row); break;
+    case 'delete':
+      onDelete(e.row);
+      break;
+    case 'edit':
+      onEdit(e.row);
+      break;
   }
 }
 
 // 4. 状态切换处理
-async function onStatusChange(
-  newStatus: number,
-  row: SystemXxxApi.SystemXxx,
-) {
+async function onStatusChange(newStatus: number, row: SystemXxxApi.SystemXxx) {
   const status: Recordable<string> = {
     0: $t('common.disabled'),
     1: $t('common.enabled'),
@@ -545,11 +547,11 @@ import { computed, nextTick, ref } from 'vue';
 import { useVbenDrawer } from '@vben/common-ui';
 import { useVbenForm } from '#/adapter/form';
 
-import { 
-  createXxx, 
-  preCreateXxx, 
-  preUpdateXxx, 
-  updateXxx 
+import {
+  createXxx,
+  preCreateXxx,
+  preUpdateXxx,
+  updateXxx,
 } from '#/api/system/xxx';
 import { $t } from '#/locales';
 import { extractTreeValue } from '#/utils/value-format';
@@ -579,7 +581,7 @@ const [Drawer, drawerApi] = useVbenDrawer({
   async onConfirm() {
     const { valid } = await formApi.validate();
     if (!valid) return;
-    
+
     const values = await formApi.getValues();
     extractTreeValue(values, ['deptIds', 'roleCodes']);
 
@@ -675,7 +677,11 @@ const getDrawerTitle = computed(() => {
 ### 值格式化
 
 ```typescript
-import { formatBackendTime, formatJsonObj, extractTreeValue } from '#/utils/value-format';
+import {
+  formatBackendTime,
+  formatJsonObj,
+  extractTreeValue,
+} from '#/utils/value-format';
 
 // 格式化后端时间
 formatBackendTime('2025-10-04T00:51:59.575623+08:00');
@@ -692,7 +698,12 @@ extractTreeValue(formData, ['deptIds', 'roleCodes']);
 ### 分页配置
 
 ```typescript
-import { usePagerConfig, useNeatPagerConfig, useFullPagerConfig, useDisabledPagerConfig } from '#/utils/pager';
+import {
+  usePagerConfig,
+  useNeatPagerConfig,
+  useFullPagerConfig,
+  useDisabledPagerConfig,
+} from '#/utils/pager';
 
 // 默认精简分页
 usePagerConfig();
@@ -764,10 +775,10 @@ const [Form, formApi] = useVbenForm({
 });
 
 // 表单操作
-await formApi.validate();      // 验证
-await formApi.getValues();     // 获取值
+await formApi.validate(); // 验证
+await formApi.getValues(); // 获取值
 await formApi.setValues(data); // 设置值
-await formApi.resetForm();     // 重置
+await formApi.resetForm(); // 重置
 formApi.updateSchema(newSchema); // 更新 schema
 await formApi.removeSchemaByFields(['field1']); // 移除字段
 ```
@@ -800,8 +811,8 @@ const [Grid, gridApi] = useVbenVxeGrid({
 });
 
 // 表格操作
-gridApi.query();      // 刷新数据
-gridApi.reload();     // 重新加载
+gridApi.query(); // 刷新数据
+gridApi.reload(); // 重新加载
 ```
 
 ### Drawer / Modal
@@ -830,10 +841,10 @@ const [Modal, modalApi] = useVbenModal({
 });
 
 // API
-drawerApi.setData(data).open();  // 设置数据并打开
-drawerApi.close();                // 关闭
-drawerApi.lock();                 // 锁定 (提交中禁用)
-drawerApi.unlock();               // 解锁
+drawerApi.setData(data).open(); // 设置数据并打开
+drawerApi.close(); // 关闭
+drawerApi.lock(); // 锁定 (提交中禁用)
+drawerApi.unlock(); // 解锁
 ```
 
 ---
@@ -888,12 +899,12 @@ playground/src/locales/langs/
 
 ### 后端期望参数
 
-| 参数 | 类型 | 说明 |
-|------|------|------|
-| page | number | 页码，从 1 开始 |
-| pageSize | number | 每页条数 |
-| sortBy | string | 排序字段名 (camelCase) |
-| sortDesc | boolean | 是否降序 |
+| 参数     | 类型    | 说明                   |
+| -------- | ------- | ---------------------- |
+| page     | number  | 页码，从 1 开始        |
+| pageSize | number  | 每页条数               |
+| sortBy   | string  | 排序字段名 (camelCase) |
+| sortDesc | boolean | 是否降序               |
 
 ### 自动转换
 
@@ -910,7 +921,7 @@ query: async (params: PageParams, formValues) => {
   // params.sort.field -> sortBy
   // params.sort.order === 'desc' -> sortDesc
   return doPageQuery(getListApi, params, formValues);
-}
+};
 ```
 
 ---
@@ -922,11 +933,13 @@ query: async (params: PageParams, formValues) => {
 #### 开发环境
 
 1. 修改 `playground/.env.development`:
+
 ```env
 VITE_BASE=/ui
 ```
 
 2. `Caddyfile.fiber-crud` 配置:
+
 ```
 import UI_DEV
 ```
@@ -936,11 +949,13 @@ import UI_DEV
 #### 生产环境
 
 1. 修改 `playground/.env.production`:
+
 ```env
 VITE_BASE=/ui
 ```
 
 2. 构建:
+
 ```bash
 pnpm build:play
 ```
@@ -948,6 +963,7 @@ pnpm build:play
 3. 部署到 `/var/www/fiber-crud-ui/`
 
 4. `Caddyfile.fiber-crud` 配置:
+
 ```
 import UI_PROD
 ```
@@ -961,6 +977,7 @@ import UI_PROD
 ### 1. 表单验证不生效
 
 检查:
+
 - 字段名是否匹配
 - rules 是否正确定义
 - 是否使用了 `z.string()` 等 Zod 方法
@@ -968,6 +985,7 @@ import UI_PROD
 ### 2. 表格数据不显示
 
 检查:
+
 - proxyConfig.ajax.query 是否正确配置
 - 返回数据格式是否符合预期
 - rowConfig.keyField 是否设置正确
@@ -986,12 +1004,13 @@ extractTreeValue(values, ['deptIds', 'roleCodes']);
 使用 `formatBackendTime` 格式化:
 
 ```typescript
-formatter: ({ cellValue }) => formatBackendTime(cellValue)
+formatter: ({ cellValue }) => formatBackendTime(cellValue);
 ```
 
 ### 5. 状态切换不生效
 
 检查:
+
 - onStatusChange 函数是否返回 Promise
 - cellRender.name 是否正确设置为 'CellSwitch'
 

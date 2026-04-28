@@ -126,7 +126,9 @@ export function useFormSchema(): VbenFormSchema[] {
 
 // 2. 编辑时需要调整的字段 (如禁用某些字段)
 export function formFieldsToAdjustForEdit(): VbenFormSchema[] {
-  return [/* ... */];
+  return [
+    /* ... */
+  ];
 }
 
 // 3. 创建时需要移除的字段 (如 id)
@@ -146,7 +148,9 @@ export function formFieldsToRemoveForPreview(): string[] {
 
 // 6. 搜索表单 schema
 export function useGridFormSchema(): VbenFormSchema[] {
-  return [/* ... */];
+  return [
+    /* ... */
+  ];
 }
 
 // 7. 表格列定义
@@ -155,7 +159,9 @@ export function useColumns<T>(
   onPreview: (row: any) => void,
   onStatusChange?: (newStatus: any, row: T) => PromiseLike<boolean | undefined>,
 ): VxeTableGridOptions['columns'] {
-  return [/* ... */];
+  return [
+    /* ... */
+  ];
 }
 ```
 
@@ -277,7 +283,10 @@ async function create(data: Omit<SystemModuleApi.SystemModule, 'id'>) {
   return requestClient.post('/system/module', data);
 }
 
-async function update(id: number, data: Omit<SystemModuleApi.SystemModule, 'id'>) {
+async function update(
+  id: number,
+  data: Omit<SystemModuleApi.SystemModule, 'id'>,
+) {
   return requestClient.put(`/system/module/${id}`, data);
 }
 
@@ -300,10 +309,12 @@ export { getList, getDetail, create, update, remove, preCreate, preUpdate };
 ### 5. 常用组件
 
 #### 容器组件
+
 - **Drawer**: 抽屉，从侧边弹出，大小不变 (大部分 form 和 preview 使用)
 - **Modal**: 模态框，从中间弹出，可全屏 (dept 中使用)
 
 #### 创建方式
+
 ```typescript
 // Drawer
 const [Drawer, drawerApi] = useVbenDrawer({
@@ -327,26 +338,33 @@ const [Modal, modalApi] = useVbenModal({
 ### 6. 分页参数
 
 后端期望的分页参数:
+
 - `page`: 页码，从 1 开始
 - `pageSize`: 每页条数
 - `sortBy`: 排序字段名 (camelCase，后端需转换为 snake_case)
 - `sortDesc`: 是否降序 (boolean, false=asc, true=desc)
 
 使用 `doPageQuery` 自动转换 VXE-Table 的参数格式:
+
 ```typescript
 import { doPageQuery } from '#/api/request';
 
 // 在 proxyConfig.ajax.query 中使用
 query: async (params: PageParams, formValues) => {
   return doPageQuery(getListApi, params, formValues);
-}
+};
 ```
 
 ### 7. 常用工具函数
 
 #### 值格式化 (`utils/value-format.ts`)
+
 ```typescript
-import { formatBackendTime, formatJsonObj, extractTreeValue } from '#/utils/value-format';
+import {
+  formatBackendTime,
+  formatJsonObj,
+  extractTreeValue,
+} from '#/utils/value-format';
 
 // 格式化后端时间字符串 "2025-10-04T00:51:59.575623+08:00" -> "2025-10-04 00:51:59 +08"
 formatBackendTime(timeStr);
@@ -359,8 +377,14 @@ extractTreeValue(formValues, ['deptIds', 'roleCodes']);
 ```
 
 #### 分页配置 (`utils/pager.ts`)
+
 ```typescript
-import { usePagerConfig, useNeatPagerConfig, useFullPagerConfig, useDisabledPagerConfig } from '#/utils/pager';
+import {
+  usePagerConfig,
+  useNeatPagerConfig,
+  useFullPagerConfig,
+  useDisabledPagerConfig,
+} from '#/utils/pager';
 
 // 默认精简分页
 usePagerConfig();
@@ -373,6 +397,7 @@ useDisabledPagerConfig();
 ```
 
 #### 对话框确认 (`utils/dialog.ts`)
+
 ```typescript
 import { confirmDialog } from '#/utils/dialog';
 
@@ -392,7 +417,7 @@ try {
 import { $t } from '#/locales';
 
 // 基础翻译
-$t('system.user.id');  // "用户ID"
+$t('system.user.id'); // "用户ID"
 
 // 带参数
 $t('ui.formRules.minLength', [$t('system.user.username'), 3]);
@@ -408,8 +433,7 @@ $t('ui.formRules.minLength', [$t('system.user.username'), 3]);
 import { z } from '#/adapter/form';
 
 // 示例规则
-rules: z
-  .string()
+rules: z.string()
   .min(3, { message: $t('validation.minLength', [3]) })
   .max(20, { message: $t('validation.maxLength', [20]) })
   .regex(/^[\w\-.]+$/, { message: $t('validation.invalidFormat') })
@@ -439,11 +463,13 @@ rules: 'required';
 ## 调试技巧
 
 ### 浏览器开发工具
+
 - **Vue Devtools**: 查看组件状态和 Pinia store
 - **Network 面板**: 检查 API 请求和响应
 - **Console**: 查看日志输出
 
 ### 常用调试方法
+
 ```typescript
 // 在 API 响应中打印
 console.log('response:', response);
@@ -454,9 +480,11 @@ console.log('form values:', values);
 ```
 
 ### 环境变量切换
+
 修改 `playground/.env.development` 中的 `VITE_GLOB_API_URL` 可切换后端服务地址。
 
 ## 提示
+
 - 在东大 pnpm 可能也要配置代理:
   ```aiexclude
   https_proxy=127.0.0.1:10077
