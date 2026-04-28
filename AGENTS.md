@@ -97,15 +97,31 @@ views/system/{module}/
 
 ```typescript
 export namespace SystemModuleApi {
-  export interface SystemModule { id: number; name: string; status: number; }
+  export interface SystemModule {
+    id: number;
+    name: string;
+    status: number;
+  }
 }
 
-async function getList(params) { return requestClient.get('/system/module/page', { params }); }
-async function getDetail(id) { return requestClient.get(`/system/module/${id}`); }
-async function create(data) { return requestClient.post('/system/module', data); }
-async function update(id, data) { return requestClient.put(`/system/module/${id}`, data); }
-async function remove(id) { return requestClient.delete(`/system/module/${id}`); }
-async function updateStatus(data) { return requestClient.put('/system/module/status', data); }
+async function getList(params) {
+  return requestClient.get('/system/module/page', { params });
+}
+async function getDetail(id) {
+  return requestClient.get(`/system/module/${id}`);
+}
+async function create(data) {
+  return requestClient.post('/system/module', data);
+}
+async function update(id, data) {
+  return requestClient.put(`/system/module/${id}`, data);
+}
+async function remove(id) {
+  return requestClient.delete(`/system/module/${id}`);
+}
+async function updateStatus(data) {
+  return requestClient.put('/system/module/status', data);
+}
 
 export { getList, getDetail, create, update, remove, updateStatus };
 ```
@@ -151,7 +167,7 @@ const { userCoreMap, setUserCoreMap, getUserCore } = useUserCoreMap();
 setUserCoreMap(result.userCoreMap);
 
 // 传递给 useColumns
-useColumns(onActionClick, onPreview, userCoreMap, onStatusChange)
+useColumns(onActionClick, onPreview, userCoreMap, onStatusChange);
 ```
 
 ---
@@ -177,21 +193,21 @@ const [Modal, modalApi] = useVbenModal({
 
 ### 工具函数
 
-| 函数 | 用途 |
-|------|------|
-| `formatBackendTime()` | 格式化后端时间字符串 |
-| `formatJsonObj()` | JSON 对象转可读字符串 |
-| `extractTreeValue()` | TreeSelect 值转换 (对象数组 → id 数组) |
-| `usePagerConfig()` | 分页配置 |
-| `confirmDialog()` | 确认对话框 |
+| 函数                  | 用途                                   |
+| --------------------- | -------------------------------------- |
+| `formatBackendTime()` | 格式化后端时间字符串                   |
+| `formatJsonObj()`     | JSON 对象转可读字符串                  |
+| `extractTreeValue()`  | TreeSelect 值转换 (对象数组 → id 数组) |
+| `usePagerConfig()`    | 分页配置                               |
+| `confirmDialog()`     | 确认对话框                             |
 
 ### 国际化 (i18n)
 
 ```typescript
 import { $t } from '#/locales';
 
-$t('system.user.id');                    // 基础翻译
-$t('ui.formRules.minLength', [$t('system.user.username'), 3]);  // 带参数
+$t('system.user.id'); // 基础翻译
+$t('ui.formRules.minLength', [$t('system.user.username'), 3]); // 带参数
 ```
 
 语言文件位置: `playground/src/locales/langs/zh-CN/`
@@ -246,6 +262,7 @@ query: async (params, formValues) => {
 ## 提示
 
 在东大 pnpm 可能需要配置代理:
+
 ```
 https_proxy=127.0.0.1:10077
 http_proxy=127.0.0.1:10077

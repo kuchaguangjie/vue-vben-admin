@@ -1,4 +1,5 @@
 import type { Ref } from 'vue';
+
 import { ref } from 'vue';
 
 import { message } from 'ant-design-vue';
@@ -6,10 +7,10 @@ import { message } from 'ant-design-vue';
 import { $t } from '#/locales';
 
 export interface DeleteActionOptions<T extends { id: number }> {
-  getRowName: (row: T) => string;
   deleteApi: (id: number) => Promise<any>;
-  onRefresh: () => void;
   getId?: (row: T) => number;
+  getRowName: (row: T) => string;
+  onRefresh: () => void;
 }
 
 export function useDeleteAction<T extends { id: number }>(

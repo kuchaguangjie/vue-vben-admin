@@ -111,11 +111,11 @@ views/system/{module}/
 
 位于 `playground/src/hooks/common/`，推荐使用:
 
-| Composable | 用途 |
-|------------|------|
-| `useStatusToggle` | 状态开关切换 (启用/禁用) |
-| `useDeleteAction` | 删除按钮点击处理 |
-| `useUserCoreMap` | 用户核心数据映射 (id → nick, username) |
+| Composable        | 用途                                   |
+| ----------------- | -------------------------------------- |
+| `useStatusToggle` | 状态开关切换 (启用/禁用)               |
+| `useDeleteAction` | 删除按钮点击处理                       |
+| `useUserCoreMap`  | 用户核心数据映射 (id → nick, username) |
 
 ### 国际化 (i18n)
 
@@ -150,25 +150,26 @@ $t('ui.formRules.minLength', [$t('system.user.username'), 3]);
 
 ### 容器组件
 
-| 组件 | 说明 |
-|------|------|
+| 组件            | 说明                  |
+| --------------- | --------------------- |
 | `useVbenDrawer` | 抽屉 (大多数表单使用) |
-| `useVbenModal` | 模态框 (dept 使用) |
+| `useVbenModal`  | 模态框 (dept 使用)    |
 
 ### 工具函数
 
-| 函数 | 用途 |
-|------|------|
-| `formatBackendTime()` | 格式化后端时间字符串 |
-| `formatJsonObj()` | JSON 对象转可读字符串 |
-| `extractTreeValue()` | TreeSelect 值转换 (对象数组 → id 数组) |
-| `usePagerConfig()` | 分页配置 |
-| `confirmDialog()` | 确认对话框 |
-| `doPageQuery()` | 分页参数自动转换 |
+| 函数                  | 用途                                   |
+| --------------------- | -------------------------------------- |
+| `formatBackendTime()` | 格式化后端时间字符串                   |
+| `formatJsonObj()`     | JSON 对象转可读字符串                  |
+| `extractTreeValue()`  | TreeSelect 值转换 (对象数组 → id 数组) |
+| `usePagerConfig()`    | 分页配置                               |
+| `confirmDialog()`     | 确认对话框                             |
+| `doPageQuery()`       | 分页参数自动转换                       |
 
 ### 分页参数
 
 后端期望参数:
+
 - `page`: 页码 (从 1 开始)
 - `pageSize`: 每页条数
 - `sortBy`: 排序字段名 (camelCase)
@@ -193,11 +194,13 @@ query: async (params, formValues) => {
 #### 开发环境
 
 1. 修改 `playground/.env.development`:
+
 ```env
 VITE_BASE=/ui
 ```
 
 2. `Caddyfile.fiber-crud` 配置:
+
 ```
 import UI_DEV
 ```
@@ -207,11 +210,13 @@ import UI_DEV
 #### 生产环境
 
 1. 修改 `playground/.env.production`:
+
 ```env
 VITE_BASE=/ui
 ```
 
 2. 构建:
+
 ```bash
 pnpm build:play
 ```
@@ -219,6 +224,7 @@ pnpm build:play
 3. 部署到 `/var/www/fiber-crud-ui/`
 
 4. `Caddyfile.fiber-crud` 配置:
+
 ```
 import UI_PROD
 ```
@@ -232,6 +238,7 @@ import UI_PROD
 ### 表单验证不生效
 
 检查:
+
 - 字段名是否匹配
 - rules 是否正确定义
 - 是否使用了 `z.string()` 等 Zod 方法
@@ -239,6 +246,7 @@ import UI_PROD
 ### 表格数据不显示
 
 检查:
+
 - `proxyConfig.ajax.query` 是否正确配置
 - 返回数据格式是否符合预期
 - `rowConfig.keyField` 是否设置正确
@@ -246,6 +254,7 @@ import UI_PROD
 ### TreeSelect 值提交异常
 
 使用 `extractTreeValue` 转换:
+
 ```typescript
 const values = await formApi.getValues();
 extractTreeValue(values, ['deptIds', 'roleCodes']);
@@ -254,6 +263,7 @@ extractTreeValue(values, ['deptIds', 'roleCodes']);
 ### 时间格式显示异常
 
 使用 `formatBackendTime` 格式化:
+
 ```typescript
 formatter: ({ cellValue }) => formatBackendTime(cellValue);
 ```
@@ -261,6 +271,7 @@ formatter: ({ cellValue }) => formatBackendTime(cellValue);
 ### 状态切换不生效
 
 检查:
+
 - `onStatusChange` 函数是否返回 Promise
 - `cellRender.name` 是否正确设置为 'CellSwitch'
 
@@ -280,6 +291,7 @@ formatter: ({ cellValue }) => formatBackendTime(cellValue);
 ## 提示
 
 在东大 pnpm 可能需要配置代理:
+
 ```
 https_proxy=127.0.0.1:10077
 http_proxy=127.0.0.1:10077

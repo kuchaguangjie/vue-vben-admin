@@ -12,10 +12,7 @@ import { Plus } from '@vben/icons';
 import { Button } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
-import {
-  deleteNotice,
-  getNoticeListWithUserCore,
-} from '#/api';
+import { deleteNotice, getNoticeListWithUserCore } from '#/api';
 import { doPageQuery } from '#/api/request';
 import { useDeleteAction } from '#/hooks/common/use-delete-action';
 import { useUserCoreMap } from '#/hooks/common/use-user-core-map';

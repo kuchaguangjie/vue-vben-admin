@@ -23,11 +23,7 @@ import { $t } from '#/locales';
 import { checkAllFieldsEmpty, removeEmptyFields } from '#/utils/object';
 import { useDisabledPagerConfig } from '#/utils/pager';
 
-import {
-  hasQueryParam,
-  useColumns,
-  useGridFormSchema,
-} from './data';
+import { hasQueryParam, useColumns, useGridFormSchema } from './data';
 import Form from './modules/form.vue';
 
 const [FormDrawer, formDrawerApi] = useVbenDrawer({
@@ -45,7 +41,7 @@ const { onStatusChange } = useStatusToggle({
 
 const { onDelete } = useDeleteAction({
   getRowName: (row) => row.path || row.name,
-  deleteApi: deleteApi,
+  deleteApi,
   onRefresh: () => gridApi.query(),
 });
 

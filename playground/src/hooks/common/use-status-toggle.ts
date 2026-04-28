@@ -1,15 +1,16 @@
 import type { Ref } from 'vue';
+
 import { ref } from 'vue';
 
 import { $t } from '#/locales';
 import { confirmDialog } from '#/utils/dialog';
 
 export interface StatusToggleOptions<T extends { id: number }> {
+  confirmTitle?: string;
   getRowName: (row: T) => string;
-  updateStatus: (data: { id: number; status: number }) => Promise<any>;
   onRefresh: () => void;
   statusMap?: Record<number | string, string>;
-  confirmTitle?: string;
+  updateStatus: (data: { id: number; status: number }) => Promise<any>;
 }
 
 export function useStatusToggle<T extends { id: number }>(
@@ -28,10 +29,7 @@ export function useStatusToggle<T extends { id: number }>(
 
   const isToggling: Ref<boolean> = ref(false);
 
-  async function onStatusChange(
-    newStatus: number,
-    row: T,
-  ): Promise<boolean> {
+  async function onStatusChange(newStatus: number, row: T): Promise<boolean> {
     const rowName = getRowName(row);
     const statusText = statusMap[newStatus] ?? String(newStatus);
 

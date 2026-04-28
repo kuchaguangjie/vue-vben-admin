@@ -1,15 +1,16 @@
 import type { Ref } from 'vue';
-import { ref } from 'vue';
 
 import type { SystemUserApi } from '#/api/system/user';
+
+import { ref } from 'vue';
 
 const userCoreMapGlobal: Ref<Record<number, SystemUserApi.UserCore>> = ref({});
 
 export interface UseUserCoreMapReturn {
-  userCoreMap: Ref<Record<number, SystemUserApi.UserCore>>;
-  setUserCoreMap: (map: Record<number, SystemUserApi.UserCore>) => void;
-  getUserCore: (id: number) => SystemUserApi.UserCore | undefined;
   clearUserCoreMap: () => void;
+  getUserCore: (id: number) => SystemUserApi.UserCore | undefined;
+  setUserCoreMap: (map: Record<number, SystemUserApi.UserCore>) => void;
+  userCoreMap: Ref<Record<number, SystemUserApi.UserCore>>;
 }
 
 export function useUserCoreMap(): UseUserCoreMapReturn {
