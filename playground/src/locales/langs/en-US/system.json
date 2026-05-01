@@ -216,5 +216,16 @@
       "part2": "to view"
     },
     "data": "Content"
+  },
+  "tenant": {
+    "module": "Tenant",
+    "title": "Tenant Management",
+    "list": "Tenant List",
+    "name": "Tenant Name",
+    "code": "Tenant Code",
+    "id": "Tenant ID",
+    "status": "Status",
+    "remark": "Remark",
+    "operation": "Operation"
   }
 }

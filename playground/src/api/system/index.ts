@@ -6,5 +6,6 @@ export * from './mem';
 export * from './menu';
 export * from './notice';
 export * from './role';
+export * from './tenant';
 export * from './user';
 export * from './ws';

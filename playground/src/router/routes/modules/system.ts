@@ -57,6 +57,15 @@ const routes: RouteRecordRaw[] = [
         },
         component: () => import('#/views/system/log/list.vue'),
       },
+      {
+        path: '/system/tenant',
+        name: 'SystemTenant',
+        meta: {
+          icon: 'mdi:domain',
+          title: $t('system.tenant.title'),
+        },
+        component: () => import('#/views/system/tenant/list.vue'),
+      },
     ],
   },
 ];
