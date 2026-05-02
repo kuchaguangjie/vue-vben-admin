@@ -2,8 +2,8 @@ import type { Ref, VxeTableGridOptions } from '@vben/plugins/vxe-table';
 
 import type { VbenFormSchema } from '#/adapter/form';
 import type { OnActionClickFn } from '#/adapter/vxe-table';
-import type { SystemDeptApi } from '#/api/system/dept';
 import type { SystemUserApi } from '#/api';
+import type { SystemDeptApi } from '#/api/system/dept';
 
 import { z } from '#/adapter/form';
 import { $t } from '#/locales';
@@ -156,8 +156,9 @@ export function useGridFormSchema(isPlatformAdmin = false): VbenFormSchema[] {
 /**
  * 获取表格列配置
  * @description 使用函数的形式返回列数据而不是直接export一个Array常量，是为了响应语言切换时重新翻译表头
- * @param onPreview
  * @param onActionClick 表格操作按钮点击事件
+ * @param onPreview
+ * @param userCoreMap
  */
 export function useColumns(
   onActionClick: OnActionClickFn<SystemDeptApi.SystemDept>,

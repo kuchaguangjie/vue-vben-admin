@@ -1,5 +1,6 @@
-import { useUserStore } from '@vben/stores';
 import { computed } from 'vue';
+
+import { useUserStore } from '@vben/stores';
 
 export function usePlatformAdmin() {
   const userStore = useUserStore();

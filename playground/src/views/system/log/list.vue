@@ -3,9 +3,9 @@ import type { VxeTableGridOptions } from '#/adapter/vxe-table';
 import type { SystemUserApi } from '#/api';
 import type { PageParams } from '#/api/request';
 
-import { Page } from '@vben/common-ui';
-
 import { unref } from 'vue';
+
+import { Page } from '@vben/common-ui';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { getLogListWithUserCore } from '#/api';
