@@ -21,6 +21,12 @@ export function useFormSchema(): VbenFormSchema[] {
     },
     {
       component: 'Input',
+      fieldName: 'tenantId',
+      label: '租户ID',
+      disabled: true, // 不可编辑
+    },
+    {
+      component: 'Input',
       fieldName: 'username',
       label: $t('system.user.username'),
       rules: z
@@ -144,7 +150,7 @@ export function formFieldsToRemoveForEdit(): string[] {
 
 // form fields - to remove - when create
 export function formFieldsToRemoveForCreate(): string[] {
-  return ['id'];
+  return ['id', 'tenantId'];
 }
 
 // form fields - to remove - when preview
@@ -153,8 +159,8 @@ export function formFieldsToRemoveForPreview(): string[] {
 }
 
 // for search list
-export function useGridFormSchema(): VbenFormSchema[] {
-  return [
+export function useGridFormSchema(isPlatformAdmin = false): VbenFormSchema[] {
+  const schema: VbenFormSchema[] = [
     {
       component: 'Input',
       fieldName: 'username',
@@ -183,6 +189,21 @@ export function useGridFormSchema(): VbenFormSchema[] {
       },
     },
   ];
+
+  if (isPlatformAdmin) {
+    schema.unshift({
+      component: 'Input',
+      fieldName: 'tenantId',
+      label: '租户ID',
+      componentProps: {
+        type: 'number',
+        allowClear: true,
+        placeholder: $t('common.currentTenant'),
+      },
+    });
+  }
+
+  return schema;
 }
 
 export function useColumns<T = SystemUserApi.SystemUser>(
@@ -201,6 +222,12 @@ export function useColumns<T = SystemUserApi.SystemUser>(
       },
       onPreview,
     ),
+    {
+      field: 'tenantId',
+      title: '租户ID',
+      width: 90,
+      sortable: true,
+    },
     {
       field: 'username',
       title: $t('system.user.username'),

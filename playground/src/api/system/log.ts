@@ -11,6 +11,7 @@ export namespace SystemLogApi {
     code: string;
     data: string;
     id: number;
+    tenantId: number;
   }
 }
 

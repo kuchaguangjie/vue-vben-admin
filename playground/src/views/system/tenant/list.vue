@@ -128,7 +128,7 @@ function onCreate() {
       <template #toolbar-tools>
         <Button type="primary" @click="onCreate">
           <Plus class="size-5" />
-          {{ $t('ui.actionTitle.create', [$t('system.tenant.name')]) }}
+          {{ $t('ui.actionTitle.create', [$t('system.tenant.module')]) }}
         </Button>
       </template>
     </Grid>

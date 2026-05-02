@@ -15,6 +15,7 @@ export namespace SystemDeptApi {
     remark?: string;
     roleCodes: string[];
     status: 0 | 1;
+    tenantId: number;
   }
 }
 

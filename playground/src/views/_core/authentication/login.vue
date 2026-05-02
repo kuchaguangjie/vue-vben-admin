@@ -32,23 +32,6 @@ const formSchema = computed((): VbenFormSchema[] => {
   return [
     {
       component: 'VbenSelect',
-      // componentProps(_values, form) {
-      //   return {
-      //     'onUpdate:modelValue': (value: string) => {
-      //       const findItem = MOCK_USER_OPTIONS.find(
-      //         (item) => item.value === value,
-      //       );
-      //       if (findItem) {
-      //         form.setValues({
-      //           password: '123456',
-      //           username: findItem.label,
-      //         });
-      //       }
-      //     },
-      //     options: MOCK_USER_OPTIONS,
-      //     placeholder: $t('authentication.selectAccount'),
-      //   };
-      // },
       componentProps: {
         options: MOCK_USER_OPTIONS,
         placeholder: $t('authentication.selectAccount'),
@@ -60,6 +43,24 @@ const formSchema = computed((): VbenFormSchema[] => {
         .min(1, { message: $t('authentication.selectAccount') })
         .optional()
         .default('admin'),
+    },
+    {
+      component: 'VbenInput',
+      componentProps: {
+        placeholder: 'Tenant ID (留空使用平台默认)',
+      },
+      fieldName: 'tenantId',
+      label: 'Tenant ID',
+      rules: z
+        .union([z.string(), z.number()])
+        .refine(
+          (val) => {
+            if (val === undefined || val === null || val === '') return true;
+            return /^\d+$/.test(String(val));
+          },
+          { message: 'Tenant ID 必须是数字' },
+        )
+        .optional(),
     },
     {
       component: 'VbenInput',
@@ -109,12 +110,16 @@ const loginRef =
   useTemplateRef<InstanceType<typeof AuthenticationLogin>>('loginRef');
 
 async function onSubmit(params: Recordable<any>) {
-  authStore.authLogin(params).catch(() => {
-    // 登陆失败，刷新验证码的演示
+  const loginParams: Recordable<any> = {
+    username: params.username,
+    password: params.password,
+  };
+  if (params.tenantId) {
+    loginParams.tenantId = Number(params.tenantId);
+  }
+  authStore.authLogin(loginParams).catch(() => {
     const formApi = loginRef.value?.getFormApi();
-    // 重置验证码组件的值
     formApi?.setFieldValue('captcha', false, false);
-    // 使用表单API获取验证码组件实例，并调用其resume方法来重置验证码
     formApi
       ?.getFieldComponentRef<InstanceType<typeof SliderCaptcha>>('captcha')
       ?.resume();

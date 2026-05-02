@@ -16,6 +16,7 @@
   "inputOrSelect": "请选择或输入..",
   "enabled": "启用",
   "disabled": "禁用",
+  "currentTenant": "默认为 当前租户",
   "messages": {
     "success": "成功",
     "loading": "加载中",

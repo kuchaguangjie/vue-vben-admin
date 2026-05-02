@@ -16,8 +16,8 @@ export const userCoreMapRef: Ref<Record<number, SystemUserApi.UserCore>> = ref(
 );
 
 // for search list
-export function useGridFormSchema(): VbenFormSchema[] {
-  return [
+export function useGridFormSchema(isPlatformAdmin = false): VbenFormSchema[] {
+  const schema: VbenFormSchema[] = [
     {
       component: 'Input',
       fieldName: 'instance',
@@ -41,6 +41,21 @@ export function useGridFormSchema(): VbenFormSchema[] {
       },
     },
   ];
+
+  if (isPlatformAdmin) {
+    schema.unshift({
+      component: 'Input',
+      fieldName: 'tenantId',
+      label: '租户ID',
+      componentProps: {
+        type: 'number',
+        allowClear: true,
+        placeholder: $t('common.currentTenant'),
+      },
+    });
+  }
+
+  return schema;
 }
 
 export function useColumns(): VxeTableGridOptions['columns'] {
@@ -49,6 +64,12 @@ export function useColumns(): VxeTableGridOptions['columns'] {
       field: 'id',
       title: $t('system.log.id'),
       width: 120,
+    },
+    {
+      field: 'tenantId',
+      title: '租户ID',
+      width: 90,
+      sortable: true,
     },
     {
       field: 'instance',

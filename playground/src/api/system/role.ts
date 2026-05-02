@@ -15,6 +15,7 @@ export namespace SystemRoleApi {
     remark?: string;
     sort: number;
     status: number;
+    tenantId: number;
   }
 }
 

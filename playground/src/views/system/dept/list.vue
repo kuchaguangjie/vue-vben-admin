@@ -6,7 +6,7 @@ import type {
 import type { PageParams } from '#/api/request';
 import type { SystemDeptApi } from '#/api/system/dept';
 
-import { ref } from 'vue';
+import { ref, unref } from 'vue';
 
 import { Page, useVbenDrawer, useVbenModal } from '@vben/common-ui';
 import { Plus } from '@vben/icons';
@@ -17,11 +17,12 @@ import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { doPageQuery } from '#/api/request';
 import { deleteDept, getDeptTreeWithUserCore } from '#/api/system/dept';
 import { useDeleteAction } from '#/hooks/common/use-delete-action';
+import { usePlatformAdmin } from '#/hooks/common/use-platform-admin';
 import { useUserCoreMap } from '#/hooks/common/use-user-core-map';
 import { $t } from '#/locales';
 import { useDisabledPagerConfig } from '#/utils/pager';
 
-import { useColumns } from './data';
+import { useColumns, useGridFormSchema } from './data';
 import DeptDetail from './modules/detail.vue';
 import Form from './modules/form.vue';
 
@@ -35,6 +36,7 @@ const [DetailDrawer, detailDrawerApi] = useVbenDrawer({
 });
 
 const { userCoreMap, setUserCoreMap } = useUserCoreMap();
+const { isPlatformAdmin } = usePlatformAdmin();
 
 const { onDelete } = useDeleteAction({
   getRowName: (row) => row.name,
@@ -79,6 +81,10 @@ function onActionClick({
 }
 
 const [Grid, gridApi] = useVbenVxeGrid({
+  formOptions: {
+    schema: useGridFormSchema(unref(isPlatformAdmin)),
+    submitOnChange: true,
+  },
   gridEvents: {},
   gridOptions: {
     columns: useColumns(onActionClick, onPreview, userCoreMap),
@@ -87,9 +93,17 @@ const [Grid, gridApi] = useVbenVxeGrid({
     pagerConfig: useDisabledPagerConfig(),
     proxyConfig: {
       ajax: {
-        query: async (params: PageParams) => {
+        query: async (params: PageParams, formValues) => {
           isExpend.value = false;
-          const result = await doPageQuery(getDeptTreeWithUserCore, params);
+          const filteredFormValues = { ...formValues };
+          if (!unref(isPlatformAdmin)) {
+            delete filteredFormValues.tenantId;
+          }
+          const result = await doPageQuery(
+            getDeptTreeWithUserCore,
+            params,
+            filteredFormValues,
+          );
           setUserCoreMap(result.userCoreMap);
           return result.roots;
         },
@@ -99,6 +113,7 @@ const [Grid, gridApi] = useVbenVxeGrid({
       custom: true,
       export: false,
       refresh: true,
+      search: true,
       zoom: true,
     },
     treeConfig: {

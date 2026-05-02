@@ -8,6 +8,7 @@ export namespace AuthApi {
   export interface LoginParams {
     password?: string;
     username?: string;
+    tenantId?: number;
   }
 
   /** 登录接口返回值 */

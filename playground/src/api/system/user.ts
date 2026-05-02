@@ -13,6 +13,7 @@ export namespace SystemUserApi {
     nick: string;
     permissions?: string[];
     status: number;
+    tenantId: number;
   }
   export interface UserCore {
     [key: string]: any;

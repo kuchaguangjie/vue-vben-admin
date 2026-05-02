@@ -22,6 +22,10 @@ interface BasicUserInfo {
    * 用户名
    */
   username: string;
+  /**
+   * 租户ID (0 表示平台管理员)
+   */
+  tenantId?: number;
 }
 
 interface AccessState {

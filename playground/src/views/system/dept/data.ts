@@ -1,8 +1,9 @@
-import type { VxeTableGridOptions } from '@vben/plugins/vxe-table';
+import type { Ref, VxeTableGridOptions } from '@vben/plugins/vxe-table';
 
 import type { VbenFormSchema } from '#/adapter/form';
 import type { OnActionClickFn } from '#/adapter/vxe-table';
 import type { SystemDeptApi } from '#/api/system/dept';
+import type { SystemUserApi } from '#/api';
 
 import { z } from '#/adapter/form';
 import { $t } from '#/locales';
@@ -19,6 +20,12 @@ export function useFormSchema(): VbenFormSchema[] {
       component: 'Input',
       fieldName: 'id',
       label: $t('system.dept.id'),
+      disabled: true, // 不可编辑
+    },
+    {
+      component: 'Input',
+      fieldName: 'tenantId',
+      label: '租户ID',
       disabled: true, // 不可编辑
     },
     {
@@ -92,7 +99,7 @@ export function useFormSchema(): VbenFormSchema[] {
 
 // form fields - to remove - when create
 export function formFieldsToRemoveForCreate(): string[] {
-  return ['id'];
+  return ['id', 'tenantId'];
 }
 
 // form fields - to adjust - when edit
@@ -103,6 +110,47 @@ export function formFieldsToAdjustForEdit(): VbenFormSchema[] {
 // form fields - to remove - when preview
 export function formFieldsToRemoveForPreview(): string[] {
   return [];
+}
+
+export function useGridFormSchema(isPlatformAdmin = false): VbenFormSchema[] {
+  const schema: VbenFormSchema[] = [
+    {
+      component: 'Input',
+      fieldName: 'name',
+      label: $t('system.dept.name'),
+      componentProps: {
+        placeholder: $t('common.prefix'),
+      },
+    },
+    { component: 'Input', fieldName: 'id', label: $t('system.dept.id') },
+    {
+      component: 'Select',
+      componentProps: {
+        allowClear: true,
+        options: [
+          { label: $t('common.enabled'), value: 1 },
+          { label: $t('common.disabled'), value: 0 },
+        ],
+      },
+      fieldName: 'status',
+      label: $t('system.dept.status'),
+    },
+  ];
+
+  if (isPlatformAdmin) {
+    schema.unshift({
+      component: 'Input',
+      fieldName: 'tenantId',
+      label: '租户ID',
+      componentProps: {
+        type: 'number',
+        allowClear: true,
+        placeholder: $t('common.currentTenant'),
+      },
+    });
+  }
+
+  return schema;
 }
 
 /**
@@ -126,6 +174,12 @@ export function useColumns(
       },
       onPreview,
     ),
+    {
+      field: 'tenantId',
+      title: '租户ID',
+      width: 90,
+      sortable: true,
+    },
     {
       align: 'left',
       field: 'name',

@@ -9,12 +9,15 @@ import type { PageParams } from '#/api/request';
 import { Page, useVbenDrawer } from '@vben/common-ui';
 import { Plus } from '@vben/icons';
 
+import { unref } from 'vue';
+
 import { Button } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { deleteNotice, getNoticeListWithUserCore } from '#/api';
 import { doPageQuery } from '#/api/request';
 import { useDeleteAction } from '#/hooks/common/use-delete-action';
+import { usePlatformAdmin } from '#/hooks/common/use-platform-admin';
 import { useUserCoreMap } from '#/hooks/common/use-user-core-map';
 import { $t } from '#/locales';
 import { usePagerConfig } from '#/utils/pager';
@@ -39,6 +42,7 @@ const [DetailDrawer, detailDrawerApi] = useVbenDrawer({
 });
 
 const { userCoreMap, setUserCoreMap } = useUserCoreMap();
+const { isPlatformAdmin } = usePlatformAdmin();
 
 const { onDelete } = useDeleteAction({
   getRowName: (row) => row.title || row.name,
@@ -53,7 +57,7 @@ function onPreview(row: any) {
 const [Grid, gridApi] = useVbenVxeGrid({
   formOptions: {
     fieldMappingTime: [['createTime', ['startTime', 'endTime']]],
-    schema: useGridFormSchema(),
+    schema: useGridFormSchema(unref(isPlatformAdmin)),
     submitOnChange: true,
   },
   gridOptions: {
@@ -64,10 +68,14 @@ const [Grid, gridApi] = useVbenVxeGrid({
     proxyConfig: {
       ajax: {
         query: async (params: PageParams, formValues) => {
+          const filteredFormValues = { ...formValues };
+          if (!unref(isPlatformAdmin)) {
+            delete filteredFormValues.tenantId;
+          }
           const result = await doPageQuery(
             getNoticeListWithUserCore,
             params,
-            formValues,
+            filteredFormValues,
           );
           if (result.categoryList) {
             categoryList.value = result.categoryList;

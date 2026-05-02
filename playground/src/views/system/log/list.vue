@@ -5,18 +5,23 @@ import type { PageParams } from '#/api/request';
 
 import { Page } from '@vben/common-ui';
 
+import { unref } from 'vue';
+
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { getLogListWithUserCore } from '#/api';
 import { doPageQuery } from '#/api/request';
+import { usePlatformAdmin } from '#/hooks/common/use-platform-admin';
 import { $t } from '#/locales';
 import { usePagerConfig } from '#/utils/pager';
 
 import { useColumns, useGridFormSchema, userCoreMapRef } from './data';
 
+const { isPlatformAdmin } = usePlatformAdmin();
+
 const [Grid] = useVbenVxeGrid({
   formOptions: {
     fieldMappingTime: [['createTime', ['startTime', 'endTime']]],
-    schema: useGridFormSchema(),
+    schema: useGridFormSchema(unref(isPlatformAdmin)),
     submitOnChange: true,
   },
   gridOptions: {
@@ -27,10 +32,14 @@ const [Grid] = useVbenVxeGrid({
     proxyConfig: {
       ajax: {
         query: async (params: PageParams, formValues) => {
+          const filteredFormValues = { ...formValues };
+          if (!unref(isPlatformAdmin)) {
+            delete filteredFormValues.tenantId;
+          }
           const result = await doPageQuery(
             getLogListWithUserCore,
             params,
-            formValues,
+            filteredFormValues,
           );
           userCoreMapRef.value = result.userCoreMap;
           return result;

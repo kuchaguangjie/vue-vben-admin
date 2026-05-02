@@ -18,6 +18,7 @@ export namespace SystemNoticeApi {
     push: boolean;
     status: number;
     tags: string[];
+    tenantId: number;
     title: string;
     totalUnread: number; // 总未读数量 (for user)
     version: number;

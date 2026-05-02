@@ -14,6 +14,7 @@
   "parent": "Parent",
   "previewDetail": "Preview Detail",
   "inputOrSelect": "Please input or select ..",
+  "currentTenant": "Default to current tenant",
   "messages": {
     "success": "Success",
     "loading": "Loading ..",
