@@ -6,12 +6,17 @@ import { computed, nextTick, ref } from 'vue';
 import { useVbenDrawer } from '@vben/common-ui';
 
 import { useVbenForm } from '#/adapter/form';
-import { createTenant, updateTenant } from '#/api/system/tenant';
+import {
+  createAndInitTenant,
+  getTenantTemplateList,
+  updateTenant,
+} from '#/api/system/tenant';
 import { $t } from '#/locales';
 
 import {
   formFieldsToAdjustForEdit,
   formFieldsToRemoveForCreate,
+  formFieldsToRemoveForEdit,
   useFormSchema,
 } from '../data';
 
@@ -34,7 +39,7 @@ const [Drawer, drawerApi] = useVbenDrawer({
     const values = await formApi.getValues();
 
     drawerApi.lock();
-    (id.value ? updateTenant(id.value, values) : createTenant(values))
+    (id.value ? updateTenant(id.value, values) : createAndInitTenant(values))
       .then(() => {
         emits('success');
         drawerApi.close();
@@ -59,8 +64,10 @@ const [Drawer, drawerApi] = useVbenDrawer({
 
       if (isEdit) {
         formApi.updateSchema(formFieldsToAdjustForEdit());
+        await formApi.removeSchemaByFields(formFieldsToRemoveForEdit());
       } else {
         await formApi.removeSchemaByFields(formFieldsToRemoveForCreate());
+        await loadTemplateOptions();
       }
       await nextTick();
 
@@ -76,6 +83,26 @@ const getDrawerTitle = computed(() => {
     ? $t('common.edit', $t('system.tenant.name'))
     : $t('common.create', $t('system.tenant.name'));
 });
+
+async function loadTemplateOptions() {
+  try {
+    const templates = await getTenantTemplateList();
+    const options = templates.map((t) => ({
+      label: t.name,
+      value: t.code,
+    }));
+    formApi.updateSchema([
+      {
+        fieldName: 'templateCode',
+        componentProps: {
+          options,
+        },
+      },
+    ]);
+  } catch (e) {
+    console.warn('Failed to load tenant templates:', e);
+  }
+}
 </script>
 
 <template>

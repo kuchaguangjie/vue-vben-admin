@@ -229,6 +229,20 @@
     "id": "租户ID",
     "status": "状态",
     "remark": "备注",
-    "operation": "操作"
+    "operation": "操作",
+    "adminUsername": "管理员用户名",
+    "adminEmail": "管理员邮箱",
+    "adminPassword": "管理员密码",
+    "adminNick": "管理员昵称",
+    "placeholder": "租户ID（留空使用平台默认）",
+    "mustBeNumber": "租户ID 必须是数字",
+    "platform": "平台",
+    "template": "租户模板",
+    "templateName": "模板名称",
+    "templateCode": "模板编码",
+    "templateDescription": "模板描述",
+    "selectTemplate": "选择模板",
+    "selectTemplatePlaceholder": "请选择租户模板（留空使用默认模板）",
+    "noTemplate": "无模板"
   }
 }

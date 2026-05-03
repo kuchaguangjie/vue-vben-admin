@@ -226,6 +226,20 @@
     "id": "Tenant ID",
     "status": "Status",
     "remark": "Remark",
-    "operation": "Operation"
+    "operation": "Operation",
+    "adminUsername": "Admin Username",
+    "adminEmail": "Admin Email",
+    "adminPassword": "Admin Password",
+    "adminNick": "Admin Nickname",
+    "placeholder": "Tenant ID (leave empty for platform default)",
+    "mustBeNumber": "Tenant ID must be a number",
+    "platform": "Platform",
+    "template": "Tenant Template",
+    "templateName": "Template Name",
+    "templateCode": "Template Code",
+    "templateDescription": "Template Description",
+    "selectTemplate": "Select Template",
+    "selectTemplatePlaceholder": "Select tenant template (leave empty for default)",
+    "noTemplate": "No Template"
   }
 }

@@ -19,13 +19,27 @@ export function useFormSchema(): VbenFormSchema[] {
       component: 'Input',
       fieldName: 'name',
       label: $t('system.tenant.name'),
-      rules: z.string().min(2).max(100),
+      rules: z
+        .string()
+        .min(2, {
+          message: $t('ui.formRules.minLength', [$t('system.tenant.name'), 2]),
+        })
+        .max(100, {
+          message: $t('ui.formRules.maxLength', [$t('system.tenant.name'), 100]),
+        }),
     },
     {
       component: 'Input',
       fieldName: 'code',
       label: $t('system.tenant.code'),
-      rules: z.string().min(2).max(50),
+      rules: z
+        .string()
+        .min(2, {
+          message: $t('ui.formRules.minLength', [$t('system.tenant.code'), 2]),
+        })
+        .max(50, {
+          message: $t('ui.formRules.maxLength', [$t('system.tenant.code'), 50]),
+        }),
     },
     {
       component: 'Input',
@@ -55,6 +69,69 @@ export function useFormSchema(): VbenFormSchema[] {
       fieldName: 'remark',
       label: $t('system.tenant.remark'),
     },
+    {
+      component: 'Input',
+      fieldName: 'adminUsername',
+      label: $t('system.tenant.adminUsername'),
+      rules: z
+        .string()
+        .min(3, { message: $t('system.user.usernameValidation') })
+        .max(20, { message: $t('system.user.usernameValidation') })
+        .regex(/^[\w\-.]+$/, {
+          message: $t('system.user.usernameValidation'),
+        }),
+    },
+    {
+      component: 'VbenInput',
+      componentProps: {
+        placeholder: 'example@example.com',
+      },
+      fieldName: 'adminEmail',
+      label: $t('system.tenant.adminEmail'),
+      rules: z
+        .string()
+        .min(1, { message: $t('authentication.emailTip') })
+        .email($t('authentication.emailValidErrorTip')),
+    },
+    {
+      component: 'InputPassword',
+      fieldName: 'adminPassword',
+      label: $t('system.tenant.adminPassword'),
+      rules: z
+        .string()
+        .min(8, { message: $t('system.user.passwordValidationLength') })
+        .max(30, { message: $t('system.user.passwordValidationLength') })
+        // eslint-disable-next-line regexp/no-obscure-range
+        .regex(/^[!-~]+$/, {
+          message: $t('system.user.passwordValidationAsciiOnly'),
+        })
+        .refine((val) => /[a-z]/i.test(val) && /\d/.test(val), {
+          message: $t('system.user.passwordValidationComplexity'),
+        }),
+    },
+    {
+      component: 'Input',
+      fieldName: 'adminNick',
+      label: $t('system.tenant.adminNick'),
+      rules: z
+        .string()
+        .min(2, {
+          message: $t('ui.formRules.minLength', [$t('system.tenant.adminNick'), 2]),
+        })
+        .max(20, {
+          message: $t('ui.formRules.maxLength', [$t('system.tenant.adminNick'), 20]),
+        }),
+    },
+    {
+      component: 'Select',
+      fieldName: 'templateCode',
+      label: $t('system.tenant.selectTemplate'),
+      componentProps: {
+        allowClear: true,
+        placeholder: $t('system.tenant.selectTemplatePlaceholder'),
+        options: [],
+      },
+    },
   ];
 }
 
@@ -75,8 +152,12 @@ export function formFieldsToRemoveForCreate(): string[] {
   return ['id'];
 }
 
+export function formFieldsToRemoveForEdit(): string[] {
+  return ['adminUsername', 'adminEmail', 'adminPassword', 'adminNick', 'templateCode'];
+}
+
 export function formFieldsToRemoveForPreview(): string[] {
-  return ['version'];
+  return ['version', 'adminPassword'];
 }
 
 export function useGridFormSchema(): VbenFormSchema[] {
@@ -85,6 +166,9 @@ export function useGridFormSchema(): VbenFormSchema[] {
       component: 'Input',
       fieldName: 'name',
       label: $t('system.tenant.name'),
+      componentProps: {
+        placeholder: $t('common.prefix'),
+      },
     },
     { component: 'Input', fieldName: 'id', label: $t('system.tenant.id') },
     {

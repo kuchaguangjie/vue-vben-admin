@@ -6,6 +6,7 @@ import type { SystemUserApi } from '#/api';
 
 import { ref } from 'vue';
 
+import { useSaasEnabled } from '#/hooks/common/use-saas-enabled';
 import { $t } from '#/locales';
 import { useCopyColumn } from '#/utils/use-copy-column';
 import { useUserCoreColumn } from '#/utils/user-core';
@@ -17,6 +18,8 @@ export const userCoreMapRef: Ref<Record<number, SystemUserApi.UserCore>> = ref(
 
 // for search list
 export function useGridFormSchema(isPlatformAdmin = false): VbenFormSchema[] {
+  const { saasEnabled } = useSaasEnabled();
+
   const schema: VbenFormSchema[] = [
     {
       component: 'Input',
@@ -42,11 +45,11 @@ export function useGridFormSchema(isPlatformAdmin = false): VbenFormSchema[] {
     },
   ];
 
-  if (isPlatformAdmin) {
+  if (saasEnabled.value && isPlatformAdmin) {
     schema.unshift({
       component: 'Input',
       fieldName: 'tenantId',
-      label: '租户ID',
+      label: $t('system.tenant.id'),
       componentProps: {
         type: 'number',
         allowClear: true,
@@ -59,18 +62,26 @@ export function useGridFormSchema(isPlatformAdmin = false): VbenFormSchema[] {
 }
 
 export function useColumns(): VxeTableGridOptions['columns'] {
-  return [
+  const { saasEnabled } = useSaasEnabled();
+
+  const columns: VxeTableGridOptions['columns'] = [
     {
       field: 'id',
       title: $t('system.log.id'),
       width: 120,
     },
-    {
+  ];
+
+  if (saasEnabled.value) {
+    columns.push({
       field: 'tenantId',
-      title: '租户ID',
+      title: $t('system.tenant.id'),
       width: 90,
       sortable: true,
-    },
+    });
+  }
+
+  columns.push(
     {
       field: 'instance',
       title: $t('system.log.instance'),
@@ -100,5 +111,7 @@ export function useColumns(): VxeTableGridOptions['columns'] {
       },
       userCoreMapRef,
     ),
-  ];
+  );
+
+  return columns;
 }

@@ -6,6 +6,7 @@ import type { SystemUserApi } from '#/api';
 import type { SystemDeptApi } from '#/api/system/dept';
 
 import { z } from '#/adapter/form';
+import { useSaasEnabled } from '#/hooks/common/use-saas-enabled';
 import { $t } from '#/locales';
 import { usePreviewLink } from '#/utils/use-preview-link';
 import { useUserCoreColumn } from '#/utils/user-core';
@@ -15,19 +16,27 @@ import { formatBackendTime } from '#/utils/value-format';
  * 获取编辑表单的字段配置。如果没有使用多语言，可以直接export一个数组常量
  */
 export function useFormSchema(): VbenFormSchema[] {
-  return [
+  const { saasEnabled } = useSaasEnabled();
+
+  const schema: VbenFormSchema[] = [
     {
       component: 'Input',
       fieldName: 'id',
       label: $t('system.dept.id'),
       disabled: true, // 不可编辑
     },
-    {
+  ];
+
+  if (saasEnabled.value) {
+    schema.push({
       component: 'Input',
       fieldName: 'tenantId',
-      label: '租户ID',
+      label: $t('system.tenant.id'),
       disabled: true, // 不可编辑
-    },
+    });
+  }
+
+  schema.push(
     {
       component: 'Input',
       fieldName: 'name',
@@ -94,7 +103,9 @@ export function useFormSchema(): VbenFormSchema[] {
         .max(50, $t('ui.formRules.maxLength', [$t('system.dept.remark'), 50]))
         .optional(),
     },
-  ];
+  );
+
+  return schema;
 }
 
 // form fields - to remove - when create
@@ -113,6 +124,8 @@ export function formFieldsToRemoveForPreview(): string[] {
 }
 
 export function useGridFormSchema(isPlatformAdmin = false): VbenFormSchema[] {
+  const { saasEnabled } = useSaasEnabled();
+
   const schema: VbenFormSchema[] = [
     {
       component: 'Input',
@@ -137,11 +150,11 @@ export function useGridFormSchema(isPlatformAdmin = false): VbenFormSchema[] {
     },
   ];
 
-  if (isPlatformAdmin) {
+  if (saasEnabled.value && isPlatformAdmin) {
     schema.unshift({
       component: 'Input',
       fieldName: 'tenantId',
-      label: '租户ID',
+      label: $t('system.tenant.id'),
       componentProps: {
         type: 'number',
         allowClear: true,
@@ -165,7 +178,9 @@ export function useColumns(
   onPreview: (row: any) => void,
   userCoreMap: Ref<Record<number, SystemUserApi.UserCore>>,
 ): VxeTableGridOptions<SystemDeptApi.SystemDept>['columns'] {
-  return [
+  const { saasEnabled } = useSaasEnabled();
+
+  const columns: VxeTableGridOptions<SystemDeptApi.SystemDept>['columns'] = [
     usePreviewLink(
       {
         field: 'id',
@@ -175,12 +190,18 @@ export function useColumns(
       },
       onPreview,
     ),
-    {
+  ];
+
+  if (saasEnabled.value) {
+    columns.push({
       field: 'tenantId',
-      title: '租户ID',
+      title: $t('system.tenant.id'),
       width: 90,
       sortable: true,
-    },
+    });
+  }
+
+  columns.push(
     {
       align: 'left',
       field: 'name',
@@ -246,5 +267,7 @@ export function useColumns(
       title: $t('system.dept.operation'),
       width: 200,
     },
-  ];
+  );
+
+  return columns;
 }

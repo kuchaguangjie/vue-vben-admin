@@ -2,16 +2,21 @@
 import type { VbenFormSchema } from '@vben/common-ui';
 import type { BasicOption, Recordable } from '@vben/types';
 
-import { computed, markRaw, useTemplateRef } from 'vue';
+import { computed, markRaw, onMounted, useTemplateRef } from 'vue';
 
 import { AuthenticationLogin, SliderCaptcha, z } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
-import { useAuthStore } from '#/store';
+import { useAppStore, useAuthStore } from '#/store';
 
 defineOptions({ name: 'Login' });
 
 const authStore = useAuthStore();
+const appStore = useAppStore();
+
+onMounted(() => {
+  appStore.fetchAppConfig();
+});
 
 const MOCK_USER_OPTIONS: BasicOption[] = [
   {
@@ -29,7 +34,7 @@ const MOCK_USER_OPTIONS: BasicOption[] = [
 ];
 
 const formSchema = computed((): VbenFormSchema[] => {
-  return [
+  const schema: VbenFormSchema[] = [
     {
       component: 'VbenSelect',
       componentProps: {
@@ -44,13 +49,16 @@ const formSchema = computed((): VbenFormSchema[] => {
         .optional()
         .default('admin'),
     },
-    {
+  ];
+
+  if (appStore.saasEnabled) {
+    schema.push({
       component: 'VbenInput',
       componentProps: {
-        placeholder: 'Tenant ID (留空使用平台默认)',
+        placeholder: $t('system.tenant.placeholder'),
       },
       fieldName: 'tenantId',
-      label: 'Tenant ID',
+      label: $t('system.tenant.id'),
       rules: z
         .union([z.string(), z.number()])
         .refine(
@@ -58,10 +66,13 @@ const formSchema = computed((): VbenFormSchema[] => {
             if (val === undefined || val === null || val === '') return true;
             return /^\d+$/.test(String(val));
           },
-          { message: 'Tenant ID 必须是数字' },
+          { message: $t('system.tenant.mustBeNumber') },
         )
         .optional(),
-    },
+    });
+  }
+
+  schema.push(
     {
       component: 'VbenInput',
       componentProps: {
@@ -103,7 +114,9 @@ const formSchema = computed((): VbenFormSchema[] => {
         message: $t('authentication.verifyRequiredTip'),
       }),
     },
-  ];
+  );
+
+  return schema;
 });
 
 const loginRef =

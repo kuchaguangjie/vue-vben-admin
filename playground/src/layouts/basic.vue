@@ -20,7 +20,7 @@ import { countUnreadNotice } from '#/api';
 import { notifications } from '#/hooks/common/use-notify';
 import { useWs } from '#/hooks/common/use-ws';
 import { $t } from '#/locales';
-import { useAuthStore } from '#/store';
+import { useAppStore, useAuthStore } from '#/store';
 import LoginForm from '#/views/_core/authentication/login.vue';
 
 const { setMenuList } = useTabbarStore();
@@ -39,6 +39,7 @@ setMenuList([
 const router = useRouter();
 const userStore = useUserStore();
 const authStore = useAuthStore();
+const appStore = useAppStore();
 const accessStore = useAccessStore();
 const { destroyWatermark, updateWatermark } = useWatermark();
 const showDot = computed(() =>
@@ -91,6 +92,21 @@ const menus = computed(() => [
 
 const avatar = computed(() => {
   return userStore.userInfo?.avatar ?? preferences.app.defaultAvatar;
+});
+
+const description = computed(() => {
+  const email = userStore.userInfo?.email ?? '';
+  const tenantId = userStore.userInfo?.tenantId;
+  
+  if (!appStore.saasEnabled || tenantId === undefined) {
+    return email;
+  }
+  
+  if (tenantId === 0) {
+    return email ? `${email} | ${$t('system.tenant.platform')}` : $t('system.tenant.platform');
+  }
+  
+  return email ? `${email} | ${$t('system.tenant.id')}: ${tenantId}` : `${$t('system.tenant.id')}: ${tenantId}`;
 });
 
 async function handleLogout() {
@@ -174,7 +190,7 @@ onBeforeMount(() => {
         :avatar
         :menus
         :text="userStore.userInfo?.realName"
-        :description="userStore.userInfo?.email"
+        :description="description"
         tag-text="Pro"
         trigger="both"
         @logout="handleLogout"

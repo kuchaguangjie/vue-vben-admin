@@ -5,6 +5,7 @@ import type { OnActionClickFn, VxeTableGridOptions } from '#/adapter/vxe-table';
 import type { SystemRoleApi, SystemUserApi } from '#/api';
 
 import { z } from '#/adapter/form';
+import { useSaasEnabled } from '#/hooks/common/use-saas-enabled';
 import { $t } from '#/locales';
 import { usePreviewLink } from '#/utils/use-preview-link';
 import { useUserCoreColumn } from '#/utils/user-core';
@@ -12,19 +13,27 @@ import { formatBackendTime } from '#/utils/value-format';
 
 // form - new/edit
 export function useFormSchema(): VbenFormSchema[] {
-  return [
+  const { saasEnabled } = useSaasEnabled();
+
+  const schema: VbenFormSchema[] = [
     {
       component: 'Input',
       fieldName: 'id',
       label: $t('system.role.id'),
       disabled: true, // 不可编辑
     },
-    {
+  ];
+
+  if (saasEnabled.value) {
+    schema.push({
       component: 'Input',
       fieldName: 'tenantId',
-      label: '租户ID',
+      label: $t('system.tenant.id'),
       disabled: true, // 不可编辑
-    },
+    });
+  }
+
+  schema.push(
     {
       component: 'Input',
       fieldName: 'name',
@@ -100,7 +109,9 @@ export function useFormSchema(): VbenFormSchema[] {
       label: $t('system.role.setApis'),
       modelPropName: 'modelValue',
     },
-  ];
+  );
+
+  return schema;
 }
 
 // form fields - to adjust - when edit
@@ -128,6 +139,8 @@ export function formFieldsToRemoveForPreview(): string[] {
 }
 
 export function useGridFormSchema(isPlatformAdmin = false): VbenFormSchema[] {
+  const { saasEnabled } = useSaasEnabled();
+
   const schema: VbenFormSchema[] = [
     {
       component: 'Input',
@@ -161,11 +174,11 @@ export function useGridFormSchema(isPlatformAdmin = false): VbenFormSchema[] {
     },
   ];
 
-  if (isPlatformAdmin) {
+  if (saasEnabled.value && isPlatformAdmin) {
     schema.unshift({
       component: 'Input',
       fieldName: 'tenantId',
-      label: '租户ID',
+      label: $t('system.tenant.id'),
       componentProps: {
         type: 'number',
         allowClear: true,
@@ -183,7 +196,9 @@ export function useColumns<T = SystemRoleApi.SystemRole>(
   userCoreMap: Ref<Record<number, SystemUserApi.UserCore>>,
   onStatusChange?: (newStatus: any, row: T) => PromiseLike<boolean | undefined>,
 ): VxeTableGridOptions['columns'] {
-  return [
+  const { saasEnabled } = useSaasEnabled();
+
+  const columns: VxeTableGridOptions['columns'] = [
     usePreviewLink(
       {
         field: 'id',
@@ -193,12 +208,18 @@ export function useColumns<T = SystemRoleApi.SystemRole>(
       },
       onPreview,
     ),
-    {
+  ];
+
+  if (saasEnabled.value) {
+    columns.push({
       field: 'tenantId',
-      title: '租户ID',
+      title: $t('system.tenant.id'),
       width: 90,
       sortable: true,
-    },
+    });
+  }
+
+  columns.push(
     {
       field: 'name',
       title: $t('system.role.name'),
@@ -256,5 +277,7 @@ export function useColumns<T = SystemRoleApi.SystemRole>(
       title: $t('system.role.operation'),
       width: 130,
     },
-  ];
+  );
+
+  return columns;
 }

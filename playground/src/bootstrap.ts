@@ -11,6 +11,7 @@ import { useTitle } from '@vueuse/core';
 
 import { $t, setupI18n } from '#/locales';
 import { router } from '#/router';
+import { useAppStore } from '#/store';
 
 import { initComponentAdapter } from './adapter/component';
 import { initSetupVbenForm } from './adapter/form';
@@ -71,9 +72,11 @@ async function bootstrap(namespace: string) {
   // 动态更新标题
   watchEffect(() => {
     if (preferences.app.dynamicTitle) {
+      const appStore = useAppStore();
       const routeTitle = router.currentRoute.value.meta?.title;
+      const currentAppName = appStore.appName || preferences.app.name;
       const pageTitle =
-        (routeTitle ? `${$t(routeTitle)} - ` : '') + preferences.app.name;
+        (routeTitle ? `${$t(routeTitle)} - ` : '') + currentAppName;
       useTitle(pageTitle);
     }
   });
