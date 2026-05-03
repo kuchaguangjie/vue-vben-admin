@@ -2,12 +2,12 @@ import { requestClient } from '#/api/request';
 
 export namespace CommonApi {
   export interface I18nInfoResp {
-    langList: string[];
+    appName: string;
     filePrefixList: string[];
     fileSuffix: string;
     i18n: any;
+    langList: string[];
     saasEnabled: boolean;
-    appName: string;
   }
 }
 

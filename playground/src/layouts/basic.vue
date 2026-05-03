@@ -97,16 +97,20 @@ const avatar = computed(() => {
 const description = computed(() => {
   const email = userStore.userInfo?.email ?? '';
   const tenantId = userStore.userInfo?.tenantId;
-  
+
   if (!appStore.saasEnabled || tenantId === undefined) {
     return email;
   }
-  
+
   if (tenantId === 0) {
-    return email ? `${email} | ${$t('system.tenant.platform')}` : $t('system.tenant.platform');
+    return email
+      ? `${email} | ${$t('system.tenant.platform')}`
+      : $t('system.tenant.platform');
   }
-  
-  return email ? `${email} | ${$t('system.tenant.id')}: ${tenantId}` : `${$t('system.tenant.id')}: ${tenantId}`;
+
+  return email
+    ? `${email} | ${$t('system.tenant.id')}: ${tenantId}`
+    : `${$t('system.tenant.id')}: ${tenantId}`;
 });
 
 async function handleLogout() {

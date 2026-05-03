@@ -21,79 +21,79 @@ export namespace SystemTenantApi {
   }
 
   export interface CreateAndInitTenantReq {
-    name: string;
-    code: string;
-    status: number;
-    remark?: string;
-    adminUsername: string;
-    adminPassword: string;
     adminEmail: string;
     adminNick: string;
-    templateId?: number;
+    adminPassword: string;
+    adminUsername: string;
+    code: string;
+    name: string;
+    remark?: string;
+    status: number;
     templateCode?: string;
+    templateId?: number;
   }
 
   export interface CreateAndInitTenantResp {
-    tenantId: number;
     adminUserId: number;
     adminUsername: string;
+    tenantId: number;
   }
 
   export interface TenantTemplateSimple {
-    id: number;
     code: string;
-    name: string;
-    status: number;
-    sortOrder: number;
     description?: string;
+    id: number;
+    name: string;
+    sortOrder: number;
+    status: number;
   }
 
   export interface TenantTemplateDetail {
-    id: number;
-    code: string;
-    name: string;
-    status: number;
-    sortOrder: number;
-    description?: string;
-    roles: TenantTemplateRole[];
-    depts: TenantTemplateDept[];
-    roleMenus: TenantTemplateRoleMenu[];
     apiPerms: TenantTemplateApiPerm[];
+    code: string;
+    depts: TenantTemplateDept[];
+    description?: string;
+    id: number;
+    name: string;
+    roleMenus: TenantTemplateRoleMenu[];
+    roles: TenantTemplateRole[];
+    sortOrder: number;
+    status: number;
   }
 
   export interface TenantTemplateRole {
-    id: number;
-    templateId: number;
-    name: string;
     code: string;
-    sortOrder: number;
     dataScope: number;
-    isDefault: number;
     description?: string;
+    id: number;
+    isDefault: number;
+    name: string;
+    sortOrder: number;
+    templateId: number;
   }
 
   export interface TenantTemplateDept {
     id: number;
-    templateId: number;
-    parentId: number;
     name: string;
+    parentId: number;
     sortOrder: number;
     status: number;
+    templateId: number;
   }
 
   export interface TenantTemplateRoleMenu {
     id: number;
-    templateId: number;
-    roleTemplateCode: string;
     menuPath: string;
+    roleTemplateCode: string;
+    templateId: number;
   }
 
   export interface TenantTemplateApiPerm {
-    id: number;
-    templateId: number;
-    roleTemplateCode: string;
     apiMethod: string;
     apiPath: string;
+    id: number;
+    roleTemplateCode: string;
+    templateId: number;
   }
 }
 
@@ -116,7 +116,9 @@ async function createTenant(data: Omit<SystemTenantApi.SystemTenant, 'id'>) {
   return requestClient.post('/system/tenant', data);
 }
 
-async function createAndInitTenant(data: SystemTenantApi.CreateAndInitTenantReq) {
+async function createAndInitTenant(
+  data: SystemTenantApi.CreateAndInitTenantReq,
+) {
   return requestClient.post<SystemTenantApi.CreateAndInitTenantResp>(
     '/system/tenant/createAndInit',
     data,
@@ -144,10 +146,7 @@ async function getTenantTemplateList() {
   );
 }
 
-async function getTenantTemplateDetail(params: {
-  id?: number;
-  code?: string;
-}) {
+async function getTenantTemplateDetail(params: { code?: string; id?: number }) {
   return requestClient.get<SystemTenantApi.TenantTemplateDetail>(
     '/system/tenant/template/detail',
     { params },

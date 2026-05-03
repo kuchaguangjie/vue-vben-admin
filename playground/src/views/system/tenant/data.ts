@@ -25,7 +25,10 @@ export function useFormSchema(): VbenFormSchema[] {
           message: $t('ui.formRules.minLength', [$t('system.tenant.name'), 2]),
         })
         .max(100, {
-          message: $t('ui.formRules.maxLength', [$t('system.tenant.name'), 100]),
+          message: $t('ui.formRules.maxLength', [
+            $t('system.tenant.name'),
+            100,
+          ]),
         }),
     },
     {
@@ -116,10 +119,16 @@ export function useFormSchema(): VbenFormSchema[] {
       rules: z
         .string()
         .min(2, {
-          message: $t('ui.formRules.minLength', [$t('system.tenant.adminNick'), 2]),
+          message: $t('ui.formRules.minLength', [
+            $t('system.tenant.adminNick'),
+            2,
+          ]),
         })
         .max(20, {
-          message: $t('ui.formRules.maxLength', [$t('system.tenant.adminNick'), 20]),
+          message: $t('ui.formRules.maxLength', [
+            $t('system.tenant.adminNick'),
+            20,
+          ]),
         }),
     },
     {
@@ -153,7 +162,13 @@ export function formFieldsToRemoveForCreate(): string[] {
 }
 
 export function formFieldsToRemoveForEdit(): string[] {
-  return ['adminUsername', 'adminEmail', 'adminPassword', 'adminNick', 'templateCode'];
+  return [
+    'adminUsername',
+    'adminEmail',
+    'adminPassword',
+    'adminNick',
+    'templateCode',
+  ];
 }
 
 export function formFieldsToRemoveForPreview(): string[] {

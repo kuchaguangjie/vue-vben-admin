@@ -99,8 +99,8 @@ async function loadTemplateOptions() {
         },
       },
     ]);
-  } catch (e) {
-    console.warn('Failed to load tenant templates:', e);
+  } catch (error) {
+    console.warn('Failed to load tenant templates:', error);
   }
 }
 </script>
