@@ -20,6 +20,7 @@ export namespace SystemUserApi {
 
     id: number;
     nick: string;
+    tenantId: number;
     username: string;
   }
 }

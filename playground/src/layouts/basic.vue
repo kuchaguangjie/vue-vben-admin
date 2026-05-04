@@ -94,23 +94,34 @@ const avatar = computed(() => {
   return userStore.userInfo?.avatar ?? preferences.app.defaultAvatar;
 });
 
-const description = computed(() => {
-  const email = userStore.userInfo?.email ?? '';
+const userEmail = computed(() => {
+  return userStore.userInfo?.email ?? '';
+});
+
+const tenantInfo = computed(() => {
   const tenantId = userStore.userInfo?.tenantId;
+  const tenantName = userStore.userInfo?.tenantName;
+  const tenantCode = userStore.userInfo?.tenantCode;
 
   if (!appStore.saasEnabled || tenantId === undefined) {
-    return email;
+    return null;
   }
 
   if (tenantId === 0) {
-    return email
-      ? `${email} | ${$t('system.tenant.platform')}`
-      : $t('system.tenant.platform');
+    return {
+      isPlatform: true,
+      name: '',
+      id: '',
+      code: '',
+    };
   }
 
-  return email
-    ? `${email} | ${$t('system.tenant.id')}: ${tenantId}`
-    : `${$t('system.tenant.id')}: ${tenantId}`;
+  return {
+    isPlatform: false,
+    name: tenantName || '',
+    id: tenantId.toString(),
+    code: tenantCode || '',
+  };
 });
 
 async function handleLogout() {
@@ -194,11 +205,46 @@ onBeforeMount(() => {
         :avatar
         :menus
         :text="userStore.userInfo?.realName"
-        :description="description"
         tag-text="Pro"
         trigger="both"
         @logout="handleLogout"
-      />
+      >
+        <template #description>
+          <div class="flex flex-col gap-1">
+            <div v-if="userEmail" class="truncate">
+              {{ userEmail }}
+            </div>
+            <div v-if="tenantInfo" class="truncate font-medium">
+              <template v-if="tenantInfo.isPlatform">
+                {{ $t('system.tenant.platform') }}
+              </template>
+              <template v-else>
+                <span v-if="tenantInfo.name">
+                  {{ $t('system.tenant.module') }}: {{ tenantInfo.name }}
+                </span>
+                <span
+                  v-if="tenantInfo.name && tenantInfo.id"
+                  class="text-muted-foreground mx-1"
+                >
+                  |
+                </span>
+                <span v-if="tenantInfo.id">
+                  ID: {{ tenantInfo.id }}
+                </span>
+                <span
+                  v-if="tenantInfo.code && (tenantInfo.name || tenantInfo.id)"
+                  class="text-muted-foreground mx-1"
+                >
+                  |
+                </span>
+                <span v-if="tenantInfo.code">
+                  Code: {{ tenantInfo.code }}
+                </span>
+              </template>
+            </div>
+          </div>
+        </template>
+      </UserDropdown>
     </template>
     <template #notification>
       <Notification

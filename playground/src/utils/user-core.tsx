@@ -41,63 +41,83 @@ export function useUserCoreColumn(
         const userCore = userCoreMapRef?.value[userId];
         const displayName = getUserCoreDisplay(userId, userCore);
 
-        return userCore ? (
-          <div class="group flex min-h-[24px] w-full items-center justify-between overflow-hidden px-2">
-            <Popover mouseEnterDelay={0.3} placement="top">
-              {{
-                content: () => (
-                  <div class="flex flex-col gap-1.5 p-1 text-sm">
-                    {[
-                      {
-                        label: $t('common.id'),
-                        value: userCore?.id,
-                        isMono: true,
-                      },
-                      {
-                        label: $t('system.user.username'),
-                        value: userCore?.username,
-                      },
-                      {
-                        label: $t('system.user.nick'),
-                        value: userCore?.nick,
-                      },
-                    ].map((item) => (
-                      <div class="flex items-center">
-                        {/* 左列：右对齐，固定宽度或最小宽度保持整齐 */}
-                        <span class="w-auto text-right opacity-60">
-                          {item.label}:
-                        </span>
-                        {/* 右列：左对齐，留出间距 */}
-                        <span
-                          class={`ml-3 w-auto flex-1 text-right ${item.isMono ? 'font-mono' : ''}`}
-                        >
-                          {item.value}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                ),
-                default: () => (
-                  <div class="flex-1 cursor-help truncate text-sm">
-                    {displayName}
-                  </div>
-                ),
-              }}
-            </Popover>
+        if (userCore) {
+          return (
+            <div class="group flex min-h-[24px] w-full items-center justify-between overflow-hidden px-2">
+              <Popover mouseEnterDelay={0.3} placement="top">
+                {{
+                  content: () => (
+                    <div class="flex flex-col gap-1.5 p-1 text-sm">
+                      {[
+                        {
+                          label: $t('common.id'),
+                          value: userCore?.id,
+                          isMono: true,
+                        },
+                        {
+                          label: $t('system.tenant.id'),
+                          value: userCore?.tenantId ?? '-',
+                          isMono: true,
+                        },
+                        {
+                          label: $t('system.user.username'),
+                          value: userCore?.username,
+                        },
+                        {
+                          label: $t('system.user.nick'),
+                          value: userCore?.nick,
+                        },
+                      ].map((item) => (
+                        <div class="flex items-center">
+                          <span class="w-auto text-right opacity-60">
+                            {item.label}:
+                          </span>
+                          <span
+                            class={`ml-3 w-auto flex-1 text-right ${item.isMono ? 'font-mono' : ''}`}
+                          >
+                            {item.value}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  ),
+                  default: () => (
+                    <div class="flex-1 cursor-help truncate text-sm">
+                      {displayName}
+                    </div>
+                  ),
+                }}
+              </Popover>
 
-            <div
-              class="invisible ml-2 flex-shrink-0 cursor-pointer text-primary transition-all active:opacity-70 group-hover:visible"
-              onClick={(e: Event) => {
-                e.stopPropagation();
-                handleCopy(userCore);
-              }}
-              title={$t('common.messages.copyId')}
-            >
-              <IconifyIcon class="size-4" icon="lucide:copy" />
+              <div
+                class="invisible ml-2 flex-shrink-0 cursor-pointer text-primary transition-all active:opacity-70 group-hover:visible"
+                onClick={(e: Event) => {
+                  e.stopPropagation();
+                  handleCopy(userCore);
+                }}
+                title={$t('common.messages.copyId')}
+              >
+                <IconifyIcon class="size-4" icon="lucide:copy" />
+              </div>
             </div>
-          </div>
-        ) : (
-          displayName
+          );
+        }
+
+        return (
+          <Popover mouseEnterDelay={0.3} placement="top">
+            {{
+              content: () => (
+                <div class="p-1 text-sm text-muted-foreground">
+                  {$t('common.userNotFound')} (ID: {userId})
+                </div>
+              ),
+              default: () => (
+                <span class="cursor-help text-muted-foreground text-sm">
+                  {displayName}
+                </span>
+              ),
+            }}
+          </Popover>
         );
       },
     },

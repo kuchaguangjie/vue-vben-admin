@@ -219,7 +219,9 @@ if (enableShortcutKey.value) {
               </slot>
             </div>
             <div class="text-muted-foreground text-xs font-normal">
-              {{ description }}
+              <slot name="description">
+                {{ description }}
+              </slot>
             </div>
           </div>
         </DropdownMenuLabel>
