@@ -224,16 +224,14 @@ onBeforeMount(() => {
                 </span>
                 <span
                   v-if="tenantInfo.name && tenantInfo.id"
-                  class="text-muted-foreground mx-1"
+                  class="mx-1 text-muted-foreground"
                 >
                   |
                 </span>
-                <span v-if="tenantInfo.id">
-                  ID: {{ tenantInfo.id }}
-                </span>
+                <span v-if="tenantInfo.id"> ID: {{ tenantInfo.id }} </span>
                 <span
                   v-if="tenantInfo.code && (tenantInfo.name || tenantInfo.id)"
-                  class="text-muted-foreground mx-1"
+                  class="mx-1 text-muted-foreground"
                 >
                   |
                 </span>

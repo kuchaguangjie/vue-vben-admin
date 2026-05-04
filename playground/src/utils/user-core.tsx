@@ -112,7 +112,7 @@ export function useUserCoreColumn(
                 </div>
               ),
               default: () => (
-                <span class="cursor-help text-muted-foreground text-sm">
+                <span class="cursor-help text-sm text-muted-foreground">
                   {displayName}
                 </span>
               ),
