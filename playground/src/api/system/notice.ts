@@ -10,12 +10,20 @@ export namespace SystemNoticeApi {
     name: string;
   }
 
+  export const NoticePushScope = {
+    Platform: 1,
+    All: 2,
+    Tenant: 3,
+  } as const;
+
   export interface SystemNotice {
     categoryId: number;
     categoryList: SystemNoticeCategory[]; // 分类列表
     data: string;
     id: number;
     push: boolean;
+    pushScope: number;
+    targetTenantId: number;
     status: number;
     tags: string[];
     tenantId: number;

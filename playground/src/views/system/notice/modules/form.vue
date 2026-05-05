@@ -1,27 +1,34 @@
 <script lang="ts" setup>
 import type { SystemNoticeApi } from '#/api/system/notice';
 
-import { computed, nextTick, ref } from 'vue';
+import { computed, nextTick, ref, unref } from 'vue';
 
 import { useVbenDrawer } from '@vben/common-ui';
 
 import { useVbenForm } from '#/adapter/form';
 import { createNotice, updateNotice } from '#/api/system/notice';
+import { getTenantAll } from '#/api/system/tenant';
+import { usePlatformAdmin } from '#/hooks/common/use-platform-admin';
 import { $t } from '#/locales';
 import { extractTreeValue } from '#/utils/value-format';
 
 import {
   formFieldsToAdjustForEdit,
   formFieldsToRemoveForCreate,
+  tenantList,
+  tenantMap,
+  tenantOptions,
   useFormSchema,
 } from '../data';
+
+const { isPlatformAdmin } = usePlatformAdmin();
 
 const emits = defineEmits(['success']);
 
 const formData = ref<SystemNoticeApi.SystemNotice>();
 
 const [Form, formApi] = useVbenForm({
-  schema: useFormSchema(),
+  schema: useFormSchema(unref(isPlatformAdmin)),
   showDefaultActions: false,
 });
 
@@ -53,7 +60,6 @@ const [Drawer, drawerApi] = useVbenDrawer({
       const data = drawerApi.getData<SystemNoticeApi.SystemNotice>();
       await formApi.resetForm();
 
-      // 判断 new / edit 模式
       const isEdit = data && data.id;
       if (isEdit) {
         formData.value = data;
@@ -62,44 +68,57 @@ const [Drawer, drawerApi] = useVbenDrawer({
         id.value = undefined;
       }
 
-      // update form fields
       if (isEdit) {
         formApi.updateSchema(formFieldsToAdjustForEdit());
       } else {
         await formApi.removeSchemaByFields(formFieldsToRemoveForCreate());
       }
-      // Wait for Vue to flush DOM updates (form fields mounted)
       await nextTick();
 
-      // get data & update field value
       if (isEdit) {
         await formApi.setValues(data);
-        await loadForUpdate(); // load data, for update
+        await loadForUpdate();
       } else {
-        await loadForCreate(); // load data, for create
+        await loadForCreate();
       }
     }
   },
 });
 
-// for new, load data & update form value.
 async function loadForCreate() {
   loadingData.value = true;
   try {
+    await loadTenantList();
     updateSchemaForNotice();
   } finally {
     loadingData.value = false;
   }
 }
 
-// for edit, load data & update form value.
 async function loadForUpdate() {
   return loadForCreate();
 }
 
-/**
- * update schema
- */
+async function loadTenantList() {
+  if (!unref(isPlatformAdmin)) {
+    return;
+  }
+  try {
+    const tenants = await getTenantAll();
+    tenantList.value = tenants;
+    tenantOptions.value = tenants.map((item) => ({
+      label: item.name,
+      value: item.id,
+    }));
+    tenantMap.value = {};
+    for (const item of tenants) {
+      tenantMap.value[item.id] = item.name;
+    }
+  } catch (e) {
+    console.error('Failed to load tenant list:', e);
+  }
+}
+
 function updateSchemaForNotice() {}
 
 const getDrawerTitle = computed(() => {

@@ -5,6 +5,7 @@ import type { CommonType } from '#/api';
 import { requestClient } from '#/api/request';
 
 export namespace SystemUserApi {
+  export const _ = true;
   export interface SystemUser {
     [key: string]: any;
 

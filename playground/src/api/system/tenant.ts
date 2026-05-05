@@ -5,6 +5,7 @@ import type { CommonType } from '#/api';
 import { requestClient } from '#/api/request';
 
 export namespace SystemTenantApi {
+  export const _ = true;
   export interface SystemTenant {
     [key: string]: any;
 

@@ -6,7 +6,7 @@ import type {
 import type { SystemNoticeApi } from '#/api';
 import type { PageParams } from '#/api/request';
 
-import { unref } from 'vue';
+import { onMounted, unref } from 'vue';
 
 import { Page, useVbenDrawer } from '@vben/common-ui';
 import { Plus } from '@vben/icons';
@@ -15,6 +15,7 @@ import { Button } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { deleteNotice, getNoticeListWithUserCore } from '#/api';
+import { getTenantAll } from '#/api/system/tenant';
 import { doPageQuery } from '#/api/request';
 import { useDeleteAction } from '#/hooks/common/use-delete-action';
 import { usePlatformAdmin } from '#/hooks/common/use-platform-admin';
@@ -26,6 +27,9 @@ import {
   categoryList,
   categoryMap,
   categoryOptions,
+  tenantList,
+  tenantMap,
+  tenantOptions,
   useColumns,
   useGridFormSchema,
 } from './data';
@@ -140,6 +144,30 @@ function onRefresh() {
 function onCreate() {
   formDrawerApi.setData({}).open();
 }
+
+async function loadTenantList() {
+  if (!unref(isPlatformAdmin)) {
+    return;
+  }
+  try {
+    const tenants = await getTenantAll();
+    tenantList.value = tenants;
+    tenantOptions.value = tenants.map((item) => ({
+      label: item.name,
+      value: item.id,
+    }));
+    tenantMap.value = {};
+    for (const item of tenants) {
+      tenantMap.value[item.id] = item.name;
+    }
+  } catch (e) {
+    console.error('Failed to load tenant list:', e);
+  }
+}
+
+onMounted(() => {
+  loadTenantList();
+});
 </script>
 <template>
   <Page auto-content-height>

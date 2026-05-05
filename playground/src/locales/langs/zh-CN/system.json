@@ -203,6 +203,13 @@
     "title": "标题",
     "category": "分类",
     "push": "是否推送",
+    "pushScope": "推送范围",
+    "pushScopeOption": {
+      "platform": "平台用户",
+      "all": "所有租户",
+      "tenant": "指定租户"
+    },
+    "targetTenant": "目标租户",
     "tags": "标签",
     "statusOption": {
       "draft": "草稿",
