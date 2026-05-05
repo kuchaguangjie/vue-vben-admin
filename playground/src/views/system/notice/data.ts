@@ -3,10 +3,10 @@ import type { Ref } from 'vue';
 import type { VbenFormSchema } from '#/adapter/form';
 import type { OnActionClickFn, VxeTableGridOptions } from '#/adapter/vxe-table';
 import type { SystemTenantApi, SystemUserApi } from '#/api';
+import type { SystemNoticeApi } from '#/api/system/notice';
 
 import { ref } from 'vue';
 
-import type { SystemNoticeApi } from '#/api/system/notice';
 import { useSaasEnabled } from '#/hooks/common/use-saas-enabled';
 import { $t } from '#/locales';
 import { usePreviewLink } from '#/utils/use-preview-link';
@@ -35,14 +35,18 @@ const NoticePushScope = {
 
 export function pushScopeToI18n(pushScope: number): string {
   switch (pushScope) {
-    case NoticePushScope.Platform:
-      return $t('system.notice.pushScopeOption.platform');
-    case NoticePushScope.All:
+    case NoticePushScope.All: {
       return $t('system.notice.pushScopeOption.all');
-    case NoticePushScope.Tenant:
+    }
+    case NoticePushScope.Platform: {
+      return $t('system.notice.pushScopeOption.platform');
+    }
+    case NoticePushScope.Tenant: {
       return $t('system.notice.pushScopeOption.tenant');
-    default:
+    }
+    default: {
       return String(pushScope);
+    }
   }
 }
 

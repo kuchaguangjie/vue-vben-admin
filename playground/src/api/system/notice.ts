@@ -23,9 +23,9 @@ export namespace SystemNoticeApi {
     id: number;
     push: boolean;
     pushScope: number;
-    targetTenantId: number;
     status: number;
     tags: string[];
+    targetTenantId: number;
     tenantId: number;
     title: string;
     totalUnread: number; // 总未读数量 (for user)

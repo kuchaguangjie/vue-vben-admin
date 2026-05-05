@@ -15,8 +15,8 @@ import { Button } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { deleteNotice, getNoticeListWithUserCore } from '#/api';
-import { getTenantAll } from '#/api/system/tenant';
 import { doPageQuery } from '#/api/request';
+import { getTenantAll } from '#/api/system/tenant';
 import { useDeleteAction } from '#/hooks/common/use-delete-action';
 import { usePlatformAdmin } from '#/hooks/common/use-platform-admin';
 import { useUserCoreMap } from '#/hooks/common/use-user-core-map';
@@ -160,8 +160,8 @@ async function loadTenantList() {
     for (const item of tenants) {
       tenantMap.value[item.id] = item.name;
     }
-  } catch (e) {
-    console.error('Failed to load tenant list:', e);
+  } catch (error) {
+    console.error('Failed to load tenant list:', error);
   }
 }
 

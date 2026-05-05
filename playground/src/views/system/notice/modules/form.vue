@@ -21,9 +21,9 @@ import {
   useFormSchema,
 } from '../data';
 
-const { isPlatformAdmin } = usePlatformAdmin();
-
 const emits = defineEmits(['success']);
+
+const { isPlatformAdmin } = usePlatformAdmin();
 
 const formData = ref<SystemNoticeApi.SystemNotice>();
 
@@ -114,8 +114,8 @@ async function loadTenantList() {
     for (const item of tenants) {
       tenantMap.value[item.id] = item.name;
     }
-  } catch (e) {
-    console.error('Failed to load tenant list:', e);
+  } catch (error) {
+    console.error('Failed to load tenant list:', error);
   }
 }
 
