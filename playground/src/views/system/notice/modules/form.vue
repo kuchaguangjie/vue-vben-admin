@@ -1,38 +1,29 @@
 <script lang="ts" setup>
 import type { SystemNoticeApi } from '#/api/system/notice';
 
-import { computed, nextTick, ref, unref } from 'vue';
+import { computed, nextTick, ref } from 'vue';
 
 import { useVbenDrawer } from '@vben/common-ui';
 
 import { useVbenForm } from '#/adapter/form';
 import { createNotice, updateNotice } from '#/api/system/notice';
-import { getTenantAll } from '#/api/system/tenant';
-import { usePlatformAdmin } from '#/hooks/common/use-platform-admin';
 import { $t } from '#/locales';
 import { extractTreeValue } from '#/utils/value-format';
 
 import {
   formFieldsToAdjustForEdit,
   formFieldsToRemoveForCreate,
-  tenantList,
-  tenantMap,
-  tenantOptions,
   useFormSchema,
 } from '../data';
 
 const emits = defineEmits(['success']);
 
-const { isPlatformAdmin } = usePlatformAdmin();
-
 const formData = ref<SystemNoticeApi.SystemNotice>();
 
 const [Form, formApi] = useVbenForm({
-  schema: useFormSchema(unref(isPlatformAdmin)),
+  schema: useFormSchema(),
   showDefaultActions: false,
 });
-
-const loadingData = ref(false);
 
 const id = ref();
 const [Drawer, drawerApi] = useVbenDrawer({
@@ -77,49 +68,10 @@ const [Drawer, drawerApi] = useVbenDrawer({
 
       if (isEdit) {
         await formApi.setValues(data);
-        await loadForUpdate();
-      } else {
-        await loadForCreate();
       }
     }
   },
 });
-
-async function loadForCreate() {
-  loadingData.value = true;
-  try {
-    await loadTenantList();
-    updateSchemaForNotice();
-  } finally {
-    loadingData.value = false;
-  }
-}
-
-async function loadForUpdate() {
-  return loadForCreate();
-}
-
-async function loadTenantList() {
-  if (!unref(isPlatformAdmin)) {
-    return;
-  }
-  try {
-    const tenants = await getTenantAll();
-    tenantList.value = tenants;
-    tenantOptions.value = tenants.map((item) => ({
-      label: item.name,
-      value: item.id,
-    }));
-    tenantMap.value = {};
-    for (const item of tenants) {
-      tenantMap.value[item.id] = item.name;
-    }
-  } catch (error) {
-    console.error('Failed to load tenant list:', error);
-  }
-}
-
-function updateSchemaForNotice() {}
 
 const getDrawerTitle = computed(() => {
   return formData.value?.id

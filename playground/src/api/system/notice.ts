@@ -10,22 +10,14 @@ export namespace SystemNoticeApi {
     name: string;
   }
 
-  export const NoticePushScope = {
-    Platform: 1,
-    All: 2,
-    Tenant: 3,
-  } as const;
-
   export interface SystemNotice {
     categoryId: number;
     categoryList: SystemNoticeCategory[]; // 分类列表
     data: string;
     id: number;
     push: boolean;
-    pushScope: number;
     status: number;
     tags: string[];
-    targetTenantId: number;
     tenantId: number;
     title: string;
     totalUnread: number; // 总未读数量 (for user)
@@ -81,12 +73,9 @@ async function deleteNotice(id: number) {
 /**
  * 公告 详情
  * @param id 公告 ID
- * @param tenantId 租户 ID（可选）
  */
-async function getNoticeDetail(id: number, tenantId?: number) {
-  return requestClient.get(`/system/notice/${id}`, {
-    params: tenantId ? { tenantId } : undefined,
-  });
+async function getNoticeDetail(id: number) {
+  return requestClient.get(`/system/notice/${id}`);
 }
 
 export {

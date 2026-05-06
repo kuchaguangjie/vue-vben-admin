@@ -6,8 +6,6 @@ import type {
 import type { SystemNoticeApi } from '#/api';
 import type { PageParams } from '#/api/request';
 
-import { onMounted, unref } from 'vue';
-
 import { Page, useVbenDrawer } from '@vben/common-ui';
 import { Plus } from '@vben/icons';
 
@@ -16,9 +14,7 @@ import { Button } from 'ant-design-vue';
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { deleteNotice, getNoticeListWithUserCore } from '#/api';
 import { doPageQuery } from '#/api/request';
-import { getTenantAll } from '#/api/system/tenant';
 import { useDeleteAction } from '#/hooks/common/use-delete-action';
-import { usePlatformAdmin } from '#/hooks/common/use-platform-admin';
 import { useUserCoreMap } from '#/hooks/common/use-user-core-map';
 import { $t } from '#/locales';
 import { usePagerConfig } from '#/utils/pager';
@@ -27,9 +23,6 @@ import {
   categoryList,
   categoryMap,
   categoryOptions,
-  tenantList,
-  tenantMap,
-  tenantOptions,
   useColumns,
   useGridFormSchema,
 } from './data';
@@ -46,7 +39,6 @@ const [DetailDrawer, detailDrawerApi] = useVbenDrawer({
 });
 
 const { userCoreMap, setUserCoreMap } = useUserCoreMap();
-const { isPlatformAdmin } = usePlatformAdmin();
 
 const { onDelete } = useDeleteAction({
   getRowName: (row) => row.title || row.name,
@@ -61,7 +53,7 @@ function onPreview(row: any) {
 const [Grid, gridApi] = useVbenVxeGrid({
   formOptions: {
     fieldMappingTime: [['createTime', ['startTime', 'endTime']]],
-    schema: useGridFormSchema(unref(isPlatformAdmin)),
+    schema: useGridFormSchema(),
     submitOnChange: true,
   },
   gridOptions: {
@@ -72,14 +64,10 @@ const [Grid, gridApi] = useVbenVxeGrid({
     proxyConfig: {
       ajax: {
         query: async (params: PageParams, formValues) => {
-          const filteredFormValues = { ...formValues };
-          if (!unref(isPlatformAdmin)) {
-            delete filteredFormValues.tenantId;
-          }
           const result = await doPageQuery(
             getNoticeListWithUserCore,
             params,
-            filteredFormValues,
+            formValues,
           );
           if (result.categoryList) {
             categoryList.value = result.categoryList;
@@ -144,30 +132,6 @@ function onRefresh() {
 function onCreate() {
   formDrawerApi.setData({}).open();
 }
-
-async function loadTenantList() {
-  if (!unref(isPlatformAdmin)) {
-    return;
-  }
-  try {
-    const tenants = await getTenantAll();
-    tenantList.value = tenants;
-    tenantOptions.value = tenants.map((item) => ({
-      label: item.name,
-      value: item.id,
-    }));
-    tenantMap.value = {};
-    for (const item of tenants) {
-      tenantMap.value[item.id] = item.name;
-    }
-  } catch (error) {
-    console.error('Failed to load tenant list:', error);
-  }
-}
-
-onMounted(() => {
-  loadTenantList();
-});
 </script>
 <template>
   <Page auto-content-height>

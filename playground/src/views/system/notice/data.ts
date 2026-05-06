@@ -2,7 +2,7 @@ import type { Ref } from 'vue';
 
 import type { VbenFormSchema } from '#/adapter/form';
 import type { OnActionClickFn, VxeTableGridOptions } from '#/adapter/vxe-table';
-import type { SystemTenantApi, SystemUserApi } from '#/api';
+import type { SystemUserApi } from '#/api';
 import type { SystemNoticeApi } from '#/api/system/notice';
 
 import { ref } from 'vue';
@@ -20,37 +20,7 @@ export function categoryIdToNameMap(id: number): string {
   return categoryMap.value[id] || '';
 }
 
-export const tenantList = ref<SystemTenantApi.SystemTenant[]>([]);
-export const tenantOptions = ref<any[]>([]);
-export const tenantMap = ref<Record<number, string>>({});
-export function tenantIdToNameMap(id: number): string {
-  return tenantMap.value[id] || $t('system.tenant.platform');
-}
-
-const NoticePushScope = {
-  Platform: 1,
-  All: 2,
-  Tenant: 3,
-} as const;
-
-export function pushScopeToI18n(pushScope: number): string {
-  switch (pushScope) {
-    case NoticePushScope.All: {
-      return $t('system.notice.pushScopeOption.all');
-    }
-    case NoticePushScope.Platform: {
-      return $t('system.notice.pushScopeOption.platform');
-    }
-    case NoticePushScope.Tenant: {
-      return $t('system.notice.pushScopeOption.tenant');
-    }
-    default: {
-      return String(pushScope);
-    }
-  }
-}
-
-export function useFormSchema(isPlatformAdmin = false): VbenFormSchema[] {
+export function useFormSchema(): VbenFormSchema[] {
   const { saasEnabled } = useSaasEnabled();
 
   const schema: VbenFormSchema[] = [
@@ -105,51 +75,6 @@ export function useFormSchema(isPlatformAdmin = false): VbenFormSchema[] {
       fieldName: 'push',
       label: $t('system.notice.push'),
     },
-  );
-
-  if (saasEnabled.value && isPlatformAdmin) {
-    schema.push(
-      {
-        component: 'RadioGroup',
-        componentProps: {
-          buttonStyle: 'solid',
-          options: [
-            {
-              label: $t('system.notice.pushScopeOption.platform'),
-              value: NoticePushScope.Platform,
-            },
-            {
-              label: $t('system.notice.pushScopeOption.all'),
-              value: NoticePushScope.All,
-            },
-            {
-              label: $t('system.notice.pushScopeOption.tenant'),
-              value: NoticePushScope.Tenant,
-            },
-          ],
-          optionType: 'button',
-        },
-        defaultValue: NoticePushScope.Platform,
-        fieldName: 'pushScope',
-        label: $t('system.notice.pushScope'),
-      },
-      {
-        component: 'Select',
-        fieldName: 'targetTenantId',
-        label: $t('system.notice.targetTenant'),
-        componentProps: {
-          multiple: false,
-          style: { width: '90%', minWidth: '100px' },
-          allowClear: true,
-          showArrow: true,
-          options: tenantOptions,
-          placeholder: $t('common.inputOrSelect'),
-        },
-      },
-    );
-  }
-
-  schema.push(
     {
       component: 'Input',
       fieldName: 'version',
@@ -216,8 +141,8 @@ export function formFieldsToRemoveForPreview(): string[] {
   return [];
 }
 
-export function useGridFormSchema(isPlatformAdmin = false): VbenFormSchema[] {
-  const { saasEnabled } = useSaasEnabled();
+export function useGridFormSchema(): VbenFormSchema[] {
+  // const { saasEnabled } = useSaasEnabled();
 
   const schema: VbenFormSchema[] = [
     {
@@ -268,19 +193,6 @@ export function useGridFormSchema(isPlatformAdmin = false): VbenFormSchema[] {
       },
     },
   ];
-
-  if (saasEnabled.value && isPlatformAdmin) {
-    schema.unshift({
-      component: 'Input',
-      fieldName: 'tenantId',
-      label: $t('system.tenant.id'),
-      componentProps: {
-        type: 'number',
-        allowClear: true,
-        placeholder: $t('common.currentTenant'),
-      },
-    });
-  }
 
   return schema;
 }
@@ -335,28 +247,6 @@ export function useColumns<T = SystemNoticeApi.SystemNotice>(
         cellValue ? $t('common.boolOptions.yes') : $t('common.boolOptions.no'),
       sortable: true,
     },
-  );
-
-  if (saasEnabled.value) {
-    columns.push(
-      {
-        field: 'pushScope',
-        title: $t('system.notice.pushScope'),
-        width: 110,
-        formatter: ({ cellValue }) => pushScopeToI18n(cellValue),
-        sortable: true,
-      },
-      {
-        field: 'targetTenantId',
-        title: $t('system.notice.targetTenant'),
-        width: 120,
-        formatter: ({ cellValue }) => tenantIdToNameMap(cellValue),
-        sortable: true,
-      },
-    );
-  }
-
-  columns.push(
     {
       field: 'tags',
       title: $t('system.notice.tags'),

@@ -29,17 +29,17 @@ const [Drawer, drawerApi] = useVbenDrawer({
       await nextTick();
 
       const data = drawerApi.getData<any>();
-      await loadDetail(data.id, data.tenantId);
+      await loadDetail(data.id);
     }
   },
 });
 
 // for get detail, load data & update value.
-async function loadDetail(noticeId: number, tenantId?: number) {
+async function loadDetail(noticeId: number) {
   loadingData.value = true;
   try {
     // load data
-    const notice = await getNoticeDetail(noticeId, tenantId);
+    const notice = await getNoticeDetail(noticeId);
 
     // 填充 数据 - form
     await formApi.setValues(notice);
