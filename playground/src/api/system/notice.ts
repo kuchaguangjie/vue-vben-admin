@@ -81,9 +81,12 @@ async function deleteNotice(id: number) {
 /**
  * 公告 详情
  * @param id 公告 ID
+ * @param tenantId 租户 ID（可选）
  */
-async function getNoticeDetail(id: number) {
-  return requestClient.get(`/system/notice/${id}`);
+async function getNoticeDetail(id: number, tenantId?: number) {
+  return requestClient.get(`/system/notice/${id}`, {
+    params: tenantId ? { tenantId } : undefined,
+  });
 }
 
 export {

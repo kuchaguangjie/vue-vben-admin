@@ -28,18 +28,18 @@ const [Drawer, drawerApi] = useVbenDrawer({
       await formApi.removeSchemaByFields(formFieldsToRemoveForPreview());
       await nextTick();
 
-      const id = drawerApi.getData<any>().id;
-      await loadDetail(id);
+      const data = drawerApi.getData<any>();
+      await loadDetail(data.id, data.tenantId);
     }
   },
 });
 
 // for get detail, load data & update value.
-async function loadDetail(noticeId: number) {
+async function loadDetail(noticeId: number, tenantId?: number) {
   loadingData.value = true;
   try {
     // load data
-    const notice = await getNoticeDetail(noticeId);
+    const notice = await getNoticeDetail(noticeId, tenantId);
 
     // 填充 数据 - form
     await formApi.setValues(notice);
