@@ -80,9 +80,72 @@ const Textarea = defineAsyncComponent(() =>
 const TimePicker = defineAsyncComponent(
   () => import('ant-design-vue/es/time-picker'),
 );
-const TreeSelect = defineAsyncComponent(
+const AntTreeSelect = defineAsyncComponent(
   () => import('ant-design-vue/es/tree-select'),
 );
+
+const TreeSelect = defineComponent({
+  name: 'SmartTreeSelect',
+  setup(props: any, { attrs, emit, slots, expose }) {
+    const innerRef = ref();
+    // 透传组件暴露的方法
+    expose(
+      new Proxy(
+        {},
+        {
+          get: (_target, key) => innerRef.value?.[key],
+          has: (_target, key) => key in (innerRef.value || {}),
+        },
+      ),
+    );
+
+    // 处理值转换：将简单值数组转换为 Ant Design Vue 期望的格式
+    const normalizedValue = computed(() => {
+      const value = attrs.modelValue;
+      if (!value) return value;
+
+      // fieldNames 暂时未使用，保留用于未来功能扩展
+      // const fieldNames = attrs.fieldNames || {
+      //   label: 'label',
+      //   value: 'value',
+      //   children: 'children',
+      // };
+
+      if (Array.isArray(value)) {
+        return value.map((item: any) => {
+          if (typeof item === 'object' && item !== null) {
+            return item;
+          }
+          // 简单值，只需要返回即可，Ant Design Vue 会根据 valueField 在 treeData 中匹配
+          return item;
+        });
+      }
+
+      if (typeof value === 'object' && value !== null) {
+        return value;
+      }
+
+      return value;
+    });
+
+    const handleUpdateValue = (val: any) => {
+      emit('update:modelValue', val);
+    };
+
+    return () =>
+      h(
+        AntTreeSelect,
+        {
+          ...props,
+          ...attrs,
+          ref: innerRef,
+          modelValue: normalizedValue.value,
+          'onUpdate:modelValue': handleUpdateValue,
+        },
+        slots,
+      );
+  },
+});
 const Cascader = defineAsyncComponent(
   () => import('ant-design-vue/es/cascader'),
 );

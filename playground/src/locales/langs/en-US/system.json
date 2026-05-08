@@ -217,6 +217,12 @@
     },
     "data": "Content"
   },
+  "noticeCategory": {
+    "module": "Notice Category Mgr",
+    "moduleShort": "Notice Category",
+    "list": "Notice Category List",
+    "name": "Category Name"
+  },
   "tenant": {
     "module": "Tenant",
     "title": "Tenant Management",

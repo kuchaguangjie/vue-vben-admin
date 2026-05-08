@@ -227,6 +227,12 @@
     },
     "data": "内容"
   },
+  "noticeCategory": {
+    "module": "公告分类管理",
+    "moduleShort": "公告分类",
+    "list": "公告分类列表",
+    "name": "分类名称"
+  },
   "tenant": {
     "module": "租户",
     "title": "租户管理",

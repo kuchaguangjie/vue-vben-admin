@@ -8,6 +8,7 @@ export namespace SystemNoticeApi {
   export interface SystemNoticeCategory {
     id: number;
     name: string;
+    tenantId?: number;
   }
 
   export interface SystemNotice {
@@ -78,11 +79,60 @@ async function getNoticeDetail(id: number) {
   return requestClient.get(`/system/notice/${id}`);
 }
 
+// ==================== 公告分类管理 ====================
+
+/**
+ * 获取公告分类分页列表
+ */
+async function getNoticeCategoryPage(params: Recordable<any>) {
+  return requestClient.get<
+    CommonType.Page<SystemNoticeApi.SystemNoticeCategory>
+  >('/system/noticeCategory/page', { params });
+}
+
+/**
+ * 创建公告分类
+ */
+async function createNoticeCategory(
+  data: Omit<SystemNoticeApi.SystemNoticeCategory, 'id'>,
+) {
+  return requestClient.post('/system/noticeCategory', data);
+}
+
+/**
+ * 更新公告分类
+ */
+async function updateNoticeCategory(
+  id: string,
+  data: Omit<SystemNoticeApi.SystemNoticeCategory, 'id'>,
+) {
+  return requestClient.put(`/system/noticeCategory/${id}`, data);
+}
+
+/**
+ * 删除公告分类
+ */
+async function deleteNoticeCategory(id: number) {
+  return requestClient.delete(`/system/noticeCategory/${id}`);
+}
+
+/**
+ * 公告分类 详情
+ */
+async function getNoticeCategoryDetail(id: number) {
+  return requestClient.get(`/system/noticeCategory/${id}`);
+}
+
 export {
   createNotice,
+  createNoticeCategory,
   deleteNotice,
+  deleteNoticeCategory,
+  getNoticeCategoryDetail,
+  getNoticeCategoryPage,
   getNoticeDetail,
   getNoticeListWithUserCore,
   updateNotice,
+  updateNoticeCategory,
   updateNoticeStatus,
 };

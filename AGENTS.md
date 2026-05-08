@@ -60,6 +60,11 @@ pnpm build:play       # 构建生产版本
 
 ## 开发规范与模式
 
+### 项目位置
+
+- **前端代码**: `/mnt/star/git_repos/vue_repos/vue-vben-admin/playground/`
+- **后端代码**: `/home/eric/go/src/github.com/kuchaguangjie/fiber-crud/`
+
 ### 页面开发模式
 
 每个系统管理页面文件结构:
@@ -71,6 +76,91 @@ views/system/{module}/
 └── modules/
     ├── form.vue         # 新建/编辑表单
     └── detail.vue       # 详情预览
+```
+
+### form.vue 标准模式（重要：避免导入错误）
+
+**不要**使用 `VbenForm` 组件，必须使用 `useVbenForm` + `useVbenDrawer` 组合：
+
+```typescript
+<script lang="ts" setup>
+import type { SystemModuleApi } from '#/api/system/module';
+
+import { computed, nextTick, ref } from 'vue';
+
+import { useVbenDrawer } from '@vben/common-ui';
+
+import { useVbenForm } from '#/adapter/form';
+import { createModule, updateModule } from '#/api/system/module';
+import { $t } from '#/locales';
+
+import { formFieldsToRemoveForCreate, useFormSchema } from '../data';
+
+const emits = defineEmits(['success']);
+
+const formData = ref<SystemModuleApi.SystemModule>();
+
+const [Form, formApi] = useVbenForm({
+  schema: useFormSchema(),
+  showDefaultActions: false,
+});
+
+const id = ref();
+const [Drawer, drawerApi] = useVbenDrawer({
+  destroyOnClose: true,
+  async onConfirm() {
+    const { valid } = await formApi.validate();
+    if (!valid) return;
+
+    const values = await formApi.getValues();
+
+    drawerApi.lock();
+    (id.value ? updateModule(id.value, values) : createModule(values))
+      .then(() => {
+        emits('success');
+        drawerApi.close();
+      })
+      .catch(() => {
+        drawerApi.unlock();
+      });
+  },
+
+  async onOpenChange(isOpen) {
+    if (isOpen) {
+      const data = drawerApi.getData<SystemModuleApi.SystemModule>();
+      await formApi.resetForm();
+
+      const isEdit = data && data.id;
+      if (isEdit) {
+        formData.value = data;
+        id.value = data.id;
+      } else {
+        id.value = undefined;
+      }
+
+      if (!isEdit) {
+        await formApi.removeSchemaByFields(formFieldsToRemoveForCreate());
+      }
+      await nextTick();
+
+      if (isEdit) {
+        await formApi.setValues(data);
+      }
+    }
+  },
+});
+
+const getDrawerTitle = computed(() => {
+  return formData.value?.id
+    ? $t('ui.actionTitle.edit', [$t('system.module.moduleShort')])
+    : $t('ui.actionTitle.create', [$t('system.module.moduleShort')]);
+});
+</script>
+<template>
+  <Drawer :title="getDrawerTitle">
+    <Form />
+  </Drawer>
+</template>
 ```
 
 ### data.ts 标准模式
