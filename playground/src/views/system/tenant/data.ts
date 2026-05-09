@@ -268,6 +268,7 @@ export function useColumns<T = SystemTenantApi.SystemTenant>(
           onClick: onActionClick,
         },
         name: 'CellOperation',
+        options: ['edit'],
       },
       field: 'operation',
       fixed: 'right',

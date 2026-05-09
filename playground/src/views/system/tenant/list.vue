@@ -14,7 +14,6 @@ import { Button } from 'ant-design-vue';
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { getTenantList, updateTenantStatus } from '#/api';
 import { doPageQuery } from '#/api/request';
-import { useDeleteAction } from '#/hooks/common/use-delete-action';
 import { useStatusToggle } from '#/hooks/common/use-status-toggle';
 import { $t } from '#/locales';
 import { usePagerConfig } from '#/utils/pager';
@@ -36,15 +35,6 @@ const [DetailDrawer, detailDrawerApi] = useVbenDrawer({
 const { onStatusChange } = useStatusToggle({
   getRowName: (row) => row.name,
   updateStatus: updateTenantStatus,
-  onRefresh: () => gridApi.query(),
-});
-
-const { onDelete } = useDeleteAction({
-  getRowName: (row) => row.name,
-  deleteApi: (_id) => {
-    console.warn('Tenant delete not implemented, use disable instead');
-    return Promise.resolve();
-  },
   onRefresh: () => gridApi.query(),
 });
 
@@ -96,10 +86,6 @@ const [Grid, gridApi] = useVbenVxeGrid({
 
 function onActionClick(e: OnActionClickParams<SystemTenantApi.SystemTenant>) {
   switch (e.code) {
-    case 'delete': {
-      onDelete(e.row);
-      break;
-    }
     case 'edit': {
       onEdit(e.row);
       break;
