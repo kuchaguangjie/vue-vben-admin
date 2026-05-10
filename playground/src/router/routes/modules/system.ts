@@ -84,6 +84,15 @@ const routes: RouteRecordRaw[] = [
         },
         component: () => import('#/views/system/notice-category/list.vue'),
       },
+      {
+        path: '/system/gen',
+        name: 'SystemGen',
+        meta: {
+          icon: 'mdi:code-tags',
+          title: $t('system.gen.module'),
+        },
+        component: () => import('#/views/system/gen/list.vue'),
+      },
     ],
   },
 ];

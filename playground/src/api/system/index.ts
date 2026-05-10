@@ -1,6 +1,7 @@
 export * from './api';
 export * from './casbin';
 export * from './dept';
+export * from './gen';
 export * from './log';
 export * from './mem';
 export * from './menu';
