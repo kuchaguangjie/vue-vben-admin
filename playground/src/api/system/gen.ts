@@ -1,65 +1,63 @@
-import type { Recordable } from '@vben/types';
-
 import { requestClient } from '#/api/request';
 
 export namespace GenApi {
   export interface GenTableColumn {
-    fieldName: string;
-    fieldType: string;
+    defaultValue?: string;
     fieldLength?: number;
+    fieldName: string;
     fieldScale?: number;
-    isPrimary?: boolean;
+    fieldType: string;
     isAuto?: boolean;
+    isIndex?: boolean;
+    isPrimary?: boolean;
     isRequired?: boolean;
     isUnique?: boolean;
-    isIndex?: boolean;
-    defaultValue?: string;
     remark?: string;
   }
 
   export interface GenTableDesign {
-    tableName: string;
-    tableComment?: string;
-    isSoftDelete?: boolean;
-    isTenant?: boolean;
-    hasVersion?: boolean;
+    columns: GenTableColumn[];
     hasCreated?: boolean;
     hasUpdated?: boolean;
-    columns: GenTableColumn[];
+    hasVersion?: boolean;
+    isSoftDelete?: boolean;
+    isTenant?: boolean;
+    tableComment?: string;
+    tableName: string;
   }
 
   export interface GenSqlResult {
     createTableSql: string;
+    fullSql: string;
     indexSql: string;
     initDataSql: string;
-    fullSql: string;
   }
 
   export interface SqlTypeOption {
-    value: string;
     label: string;
+    value: string;
   }
 
   export interface GenSaveSqlReq {
-    tableName: string;
     fileName?: string;
     sql: string;
+    tableName: string;
   }
 
   export interface GenSaveSqlResult {
-    filePath: string;
     fileName: string;
+    filePath: string;
   }
 
   export interface GenExecuteSqlReq {
-    tableName: string;
     sql: string;
+    tableName: string;
   }
 
   export interface GenExecuteSqlResult {
-    success: boolean;
-    message: string;
     error?: string;
+    message: string;
+    success: boolean;
   }
 
   export interface GenGenerateGormReq {
@@ -67,14 +65,75 @@ export namespace GenApi {
   }
 
   export interface GenGenerateGormResult {
-    success: boolean;
-    message: string;
     error?: string;
+    message: string;
+    success: boolean;
   }
 
   export interface GenTableInfo {
-    tableName: string;
     tableComment: string;
+    tableName: string;
+  }
+
+  export interface GenGenerateCodeReq {
+    moduleName: string;
+    tableName: string;
+  }
+
+  export interface GenGeneratedFile {
+    content?: string;
+    fileName: string;
+    filePath: string;
+  }
+
+  export interface GenGenerateCodeResult {
+    error?: string;
+    files?: GenGeneratedFile[];
+    isPartialReady?: boolean;
+    message: string;
+    skippedFiles?: string[];
+    success: boolean;
+  }
+
+  export interface GenGenerateFrontendReq {
+    menuParentId?: number;
+    moduleName: string;
+    moduleTitle?: string;
+    tableName: string;
+  }
+
+  export interface GenGenerateFrontendResult {
+    error?: string;
+    files?: GenGeneratedFile[];
+    message: string;
+    success: boolean;
+  }
+
+  export interface GenCreateMenuReq {
+    menuParentId?: number;
+    moduleName: string;
+    moduleTitle?: string;
+    tableName: string;
+  }
+
+  export interface GenCreateMenuResult {
+    error?: string;
+    menuId?: number;
+    message: string;
+    success: boolean;
+  }
+
+  export interface GenCreateApiReq {
+    apiParentId?: number;
+    moduleName: string;
+    tableName: string;
+  }
+
+  export interface GenCreateApiResult {
+    apiIds?: number[];
+    error?: string;
+    message: string;
+    success: boolean;
   }
 }
 
@@ -116,11 +175,43 @@ async function getTableList() {
   return requestClient.get<GenApi.GenTableInfo[]>('/system/gen/table-list');
 }
 
+async function generateCode(req: GenApi.GenGenerateCodeReq) {
+  return requestClient.post<GenApi.GenGenerateCodeResult>(
+    '/system/gen/generate-code',
+    req,
+  );
+}
+
+async function generateFrontend(req: GenApi.GenGenerateFrontendReq) {
+  return requestClient.post<GenApi.GenGenerateFrontendResult>(
+    '/system/gen/generate-frontend',
+    req,
+  );
+}
+
+async function createMenuForGen(req: GenApi.GenCreateMenuReq) {
+  return requestClient.post<GenApi.GenCreateMenuResult>(
+    '/system/gen/create-menu',
+    req,
+  );
+}
+
+async function createApiForGen(req: GenApi.GenCreateApiReq) {
+  return requestClient.post<GenApi.GenCreateApiResult>(
+    '/system/gen/create-api',
+    req,
+  );
+}
+
 export {
+  createApiForGen,
+  createMenuForGen,
+  executeSql,
+  generateCode,
+  generateFrontend,
+  generateGorm,
+  generateSql,
   getSqlTypeOptions,
   getTableList,
-  generateSql,
   saveSql,
-  executeSql,
-  generateGorm,
 };

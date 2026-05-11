@@ -268,6 +268,8 @@
     "executeResult": "执行结果",
     "generateGormSuccess": "GORM 代码生成成功",
     "generateGormFailed": "GORM 代码生成失败",
+    "generateCodeSuccess": "Service 和 API 代码生成成功",
+    "generateCodeFailed": "Service 和 API 代码生成失败",
     "sqlResult": "SQL 结果",
     "createTableSql": "建表语句",
     "indexSql": "索引语句",

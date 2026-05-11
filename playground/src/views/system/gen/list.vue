@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { GenApi } from '#/api';
+import type { GenApi, SystemApiApi, SystemMenuApi } from '#/api';
 
 import { onMounted, ref } from 'vue';
 
@@ -14,16 +14,23 @@ import {
   Select,
   Switch,
   Tabs,
+  TreeSelect,
 } from 'ant-design-vue';
 
+import { getApiTreeRoots } from '#/api/system/api';
 import {
+  createApiForGen,
+  createMenuForGen,
   executeSql,
+  generateCode,
+  generateFrontend,
   generateGorm,
   generateSql,
   getSqlTypeOptions,
   getTableList,
   saveSql,
 } from '#/api/system/gen';
+import { getMenuTreeRoots } from '#/api/system/menu';
 import { $t } from '#/locales';
 
 const sqlTypeOptions = ref<GenApi.SqlTypeOption[]>([]);
@@ -76,11 +83,43 @@ const lastSavedPath = ref('');
 const executeResult = ref<GenApi.GenExecuteSqlResult | null>(null);
 const generateGormResult = ref<GenApi.GenGenerateGormResult | null>(null);
 const canGenerateGorm = ref(false);
+const moduleName = ref('');
+const canGenerateCode = ref(false);
+const isGeneratingCode = ref(false);
+const generateCodeResult = ref<GenApi.GenGenerateCodeResult | null>(null);
+
+const canGenerateFrontend = ref(false);
+const isGeneratingFrontend = ref(false);
+const generateFrontendResult = ref<GenApi.GenGenerateFrontendResult | null>(
+  null,
+);
+
+const menuTreeData = ref<SystemMenuApi.SystemMenu[]>([]);
+const selectedMenuParentId = ref<number | undefined>(undefined);
+const isCreatingMenu = ref(false);
+const createMenuResult = ref<GenApi.GenCreateMenuResult | null>(null);
+const canCreateMenu = ref(false);
+
+const apiTreeData = ref<SystemApiApi.SystemApi[]>([]);
+const selectedApiParentId = ref<number | undefined>(undefined);
+const isCreatingApi = ref(false);
+const createApiResult = ref<GenApi.GenCreateApiResult | null>(null);
+const canCreateApi = ref(false);
 
 onMounted(() => {
   loadSqlTypeOptions();
   loadTableList();
+  loadMenuTree();
+  loadApiTree();
 });
+
+async function loadMenuTree() {
+  menuTreeData.value = await getMenuTreeRoots({});
+}
+
+async function loadApiTree() {
+  apiTreeData.value = await getApiTreeRoots({ type: 1 });
+}
 
 async function loadSqlTypeOptions() {
   sqlTypeOptions.value = await getSqlTypeOptions();
@@ -161,6 +200,7 @@ async function handleGenerate() {
 function handleClear() {
   tableName.value = '';
   tableComment.value = '';
+  moduleName.value = '';
   isSoftDelete.value = true;
   isTenant.value = true;
   hasVersion.value = true;
@@ -179,14 +219,37 @@ function handleClear() {
   sqlResult.value = null;
   selectedExistingTable.value = '';
   canGenerateGorm.value = false;
+  canGenerateCode.value = false;
+  canGenerateFrontend.value = false;
+  canCreateMenu.value = false;
+  canCreateApi.value = false;
   executeResult.value = null;
   generateGormResult.value = null;
+  generateCodeResult.value = null;
+  generateFrontendResult.value = null;
+  createMenuResult.value = null;
+  createApiResult.value = null;
+  selectedMenuParentId.value = undefined;
+  selectedApiParentId.value = undefined;
 }
 
 function handleSelectExistingTable(value: string) {
+  moduleName.value = '';
+  canGenerateCode.value = false;
+  canCreateMenu.value = false;
+  canCreateApi.value = false;
+  generateGormResult.value = null;
+  generateCodeResult.value = null;
+  generateFrontendResult.value = null;
+  createMenuResult.value = null;
+  createApiResult.value = null;
+  selectedMenuParentId.value = undefined;
+  selectedApiParentId.value = undefined;
+
   if (value) {
     tableName.value = value;
     canGenerateGorm.value = true;
+    canGenerateFrontend.value = true;
   } else {
     canGenerateGorm.value = false;
   }
@@ -267,6 +330,7 @@ async function handleGenerateGorm() {
   }
 
   generateGormResult.value = null;
+  canGenerateCode.value = false;
   isGeneratingGorm.value = true;
   try {
     const result = await generateGorm({
@@ -274,12 +338,147 @@ async function handleGenerateGorm() {
     });
     generateGormResult.value = result;
     if (result.success) {
+      canGenerateCode.value = true;
+      canGenerateFrontend.value = true;
       message.success($t('system.gen.generateGormSuccess'), 5);
     } else {
       message.error($t('system.gen.generateGormFailed'), 5);
     }
   } finally {
     isGeneratingGorm.value = false;
+  }
+}
+
+async function handleGenerateCode() {
+  if (!tableName.value.trim()) {
+    message.warning('请输入表名');
+    return;
+  }
+  if (!moduleName.value.trim()) {
+    message.warning('请输入模块名');
+    return;
+  }
+
+  generateCodeResult.value = null;
+  generateFrontendResult.value = null;
+  canCreateMenu.value = false;
+  isGeneratingCode.value = true;
+  try {
+    const result = await generateCode({
+      tableName: tableName.value.trim(),
+      moduleName: moduleName.value.trim(),
+    });
+    generateCodeResult.value = result;
+    if (result.success) {
+      if (result.isPartialReady) {
+        canGenerateFrontend.value = true;
+        canCreateApi.value = true;
+        canCreateMenu.value = true;
+        if (result.skippedFiles && result.skippedFiles.length > 0) {
+          message.warning(result.message, 5);
+        } else {
+          message.success($t('system.gen.generateCodeSuccess'), 5);
+        }
+      } else {
+        canGenerateFrontend.value = true;
+        canCreateApi.value = true;
+        canCreateMenu.value = true;
+        message.success($t('system.gen.generateCodeSuccess'), 5);
+      }
+    } else {
+      message.error(result.message || $t('system.gen.generateCodeFailed'), 5);
+    }
+  } finally {
+    isGeneratingCode.value = false;
+  }
+}
+
+async function handleGenerateFrontend() {
+  if (!tableName.value.trim()) {
+    message.warning('请输入表名');
+    return;
+  }
+  if (!moduleName.value.trim()) {
+    message.warning('请输入模块名');
+    return;
+  }
+
+  generateFrontendResult.value = null;
+  isGeneratingFrontend.value = true;
+  try {
+    const result = await generateFrontend({
+      tableName: tableName.value.trim(),
+      moduleName: moduleName.value.trim(),
+    });
+    generateFrontendResult.value = result;
+    if (result.success) {
+      canCreateMenu.value = true;
+      message.success('前端代码模板生成成功', 5);
+    } else {
+      message.error(result.message || '前端代码模板生成失败', 5);
+    }
+  } finally {
+    isGeneratingFrontend.value = false;
+  }
+}
+
+async function handleCreateMenu() {
+  if (!tableName.value.trim()) {
+    message.warning('请输入表名');
+    return;
+  }
+  if (!moduleName.value.trim()) {
+    message.warning('请输入模块名');
+    return;
+  }
+
+  createMenuResult.value = null;
+  isCreatingMenu.value = true;
+  try {
+    const result = await createMenuForGen({
+      tableName: tableName.value.trim(),
+      moduleName: moduleName.value.trim(),
+      menuParentId: selectedMenuParentId.value,
+    });
+    createMenuResult.value = result;
+    if (result.success) {
+      message.success(result.message, 5);
+      loadMenuTree();
+    } else {
+      message.error(result.message || '创建菜单失败', 5);
+    }
+  } finally {
+    isCreatingMenu.value = false;
+  }
+}
+
+async function handleCreateApi() {
+  if (!tableName.value.trim()) {
+    message.warning('请输入表名');
+    return;
+  }
+  if (!moduleName.value.trim()) {
+    message.warning('请输入模块名');
+    return;
+  }
+
+  createApiResult.value = null;
+  isCreatingApi.value = true;
+  try {
+    const result = await createApiForGen({
+      tableName: tableName.value.trim(),
+      moduleName: moduleName.value.trim(),
+      apiParentId: selectedApiParentId.value,
+    });
+    createApiResult.value = result;
+    if (result.success) {
+      message.success(result.message, 5);
+      loadApiTree();
+    } else {
+      message.error(result.message || '创建 API 失败', 5);
+    }
+  } finally {
+    isCreatingApi.value = false;
   }
 }
 </script>
@@ -289,7 +488,7 @@ async function handleGenerateGorm() {
     <div class="space-y-4 p-4">
       <Card :title="$t('system.gen.section.basic')">
         <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
-          <div>
+          <div class="md:col-span-3">
             <label
               class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
             >
@@ -327,6 +526,18 @@ async function handleGenerateGorm() {
               {{ $t('system.gen.tableComment') }}
             </label>
             <Input v-model:value="tableComment" />
+          </div>
+          <div>
+            <label
+              class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
+            >
+              模块名
+              <span class="text-red-500" v-if="canGenerateCode">*</span>
+            </label>
+            <Input
+              v-model:value="moduleName"
+              placeholder="e.g., product, category"
+            />
           </div>
         </div>
       </Card>
@@ -565,6 +776,267 @@ async function handleGenerateGorm() {
         </div>
       </Card>
 
+      <Card
+        v-if="canGenerateCode && !sqlResult"
+        title="生成 Service 和 API 代码"
+      >
+        <div class="flex flex-col gap-4">
+          <div class="text-sm text-gray-600 dark:text-gray-400">
+            已完成 GORM 代码生成，可以继续生成 Service 和 API 代码
+          </div>
+          <div>
+            <Button
+              type="primary"
+              :loading="isGeneratingCode"
+              @click="handleGenerateCode"
+            >
+              生成 Service 和 API 代码
+            </Button>
+          </div>
+          <div v-if="generateCodeResult" class="rounded-md p-3 text-sm">
+            <div class="mb-1 font-medium">代码生成结果:</div>
+            <div
+              :class="[
+                generateCodeResult.success
+                  ? 'text-green-600 dark:text-green-400'
+                  : 'text-red-600 dark:text-red-400',
+              ]"
+            >
+              {{ generateCodeResult.message }}
+            </div>
+            <div
+              v-if="generateCodeResult.error"
+              class="mt-2 text-sm text-red-500 dark:text-red-400"
+            >
+              <pre class="whitespace-pre-wrap">{{
+                generateCodeResult.error
+              }}</pre>
+            </div>
+            <div
+              v-if="
+                generateCodeResult.files && generateCodeResult.files.length > 0
+              "
+              class="mt-3"
+            >
+              <div class="mb-1 font-medium">生成的文件:</div>
+              <ul class="list-disc pl-5">
+                <li
+                  v-for="file in generateCodeResult.files"
+                  :key="file.fileName"
+                  class="text-gray-600 dark:text-gray-400"
+                >
+                  {{ file.filePath }}
+                </li>
+              </ul>
+            </div>
+            <div
+              v-if="
+                generateCodeResult.skippedFiles &&
+                generateCodeResult.skippedFiles.length > 0
+              "
+              class="mt-3"
+            >
+              <div
+                class="mb-1 font-medium text-yellow-600 dark:text-yellow-400"
+              >
+                跳过的已存在文件:
+              </div>
+              <ul class="list-disc pl-5">
+                <li
+                  v-for="fileName in generateCodeResult.skippedFiles"
+                  :key="fileName"
+                  class="text-yellow-600 dark:text-yellow-400"
+                >
+                  {{ fileName }}
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </Card>
+
+      <Card v-if="canCreateApi && !sqlResult" title="生成数据库 API">
+        <div class="flex flex-col gap-4">
+          <div class="text-sm text-gray-600 dark:text-gray-400">
+            已完成 Service 和 API 代码生成，可继续创建数据库 API 记录
+          </div>
+          <div>
+            <label
+              class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
+            >
+              选择上级 API 目录
+            </label>
+            <TreeSelect
+              v-model:value="selectedApiParentId"
+              :tree-data="apiTreeData"
+              :field-names="{
+                label: 'path',
+                value: 'id',
+                children: 'children',
+              }"
+              class="w-full"
+              placeholder="选择上级 API 目录（可选）"
+              show-search
+              tree-default-expand-all
+            />
+          </div>
+          <div>
+            <Button
+              type="primary"
+              :loading="isCreatingApi"
+              @click="handleCreateApi"
+            >
+              生成数据库 API 记录
+            </Button>
+          </div>
+          <div v-if="createApiResult" class="rounded-md p-3 text-sm">
+            <div class="mb-1 font-medium">API 创建结果:</div>
+            <div
+              :class="[
+                createApiResult.success
+                  ? 'text-green-600 dark:text-green-400'
+                  : 'text-red-600 dark:text-red-400',
+              ]"
+            >
+              {{ createApiResult.message }}
+            </div>
+            <div
+              v-if="createApiResult.error"
+              class="mt-2 text-sm text-red-500 dark:text-red-400"
+            >
+              <pre class="whitespace-pre-wrap">{{ createApiResult.error }}</pre>
+            </div>
+            <div
+              v-if="createApiResult.apiIds && createApiResult.apiIds.length > 0"
+              class="mt-3"
+            >
+              <div class="mb-1 font-medium">创建的 API 数量:</div>
+              <span class="text-gray-600 dark:text-gray-400">
+                {{ createApiResult.apiIds.length }} 个
+              </span>
+            </div>
+          </div>
+        </div>
+      </Card>
+
+      <Card v-if="canGenerateFrontend && !sqlResult" title="生成前端代码模板">
+        <div class="flex flex-col gap-4">
+          <div class="text-sm text-gray-600 dark:text-gray-400">
+            前后端分离开发，可独立生成前端代码模板（GORM 模型需已存在）
+          </div>
+          <div>
+            <Button
+              type="primary"
+              :loading="isGeneratingFrontend"
+              @click="handleGenerateFrontend"
+            >
+              生成前端代码模板
+            </Button>
+          </div>
+          <div v-if="generateFrontendResult" class="rounded-md p-3 text-sm">
+            <div class="mb-1 font-medium">前端代码生成结果:</div>
+            <div
+              :class="[
+                generateFrontendResult.success
+                  ? 'text-green-600 dark:text-green-400'
+                  : 'text-red-600 dark:text-red-400',
+              ]"
+            >
+              {{ generateFrontendResult.message }}
+            </div>
+            <div
+              v-if="generateFrontendResult.error"
+              class="mt-2 text-sm text-red-500 dark:text-red-400"
+            >
+              <pre class="whitespace-pre-wrap">{{
+                generateFrontendResult.error
+              }}</pre>
+            </div>
+            <div
+              v-if="
+                generateFrontendResult.files &&
+                generateFrontendResult.files.length > 0
+              "
+              class="mt-3"
+            >
+              <div class="mb-1 font-medium">生成的文件:</div>
+              <ul class="list-disc pl-5">
+                <li
+                  v-for="file in generateFrontendResult.files"
+                  :key="file.fileName"
+                  class="text-gray-600 dark:text-gray-400"
+                >
+                  {{ file.filePath }}
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </Card>
+
+      <Card v-if="canCreateMenu && !sqlResult" title="生成数据库菜单">
+        <div class="flex flex-col gap-4">
+          <div class="text-sm text-gray-600 dark:text-gray-400">
+            已完成前端代码生成，可继续创建数据库菜单记录
+          </div>
+          <div>
+            <label
+              class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-300"
+            >
+              选择上级菜单
+            </label>
+            <TreeSelect
+              v-model:value="selectedMenuParentId"
+              :tree-data="menuTreeData"
+              :field-names="{
+                label: 'name',
+                value: 'id',
+                children: 'children',
+              }"
+              class="w-full"
+              placeholder="选择上级菜单（可选）"
+              show-search
+              tree-default-expand-all
+            />
+          </div>
+          <div>
+            <Button
+              type="primary"
+              :loading="isCreatingMenu"
+              @click="handleCreateMenu"
+            >
+              生成数据库菜单记录
+            </Button>
+          </div>
+          <div v-if="createMenuResult" class="rounded-md p-3 text-sm">
+            <div class="mb-1 font-medium">菜单创建结果:</div>
+            <div
+              :class="[
+                createMenuResult.success
+                  ? 'text-green-600 dark:text-green-400'
+                  : 'text-red-600 dark:text-red-400',
+              ]"
+            >
+              {{ createMenuResult.message }}
+            </div>
+            <div
+              v-if="createMenuResult.error"
+              class="mt-2 text-sm text-red-500 dark:text-red-400"
+            >
+              <pre class="whitespace-pre-wrap">{{
+                createMenuResult.error
+              }}</pre>
+            </div>
+            <div v-if="createMenuResult.menuId" class="mt-3">
+              <div class="mb-1 font-medium">创建的菜单 ID:</div>
+              <span class="text-gray-600 dark:text-gray-400">
+                {{ createMenuResult.menuId }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </Card>
+
       <Card v-if="sqlResult" :title="$t('system.gen.section.result')">
         <template #extra>
           <div class="flex gap-2">
@@ -584,6 +1056,15 @@ async function handleGenerateGorm() {
               @click="handleGenerateGorm"
             >
               {{ $t('system.gen.btnGenerateGorm') }}
+            </Button>
+            <Button
+              v-if="canGenerateCode"
+              type="primary"
+              size="small"
+              :loading="isGeneratingCode"
+              @click="handleGenerateCode"
+            >
+              生成 Service 和 API
             </Button>
             <Button
               type="default"
@@ -649,6 +1130,44 @@ async function handleGenerateGorm() {
             <pre class="whitespace-pre-wrap">{{
               generateGormResult.error
             }}</pre>
+          </div>
+        </div>
+
+        <div v-if="generateCodeResult" class="mb-3 rounded-md p-3 text-sm">
+          <div class="mb-1 font-medium">代码生成结果:</div>
+          <div
+            :class="[
+              generateCodeResult.success
+                ? 'text-green-600 dark:text-green-400'
+                : 'text-red-600 dark:text-red-400',
+            ]"
+          >
+            {{ generateCodeResult.message }}
+          </div>
+          <div
+            v-if="generateCodeResult.error"
+            class="mt-2 text-sm text-red-500 dark:text-red-400"
+          >
+            <pre class="whitespace-pre-wrap">{{
+              generateCodeResult.error
+            }}</pre>
+          </div>
+          <div
+            v-if="
+              generateCodeResult.files && generateCodeResult.files.length > 0
+            "
+            class="mt-3"
+          >
+            <div class="mb-1 font-medium">生成的文件:</div>
+            <ul class="list-disc pl-5">
+              <li
+                v-for="file in generateCodeResult.files"
+                :key="file.fileName"
+                class="text-gray-600 dark:text-gray-400"
+              >
+                {{ file.filePath }}
+              </li>
+            </ul>
           </div>
         </div>
 
