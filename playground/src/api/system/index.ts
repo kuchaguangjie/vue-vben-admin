@@ -1,4 +1,3 @@
-export * from './ai_provider';
 export * from './api';
 export * from './casbin';
 export * from './dept';

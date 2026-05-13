@@ -1,4 +1,5 @@
 {
+  "title": "AI Management",
   "provider": {
     "module": "AI Provider",
     "moduleShort": "AI Provider",

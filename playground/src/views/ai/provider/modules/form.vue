@@ -1,19 +1,19 @@
 <script lang="ts" setup>
-import type { SystemAiProviderApi } from '#/api/system/ai_provider';
+import type { SystemAiProviderApi } from '#/api/ai';
 
 import { computed, nextTick, ref } from 'vue';
 
 import { useVbenDrawer } from '@vben/common-ui';
 
 import { useVbenForm } from '#/adapter/form';
-import { createAiModel, updateAiModel } from '#/api/system/ai_provider';
+import { createAiProvider, updateAiProvider } from '#/api/ai';
 import { $t } from '#/locales';
 
 import { formFieldsToRemoveForCreate, useFormSchema } from '../data';
 
 const emits = defineEmits(['success']);
 
-const formData = ref<SystemAiProviderApi.AiModel>();
+const formData = ref<SystemAiProviderApi.AiProvider>();
 
 const [Form, formApi] = useVbenForm({
   schema: useFormSchema(),
@@ -30,7 +30,7 @@ const [Drawer, drawerApi] = useVbenDrawer({
     const values = await formApi.getValues();
 
     drawerApi.lock();
-    (id.value ? updateAiModel(id.value, values) : createAiModel(values))
+    (id.value ? updateAiProvider(id.value, values) : createAiProvider(values))
       .then(() => {
         emits('success');
         drawerApi.close();
@@ -42,7 +42,7 @@ const [Drawer, drawerApi] = useVbenDrawer({
 
   async onOpenChange(isOpen) {
     if (isOpen) {
-      const data = drawerApi.getData<SystemAiProviderApi.AiModel>();
+      const data = drawerApi.getData<SystemAiProviderApi.AiProvider>();
       await formApi.resetForm();
 
       const isEdit = data && data.id;
@@ -67,8 +67,8 @@ const [Drawer, drawerApi] = useVbenDrawer({
 
 const getDrawerTitle = computed(() => {
   return formData.value?.id
-    ? $t('ui.actionTitle.edit', [$t('system.aiModel.moduleShort')])
-    : $t('ui.actionTitle.create', [$t('system.aiModel.moduleShort')]);
+    ? $t('ui.actionTitle.edit', [$t('ai.provider.moduleShort')])
+    : $t('ui.actionTitle.create', [$t('ai.provider.moduleShort')]);
 });
 </script>
 <template>

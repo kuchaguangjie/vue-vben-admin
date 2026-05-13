@@ -4,7 +4,7 @@ import type {
   VxeTableGridOptions,
 } from '#/adapter/vxe-table';
 import type { PageParams } from '#/api/request';
-import type { SystemAiProviderApi } from '#/api/system/ai_provider';
+import type { SystemAiProviderApi } from '#/api/ai';
 
 import { Page, useVbenDrawer } from '@vben/common-ui';
 import { Plus } from '@vben/icons';
@@ -13,7 +13,7 @@ import { Button } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { doPageQuery } from '#/api/request';
-import { deleteAiModel, getAiModelPage } from '#/api/system/ai_provider';
+import { deleteAiModel, getAiModelPage } from '#/api/ai';
 import { useDeleteAction } from '#/hooks/common/use-delete-action';
 import { $t } from '#/locales';
 import { usePagerConfig } from '#/utils/pager';
