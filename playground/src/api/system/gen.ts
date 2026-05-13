@@ -96,6 +96,7 @@ export namespace GenApi {
   }
 
   export interface GenGenerateFrontendReq {
+    downloadZip?: boolean;
     menuParentId?: number;
     moduleName: string;
     moduleTitle?: string;
@@ -107,9 +108,12 @@ export namespace GenApi {
     files?: GenGeneratedFile[];
     message: string;
     success: boolean;
+    zipData?: string;
+    zipFileName?: string;
   }
 
   export interface GenCreateMenuReq {
+    executeSql?: boolean;
     menuParentId?: number;
     moduleName: string;
     moduleTitle?: string;
@@ -120,11 +124,13 @@ export namespace GenApi {
     error?: string;
     menuId?: number;
     message: string;
+    sql?: string;
     success: boolean;
   }
 
   export interface GenCreateApiReq {
     apiParentId?: number;
+    executeSql?: boolean;
     moduleName: string;
     tableName: string;
   }
@@ -133,6 +139,40 @@ export namespace GenApi {
     apiIds?: number[];
     error?: string;
     message: string;
+    sql?: string;
+    success: boolean;
+  }
+
+  export interface GenGenerateMenuSqlReq {
+    menuParentId?: number;
+    moduleName: string;
+    moduleTitle?: string;
+    tableName: string;
+  }
+
+  export interface GenGenerateMenuSqlResult {
+    error?: string;
+    message: string;
+    sql: string;
+    success: boolean;
+  }
+
+  export interface GenOneClickGenerateReq {
+    moduleName: string;
+    moduleTitle?: string;
+    tableName: string;
+  }
+
+  export interface GenOneClickGenerateResult {
+    backendFiles?: GenGeneratedFile[];
+    codeResult?: GenGenerateCodeResult;
+    currentStep?: string;
+    error?: string;
+    frontendZipData?: string;
+    frontendZipFileName?: string;
+    gormResult?: GenGenerateGormResult;
+    message: string;
+    skippedFiles?: string[];
     success: boolean;
   }
 }
@@ -203,6 +243,20 @@ async function createApiForGen(req: GenApi.GenCreateApiReq) {
   );
 }
 
+async function generateMenuSql(req: GenApi.GenGenerateMenuSqlReq) {
+  return requestClient.post<GenApi.GenGenerateMenuSqlResult>(
+    '/system/gen/generate-menu-sql',
+    req,
+  );
+}
+
+async function oneClickGenerate(req: GenApi.GenOneClickGenerateReq) {
+  return requestClient.post<GenApi.GenOneClickGenerateResult>(
+    '/system/gen/one-click-generate',
+    req,
+  );
+}
+
 export {
   createApiForGen,
   createMenuForGen,
@@ -210,8 +264,10 @@ export {
   generateCode,
   generateFrontend,
   generateGorm,
+  generateMenuSql,
   generateSql,
   getSqlTypeOptions,
   getTableList,
+  oneClickGenerate,
   saveSql,
 };

@@ -1,0 +1,35 @@
+{
+  "provider": {
+    "module": "AI Provider",
+    "moduleShort": "AI Provider",
+    "title": "AI Provider Management",
+    "list": "AI Provider List",
+    "name": "Provider Name",
+    "code": "Code",
+    "baseUrl": "API URL",
+    "apiKey": "API Key",
+    "timeout": "Timeout (seconds)",
+    "status": "Status",
+    "id": "ID",
+    "operation": "Operation"
+  },
+  "model": {
+    "module": "AI Model",
+    "moduleShort": "AI Model",
+    "title": "AI Model Management",
+    "list": "AI Model List",
+    "name": "Model Name",
+    "code": "Model Code",
+    "description": "Description",
+    "contextWindow": "Context Window",
+    "maxOutput": "Max Output Length",
+    "capabilities": "Capabilities",
+    "capability": "Capability",
+    "inputPrice": "Input Price ($/M tokens)",
+    "outputPrice": "Output Price ($/M tokens)",
+    "status": "Status",
+    "isCustom": "Is Custom",
+    "id": "ID",
+    "operation": "Operation"
+  }
+}

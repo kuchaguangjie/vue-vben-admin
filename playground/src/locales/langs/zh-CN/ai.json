@@ -1,0 +1,35 @@
+{
+  "provider": {
+    "module": "AI 供应商",
+    "moduleShort": "AI 供应商",
+    "title": "AI 供应商管理",
+    "list": "AI 供应商列表",
+    "name": "供应商名称",
+    "code": "编码",
+    "baseUrl": "API 地址",
+    "apiKey": "API 密钥",
+    "timeout": "超时时间(秒)",
+    "status": "状态",
+    "id": "ID",
+    "operation": "操作"
+  },
+  "model": {
+    "module": "AI 模型",
+    "moduleShort": "AI 模型",
+    "title": "AI 模型管理",
+    "list": "AI 模型列表",
+    "name": "模型名称",
+    "code": "模型编码",
+    "description": "描述",
+    "contextWindow": "上下文窗口",
+    "maxOutput": "最大输出长度",
+    "capabilities": "支持能力",
+    "capability": "能力",
+    "inputPrice": "输入价格($/M tokens)",
+    "outputPrice": "输出价格($/M tokens)",
+    "status": "状态",
+    "isCustom": "是否自定义",
+    "id": "ID",
+    "operation": "操作"
+  }
+}
