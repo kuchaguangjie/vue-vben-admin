@@ -216,6 +216,36 @@ async function updateStatus(data) {
 export { getList, getDetail, create, update, remove, updateStatus };
 ```
 
+### ESLint 代码检查（重要）
+
+**每次修改前端代码后，必须运行 ESLint 检查，确保没有 lint 错误。**
+
+#### 检查命令
+
+```bash
+# 检查整个项目
+pnpm lint
+
+# 检查特定文件
+cd playground && npx eslint src/path/to/file.vue
+```
+
+#### 常见 ESLint 规则及修复方法
+
+| 规则 | 说明 | 修复方法 |
+|------|------|----------|
+| `unicorn/no-array-reduce` | 禁止使用 `Array#reduce()` | 使用 `for...of` 循环替代 |
+| `no-unused-vars` | 定义了但未使用的变量/函数 | 删除未使用的代码 |
+| `unused-imports/no-unused-vars` | 未使用的导入 | 删除未使用的导入 |
+| `unicorn/no-useless-switch-case` | switch 中无用的 case | 删除多余的 case |
+
+#### 修复流程
+
+1. 修改代码后，先运行 ESLint 检查
+2. 根据错误信息逐一修复
+3. 修复后再次运行检查确认所有错误已解决
+4. 不要通过禁用规则来绕过检查，除非确实有必要
+
 ---
 
 ## 共享 Composables
