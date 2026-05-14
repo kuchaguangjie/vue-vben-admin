@@ -233,7 +233,7 @@ cd playground && npx eslint src/path/to/file.vue
 #### 常见 ESLint 规则及修复方法
 
 | 规则 | 说明 | 修复方法 |
-|------|------|----------|
+| --- | --- | --- |
 | `unicorn/no-array-reduce` | 禁止使用 `Array#reduce()` | 使用 `for...of` 循环替代 |
 | `no-unused-vars` | 定义了但未使用的变量/函数 | 删除未使用的代码 |
 | `unused-imports/no-unused-vars` | 未使用的导入 | 删除未使用的导入 |
