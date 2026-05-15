@@ -4,6 +4,9 @@ import type { KnowledgeCategoryApi, KnowledgeContentApi } from '#/api';
 
 import { ref } from 'vue';
 
+import { message } from 'ant-design-vue';
+
+import { getKnowledgeCategoryList } from '#/api';
 import { useSaasEnabled } from '#/hooks/common/use-saas-enabled';
 import { $t } from '#/locales';
 import { usePreviewLink } from '#/utils/use-preview-link';
@@ -13,6 +16,24 @@ export const categoryOptions = ref<any[]>([]);
 export const categoryMap = ref<Record<number, string>>({});
 export function categoryIdToName(id: number): string {
   return categoryMap.value[id] || '';
+}
+
+export async function loadCategoryOptions() {
+  try {
+    const result = await getKnowledgeCategoryList();
+    categoryList.value = result;
+    categoryOptions.value = result.map((item) => ({
+      label: item.name,
+      value: item.id,
+    }));
+    const map: Record<number, string> = {};
+    for (const item of result) {
+      map[item.id] = item.name;
+    }
+    categoryMap.value = map;
+  } catch {
+    message.error($t('ui.message.loadFailed'));
+  }
 }
 
 export function useFormSchema(): VbenFormSchema[] {
