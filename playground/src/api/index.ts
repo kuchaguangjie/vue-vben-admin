@@ -3,5 +3,5 @@ export * from './core';
 export * from './examples';
 export * from './knowledge';
 export * from './search';
-export { SearchKnowledgeApi, searchKnowledge } from './search'; // Explicitly export searchKnowledge
+export { searchKnowledge, SearchKnowledgeApi } from './search'; // Explicitly export searchKnowledge
 export * from './system';
