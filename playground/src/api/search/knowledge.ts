@@ -2,7 +2,7 @@ import type { Recordable } from '@vben/types';
 
 import { requestClient } from '#/api/request';
 
-export namespace SearchKnowledgeApi {
+namespace SearchKnowledgeApi {
   export interface KnowledgeSearchResult {
     hits: KnowledgeSearchHit[];
     page: number;
@@ -61,6 +61,9 @@ export namespace SearchKnowledgeApi {
   }
 }
 
+// Provide a runtime value for SearchKnowledgeApi
+export const SearchKnowledgeApi = {};
+
 /**
  * 搜索知识库
  */
@@ -98,7 +101,9 @@ async function rebuildIndex() {
  * 获取索引统计信息
  */
 async function getIndexStats() {
-  return requestClient.get<SearchKnowledgeApi.IndexStats>('/search/index/stats');
+  return requestClient.get<SearchKnowledgeApi.IndexStats>(
+    '/search/index/stats',
+  );
 }
 
 export { getIndexStats, rebuildIndex, searchKnowledge, syncAllKnowledge };

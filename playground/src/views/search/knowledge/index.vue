@@ -7,7 +7,7 @@ import { IconifyIcon } from '@vben/icons';
 import { Button, Card, Empty, message, Space, Tag } from 'ant-design-vue';
 
 import { useVbenForm } from '#/adapter/form';
-import { SearchKnowledgeApi, searchKnowledge } from '#/api';
+import { searchKnowledge, SearchKnowledgeApi } from '#/api';
 import { $t } from '#/locales';
 
 import { loadCategoryOptions, useSearchFormSchema } from '../data';
