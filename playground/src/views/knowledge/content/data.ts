@@ -282,10 +282,8 @@ export function useColumns<T = KnowledgeContentApi.KnowledgeContent>(
       field: 'categoryId',
       title: $t('knowledge.content.category'),
       width: 120,
-      cellRender: {
-        name: 'CellSpan',
-        render: ({ row }) => categoryIdToName(row.categoryId),
-      },
+      sortable: true,
+      formatter: ({ cellValue }) => categoryIdToName(cellValue),
     },
     {
       field: 'format',

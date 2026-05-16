@@ -1,7 +1,5 @@
 <script lang="ts" setup>
-import type { VbenFormSchema } from '#/adapter/form';
-
-import { onMounted, ref } from 'vue';
+import { defineAsyncComponent, onMounted, ref } from 'vue';
 
 import { Page, useVbenDrawer } from '@vben/common-ui';
 import { IconifyIcon } from '@vben/icons';
@@ -9,10 +7,14 @@ import { IconifyIcon } from '@vben/icons';
 import { Button, Card, Empty, message, Space, Tag } from 'ant-design-vue';
 
 import { useVbenForm } from '#/adapter/form';
-import { SearchApi, searchKnowledge } from '#/api';
+import { SearchKnowledgeApi, searchKnowledge } from '#/api';
+import { $t } from '#/locales';
 
-import { categoryOptions, loadCategoryOptions } from '../content/data';
-import Detail from '../content/modules/detail.vue';
+import { loadCategoryOptions, useSearchFormSchema } from '../data';
+
+const Detail = defineAsyncComponent(
+  () => import('../../knowledge/content/modules/detail.vue'),
+);
 
 const [DetailDrawer, detailDrawerApi] = useVbenDrawer({
   destroyOnClose: true,
@@ -21,58 +23,14 @@ const [DetailDrawer, detailDrawerApi] = useVbenDrawer({
 
 const searching = ref(false);
 
-const searchFormSchema: VbenFormSchema[] = [
-  {
-    component: 'Input',
-    fieldName: 'q',
-    label: '关键词',
-    componentProps: {
-      placeholder: '请输入搜索关键词',
-      allowClear: true,
-    },
-    rules: 'required',
-  },
-  {
-    component: 'Select',
-    fieldName: 'categoryId',
-    label: '分类',
-    componentProps: {
-      options: categoryOptions,
-      allowClear: true,
-      placeholder: '请选择分类',
-    },
-  },
-  {
-    component: 'Input',
-    fieldName: 'tags',
-    label: '标签',
-    componentProps: {
-      placeholder: '多个标签用逗号分隔',
-      allowClear: true,
-    },
-  },
-  {
-    component: 'Select',
-    fieldName: 'status',
-    label: '状态',
-    componentProps: {
-      allowClear: true,
-      options: [
-        { label: '草稿', value: 0 },
-        { label: '已发布', value: 1 },
-        { label: '已归档', value: 2 },
-      ],
-      placeholder: '请选择状态',
-    },
-  },
-];
+const searchFormSchema = useSearchFormSchema();
 
 const [SearchForm, searchFormApi] = useVbenForm({
   schema: searchFormSchema,
   showDefaultActions: false,
 });
 
-const searchResult = ref<SearchApi.KnowledgeSearchResult>({
+const searchResult = ref<SearchKnowledgeApi.KnowledgeSearchResult>({
   hits: [],
   total: 0,
   page: 1,
@@ -83,7 +41,7 @@ const searchResult = ref<SearchApi.KnowledgeSearchResult>({
 async function handleSearch() {
   const values = await searchFormApi.getValues();
   if (!values.q || !values.q.trim()) {
-    message.warning('请输入搜索关键词');
+    message.warning($t('search.knowledge.pleaseEnterKeyword'));
     return;
   }
 
@@ -103,11 +61,14 @@ async function handleSearch() {
     });
     searchResult.value = result;
     message.success(
-      `找到 ${result.total} 条结果，耗时 ${result.processingTimeMs}ms`,
+      $t('search.knowledge.searchSuccess', {
+        total: result.total,
+        ms: result.processingTimeMs,
+      }),
     );
   } catch (error) {
-    message.error('搜索失败，请稍后重试');
-    console.error('搜索失败:', error);
+    message.error($t('search.knowledge.searchFailed'));
+    console.error('Search failed:', error);
   } finally {
     searching.value = false;
   }
@@ -152,9 +113,11 @@ onMounted(() => {
         <Space>
           <Button type="primary" @click="handleSearch" :loading="searching">
             <IconifyIcon icon="mdi:magnify" class="size-5" />
-            搜索
+            {{ $t('search.knowledge.search') }}
           </Button>
-          <Button @click="handleReset"> 重置 </Button>
+          <Button @click="handleReset">
+            {{ $t('search.knowledge.reset') }}
+          </Button>
         </Space>
       </div>
     </Card>
@@ -162,8 +125,12 @@ onMounted(() => {
     <Card v-if="searchResult.total > 0" class="mb-4">
       <template #title>
         <span>
-          搜索结果 (共 {{ searchResult.total }} 条，耗时
-          {{ searchResult.processingTimeMs }}ms)
+          {{
+            $t('search.knowledge.totalResults', {
+              total: searchResult.total,
+              ms: searchResult.processingTimeMs,
+            })
+          }}
         </span>
       </template>
 
@@ -190,7 +157,11 @@ onMounted(() => {
                 {{ item.language }}
               </Tag>
               <Tag :color="item.isPrivate ? 'orange' : 'default'">
-                {{ item.isPrivate ? '私有' : '公开' }}
+                {{
+                  item.isPrivate
+                    ? $t('search.knowledge.private')
+                    : $t('search.knowledge.public')
+                }}
               </Tag>
             </Space>
           </div>
@@ -209,9 +180,15 @@ onMounted(() => {
               </Tag>
             </Space>
             <Space size="small">
-              <span>浏览: {{ item.viewCount }}</span>
-              <span>优先级: {{ item.priority }}</span>
-              <span>更新: {{ item.updatedAt }}</span>
+              <span>
+                {{ $t('search.knowledge.views') }}: {{ item.viewCount }}
+              </span>
+              <span>
+                {{ $t('search.knowledge.priority') }}: {{ item.priority }}
+              </span>
+              <span>
+                {{ $t('search.knowledge.updated') }}: {{ item.updatedAt }}
+              </span>
             </Space>
           </div>
         </div>
@@ -222,7 +199,7 @@ onMounted(() => {
       v-else-if="
         !searching && searchResult.total === 0 && searchResult.hits.length === 0
       "
-      description="暂无搜索结果"
+      :description="$t('search.knowledge.noResults')"
       class="py-12"
     >
       <template #image>

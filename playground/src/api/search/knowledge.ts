@@ -2,7 +2,7 @@ import type { Recordable } from '@vben/types';
 
 import { requestClient } from '#/api/request';
 
-export namespace SearchApi {
+export namespace SearchKnowledgeApi {
   export interface KnowledgeSearchResult {
     hits: KnowledgeSearchHit[];
     page: number;
@@ -51,13 +51,21 @@ export namespace SearchApi {
     failedIds: number[];
     syncedCount: number;
   }
+
+  export interface IndexStats {
+    fieldCount: number;
+    fieldDistributionSize: number;
+    indexUid: string;
+    numberOfDocuments: number;
+    updatedAt: string;
+  }
 }
 
 /**
  * 搜索知识库
  */
-async function searchKnowledge(params: SearchApi.KnowledgeSearchReq) {
-  return requestClient.get<SearchApi.KnowledgeSearchResult>(
+async function searchKnowledge(params: SearchKnowledgeApi.KnowledgeSearchReq) {
+  return requestClient.get<SearchKnowledgeApi.KnowledgeSearchResult>(
     '/search/knowledge',
     {
       params,
@@ -69,7 +77,7 @@ async function searchKnowledge(params: SearchApi.KnowledgeSearchReq) {
  * 全量同步知识库到索引
  */
 async function syncAllKnowledge(categoryId?: number) {
-  return requestClient.post<SearchApi.KnowledgeSyncResult>(
+  return requestClient.post<SearchKnowledgeApi.KnowledgeSyncResult>(
     '/search/knowledge/sync/all',
     {
       categoryId,
@@ -81,9 +89,16 @@ async function syncAllKnowledge(categoryId?: number) {
  * 重建索引（删除后重新创建并全量同步）
  */
 async function rebuildIndex() {
-  return requestClient.post<SearchApi.KnowledgeSyncResult>(
+  return requestClient.post<SearchKnowledgeApi.KnowledgeSyncResult>(
     '/search/index/rebuild',
   );
 }
 
-export { rebuildIndex, searchKnowledge, syncAllKnowledge };
+/**
+ * 获取索引统计信息
+ */
+async function getIndexStats() {
+  return requestClient.get<SearchKnowledgeApi.IndexStats>('/search/index/stats');
+}
+
+export { getIndexStats, rebuildIndex, searchKnowledge, syncAllKnowledge };
