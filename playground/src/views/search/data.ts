@@ -41,7 +41,6 @@ export function useSearchFormSchema(): VbenFormSchema[] {
         placeholder: $t('search.knowledge.pleaseEnterKeyword'),
         allowClear: true,
       },
-      rules: 'required',
     },
     {
       component: 'Select',
@@ -51,15 +50,18 @@ export function useSearchFormSchema(): VbenFormSchema[] {
         options: categoryOptions,
         allowClear: true,
         placeholder: $t('search.knowledge.category'),
+        style: { width: '100%' },
       },
     },
     {
-      component: 'Input',
+      component: 'Select',
       fieldName: 'tags',
       label: $t('search.knowledge.tags'),
       componentProps: {
-        placeholder: $t('search.knowledge.tags'),
+        mode: 'tags',
+        placeholder: '输入标签，按回车添加',
         allowClear: true,
+        style: { width: '100%' },
       },
     },
     {
@@ -70,6 +72,7 @@ export function useSearchFormSchema(): VbenFormSchema[] {
         allowClear: true,
         options: statusOptions.value,
         placeholder: $t('search.knowledge.status'),
+        style: { width: '100%' },
       },
     },
   ];

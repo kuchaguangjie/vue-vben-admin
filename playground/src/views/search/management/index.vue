@@ -108,7 +108,16 @@ function formatSize(bytes?: number): string {
 
 function formatDate(dateStr?: string): string {
   if (!dateStr) return '-';
-  return new Date(dateStr).toLocaleString();
+  const date = new Date(dateStr);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const hours = date.getHours();
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const seconds = String(date.getSeconds()).padStart(2, '0');
+  const ampm = hours >= 12 ? 'PM' : 'AM';
+  const displayHours = hours % 12 || 12;
+  return `${year}-${month}-${day} ${displayHours}:${minutes}:${seconds} ${ampm}`;
 }
 
 onMounted(() => {
@@ -132,10 +141,10 @@ onMounted(() => {
 
       <Descriptions :column="2" bordered>
         <Descriptions.Item :label="$t('search.management.indexName')">
-          <Tag color="blue">{{ stats?.indexUid || '-' }}</Tag>
+          <Tag color="blue">{{ stats?.indexName || '-' }}</Tag>
         </Descriptions.Item>
         <Descriptions.Item :label="$t('search.management.documentCount')">
-          <Tag color="green">{{ stats?.numberOfDocuments || 0 }}</Tag>
+          <Tag color="green">{{ stats?.documentCount || 0 }}</Tag>
         </Descriptions.Item>
         <Descriptions.Item :label="$t('search.management.indexSize')">
           {{ formatSize(stats?.fieldDistributionSize) }}
@@ -143,8 +152,8 @@ onMounted(() => {
         <Descriptions.Item :label="$t('search.management.fieldCount')">
           {{ stats?.fieldCount || 0 }}
         </Descriptions.Item>
-        <Descriptions.Item :label="$t('search.management.lastUpdated')">
-          {{ formatDate(stats?.updatedAt) }}
+        <Descriptions.Item :label="$t('search.management.lastSyncAt')">
+          {{ formatDate(stats?.lastSyncAt) }}
         </Descriptions.Item>
         <Descriptions.Item :label="$t('search.management.status')">
           <Tag color="success">{{ $t('search.management.normal') }}</Tag>

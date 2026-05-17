@@ -50,14 +50,19 @@ namespace SearchKnowledgeApi {
     failedCount: number;
     failedIds: number[];
     syncedCount: number;
+    skippedCount: number;
   }
 
   export interface IndexStats {
+    documentCount: number;
     fieldCount: number;
     fieldDistributionSize: number;
-    indexUid: string;
-    numberOfDocuments: number;
-    updatedAt: string;
+    indexName: string;
+    isIndexing: boolean;
+    isReady: boolean;
+    lastSyncAt: string;
+    lastDocUpdatedAt: string;
+    tenantId: number;
   }
 }
 

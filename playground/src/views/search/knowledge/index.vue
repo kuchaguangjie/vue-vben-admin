@@ -49,12 +49,7 @@ async function handleSearch() {
   try {
     const result = await searchKnowledge({
       ...values,
-      tags: values.tags
-        ? values.tags
-            .split(',')
-            .map((t: string) => t.trim())
-            .filter(Boolean)
-        : undefined,
+      tags: values.tags && values.tags.length > 0 ? values.tags : undefined,
       page: 1,
       pageSize: 20,
       highlight: true,
@@ -62,8 +57,8 @@ async function handleSearch() {
     searchResult.value = result;
     message.success(
       $t('search.knowledge.searchSuccess', {
-        total: result.total,
-        ms: result.processingTimeMs,
+        totalCount: result.total,
+        timeSpent: result.processingTimeMs,
       }),
     );
   } catch (error) {
@@ -127,8 +122,8 @@ onMounted(() => {
         <span>
           {{
             $t('search.knowledge.totalResults', {
-              total: searchResult.total,
-              ms: searchResult.processingTimeMs,
+              totalCount: searchResult.total,
+              timeSpent: searchResult.processingTimeMs,
             })
           }}
         </span>
