@@ -49,8 +49,8 @@ namespace SearchKnowledgeApi {
   export interface KnowledgeSyncResult {
     failedCount: number;
     failedIds: number[];
-    syncedCount: number;
     skippedCount: number;
+    syncedCount: number;
   }
 
   export interface IndexStats {
@@ -60,8 +60,8 @@ namespace SearchKnowledgeApi {
     indexName: string;
     isIndexing: boolean;
     isReady: boolean;
-    lastSyncAt: string;
     lastDocUpdatedAt: string;
+    lastSyncAt: string;
     tenantId: number;
   }
 }
