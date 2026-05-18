@@ -6,40 +6,40 @@ import { requestClient } from '#/api/request';
 
 export namespace SystemApiKeyApi {
   export interface ApiKey {
+    createdAt: string;
+    createdBy: number;
+    expiresAt?: string;
     id: number;
+    isBot: boolean;
+    lastUsedAt?: string;
+    name: string;
+    remark?: string;
+    status: number;
     tenantId: number;
     userId: number;
     username: string;
-    isBot: boolean;
-    name: string;
-    expiresAt?: string;
-    lastUsedAt?: string;
-    status: number;
-    remark?: string;
-    createdAt: string;
-    createdBy: number;
   }
 
   export interface BotUser {
     id: number;
-    username: string;
     nick: string;
+    username: string;
   }
 
   export interface ApiKeyCreateReq {
-    userId: number;
-    name: string;
-    expiryType: 'custom' | '1h' | '1d' | '1w' | '1y' | '99y';
     expiresAt?: number; // 秒级时间戳
+    expiryType: '1d' | '1h' | '1w' | '1y' | '99y' | 'custom';
+    name: string;
+    userId: number;
   }
 
   export interface ApiKeyCreateResp {
+    expiresAt?: string;
+    expiryType: string;
     id: number;
     key: string;
     name: string;
     userId: number;
-    expiryType: string;
-    expiresAt?: string;
   }
 }
 
@@ -81,7 +81,9 @@ async function deleteApiKey(id: number) {
  * 更新机器人 API Key 状态
  */
 async function updateApiKeyStatus(data: { id: number; status: number }) {
-  return requestClient.put(`/system/api-key/${data.id}/status`, { status: data.status });
+  return requestClient.put(`/system/api-key/${data.id}/status`, {
+    status: data.status,
+  });
 }
 
 /**
@@ -96,8 +98,8 @@ async function getBotUserList() {
 export {
   createApiKey,
   deleteApiKey,
-  getBotUserList,
   getApiKeyDetail,
   getApiKeyPage,
+  getBotUserList,
   updateApiKeyStatus,
 };
