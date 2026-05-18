@@ -93,6 +93,15 @@ const routes: RouteRecordRaw[] = [
         },
         component: () => import('#/views/system/gen/list.vue'),
       },
+      {
+        path: '/system/api-key',
+        name: 'SystemApiKey',
+        meta: {
+          icon: 'mdi:key',
+          title: $t('system.apiKey.module'),
+        },
+        component: () => import('#/views/system/api-key/list.vue'),
+      },
     ],
   },
 ];

@@ -116,6 +116,7 @@
     "role": "Role",
     "remark": "Remark",
     "status": "Status",
+    "isBot": "Bot",
     "createdAt": "Created At",
     "operation": "Operation",
     "setRoles": "Roles",
@@ -295,5 +296,26 @@
     "selectTemplate": "Select Template",
     "selectTemplatePlaceholder": "Select tenant template (leave empty for default)",
     "noTemplate": "No Template"
+  },
+  "apiKey": {
+    "module": "API Key",
+    "moduleShort": "API Key",
+    "list": "API Key List",
+    "name": "Name",
+    "botUser": "Bot User",
+    "botUserId": "Bot User ID",
+    "botUsername": "Bot Username",
+    "expiryType": "Expiry Type",
+    "expiry1Hour": "1 Hour",
+    "expiry1Day": "1 Day",
+    "expiry1Week": "1 Week",
+    "expiry1Year": "1 Year",
+    "expiryNever": "Never Expire",
+    "expiryCustom": "Custom Time",
+    "expiresAt": "Expires At",
+    "lastUsedAt": "Last Used At",
+    "apiKey": "API Key",
+    "createSuccessNotice": "API Key created successfully, please copy and save, it will not be shown again",
+    "copyWarning": "Please keep it safe, leakage will cause security risks"
   }
 }

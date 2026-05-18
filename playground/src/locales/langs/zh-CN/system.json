@@ -118,6 +118,7 @@
     "role": "角色",
     "remark": "备注",
     "status": "状态",
+    "isBot": "机器人",
     "createdAt": "创建时间",
     "operation": "操作",
     "setRoles": "角色",
@@ -307,5 +308,26 @@
     "selectTemplate": "选择模板",
     "selectTemplatePlaceholder": "请选择租户模板（留空使用默认模板）",
     "noTemplate": "无模板"
+  },
+  "apiKey": {
+    "module": "API Key",
+    "moduleShort": "API Key",
+    "list": "API Key 列表",
+    "name": "名称",
+    "botUser": "机器人用户",
+    "botUserId": "机器人用户ID",
+    "botUsername": "机器人用户名",
+    "expiryType": "过期类型",
+    "expiry1Hour": "1小时",
+    "expiry1Day": "1天",
+    "expiry1Week": "1周",
+    "expiry1Year": "1年",
+    "expiryNever": "永不过期",
+    "expiryCustom": "自定义时间",
+    "expiresAt": "过期时间",
+    "lastUsedAt": "最后使用时间",
+    "apiKey": "API Key",
+    "createSuccessNotice": "API Key 创建成功，请复制保存，后续不会再显示",
+    "copyWarning": "请妥善保管，泄露会导致安全风险"
   }
 }

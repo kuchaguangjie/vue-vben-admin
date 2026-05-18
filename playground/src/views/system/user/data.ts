@@ -193,6 +193,18 @@ export function useGridFormSchema(isPlatformAdmin = false): VbenFormSchema[] {
       label: $t('system.user.status'),
     },
     {
+      component: 'Select',
+      componentProps: {
+        allowClear: true,
+        options: [
+          { label: $t('common.yes'), value: true },
+          { label: $t('common.no'), value: false },
+        ],
+      },
+      fieldName: 'isBot',
+      label: $t('system.user.isBot'),
+    },
+    {
       component: 'RangePicker',
       fieldName: 'createdAtRangeMs',
       label: $t('common.createdAt'),
@@ -259,6 +271,14 @@ export function useColumns<T = SystemUserApi.SystemUser>(
       field: 'nick',
       title: $t('system.user.nick'),
       width: 150,
+    },
+    {
+      field: 'isBot',
+      title: $t('system.user.isBot'),
+      width: 100,
+      sortable: true,
+      formatter: ({ cellValue }) =>
+        cellValue ? $t('common.yes') : $t('common.no'),
     },
     {
       cellRender: {

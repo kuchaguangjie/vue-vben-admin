@@ -11,6 +11,7 @@ export namespace SystemUserApi {
 
     deptIds: number[];
     id: number;
+    isBot: boolean;
     nick: string;
     permissions?: string[];
     status: number;
