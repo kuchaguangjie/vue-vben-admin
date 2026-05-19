@@ -20,7 +20,7 @@ export function useFormSchema(): VbenFormSchema[] {
       label: $t('system.apiKey.botUser'),
       rules: 'required',
       componentProps: {
-        placeholder: $t('common.prefix'),
+        placeholder: $t('common.placeholder.select'),
         allowClear: true,
       },
     },
@@ -81,7 +81,7 @@ export function useGridFormSchema(): VbenFormSchema[] {
       fieldName: 'userId',
       label: $t('system.apiKey.botUser'),
       componentProps: {
-        placeholder: $t('common.prefix'),
+        placeholder: $t('common.placeholder.select'),
         allowClear: true,
         options: [],
       },

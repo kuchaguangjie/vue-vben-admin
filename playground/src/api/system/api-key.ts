@@ -1,6 +1,6 @@
 import type { Recordable } from '@vben/types';
 
-import type { CommonType } from '#/api';
+import type { CommonType } from '#/api/common_type';
 
 import { requestClient } from '#/api/request';
 
@@ -80,10 +80,8 @@ async function deleteApiKey(id: number) {
 /**
  * 更新机器人 API Key 状态
  */
-async function updateApiKeyStatus(data: { id: number; status: number }) {
-  return requestClient.put(`/system/api-key/${data.id}/status`, {
-    status: data.status,
-  });
+async function updateApiKeyStatus(data: CommonType.UpdateStatus) {
+  return requestClient.post(`/system/api-key/updateStatus`, data);
 }
 
 /**
