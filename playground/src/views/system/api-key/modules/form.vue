@@ -23,7 +23,7 @@ const [Form, formApi] = useVbenForm({
   showDefaultActions: false,
 });
 
-const [, drawerApi] = useVbenDrawer({
+const [Drawer, drawerApi] = useVbenDrawer({
   destroyOnClose: true,
   async onConfirm() {
     if (showApiKey.value) {
@@ -68,7 +68,12 @@ const [, drawerApi] = useVbenDrawer({
         label: user.nick || user.username,
         value: user.id,
       }));
-      formApi.setComponentProps('userId', { options: userOptions });
+      formApi.updateSchema([
+        {
+          fieldName: 'userId',
+          componentProps: { options: userOptions },
+        },
+      ]);
 
       await nextTick();
     }
@@ -80,31 +85,36 @@ function copyApiKey() {
   message.success($t('ui.message.copied'));
 }
 </script>
+
 <template>
-  <Form v-if="!showApiKey" />
-  <div v-if="showApiKey" class="space-y-4">
-    <div class="mb-4 text-success">
-      {{ $t('system.apiKey.createSuccessNotice') }}
-    </div>
-    <div class="form-item">
-      <label class="form-label">{{ $t('system.apiKey.apiKey') }}</label>
-      <div class="flex items-center gap-2">
-        <input
-          :value="apiKey"
-          readonly
-          class="flex-1 rounded-md border bg-gray-50 px-3 py-2"
-        />
-        <button
-          type="button"
-          class="rounded-md bg-primary px-4 py-2 text-white"
-          @click="copyApiKey"
-        >
-          {{ $t('ui.action.copy') }}
-        </button>
+  <Drawer
+    :title="$t('ui.actionTitle.create', [$t('system.apiKey.moduleShort')])"
+  >
+    <Form v-if="!showApiKey" />
+    <div v-if="showApiKey" class="space-y-4">
+      <div class="mb-4 text-success">
+        {{ $t('system.apiKey.createSuccessNotice') }}
       </div>
-      <div class="mt-2 text-sm text-warning">
-        {{ $t('system.apiKey.copyWarning') }}
+      <div class="form-item">
+        <label class="form-label">{{ $t('system.apiKey.apiKey') }}</label>
+        <div class="flex items-center gap-2">
+          <input
+            :value="apiKey"
+            readonly
+            class="flex-1 rounded-md border bg-gray-50 px-3 py-2"
+          />
+          <button
+            type="button"
+            class="rounded-md bg-primary px-4 py-2 text-white"
+            @click="copyApiKey"
+          >
+            {{ $t('ui.action.copy') }}
+          </button>
+        </div>
+        <div class="mt-2 text-sm text-warning">
+          {{ $t('system.apiKey.copyWarning') }}
+        </div>
       </div>
     </div>
-  </div>
+  </Drawer>
 </template>

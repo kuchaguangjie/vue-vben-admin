@@ -69,20 +69,21 @@ export function useGridFormSchema(): VbenFormSchema[] {
   const schema: VbenFormSchema[] = [
     {
       component: 'Input',
-      fieldName: 'userId',
-      label: $t('system.apiKey.botUserId'),
+      fieldName: 'name',
+      label: $t('system.apiKey.name'),
       componentProps: {
         placeholder: $t('common.prefix'),
         allowClear: true,
       },
     },
     {
-      component: 'Input',
-      fieldName: 'username',
-      label: $t('system.apiKey.botUsername'),
+      component: 'Select',
+      fieldName: 'userId',
+      label: $t('system.apiKey.botUser'),
       componentProps: {
         placeholder: $t('common.prefix'),
         allowClear: true,
+        options: [],
       },
     },
     {
@@ -104,7 +105,10 @@ export function useGridFormSchema(): VbenFormSchema[] {
 
 export function useColumns<T = SystemApiKeyApi.ApiKey>(
   onActionClick: OnActionClickFn<T>,
-  onStatusChange?: (row: T, status: number) => void,
+  onStatusChange?: (
+    newStatus: number,
+    row: T,
+  ) => PromiseLike<boolean | undefined>,
 ): VxeTableGridOptions['columns'] {
   const { saasEnabled } = useSaasEnabled();
 
@@ -146,16 +150,14 @@ export function useColumns<T = SystemApiKeyApi.ApiKey>(
       sortable: true,
     },
     {
+      cellRender: {
+        attrs: { beforeChange: onStatusChange },
+        name: onStatusChange ? 'CellSwitch' : 'CellTag',
+      },
       field: 'status',
       title: $t('common.status'),
       width: 100,
       sortable: true,
-      cellRender: {
-        attrs: {
-          onClick: onStatusChange,
-        },
-        name: 'CellStatusSwitch',
-      },
     },
     {
       field: 'expiresAt',

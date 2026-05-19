@@ -317,7 +317,7 @@
     "botUser": "机器人用户",
     "botUserId": "机器人用户ID",
     "botUsername": "机器人用户名",
-    "expiryType": "过期类型",
+    "expiryType": "有效期",
     "expiry1Hour": "1小时",
     "expiry1Day": "1天",
     "expiry1Week": "1周",

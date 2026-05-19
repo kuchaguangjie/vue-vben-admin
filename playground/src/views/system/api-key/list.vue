@@ -16,6 +16,7 @@ import { doPageQuery } from '#/api/request';
 import {
   deleteApiKey,
   getApiKeyPage,
+  getBotUserList,
   updateApiKeyStatus,
 } from '#/api/system/api-key';
 import { useDeleteAction } from '#/hooks/common/use-delete-action';
@@ -44,6 +45,9 @@ const { onStatusChange } = useStatusToggle({
   onRefresh: () => gridApi.query(),
 });
 
+// 缓存机器人用户列表，避免重复请求
+let botUserOptions: null | { label: string; value: number }[] = null;
+
 const [Grid, gridApi] = useVbenVxeGrid({
   formOptions: {
     schema: useGridFormSchema(),
@@ -57,7 +61,22 @@ const [Grid, gridApi] = useVbenVxeGrid({
     proxyConfig: {
       ajax: {
         query: async (params: PageParams, formValues) => {
-          return doPageQuery(getApiKeyPage, params, formValues);
+          // 第一次查询时加载机器人用户选项
+          const result = await doPageQuery(getApiKeyPage, params, formValues);
+          if (!botUserOptions) {
+            const botUsers = await getBotUserList();
+            botUserOptions = botUsers.map((user) => ({
+              label: user.nick || user.username,
+              value: user.id,
+            }));
+            gridApi.formApi.updateSchema([
+              {
+                fieldName: 'userId',
+                componentProps: { options: botUserOptions },
+              },
+            ]);
+          }
+          return result;
         },
       },
     },
@@ -68,7 +87,7 @@ const [Grid, gridApi] = useVbenVxeGrid({
       custom: true,
       export: false,
       refresh: true,
-      search: true,
+      search: false,
       zoom: true,
     },
     sortConfig: {
