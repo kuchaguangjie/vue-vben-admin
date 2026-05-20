@@ -20,7 +20,7 @@ export function useFormSchema(): VbenFormSchema[] {
       label: $t('system.apiKey.botUser'),
       rules: 'required',
       componentProps: {
-        placeholder: $t('common.placeholder.select'),
+        placeholder: $t('common.messages.pleaseSelect'),
         allowClear: true,
       },
     },
@@ -81,7 +81,7 @@ export function useGridFormSchema(): VbenFormSchema[] {
       fieldName: 'userId',
       label: $t('system.apiKey.botUser'),
       componentProps: {
-        placeholder: $t('common.placeholder.select'),
+        placeholder: $t('common.messages.pleaseSelect'),
         allowClear: true,
         options: [],
       },
@@ -189,6 +189,7 @@ export function useColumns<T = SystemApiKeyApi.ApiKey>(
           onClick: onActionClick,
         },
         name: 'CellOperation',
+        options: ['delete'],
       },
       field: 'operation',
       fixed: 'right',
