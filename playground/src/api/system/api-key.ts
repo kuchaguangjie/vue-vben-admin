@@ -41,6 +41,12 @@ export namespace SystemApiKeyApi {
     name: string;
     userId: number;
   }
+
+  export interface ApiKeyUpdateReq {
+    name?: string;
+    expiryType?: '1d' | '1h' | '1w' | '1y' | '99y' | 'custom';
+    expiresAt?: number;
+  }
 }
 
 /**
@@ -85,6 +91,16 @@ async function updateApiKeyStatus(data: CommonType.UpdateStatus) {
 }
 
 /**
+ * 更新机器人 API Key
+ */
+async function updateApiKey(
+  id: number,
+  data: SystemApiKeyApi.ApiKeyUpdateReq,
+) {
+  return requestClient.put(`/system/api-key/${id}`, data);
+}
+
+/**
  * 获取机器人用户列表
  */
 async function getBotUserList() {
@@ -99,5 +115,6 @@ export {
   getApiKeyDetail,
   getApiKeyPage,
   getBotUserList,
+  updateApiKey,
   updateApiKeyStatus,
 };

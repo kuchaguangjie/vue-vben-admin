@@ -1,27 +1,42 @@
 <script lang="ts" setup>
 import type { SystemApiKeyApi } from '#/api';
 
-import { nextTick, ref } from 'vue';
+import { computed, nextTick, ref } from 'vue';
 
 import { useVbenDrawer } from '@vben/common-ui';
 
 import { message } from 'ant-design-vue';
 
 import { useVbenForm } from '#/adapter/form';
-import { createApiKey, getBotUserList } from '#/api/system/api-key';
+import {
+  createApiKey,
+  getApiKeyDetail,
+  getBotUserList,
+  updateApiKey,
+} from '#/api/system/api-key';
 import { $t } from '#/locales';
 
 import { formFieldsToRemoveForCreate, useFormSchema } from '../data';
 
 const emits = defineEmits(['success']);
 
+const formData = ref<SystemApiKeyApi.ApiKey>();
 const apiKey = ref<string>('');
 const showApiKey = ref(false);
 const showApiKeyText = ref(false);
+const id = ref<number>();
 
 const [Form, formApi] = useVbenForm({
   schema: useFormSchema(),
   showDefaultActions: false,
+});
+
+const isEdit = computed(() => !!id.value);
+
+const getDrawerTitle = computed(() => {
+  return isEdit.value
+    ? $t('ui.actionTitle.edit', [$t('system.apiKey.moduleShort')])
+    : $t('ui.actionTitle.create', [$t('system.apiKey.moduleShort')]);
 });
 
 const [Drawer, drawerApi] = useVbenDrawer({
@@ -45,13 +60,21 @@ const [Drawer, drawerApi] = useVbenDrawer({
 
     drawerApi.lock();
     try {
-      const result = await createApiKey(
-        values as SystemApiKeyApi.ApiKeyCreateReq,
-      );
-      apiKey.value = result.key;
-      showApiKey.value = true;
-      message.success($t('ui.actionMessage.createSuccess'));
+      if (isEdit.value) {
+        await updateApiKey(id.value!, values);
+        message.success($t('ui.actionMessage.updateSuccess'));
+      } else {
+        const result = await createApiKey(
+          values as SystemApiKeyApi.ApiKeyCreateReq,
+        );
+        apiKey.value = result.key;
+        showApiKey.value = true;
+        message.success($t('ui.actionMessage.createSuccess'));
+      }
       emits('success');
+      if (isEdit.value) {
+        drawerApi.close();
+      }
     } finally {
       drawerApi.unlock();
     }
@@ -60,10 +83,11 @@ const [Drawer, drawerApi] = useVbenDrawer({
   async onOpenChange(isOpen) {
     if (isOpen) {
       await formApi.resetForm();
-      await formApi.removeSchemaByFields(formFieldsToRemoveForCreate());
       showApiKey.value = false;
       showApiKeyText.value = false;
       apiKey.value = '';
+      id.value = undefined;
+      formData.value = undefined;
 
       const botUsers = await getBotUserList();
       const userOptions = botUsers.map((user) => ({
@@ -76,6 +100,27 @@ const [Drawer, drawerApi] = useVbenDrawer({
           componentProps: { options: userOptions },
         },
       ]);
+
+      const data = drawerApi.getData<SystemApiKeyApi.ApiKey>();
+      const editing = data && data.id;
+      if (editing) {
+        id.value = data.id;
+        formData.value = data;
+        const detail = await getApiKeyDetail(data.id);
+        await formApi.setValues({
+          name: detail.name,
+          userId: detail.userId,
+          expiryType: '1d',
+        });
+        formApi.updateSchema([
+          {
+            fieldName: 'userId',
+            componentProps: { disabled: true },
+          },
+        ]);
+      } else {
+        await formApi.removeSchemaByFields(formFieldsToRemoveForCreate());
+      }
 
       await nextTick();
     }
@@ -93,9 +138,7 @@ function toggleShowApiKey() {
 </script>
 
 <template>
-  <Drawer
-    :title="$t('ui.actionTitle.create', [$t('system.apiKey.moduleShort')])"
-  >
+  <Drawer :title="getDrawerTitle">
     <Form v-if="!showApiKey" />
     <div v-if="showApiKey" class="space-y-4">
       <div class="mb-4 text-success">

@@ -110,6 +110,10 @@ function onActionClick(e: OnActionClickParams<SystemApiKeyApi.ApiKey>) {
       onDelete(e.row);
       break;
     }
+    case 'edit': {
+      formDrawerApi.setData(e.row).open();
+      break;
+    }
   }
 }
 

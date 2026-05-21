@@ -189,7 +189,7 @@ export function useColumns<T = SystemApiKeyApi.ApiKey>(
           onClick: onActionClick,
         },
         name: 'CellOperation',
-        options: ['delete'],
+        options: ['edit', 'delete'],
       },
       field: 'operation',
       fixed: 'right',
