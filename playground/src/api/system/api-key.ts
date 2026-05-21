@@ -43,8 +43,6 @@ export namespace SystemApiKeyApi {
   }
 
   export interface ApiKeyUpdateReq {
-    expiresAt?: number;
-    expiryType?: '1d' | '1h' | '1w' | '1y' | '99y' | 'custom';
     name?: string;
   }
 }

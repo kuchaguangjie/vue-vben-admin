@@ -65,6 +65,10 @@ export function formFieldsToRemoveForCreate(): string[] {
   return [];
 }
 
+export function formFieldsToRemoveForEdit(): string[] {
+  return ['expiryType'];
+}
+
 export function useGridFormSchema(): VbenFormSchema[] {
   const schema: VbenFormSchema[] = [
     {

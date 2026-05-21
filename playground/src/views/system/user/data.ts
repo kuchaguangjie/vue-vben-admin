@@ -60,9 +60,27 @@ export function useFormSchema(): VbenFormSchema[] {
         .email($t('authentication.emailValidErrorTip')),
     },
     {
+      component: 'RadioGroup',
+      componentProps: {
+        buttonStyle: 'solid',
+        options: [
+          { label: $t('common.no'), value: false },
+          { label: $t('common.yes'), value: true },
+        ],
+        optionType: 'button',
+      },
+      defaultValue: false,
+      fieldName: 'isBot',
+      label: $t('system.user.isBot'),
+    },
+    {
       component: 'InputPassword',
       fieldName: 'password',
       label: $t('system.user.password'),
+      dependencies: {
+        triggerFields: ['isBot'],
+        if: (values) => !values.isBot,
+      },
       rules: z
         .string()
         .min(8, { message: $t('system.user.passwordValidationLength') })

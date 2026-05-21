@@ -15,8 +15,13 @@ import {
   updateApiKey,
 } from '#/api/system/api-key';
 import { $t } from '#/locales';
+import { formatBackendTime } from '#/utils/value-format';
 
-import { formFieldsToRemoveForCreate, useFormSchema } from '../data';
+import {
+  formFieldsToRemoveForCreate,
+  formFieldsToRemoveForEdit,
+  useFormSchema,
+} from '../data';
 
 const emits = defineEmits(['success']);
 
@@ -25,6 +30,7 @@ const apiKey = ref<string>('');
 const showApiKey = ref(false);
 const showApiKeyText = ref(false);
 const id = ref<number>();
+const expiresAtDisplay = ref<string>('');
 
 const [Form, formApi] = useVbenForm({
   schema: useFormSchema(),
@@ -95,6 +101,7 @@ const [Drawer, drawerApi] = useVbenDrawer({
       apiKey.value = '';
       id.value = undefined;
       formData.value = undefined;
+      expiresAtDisplay.value = '';
 
       const botUsers = await getBotUserList();
       const userOptions = botUsers.map((user) => ({
@@ -114,11 +121,12 @@ const [Drawer, drawerApi] = useVbenDrawer({
         id.value = data.id;
         formData.value = data;
         const detail = await getApiKeyDetail(data.id);
+        expiresAtDisplay.value = detail.expiresAt;
         await formApi.setValues({
           name: detail.name,
           userId: detail.userId,
-          expiryType: '1d',
         });
+        await formApi.removeSchemaByFields(formFieldsToRemoveForEdit());
         formApi.updateSchema([
           {
             fieldName: 'userId',
@@ -147,6 +155,14 @@ function toggleShowApiKey() {
 <template>
   <Drawer :title="getDrawerTitle">
     <Form v-if="!showApiKey" />
+    <div v-if="isEdit && !showApiKey" class="form-item mt-4 flex items-center">
+      <label class="form-label w-24 flex-shrink-0">
+        {{ $t('system.apiKey.expiresAt') }}:
+      </label>
+      <div class="flex-1 text-gray-600">
+        {{ formatBackendTime(expiresAtDisplay) }}
+      </div>
+    </div>
     <div v-if="showApiKey" class="space-y-4">
       <div class="mb-4 text-success">
         {{ $t('system.apiKey.createSuccessNotice') }}
