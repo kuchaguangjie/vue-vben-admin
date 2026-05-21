@@ -43,9 +43,9 @@ export namespace SystemApiKeyApi {
   }
 
   export interface ApiKeyUpdateReq {
-    name?: string;
-    expiryType?: '1d' | '1h' | '1w' | '1y' | '99y' | 'custom';
     expiresAt?: number;
+    expiryType?: '1d' | '1h' | '1w' | '1y' | '99y' | 'custom';
+    name?: string;
   }
 }
 
@@ -93,10 +93,7 @@ async function updateApiKeyStatus(data: CommonType.UpdateStatus) {
 /**
  * 更新机器人 API Key
  */
-async function updateApiKey(
-  id: number,
-  data: SystemApiKeyApi.ApiKeyUpdateReq,
-) {
+async function updateApiKey(id: number, data: SystemApiKeyApi.ApiKeyUpdateReq) {
   return requestClient.put(`/system/api-key/${id}`, data);
 }
 

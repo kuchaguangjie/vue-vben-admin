@@ -61,7 +61,14 @@ const [Drawer, drawerApi] = useVbenDrawer({
     drawerApi.lock();
     try {
       if (isEdit.value) {
-        await updateApiKey(id.value!, values);
+        const updateData: SystemApiKeyApi.ApiKeyUpdateReq = {
+          name: values.name,
+        };
+        if (values.expiryType) {
+          updateData.expiryType = values.expiryType;
+          updateData.expiresAt = values.expiresAt;
+        }
+        await updateApiKey(id.value!, updateData);
         message.success($t('ui.actionMessage.updateSuccess'));
       } else {
         const result = await createApiKey(
