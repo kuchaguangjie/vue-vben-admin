@@ -1,0 +1,41 @@
+{
+  "title": "Risk Control",
+  "ruleGroup": {
+    "module": "Rule Group Management",
+    "moduleShort": "Rule Group",
+    "list": "Rule Group List",
+    "name": "Group Name",
+    "code": "Group Code",
+    "scenario": "Scenario",
+    "description": "Description",
+    "priority": "Priority",
+    "status": "Status"
+  },
+  "rule": {
+    "module": "Rule Management",
+    "moduleShort": "Rule",
+    "list": "Rule List",
+    "groupName": "Rule Group",
+    "name": "Rule Name",
+    "code": "Rule Code",
+    "description": "Description",
+    "priority": "Priority",
+    "conditions": "Conditions",
+    "action": "Action",
+    "actionPass": "Pass",
+    "actionReject": "Reject",
+    "riskLevel": "Risk Level",
+    "riskLevelLow": "Low",
+    "riskLevelMedium": "Medium",
+    "riskLevelHigh": "High",
+    "riskLevelCritical": "Critical",
+    "errorCode": "Error Code",
+    "errorMsg": "Error Message",
+    "status": "Status"
+  },
+  "executionLog": {
+    "module": "Execution Log",
+    "moduleShort": "Execution Log",
+    "list": "Execution Log List"
+  }
+}

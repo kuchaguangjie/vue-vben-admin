@@ -1,2 +1,41 @@
 {
-  "title":
+  "title": "风控系统",
+  "ruleGroup": {
+    "module": "规则组管理",
+    "moduleShort": "规则组",
+    "list": "规则组列表",
+    "name": "规则组名称",
+    "code": "规则组编码",
+    "scenario": "适用场景",
+    "description": "描述",
+    "priority": "优先级",
+    "status": "状态"
+  },
+  "rule": {
+    "module": "规则管理",
+    "moduleShort": "规则",
+    "list": "规则列表",
+    "groupName": "所属规则组",
+    "name": "规则名称",
+    "code": "规则编码",
+    "description": "描述",
+    "priority": "优先级",
+    "conditions": "规则条件",
+    "action": "执行动作",
+    "actionPass": "通过",
+    "actionReject": "拒绝",
+    "riskLevel": "风险等级",
+    "riskLevelLow": "低",
+    "riskLevelMedium": "中",
+    "riskLevelHigh": "高",
+    "riskLevelCritical": "严重",
+    "errorCode": "错误码",
+    "errorMsg": "错误信息",
+    "status": "状态"
+  },
+  "executionLog": {
+    "module": "执行日志",
+    "moduleShort": "执行日志",
+    "list": "执行日志列表"
+  }
+}
