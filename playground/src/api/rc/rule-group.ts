@@ -2,28 +2,28 @@ import { requestClient } from '#/api/request';
 
 export namespace RcRuleGroupApi {
   export interface RcRuleGroup {
-    id: number;
-    tenantId: number;
-    name: string;
     code: string;
-    scenario: string;
-    description: string;
-    priority: number;
-    status: number;
     createdAt: string;
     createdBy: number;
+    description: string;
+    id: number;
+    name: string;
+    priority: number;
+    scenario: string;
+    status: number;
+    tenantId: number;
     updatedAt?: string;
     updatedBy?: number;
   }
 
   export interface RcRuleGroupPageParams {
+    code?: string;
+    name?: string;
     page?: number;
     pageSize?: number;
+    scenario?: string;
     sortBy?: string;
     sortDesc?: boolean;
-    name?: string;
-    code?: string;
-    scenario?: string;
     status?: number;
   }
 
@@ -33,20 +33,20 @@ export namespace RcRuleGroupApi {
   }
 
   export interface CreateRcRuleGroupRequest {
-    name: string;
     code: string;
-    scenario: string;
     description?: string;
+    name: string;
     priority: number;
+    scenario: string;
     status: number;
   }
 
   export interface UpdateRcRuleGroupRequest {
-    name: string;
     code: string;
-    scenario: string;
     description?: string;
+    name: string;
     priority: number;
+    scenario: string;
     status: number;
   }
 
@@ -55,22 +55,31 @@ export namespace RcRuleGroupApi {
   }
 }
 
-export async function getRcRuleGroupPage(params: RcRuleGroupApi.RcRuleGroupPageParams) {
+export async function getRcRuleGroupPage(
+  params: RcRuleGroupApi.RcRuleGroupPageParams,
+) {
   return requestClient.get<{
     items: RcRuleGroupApi.RcRuleGroup[];
     total: number;
   }>('/rc/rule-group/page', { params });
 }
 
-export async function getRcRuleGroupList(params?: RcRuleGroupApi.RcRuleGroupListParams) {
-  return requestClient.get<RcRuleGroupApi.RcRuleGroup[]>('/rc/rule-group/list', { params });
+export async function getRcRuleGroupList(
+  params?: RcRuleGroupApi.RcRuleGroupListParams,
+) {
+  return requestClient.get<RcRuleGroupApi.RcRuleGroup[]>(
+    '/rc/rule-group/list',
+    { params },
+  );
 }
 
 export async function getRcRuleGroup(id: number) {
   return requestClient.get<RcRuleGroupApi.RcRuleGroup>(`/rc/rule-group/${id}`);
 }
 
-export async function createRcRuleGroup(data: RcRuleGroupApi.CreateRcRuleGroupRequest) {
+export async function createRcRuleGroup(
+  data: RcRuleGroupApi.CreateRcRuleGroupRequest,
+) {
   return requestClient.post<RcRuleGroupApi.RcRuleGroup>('/rc/rule-group', data);
 }
 
