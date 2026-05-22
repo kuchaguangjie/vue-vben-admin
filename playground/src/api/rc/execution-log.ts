@@ -2,45 +2,45 @@ import { requestClient } from '#/api/request';
 
 export namespace RcExecutionLogApi {
   export interface RcExecutionLog {
-    id: number;
-    tenantId: number;
-    groupId?: number;
-    ruleId?: number;
-    scenario: string;
-    userId?: number;
-    inputParams: string;
-    result: string;
-    riskLevel: string;
+    createdAt: string;
+    createdBy?: number;
     errorCode?: string;
     errorMsg?: string;
     executionTimeMs: number;
-    createdAt: string;
-    createdBy?: number;
+    groupId?: number;
+    id: number;
+    inputParams: string;
+    result: string;
+    riskLevel: string;
+    ruleId?: number;
+    scenario: string;
+    tenantId: number;
+    userId?: number;
   }
 
   export interface RcExecutionLogPageParams {
-    groupId?: number;
-    ruleId?: number;
-    scenario?: string;
-    userId?: number;
-    result?: string;
-    riskLevel?: string;
-    startDate?: string;
     endDate?: string;
+    groupId?: number;
     page?: number;
     pageSize?: number;
+    result?: string;
+    riskLevel?: string;
+    ruleId?: number;
+    scenario?: string;
     sortBy?: string;
     sortDesc?: boolean;
+    startDate?: string;
+    userId?: number;
   }
 
   export interface RcExecutionLogListParams {
     groupId?: number;
+    limit?: number;
+    result?: string;
+    riskLevel?: string;
     ruleId?: number;
     scenario?: string;
     userId?: number;
-    result?: string;
-    riskLevel?: string;
-    limit?: number;
   }
 
   export interface BatchDeleteRequest {
@@ -99,7 +99,10 @@ export async function cleanOldRcExecutionLogs(
 }
 
 export async function getRcExecutionLogStatistics(days?: number) {
-  return requestClient.get<Record<string, any>>('/rc/execution-log/statistics', {
-    params: { days },
-  });
+  return requestClient.get<Record<string, any>>(
+    '/rc/execution-log/statistics',
+    {
+      params: { days },
+    },
+  );
 }
