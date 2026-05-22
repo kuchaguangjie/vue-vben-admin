@@ -14,7 +14,12 @@
   "parent": "Parent",
   "previewDetail": "Preview Detail",
   "inputOrSelect": "Please input or select ..",
+  "enabled": "Enabled",
+  "disabled": "Disabled",
   "currentTenant": "Default to current tenant",
+  "startDate": "Start Date",
+  "endDate": "End Date",
+  "refresh": "Refresh",
   "messages": {
     "success": "Success",
     "loading": "Loading ..",

@@ -36,6 +36,15 @@
   "executionLog": {
     "module": "执行日志",
     "moduleShort": "执行日志",
-    "list": "执行日志列表"
+    "list": "执行日志列表",
+    "result": "执行结果",
+    "executionTimeMs": "执行耗时(ms)",
+    "cleanOldLogs": "清理旧日志",
+    "cleanDays": "清理天数",
+    "confirmClean": "确定要清理 {0} 天前的日志吗？",
+    "totalCount": "总执行次数",
+    "passCount": "通过次数",
+    "rejectCount": "拒绝次数",
+    "avgExecutionTime": "平均执行时间"
   }
 }

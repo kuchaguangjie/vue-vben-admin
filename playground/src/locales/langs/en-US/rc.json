@@ -36,6 +36,15 @@
   "executionLog": {
     "module": "Execution Log",
     "moduleShort": "Execution Log",
-    "list": "Execution Log List"
+    "list": "Execution Log List",
+    "result": "Result",
+    "executionTimeMs": "Execution Time (ms)",
+    "cleanOldLogs": "Clean Old Logs",
+    "cleanDays": "Days to Keep",
+    "confirmClean": "Are you sure you want to clean logs older than {0} days?",
+    "totalCount": "Total Executions",
+    "passCount": "Pass Count",
+    "rejectCount": "Reject Count",
+    "avgExecutionTime": "Avg Execution Time"
   }
 }

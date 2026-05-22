@@ -17,6 +17,9 @@
   "enabled": "启用",
   "disabled": "禁用",
   "currentTenant": "默认为 当前租户",
+  "startDate": "开始日期",
+  "endDate": "结束日期",
+  "refresh": "刷新",
   "messages": {
     "success": "成功",
     "loading": "加载中",
