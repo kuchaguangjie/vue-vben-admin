@@ -2,35 +2,35 @@ import { requestClient } from '#/api/request';
 
 export namespace RcRuleApi {
   export interface RcRule {
-    id: number;
-    tenantId: number;
-    groupId: number;
-    name: string;
-    code: string;
-    description: string;
-    priority: number;
-    conditions: string;
     action: string;
-    riskLevel: string;
-    errorCode?: string;
-    errorMsg?: string;
-    status: number;
+    code: string;
+    conditions: string;
     createdAt: string;
     createdBy: number;
+    description: string;
+    errorCode?: string;
+    errorMsg?: string;
+    groupId: number;
+    id: number;
+    name: string;
+    priority: number;
+    riskLevel: string;
+    status: number;
+    tenantId: number;
     updatedAt?: string;
     updatedBy?: number;
   }
 
   export interface RcRulePageParams {
-    page?: number;
-    pageSize?: number;
-    sortBy?: string;
-    sortDesc?: boolean;
+    action?: string;
+    code?: string;
     groupId?: number;
     name?: string;
-    code?: string;
-    action?: string;
+    page?: number;
+    pageSize?: number;
     riskLevel?: string;
+    sortBy?: string;
+    sortDesc?: boolean;
     status?: number;
   }
 
@@ -40,30 +40,30 @@ export namespace RcRuleApi {
   }
 
   export interface CreateRcRuleRequest {
-    groupId: number;
-    name: string;
-    code: string;
-    description?: string;
-    priority: number;
-    conditions: string;
     action: string;
-    riskLevel: string;
+    code: string;
+    conditions: string;
+    description?: string;
     errorCode?: string;
     errorMsg?: string;
+    groupId: number;
+    name: string;
+    priority: number;
+    riskLevel: string;
     status: number;
   }
 
   export interface UpdateRcRuleRequest {
-    groupId: number;
-    name: string;
-    code: string;
-    description?: string;
-    priority: number;
-    conditions: string;
     action: string;
-    riskLevel: string;
+    code: string;
+    conditions: string;
+    description?: string;
     errorCode?: string;
     errorMsg?: string;
+    groupId: number;
+    name: string;
+    priority: number;
+    riskLevel: string;
     status: number;
   }
 
