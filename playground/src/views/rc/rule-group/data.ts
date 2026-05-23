@@ -105,6 +105,7 @@ export function useGridFormSchema(): VbenFormSchema[] {
       fieldName: 'code',
       label: $t('rc.ruleGroup.code'),
       componentProps: {
+        placeholder: $t('common.prefix'),
         allowClear: true,
       },
     },

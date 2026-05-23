@@ -29,8 +29,23 @@ const [Drawer, drawerApi] = useVbenDrawer({
 
     const values = await formApi.getValues();
 
+    if (values.conditions) {
+      try {
+        JSON.parse(values.conditions);
+      } catch {
+        formApi.setFieldError(
+          'conditions',
+          $t('ui.formRules.invalidJson', [$t('rc.rule.conditions')]),
+        );
+        return;
+      }
+    }
+
     drawerApi.lock();
-    (id.value ? updateRcRule(id.value, values) : createRcRule(values))
+    (id.value
+      ? updateRcRule({ ...values, id: id.value })
+      : createRcRule(values)
+    )
       .then(() => {
         emits('success');
         drawerApi.close();
@@ -59,7 +74,11 @@ const [Drawer, drawerApi] = useVbenDrawer({
       await nextTick();
 
       if (isEdit) {
-        await formApi.setValues(data);
+        const formData = { ...data };
+        if (formData.conditions && typeof formData.conditions === 'object') {
+          formData.conditions = JSON.stringify(formData.conditions, null, 2);
+        }
+        await formApi.setValues(formData);
       }
     }
   },

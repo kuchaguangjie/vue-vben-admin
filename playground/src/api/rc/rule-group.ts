@@ -42,6 +42,7 @@ export namespace RcRuleGroupApi {
   }
 
   export interface UpdateRcRuleGroupRequest {
+    id: number;
     code: string;
     description?: string;
     name: string;
@@ -51,6 +52,7 @@ export namespace RcRuleGroupApi {
   }
 
   export interface UpdateStatusRequest {
+    id: number;
     status: number;
   }
 }
@@ -84,10 +86,9 @@ export async function createRcRuleGroup(
 }
 
 export async function updateRcRuleGroup(
-  id: number,
   data: RcRuleGroupApi.UpdateRcRuleGroupRequest,
 ) {
-  return requestClient.put(`/rc/rule-group/${id}`, data);
+  return requestClient.post('/rc/rule-group/update', data);
 }
 
 export async function deleteRcRuleGroup(id: number) {
@@ -95,8 +96,7 @@ export async function deleteRcRuleGroup(id: number) {
 }
 
 export async function updateRcRuleGroupStatus(
-  id: number,
   data: RcRuleGroupApi.UpdateStatusRequest,
 ) {
-  return requestClient.put(`/rc/rule-group/${id}/status`, data);
+  return requestClient.post('/rc/rule-group/updateStatus', data);
 }

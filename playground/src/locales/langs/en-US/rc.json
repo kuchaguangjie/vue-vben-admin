@@ -1,7 +1,7 @@
 {
   "title": "Risk Control",
   "ruleGroup": {
-    "module": "RC Rule Group",
+    "module": "RC Group",
     "moduleShort": "Rule Group",
     "list": "Rule Group List",
     "name": "Group Name",

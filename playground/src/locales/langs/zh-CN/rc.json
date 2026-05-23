@@ -1,7 +1,7 @@
 {
   "title": "风控系统",
   "ruleGroup": {
-    "module": "风控规则组",
+    "module": "风控组",
     "moduleShort": "规则组",
     "list": "规则组列表",
     "name": "规则组名称",

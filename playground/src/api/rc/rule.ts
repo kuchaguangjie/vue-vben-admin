@@ -68,6 +68,7 @@ export namespace RcRuleApi {
   }
 
   export interface UpdateStatusRequest {
+    id: number;
     status: number;
   }
 }
@@ -92,19 +93,15 @@ export async function createRcRule(data: RcRuleApi.CreateRcRuleRequest) {
 }
 
 export async function updateRcRule(
-  id: number,
   data: RcRuleApi.UpdateRcRuleRequest,
 ) {
-  return requestClient.put(`/rc/rule/${id}`, data);
+  return requestClient.post('/rc/rule/update', data);
 }
 
 export async function deleteRcRule(id: number) {
   return requestClient.delete(`/rc/rule/${id}`);
 }
 
-export async function updateRcRuleStatus(
-  id: number,
-  data: RcRuleApi.UpdateStatusRequest,
-) {
-  return requestClient.put(`/rc/rule/${id}/status`, data);
+export async function updateRcRuleStatus(data: RcRuleApi.UpdateStatusRequest) {
+  return requestClient.post('/rc/rule/updateStatus', data);
 }

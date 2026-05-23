@@ -78,7 +78,9 @@ export function useFormSchema(): VbenFormSchema[] {
       label: $t('rc.rule.conditions'),
       rules: 'required',
       componentProps: {
-        rows: 6,
+        rows: 8,
+        placeholder:
+          '{\n  "logic": "AND",\n  "conditions": [\n    {\n      "field": "amount",\n      "operator": "gt",\n      "value": 1000\n    }\n  ]\n}',
       },
     },
     {

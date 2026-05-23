@@ -27,6 +27,7 @@
     "maxLength": "{0} 长度不能超过 {1} 个字符",
     "invalidEmail": "请输入有效的邮箱地址",
     "invalidFormat": "格式不正确",
+    "invalidJson": "{0} 必须是有效的 JSON 格式",
     "alreadyExists": "{0} 已存在",
     "startWith": "{0} 必须以 \"{1}\" 开头",
     "invalidURL": "请输入有效的 URL"

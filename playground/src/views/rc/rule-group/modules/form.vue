@@ -30,7 +30,10 @@ const [Drawer, drawerApi] = useVbenDrawer({
     const values = await formApi.getValues();
 
     drawerApi.lock();
-    (id.value ? updateRcRuleGroup(id.value, values) : createRcRuleGroup(values))
+    (id.value
+      ? updateRcRuleGroup({ ...values, id: id.value })
+      : createRcRuleGroup(values)
+    )
       .then(() => {
         emits('success');
         drawerApi.close();

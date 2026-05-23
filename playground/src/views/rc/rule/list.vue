@@ -9,7 +9,7 @@ import type { PageParams } from '#/api/request';
 import { Page, useVbenDrawer } from '@vben/common-ui';
 import { Plus } from '@vben/icons';
 
-import { Button } from 'ant-design-vue';
+import { Button, Tag } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { deleteRcRule, getRcRulePage, updateRcRuleStatus } from '#/api';
@@ -160,28 +160,28 @@ function onCreate() {
       </template>
 
       <template #action="{ row }">
-        <a-tag :color="row.action === 'pass' ? 'green' : 'red'">
+        <Tag :color="row.action === 'pass' ? 'green' : 'red'">
           {{
             row.action === 'pass'
               ? $t('rc.rule.actionPass')
               : $t('rc.rule.actionReject')
           }}
-        </a-tag>
+        </Tag>
       </template>
 
       <template #riskLevel="{ row }">
-        <a-tag :color="getRiskLevelColor(row.riskLevel)">
+        <Tag :color="getRiskLevelColor(row.riskLevel)">
           {{ getRiskLevelText(row.riskLevel) }}
-        </a-tag>
+        </Tag>
       </template>
 
       <template #status="{ row }">
-        <a-tag
+        <Tag
           :color="row.status === 1 ? 'green' : 'default'"
           @click="() => onStatusChange(row.status === 1 ? 0 : 1, row)"
         >
           {{ row.status === 1 ? $t('common.enabled') : $t('common.disabled') }}
-        </a-tag>
+        </Tag>
       </template>
     </Grid>
   </Page>

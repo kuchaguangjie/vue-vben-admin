@@ -11,7 +11,7 @@ import { ref } from 'vue';
 import { Page, useVbenModal } from '@vben/common-ui';
 import { RotateCw, X } from '@vben/icons';
 
-import { Button, InputNumber, message, Modal } from 'ant-design-vue';
+import { Button, InputNumber, message, Modal, Tag } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import {
@@ -202,28 +202,32 @@ loadStatistics();
       class="mb-4 grid grid-cols-2 gap-4 md:grid-cols-4"
       v-if="Object.keys(statistics).length > 0"
     >
-      <div class="rounded-lg bg-white p-4 shadow">
-        <div class="text-gray-500">{{ $t('rc.executionLog.totalCount') }}</div>
+      <div class="rounded-lg bg-white p-4 shadow dark:bg-gray-800">
+        <div class="text-gray-500 dark:text-gray-400">
+          {{ $t('rc.executionLog.totalCount') }}
+        </div>
         <div class="text-2xl font-bold">
           {{ statistics.total ?? 0 }}
         </div>
       </div>
-      <div class="rounded-lg bg-white p-4 shadow">
-        <div class="text-gray-500">{{ $t('rc.executionLog.passCount') }}</div>
+      <div class="rounded-lg bg-white p-4 shadow dark:bg-gray-800">
+        <div class="text-gray-500 dark:text-gray-400">
+          {{ $t('rc.executionLog.passCount') }}
+        </div>
         <div class="text-2xl font-bold text-green-600">
           {{ statistics.passCount ?? 0 }}
         </div>
       </div>
-      <div class="rounded-lg bg-white p-4 shadow">
-        <div class="text-gray-500">
+      <div class="rounded-lg bg-white p-4 shadow dark:bg-gray-800">
+        <div class="text-gray-500 dark:text-gray-400">
           {{ $t('rc.executionLog.rejectCount') }}
         </div>
         <div class="text-2xl font-bold text-red-600">
           {{ statistics.rejectCount ?? 0 }}
         </div>
       </div>
-      <div class="rounded-lg bg-white p-4 shadow">
-        <div class="text-gray-500">
+      <div class="rounded-lg bg-white p-4 shadow dark:bg-gray-800">
+        <div class="text-gray-500 dark:text-gray-400">
           {{ $t('rc.executionLog.avgExecutionTime') }}
         </div>
         <div class="text-2xl font-bold">
@@ -238,22 +242,22 @@ loadStatistics();
           <RotateCw class="size-5" />
           {{ $t('common.refresh') }}
         </Button>
-        <Button danger @click="onCleanOldLogs">
+        <Button danger disabled @click="onCleanOldLogs">
           <X class="size-5" />
           {{ $t('rc.executionLog.cleanOldLogs') }}
         </Button>
       </template>
 
       <template #result="{ row }">
-        <a-tag :color="getResultColor(row.result)">
+        <Tag :color="getResultColor(row.result)">
           {{ getResultText(row.result) }}
-        </a-tag>
+        </Tag>
       </template>
 
       <template #riskLevel="{ row }">
-        <a-tag :color="getRiskLevelColor(row.riskLevel)">
+        <Tag :color="getRiskLevelColor(row.riskLevel)">
           {{ getRiskLevelText(row.riskLevel) }}
-        </a-tag>
+        </Tag>
       </template>
     </Grid>
   </Page>

@@ -9,7 +9,7 @@ import type { PageParams } from '#/api/request';
 import { Page, useVbenDrawer } from '@vben/common-ui';
 import { Plus } from '@vben/icons';
 
-import { Button } from 'ant-design-vue';
+import { Button, Tag } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import {
@@ -124,12 +124,12 @@ function onCreate() {
       </template>
 
       <template #status="{ row }">
-        <a-tag
+        <Tag
           :color="row.status === 1 ? 'green' : 'default'"
           @click="() => onStatusChange(row.status === 1 ? 0 : 1, row)"
         >
           {{ row.status === 1 ? $t('common.enabled') : $t('common.disabled') }}
-        </a-tag>
+        </Tag>
       </template>
     </Grid>
   </Page>
