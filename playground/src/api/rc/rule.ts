@@ -92,9 +92,7 @@ export async function createRcRule(data: RcRuleApi.CreateRcRuleRequest) {
   return requestClient.post<RcRuleApi.RcRule>('/rc/rule', data);
 }
 
-export async function updateRcRule(
-  data: RcRuleApi.UpdateRcRuleRequest,
-) {
+export async function updateRcRule(data: RcRuleApi.UpdateRcRuleRequest) {
   return requestClient.post('/rc/rule/update', data);
 }
 

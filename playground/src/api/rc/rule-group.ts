@@ -42,9 +42,9 @@ export namespace RcRuleGroupApi {
   }
 
   export interface UpdateRcRuleGroupRequest {
-    id: number;
     code: string;
     description?: string;
+    id: number;
     name: string;
     priority: number;
     scenario: string;
