@@ -1,7 +1,7 @@
 {
   "title": "Risk Control",
   "ruleGroup": {
-    "module": "Rule Group Management",
+    "module": "RC Rule Group",
     "moduleShort": "Rule Group",
     "list": "Rule Group List",
     "name": "Group Name",
@@ -12,7 +12,7 @@
     "status": "Status"
   },
   "rule": {
-    "module": "Rule Management",
+    "module": "RC Rule",
     "moduleShort": "Rule",
     "list": "Rule List",
     "groupName": "Rule Group",
@@ -34,7 +34,7 @@
     "status": "Status"
   },
   "executionLog": {
-    "module": "Execution Log",
+    "module": "RC Log",
     "moduleShort": "Execution Log",
     "list": "Execution Log List",
     "result": "Result",

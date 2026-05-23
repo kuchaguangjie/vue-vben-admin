@@ -1,7 +1,7 @@
 {
   "title": "风控系统",
   "ruleGroup": {
-    "module": "规则组管理",
+    "module": "风控规则组",
     "moduleShort": "规则组",
     "list": "规则组列表",
     "name": "规则组名称",
@@ -12,7 +12,7 @@
     "status": "状态"
   },
   "rule": {
-    "module": "规则管理",
+    "module": "风控规则",
     "moduleShort": "规则",
     "list": "规则列表",
     "groupName": "所属规则组",
@@ -34,7 +34,7 @@
     "status": "状态"
   },
   "executionLog": {
-    "module": "执行日志",
+    "module": "风控日志",
     "moduleShort": "执行日志",
     "list": "执行日志列表",
     "result": "执行结果",
