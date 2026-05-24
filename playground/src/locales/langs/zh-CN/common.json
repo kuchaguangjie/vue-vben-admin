@@ -1,5 +1,6 @@
 {
   "id": "ID",
+  "sort": "排序",
   "createdAt": "创建时间",
   "createdBy": "创建人",
   "updatedAt": "更新时间",

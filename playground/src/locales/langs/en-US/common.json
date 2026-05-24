@@ -1,5 +1,6 @@
 {
   "id": "ID",
+  "sortOrder": "Sort Order",
   "createdAt": "Created At",
   "createdBy": "Created By",
   "updatedAt": "Updated At",

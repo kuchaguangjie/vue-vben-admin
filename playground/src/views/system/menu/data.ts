@@ -95,6 +95,12 @@ export function useColumns<T = SystemMenuApi.SystemMenu>(
       sortable: true,
     },
     {
+      field: 'sort',
+      title: $t('common.sort'),
+      width: 80,
+      sortable: true,
+    },
+    {
       field: 'authCode',
       title: $t('system.menu.authCode'),
       width: 100,
