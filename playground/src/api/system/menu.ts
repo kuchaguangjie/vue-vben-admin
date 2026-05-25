@@ -168,6 +168,14 @@ async function updateMenu(
 }
 
 /**
+ * 更新菜单排序
+ * @param menuIds 按顺序排列的菜单 ID 数组（必须同层级）
+ */
+async function updateMenuSort(menuIds: number[]) {
+  return requestClient.post('/system/menu/updateSort', { menuIds });
+}
+
+/**
  * 删除菜单
  * @param id 菜单 ID
  */
@@ -184,5 +192,6 @@ export {
   isMenuNameExists,
   isMenuPathExists,
   updateMenu,
+  updateMenuSort,
   updateMenuStatus,
 };

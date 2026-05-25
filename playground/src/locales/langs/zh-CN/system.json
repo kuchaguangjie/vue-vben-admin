@@ -61,7 +61,9 @@
     "typeCatalog": "目录",
     "typeEmbedded": "内嵌",
     "typeLink": "外链",
-    "typeMenu": "菜单"
+    "typeMenu": "菜单",
+    "moveUp": "上移",
+    "moveDown": "下移"
   },
   "api": {
     "menuName": "api",

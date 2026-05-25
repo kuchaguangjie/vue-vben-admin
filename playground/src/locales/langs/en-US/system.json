@@ -34,6 +34,8 @@
     "typeButton": "Button",
     "typeLink": "Link",
     "typeEmbedded": "Embedded",
+    "moveUp": "Move Up",
+    "moveDown": "Move Down",
     "icon": "Icon",
     "activeIcon": "Active Icon",
     "activePath": "Active Path",

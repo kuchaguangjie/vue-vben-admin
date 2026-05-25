@@ -21,6 +21,7 @@ import {
   deleteMenu,
   getMenuTreeWithUserCore,
   SystemMenuApi,
+  updateMenuSort,
   updateMenuStatus,
 } from '#/api/system/menu';
 import { useDeleteAction } from '#/hooks/common/use-delete-action';
@@ -37,6 +38,7 @@ const [FormDrawer, formDrawerApi] = useVbenDrawer({
 });
 
 const { userCoreMap, setUserCoreMap } = useUserCoreMap();
+const menuRoots = ref<SystemMenuApi.SystemMenu[]>([]);
 
 const { onStatusChange } = useStatusToggle({
   getRowName: (row) => row.meta?.title || row.name,
@@ -52,7 +54,13 @@ const { onDelete } = useDeleteAction({
 
 const [Grid, gridApi] = useVbenVxeGrid({
   gridOptions: {
-    columns: useColumns(onActionClick, userCoreMap, onStatusChange),
+    columns: useColumns(
+      onActionClick,
+      userCoreMap,
+      onStatusChange,
+      canMoveUp,
+      canMoveDown,
+    ),
     height: 'auto',
     keepSource: true,
     pagerConfig: useDisabledPagerConfig(),
@@ -62,6 +70,7 @@ const [Grid, gridApi] = useVbenVxeGrid({
           isExpend.value = false;
           const result = await doPageQuery(getMenuTreeWithUserCore, params);
           setUserCoreMap(result.userCoreMap);
+          menuRoots.value = result.roots;
           return result.roots;
         },
       },
@@ -97,6 +106,78 @@ const [Grid, gridApi] = useVbenVxeGrid({
   } as VxeTableGridOptions,
 });
 
+function getSiblings(
+  row: SystemMenuApi.SystemMenu,
+): SystemMenuApi.SystemMenu[] {
+  const roots = menuRoots.value;
+
+  if (row.pid === 0 || !row.pid) {
+    return roots;
+  }
+
+  function findParent(
+    items: SystemMenuApi.SystemMenu[],
+  ): null | SystemMenuApi.SystemMenu {
+    for (const item of items) {
+      if (item.id === Number(row.pid)) {
+        return item;
+      }
+      if (item.children && item.children.length > 0) {
+        const found = findParent(item.children);
+        if (found) return found;
+      }
+    }
+    return null;
+  }
+
+  const parent = findParent(roots);
+  return parent?.children || [];
+}
+
+function canMoveUp(row: SystemMenuApi.SystemMenu): boolean {
+  const siblings = getSiblings(row);
+  const index = siblings.findIndex((s) => s.id === row.id);
+  return index <= 0;
+}
+
+function canMoveDown(row: SystemMenuApi.SystemMenu): boolean {
+  const siblings = getSiblings(row);
+  const index = siblings.findIndex((s) => s.id === row.id);
+  return index === -1 || index >= siblings.length - 1;
+}
+
+async function onMoveUp(row: SystemMenuApi.SystemMenu) {
+  const siblings = getSiblings(row);
+  const index = siblings.findIndex((s) => s.id === row.id);
+  if (index <= 0) return;
+
+  const newSiblings = [...siblings];
+  [newSiblings[index - 1], newSiblings[index]] = [
+    newSiblings[index],
+    newSiblings[index - 1],
+  ];
+
+  const menuIds = newSiblings.map((s) => s.id);
+  await updateMenuSort(menuIds);
+  await gridApi.query();
+}
+
+async function onMoveDown(row: SystemMenuApi.SystemMenu) {
+  const siblings = getSiblings(row);
+  const index = siblings.findIndex((s) => s.id === row.id);
+  if (index === -1 || index >= siblings.length - 1) return;
+
+  const newSiblings = [...siblings];
+  [newSiblings[index], newSiblings[index + 1]] = [
+    newSiblings[index + 1],
+    newSiblings[index],
+  ];
+
+  const menuIds = newSiblings.map((s) => s.id);
+  await updateMenuSort(menuIds);
+  await gridApi.query();
+}
+
 function onActionClick({
   code,
   row,
@@ -112,6 +193,14 @@ function onActionClick({
     }
     case 'edit': {
       onEdit(row);
+      break;
+    }
+    case 'moveDown': {
+      onMoveDown(row);
+      break;
+    }
+    case 'moveUp': {
+      onMoveUp(row);
       break;
     }
   }

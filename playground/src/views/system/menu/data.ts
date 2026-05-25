@@ -30,6 +30,8 @@ export function useColumns<T = SystemMenuApi.SystemMenu>(
   onActionClick: OnActionClickFn<SystemMenuApi.SystemMenu>,
   userCoreMap: Ref<Record<number, SystemUserApi.UserCore>>,
   onStatusChange?: (newStatus: any, row: T) => PromiseLike<boolean | undefined>,
+  canMoveUp?: (row: SystemMenuApi.SystemMenu) => boolean,
+  canMoveDown?: (row: SystemMenuApi.SystemMenu) => boolean,
 ): VxeTableGridOptions<SystemMenuApi.SystemMenu>['columns'] {
   return [
     {
@@ -130,6 +132,16 @@ export function useColumns<T = SystemMenuApi.SystemMenu>(
         name: 'CellOperation',
         options: [
           {
+            code: 'moveUp',
+            text: $t('system.menu.moveUp'),
+            disabled: canMoveUp,
+          },
+          {
+            code: 'moveDown',
+            text: $t('system.menu.moveDown'),
+            disabled: canMoveDown,
+          },
+          {
             code: 'append',
             text: $t('common.newChild'),
           },
@@ -147,7 +159,7 @@ export function useColumns<T = SystemMenuApi.SystemMenu>(
       headerAlign: 'center',
       showOverflow: false,
       title: $t('system.menu.operation'),
-      width: 200,
+      width: 300,
     },
   ];
 }
