@@ -30,6 +30,15 @@ const routes: RouteRecordRaw[] = [
         },
         component: () => import('#/views/cm/user-closure/list.vue'),
       },
+      {
+        path: '/cm/report',
+        name: 'CmReport',
+        meta: {
+          icon: 'mdi:chart-bar',
+          title: $t('cm.report.module'),
+        },
+        component: () => import('#/views/cm/report/list.vue'),
+      },
     ],
   },
 ];

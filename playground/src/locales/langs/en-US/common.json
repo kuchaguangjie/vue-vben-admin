@@ -4,6 +4,7 @@
   "view": "View",
   "unbind": "Unbind",
   "close": "Close",
+  "remark": "Remark",
   "createdAt": "Created At",
   "createdBy": "Created By",
   "updatedAt": "Updated At",
