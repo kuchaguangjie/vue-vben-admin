@@ -16,6 +16,7 @@ export namespace SystemUserApi {
     permissions?: string[];
     status: number;
     tenantId: number;
+    userType: number;
   }
   export interface UserCore {
     [key: string]: any;

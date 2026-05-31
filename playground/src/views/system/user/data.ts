@@ -74,6 +74,21 @@ export function useFormSchema(): VbenFormSchema[] {
       label: $t('system.user.isBot'),
     },
     {
+      component: 'RadioGroup',
+      componentProps: {
+        buttonStyle: 'solid',
+        options: [
+          { label: $t('system.user.userTypeAdmin'), value: 1 },
+          { label: $t('system.user.userTypeApp'), value: 2 },
+          { label: $t('system.user.userTypeBoth'), value: 3 },
+        ],
+        optionType: 'button',
+      },
+      defaultValue: 1,
+      fieldName: 'userType',
+      label: $t('system.user.userType'),
+    },
+    {
       component: 'InputPassword',
       fieldName: 'password',
       label: $t('system.user.password'),
@@ -169,6 +184,14 @@ export function formFieldsToAdjustForEdit(): VbenFormSchema[] {
         disabled: true, // 不可编辑
       },
     },
+    {
+      component: 'RadioGroup',
+      fieldName: 'userType',
+      label: $t('system.user.userType'),
+      componentProps: {
+        disabled: true, // 不可编辑
+      },
+    },
   ];
 }
 
@@ -221,6 +244,19 @@ export function useGridFormSchema(isPlatformAdmin = false): VbenFormSchema[] {
       },
       fieldName: 'isBot',
       label: $t('system.user.isBot'),
+    },
+    {
+      component: 'Select',
+      componentProps: {
+        allowClear: true,
+        options: [
+          { label: $t('system.user.userTypeAdmin'), value: 1 },
+          { label: $t('system.user.userTypeApp'), value: 2 },
+          { label: $t('system.user.userTypeBoth'), value: 3 },
+        ],
+      },
+      fieldName: 'userType',
+      label: $t('system.user.userType'),
     },
     {
       component: 'RangePicker',
@@ -297,6 +333,18 @@ export function useColumns<T = SystemUserApi.SystemUser>(
       sortable: true,
       formatter: ({ cellValue }) =>
         cellValue ? $t('common.yes') : $t('common.no'),
+    },
+    {
+      field: 'userType',
+      title: $t('system.user.userType'),
+      width: 120,
+      sortable: true,
+      formatter: ({ cellValue }) => {
+        if (cellValue === 1) return $t('system.user.userTypeAdmin');
+        if (cellValue === 2) return $t('system.user.userTypeApp');
+        if (cellValue === 3) return $t('system.user.userTypeBoth');
+        return cellValue;
+      },
     },
     {
       cellRender: {
