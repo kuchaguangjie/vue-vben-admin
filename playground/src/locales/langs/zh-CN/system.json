@@ -142,7 +142,10 @@
     "list": "日志列表",
     "id": "日志 ID",
     "createdBy": "创建人 ID",
-    "createdAt": "创建时间"
+    "createdAt": "创建时间",
+    "app": "来源端",
+    "appAdmin": "管理端",
+    "appUser": "用户端"
   },
   "mem": {
     "title": "缓存管理",

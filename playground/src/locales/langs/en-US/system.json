@@ -140,7 +140,10 @@
     "list": "Log List",
     "id": "Log ID",
     "createdBy": "Created By [ID]",
-    "createdAt": "Created At"
+    "createdAt": "Created At",
+    "app": "App",
+    "appAdmin": "Admin",
+    "appUser": "User"
   },
   "mem": {
     "title": "Cache Mgr",

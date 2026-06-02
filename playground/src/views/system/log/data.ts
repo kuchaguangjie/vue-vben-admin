@@ -43,6 +43,19 @@ export function useGridFormSchema(isPlatformAdmin = false): VbenFormSchema[] {
         valueFormat: 'x', // in ms
       },
     },
+    {
+      component: 'Select',
+      fieldName: 'app',
+      label: $t('system.log.app'),
+      componentProps: {
+        allowClear: true,
+        placeholder: '',
+        options: [
+          { label: $t('system.log.appAdmin'), value: 'admin' },
+          { label: $t('system.log.appUser'), value: 'user' },
+        ],
+      },
+    },
   ];
 
   if (saasEnabled.value && isPlatformAdmin) {
@@ -86,6 +99,11 @@ export function useColumns(): VxeTableGridOptions['columns'] {
       field: 'instance',
       title: $t('system.log.instance'),
       width: 200,
+    },
+    {
+      field: 'app',
+      title: $t('system.log.app'),
+      width: 100,
     },
     {
       field: 'code',
