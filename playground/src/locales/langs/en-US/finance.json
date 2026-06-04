@@ -1,0 +1,42 @@
+{
+  "title": "Finance",
+  "walletTx": {
+    "module": "Wallet Transactions",
+    "list": "Transaction List",
+    "id": "ID",
+    "userId": "User ID",
+    "userNick": "Nickname",
+    "tenantId": "Tenant ID",
+    "type": "Type",
+    "typeRecharge": "Recharge",
+    "typeWithdraw": "Withdraw",
+    "typeExchange": "Exchange",
+    "channel": "Channel",
+    "channelWechat": "WeChat",
+    "channelAlipay": "Alipay",
+    "channelDouyin": "Douyin",
+    "channelUsd": "USD",
+    "currency": "Currency",
+    "amount": "Amount",
+    "balanceBefore": "Before",
+    "balanceAfter": "After",
+    "payTxId": "Transaction ID",
+    "remark": "Remark",
+    "createdAt": "Created At"
+  },
+  "currency": {
+    "module": "Currency",
+    "moduleShort": "Currency",
+    "list": "Currency List",
+    "code": "Code",
+    "name": "Name",
+    "symbol": "Symbol",
+    "rateToCny": "Rate to CNY",
+    "minRecharge": "Min Recharge",
+    "maxRecharge": "Max Recharge",
+    "minWithdraw": "Min Withdraw",
+    "maxWithdraw": "Max Withdraw",
+    "enabled": "Enabled",
+    "sort": "Sort"
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "title": "财务管理",
+  "walletTx": {
+    "module": "帐变管理",
+    "list": "帐变列表",
+    "id": "ID",
+    "userId": "用户ID",
+    "userNick": "用户昵称",
+    "tenantId": "租户ID",
+    "type": "帐变类型",
+    "typeRecharge": "充值",
+    "typeWithdraw": "提现",
+    "typeExchange": "兑换",
+    "channel": "渠道",
+    "channelWechat": "微信",
+    "channelAlipay": "支付宝",
+    "channelDouyin": "抖音",
+    "channelUsd": "美元",
+    "currency": "币种",
+    "amount": "金额",
+    "balanceBefore": "变动前",
+    "balanceAfter": "变动后",
+    "payTxId": "交易号",
+    "remark": "备注",
+    "createdAt": "创建时间"
+  },
+  "currency": {
+    "module": "币种管理",
+    "moduleShort": "币种",
+    "list": "币种列表",
+    "code": "币种代码",
+    "name": "币种名称",
+    "symbol": "货币符号",
+    "rateToCny": "对人民币汇率",
+    "minRecharge": "最小充值",
+    "maxRecharge": "最大充值",
+    "minWithdraw": "最小提现",
+    "maxWithdraw": "最大提现",
+    "enabled": "是否启用",
+    "sort": "排序"
+  }
+}

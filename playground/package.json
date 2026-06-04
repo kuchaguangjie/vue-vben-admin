@@ -52,7 +52,7 @@
     "json-bigint": "catalog:",
     "pinia": "catalog:",
     "vue": "catalog:",
-    "vue-advanced-cropper": "^2.8.9",
+    "vue-advanced-cropper": "catalog:",
     "vue-router": "catalog:"
   },
   "devDependencies": {
