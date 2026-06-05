@@ -16,7 +16,7 @@
     "typeRefund": "退款",
     "balanceType": "资金属性",
     "balanceTypeSpendable": "消费金",
-    "balanceTypeWithdrawable": "收益提现池",
+    "balanceTypeEarnings": "收益池",
     "bizType": "业务类型",
     "bizTypeCharge": "充值",
     "bizTypeCommission": "分佣",

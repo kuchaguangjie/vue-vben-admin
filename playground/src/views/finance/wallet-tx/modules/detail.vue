@@ -86,11 +86,11 @@ function getWalletTxChannelLabel(channel: string): string {
 
 function getBalanceTypeLabel(balanceType: string): string {
   switch (balanceType) {
+    case 'earnings': {
+      return $t('finance.walletTx.balanceTypeEarnings');
+    }
     case 'spendable': {
       return $t('finance.walletTx.balanceTypeSpendable');
-    }
-    case 'withdrawable': {
-      return $t('finance.walletTx.balanceTypeWithdrawable');
     }
     default: {
       return balanceType;

@@ -16,7 +16,7 @@
     "typeRefund": "Refund",
     "balanceType": "Balance Type",
     "balanceTypeSpendable": "Spendable",
-    "balanceTypeWithdrawable": "Withdrawable",
+    "balanceTypeEarnings": "Earnings",
     "bizType": "Biz Type",
     "bizTypeCharge": "Charge",
     "bizTypeCommission": "Commission",
