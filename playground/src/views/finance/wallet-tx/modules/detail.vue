@@ -34,11 +34,20 @@ const [Drawer, drawerApi] = useVbenDrawer({
 
 function getWalletTxTypeLabel(type: string): string {
   switch (type) {
+    case 'commission': {
+      return $t('finance.walletTx.typeCommission');
+    }
+    case 'consume': {
+      return $t('finance.walletTx.typeConsume');
+    }
     case 'exchange': {
       return $t('finance.walletTx.typeExchange');
     }
     case 'recharge': {
       return $t('finance.walletTx.typeRecharge');
+    }
+    case 'refund': {
+      return $t('finance.walletTx.typeRefund');
     }
     case 'withdraw': {
       return $t('finance.walletTx.typeWithdraw');
@@ -54,8 +63,14 @@ function getWalletTxChannelLabel(channel: string): string {
     case 'alipay': {
       return $t('finance.walletTx.channelAlipay');
     }
+    case 'commission': {
+      return $t('finance.walletTx.channelCommission');
+    }
     case 'douyin': {
       return $t('finance.walletTx.channelDouyin');
+    }
+    case 'exchange': {
+      return $t('finance.walletTx.channelExchange');
     }
     case 'usd': {
       return $t('finance.walletTx.channelUsd');
@@ -69,12 +84,54 @@ function getWalletTxChannelLabel(channel: string): string {
   }
 }
 
+function getBalanceTypeLabel(balanceType: string): string {
+  switch (balanceType) {
+    case 'spendable': {
+      return $t('finance.walletTx.balanceTypeSpendable');
+    }
+    case 'withdrawable': {
+      return $t('finance.walletTx.balanceTypeWithdrawable');
+    }
+    default: {
+      return balanceType;
+    }
+  }
+}
+
+function getBizTypeLabel(bizType: string): string {
+  switch (bizType) {
+    case 'charge': {
+      return $t('finance.walletTx.bizTypeCharge');
+    }
+    case 'commission': {
+      return $t('finance.walletTx.bizTypeCommission');
+    }
+    case 'consume': {
+      return $t('finance.walletTx.bizTypeConsume');
+    }
+    case 'exchange': {
+      return $t('finance.walletTx.bizTypeExchange');
+    }
+    case 'refund': {
+      return $t('finance.walletTx.bizTypeRefund');
+    }
+    case 'withdraw': {
+      return $t('finance.walletTx.bizTypeWithdraw');
+    }
+    default: {
+      return bizType;
+    }
+  }
+}
+
 async function loadDetail(txId: number) {
   loadingData.value = true;
   try {
     const data = await getWalletTxDetail(txId);
     data.type = getWalletTxTypeLabel(data.type);
     data.channel = getWalletTxChannelLabel(data.channel);
+    data.balanceType = getBalanceTypeLabel(data.balanceType);
+    data.bizType = getBizTypeLabel(data.bizType);
     await formApi.setValues(data);
   } finally {
     loadingData.value = false;

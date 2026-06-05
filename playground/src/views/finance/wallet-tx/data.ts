@@ -19,11 +19,20 @@ export const userCoreMapRef: Ref<Record<number, SystemUserApi.UserCore>> = ref(
 
 function getWalletTxTypeLabel(type: string): string {
   switch (type) {
+    case 'commission': {
+      return $t('finance.walletTx.typeCommission');
+    }
+    case 'consume': {
+      return $t('finance.walletTx.typeConsume');
+    }
     case 'exchange': {
       return $t('finance.walletTx.typeExchange');
     }
     case 'recharge': {
       return $t('finance.walletTx.typeRecharge');
+    }
+    case 'refund': {
+      return $t('finance.walletTx.typeRefund');
     }
     case 'withdraw': {
       return $t('finance.walletTx.typeWithdraw');
@@ -39,8 +48,14 @@ function getWalletTxChannelLabel(channel: string): string {
     case 'alipay': {
       return $t('finance.walletTx.channelAlipay');
     }
+    case 'commission': {
+      return $t('finance.walletTx.channelCommission');
+    }
     case 'douyin': {
       return $t('finance.walletTx.channelDouyin');
+    }
+    case 'exchange': {
+      return $t('finance.walletTx.channelExchange');
     }
     case 'usd': {
       return $t('finance.walletTx.channelUsd');
@@ -50,6 +65,46 @@ function getWalletTxChannelLabel(channel: string): string {
     }
     default: {
       return channel;
+    }
+  }
+}
+
+function getBalanceTypeLabel(balanceType: string): string {
+  switch (balanceType) {
+    case 'spendable': {
+      return $t('finance.walletTx.balanceTypeSpendable');
+    }
+    case 'withdrawable': {
+      return $t('finance.walletTx.balanceTypeWithdrawable');
+    }
+    default: {
+      return balanceType;
+    }
+  }
+}
+
+function _getBizTypeLabel(bizType: string): string {
+  switch (bizType) {
+    case 'charge': {
+      return $t('finance.walletTx.bizTypeCharge');
+    }
+    case 'commission': {
+      return $t('finance.walletTx.bizTypeCommission');
+    }
+    case 'consume': {
+      return $t('finance.walletTx.bizTypeConsume');
+    }
+    case 'exchange': {
+      return $t('finance.walletTx.bizTypeExchange');
+    }
+    case 'refund': {
+      return $t('finance.walletTx.bizTypeRefund');
+    }
+    case 'withdraw': {
+      return $t('finance.walletTx.bizTypeWithdraw');
+    }
+    default: {
+      return bizType;
     }
   }
 }
@@ -78,6 +133,18 @@ export function useFormSchema(): VbenFormSchema[] {
       component: 'Input',
       fieldName: 'type',
       label: $t('finance.walletTx.type'),
+      disabled: true,
+    },
+    {
+      component: 'Input',
+      fieldName: 'balanceType',
+      label: $t('finance.walletTx.balanceType'),
+      disabled: true,
+    },
+    {
+      component: 'Input',
+      fieldName: 'bizType',
+      label: $t('finance.walletTx.bizType'),
       disabled: true,
     },
     {
@@ -160,6 +227,28 @@ export function useGridFormSchema(isPlatformAdmin = false): VbenFormSchema[] {
           { label: $t('finance.walletTx.typeRecharge'), value: 'recharge' },
           { label: $t('finance.walletTx.typeWithdraw'), value: 'withdraw' },
           { label: $t('finance.walletTx.typeExchange'), value: 'exchange' },
+          { label: $t('finance.walletTx.typeCommission'), value: 'commission' },
+          { label: $t('finance.walletTx.typeConsume'), value: 'consume' },
+          { label: $t('finance.walletTx.typeRefund'), value: 'refund' },
+        ],
+      },
+    },
+    {
+      component: 'Select',
+      fieldName: 'balanceType',
+      label: $t('finance.walletTx.balanceType'),
+      componentProps: {
+        allowClear: true,
+        placeholder: '',
+        options: [
+          {
+            label: $t('finance.walletTx.balanceTypeSpendable'),
+            value: 'spendable',
+          },
+          {
+            label: $t('finance.walletTx.balanceTypeWithdrawable'),
+            value: 'withdrawable',
+          },
         ],
       },
     },
@@ -262,6 +351,12 @@ export function useColumns(
       title: $t('finance.walletTx.type'),
       width: 100,
       formatter: ({ cellValue }) => getWalletTxTypeLabel(cellValue),
+    },
+    {
+      field: 'balanceType',
+      title: $t('finance.walletTx.balanceType'),
+      width: 110,
+      formatter: ({ cellValue }) => getBalanceTypeLabel(cellValue),
     },
     {
       field: 'channel',

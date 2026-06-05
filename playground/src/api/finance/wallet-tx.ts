@@ -100,6 +100,8 @@ export namespace FinanceWalletTxApi {
     amount: number;
     balanceAfter: number;
     balanceBefore: number;
+    balanceType: string;
+    bizType: string;
     channel: string;
     createdAt: string;
     id: number;
@@ -113,6 +115,8 @@ export namespace FinanceWalletTxApi {
   }
 
   export interface WalletTxPageParams {
+    balanceType?: string;
+    bizType?: string;
     channel?: string;
     createdAtRangeMs?: number[];
     page?: number;
