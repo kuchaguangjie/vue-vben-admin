@@ -10,10 +10,12 @@ export namespace SystemTenantApi {
     [key: string]: any;
 
     code: string;
+    commissionRate?: number;
     createdAt?: string;
     createdBy?: number;
     id: number;
     name: string;
+    parentId: number;
     remark?: string;
     status: number;
     updatedAt?: string;
@@ -27,7 +29,9 @@ export namespace SystemTenantApi {
     adminPassword: string;
     adminUsername: string;
     code: string;
+    commissionRate?: number;
     name: string;
+    parentId: number;
     remark?: string;
     status: number;
     templateCode?: string;

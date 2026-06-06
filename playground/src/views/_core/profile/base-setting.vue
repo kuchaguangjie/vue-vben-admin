@@ -37,6 +37,30 @@ const formSchema = computed((): VbenFormSchema[] => {
       },
     },
     {
+      fieldName: 'tenantId',
+      component: 'Input',
+      label: $t('system.tenant.id'),
+      componentProps: {
+        disabled: true,
+      },
+    },
+    {
+      fieldName: 'tenantName',
+      component: 'Input',
+      label: $t('system.tenant.name'),
+      componentProps: {
+        disabled: true,
+      },
+    },
+    {
+      fieldName: 'tenantCode',
+      component: 'Input',
+      label: $t('system.tenant.code'),
+      componentProps: {
+        disabled: true,
+      },
+    },
+    {
       fieldName: 'email',
       component: 'Input',
       label: $t('system.user.email'),

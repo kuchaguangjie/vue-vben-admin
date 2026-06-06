@@ -5,19 +5,23 @@ export namespace CmCommissionRuleApi {
     createdAt: string;
     createdBy: number;
     id: number;
-    level: number;
     maxAmount: number;
-    rate: number;
     remark: string;
     sceneKey: string;
     status: number;
     tenantId: number;
+    tenantLevel1Rate: number;
+    tenantMaxLevel: number;
+    totalRate: number;
     updatedAt?: string;
     updatedBy?: number;
+    userLevel1Rate: number;
+    userLevel2Rate: number;
+    userLevel3Rate: number;
+    userMaxLevel: number;
   }
 
   export interface CmCommissionRulePageParams {
-    level?: number;
     page?: number;
     pageSize?: number;
     sceneKey?: string;
@@ -27,22 +31,32 @@ export namespace CmCommissionRuleApi {
   }
 
   export interface CmCommissionRuleCreateReq {
-    level: number;
     maxAmount: number;
-    rate: number;
     remark?: string;
     sceneKey: string;
     status: number;
+    tenantLevel1Rate: number;
+    tenantMaxLevel: number;
+    totalRate: number;
+    userLevel1Rate: number;
+    userLevel2Rate: number;
+    userLevel3Rate: number;
+    userMaxLevel: number;
   }
 
   export interface CmCommissionRuleUpdateReq {
     id: number;
-    level: number;
     maxAmount: number;
-    rate: number;
     remark?: string;
     sceneKey: string;
     status: number;
+    tenantLevel1Rate: number;
+    tenantMaxLevel: number;
+    totalRate: number;
+    userLevel1Rate: number;
+    userLevel2Rate: number;
+    userLevel3Rate: number;
+    userMaxLevel: number;
   }
 
   export interface CmCommissionRuleStatusReq {

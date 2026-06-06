@@ -2,10 +2,40 @@ import type { VbenFormSchema } from '#/adapter/form';
 import type { OnActionClickFn, VxeTableGridOptions } from '#/adapter/vxe-table';
 import type { SystemTenantApi } from '#/api';
 
+import { ref } from 'vue';
+
 import { z } from '#/adapter/form';
+import { getTenantAll } from '#/api';
 import { $t } from '#/locales';
 import { usePreviewLink } from '#/utils/use-preview-link';
 import { formatBackendTime } from '#/utils/value-format';
+
+const tenantOptionsRef = ref<Array<{ label: string; value: number }>>([]);
+const tenantMapRef = ref<Record<number, string>>({});
+
+async function loadTenantOptions() {
+  try {
+    const result = await getTenantAll();
+    const options = result.map((t) => ({
+      label: `${t.name} (${t.code})`,
+      value: t.id,
+    }));
+    options.unshift(
+      { label: '平台 (tid=0)', value: 0 },
+      { label: '无上级 (不参与分佣)', value: -1 },
+    );
+    tenantOptionsRef.value = options;
+    const tenantMap: Record<number, string> = { 0: '平台', [-1]: '无上级' };
+    for (const t of result) {
+      tenantMap[t.id] = t.name;
+    }
+    tenantMapRef.value = tenantMap;
+  } catch (error) {
+    console.error('Failed to load tenant options', error);
+  }
+}
+
+loadTenantOptions();
 
 export function useFormSchema(): VbenFormSchema[] {
   return [
@@ -43,6 +73,35 @@ export function useFormSchema(): VbenFormSchema[] {
         .max(50, {
           message: $t('ui.formRules.maxLength', [$t('system.tenant.code'), 50]),
         }),
+    },
+    {
+      component: 'Select',
+      fieldName: 'parentId',
+      label: $t('system.tenant.parentId'),
+      componentProps: {
+        allowClear: true,
+        options: tenantOptionsRef,
+        placeholder: $t('system.tenant.parentIdPlaceholder'),
+        style: { width: '100%' },
+      },
+      defaultValue: -1,
+      if: (values) => {
+        const id = values.id as number | undefined;
+        return id === undefined || id !== 0;
+      },
+    },
+    {
+      component: 'InputNumber',
+      fieldName: 'commissionRate',
+      label: $t('system.tenant.commissionRate'),
+      componentProps: {
+        min: 0,
+        max: 0.15,
+        step: 0.01,
+        precision: 4,
+        placeholder: $t('system.tenant.commissionRatePlaceholder'),
+        style: 'width: 100%',
+      },
     },
     {
       component: 'Input',
@@ -188,6 +247,16 @@ export function useGridFormSchema(): VbenFormSchema[] {
     { component: 'Input', fieldName: 'id', label: $t('system.tenant.id') },
     {
       component: 'Select',
+      fieldName: 'parentId',
+      label: $t('system.tenant.parentId'),
+      componentProps: {
+        allowClear: true,
+        options: tenantOptionsRef,
+        placeholder: '',
+      },
+    },
+    {
+      component: 'Select',
       componentProps: {
         allowClear: true,
         options: [
@@ -236,6 +305,39 @@ export function useColumns<T = SystemTenantApi.SystemTenant>(
       title: $t('system.tenant.code'),
       width: 200,
       sortable: true,
+    },
+    {
+      field: 'parentId',
+      title: $t('system.tenant.parentId'),
+      width: 180,
+      sortable: true,
+      formatter: ({ cellValue }) => {
+        const parentId = cellValue as number;
+        if (parentId === -1) {
+          return $t('system.tenant.noParent');
+        }
+        if (parentId === 0) {
+          return $t('system.tenant.platform');
+        }
+        const parentName = tenantMapRef.value[parentId];
+        if (parentName) {
+          return `${parentName} (${parentId})`;
+        }
+        return String(parentId);
+      },
+    },
+    {
+      field: 'commissionRate',
+      title: $t('system.tenant.commissionRate'),
+      width: 130,
+      sortable: true,
+      formatter: ({ cellValue }) => {
+        const rate = cellValue as null | number | undefined;
+        if (rate === undefined || rate === null) {
+          return $t('system.tenant.useGlobal');
+        }
+        return `${(rate * 100).toFixed(2)}%`;
+      },
     },
     {
       cellRender: {

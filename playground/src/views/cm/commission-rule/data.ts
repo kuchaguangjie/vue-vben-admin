@@ -4,6 +4,14 @@ import type { CmCommissionRuleApi } from '#/api/cm/commission-rule';
 
 import { $t } from '#/locales';
 
+const numberInputProps = {
+  min: 0,
+  max: 1,
+  step: 0.0001,
+  precision: 4,
+  style: 'width: 100%',
+};
+
 export function useFormSchema(): VbenFormSchema[] {
   return [
     {
@@ -17,28 +25,79 @@ export function useFormSchema(): VbenFormSchema[] {
     },
     {
       component: 'InputNumber',
-      fieldName: 'level',
-      label: $t('cm.commissionRule.level'),
+      fieldName: 'totalRate',
+      label: $t('cm.commissionRule.totalRate'),
       rules: 'required',
+      defaultValue: 0.15,
+      componentProps: {
+        ...numberInputProps,
+        placeholder: $t('cm.commissionRule.totalRatePlaceholder'),
+      },
+    },
+    {
+      component: 'InputNumber',
+      fieldName: 'userMaxLevel',
+      label: $t('cm.commissionRule.userMaxLevel'),
+      rules: 'required',
+      defaultValue: 3,
       componentProps: {
         min: 1,
         max: 10,
-        placeholder: $t('cm.commissionRule.level'),
+        placeholder: $t('cm.commissionRule.userMaxLevel'),
         style: 'width: 100%',
       },
     },
     {
       component: 'InputNumber',
-      fieldName: 'rate',
-      label: $t('cm.commissionRule.rate'),
+      fieldName: 'userLevel1Rate',
+      label: $t('cm.commissionRule.userLevel1Rate'),
       rules: 'required',
+      defaultValue: 0.05,
+      componentProps: {
+        ...numberInputProps,
+        placeholder: $t('cm.commissionRule.userLevel1Rate'),
+      },
+    },
+    {
+      component: 'InputNumber',
+      fieldName: 'userLevel2Rate',
+      label: $t('cm.commissionRule.userLevel2Rate'),
+      defaultValue: 0.02,
+      componentProps: {
+        ...numberInputProps,
+        placeholder: $t('cm.commissionRule.userLevel2Rate'),
+      },
+    },
+    {
+      component: 'InputNumber',
+      fieldName: 'userLevel3Rate',
+      label: $t('cm.commissionRule.userLevel3Rate'),
+      defaultValue: 0.01,
+      componentProps: {
+        ...numberInputProps,
+        placeholder: $t('cm.commissionRule.userLevel3Rate'),
+      },
+    },
+    {
+      component: 'InputNumber',
+      fieldName: 'tenantMaxLevel',
+      label: $t('cm.commissionRule.tenantMaxLevel'),
+      defaultValue: 1,
       componentProps: {
         min: 0,
-        max: 1,
-        step: 0.0001,
-        precision: 4,
-        placeholder: $t('cm.commissionRule.ratePlaceholder'),
+        max: 10,
+        placeholder: $t('cm.commissionRule.tenantMaxLevel'),
         style: 'width: 100%',
+      },
+    },
+    {
+      component: 'InputNumber',
+      fieldName: 'tenantLevel1Rate',
+      label: $t('cm.commissionRule.tenantLevel1Rate'),
+      defaultValue: 0.02,
+      componentProps: {
+        ...numberInputProps,
+        placeholder: $t('cm.commissionRule.tenantLevel1Rate'),
       },
     },
     {
@@ -90,17 +149,6 @@ export function useGridFormSchema(): VbenFormSchema[] {
       },
     },
     {
-      component: 'InputNumber',
-      fieldName: 'level',
-      label: $t('cm.commissionRule.level'),
-      componentProps: {
-        min: 1,
-        allowClear: true,
-        placeholder: $t('cm.commissionRule.level'),
-        style: 'width: 100%',
-      },
-    },
-    {
       component: 'Select',
       fieldName: 'status',
       label: $t('common.status'),
@@ -117,6 +165,10 @@ export function useGridFormSchema(): VbenFormSchema[] {
   ];
 }
 
+function formatPercent(value: number): string {
+  return `${(value * 100).toFixed(2)}%`;
+}
+
 export function useColumns<T = CmCommissionRuleApi.CmCommissionRule>(
   onActionClick: OnActionClickFn<T>,
   onStatusChange: (row: T, value: number) => void,
@@ -128,29 +180,48 @@ export function useColumns<T = CmCommissionRuleApi.CmCommissionRule>(
       width: 160,
     },
     {
-      field: 'level',
-      title: $t('cm.commissionRule.level'),
-      width: 100,
-      formatter: ({ cellValue }) => {
-        return $t('cm.commissionRule.levelN', [cellValue]);
-      },
+      field: 'totalRate',
+      title: $t('cm.commissionRule.totalRate'),
+      width: 120,
+      formatter: ({ cellValue }) => formatPercent(cellValue as number),
     },
     {
-      field: 'rate',
-      title: $t('cm.commissionRule.rate'),
-      width: 140,
-      formatter: ({ cellValue }) => {
-        return `${(cellValue * 100).toFixed(2)}%`;
-      },
+      field: 'userMaxLevel',
+      title: $t('cm.commissionRule.userMaxLevel'),
+      width: 120,
+      formatter: ({ cellValue }) => `${cellValue}级`,
+    },
+    {
+      field: 'userLevel1Rate',
+      title: $t('cm.commissionRule.userLevel1Rate'),
+      width: 120,
+      formatter: ({ cellValue }) => formatPercent(cellValue as number),
+    },
+    {
+      field: 'userLevel2Rate',
+      title: $t('cm.commissionRule.userLevel2Rate'),
+      width: 120,
+      formatter: ({ cellValue }) => formatPercent(cellValue as number),
+    },
+    {
+      field: 'userLevel3Rate',
+      title: $t('cm.commissionRule.userLevel3Rate'),
+      width: 120,
+      formatter: ({ cellValue }) => formatPercent(cellValue as number),
+    },
+    {
+      field: 'tenantLevel1Rate',
+      title: $t('cm.commissionRule.tenantLevel1Rate'),
+      width: 130,
+      formatter: ({ cellValue }) => formatPercent(cellValue as number),
     },
     {
       field: 'maxAmount',
       title: $t('cm.commissionRule.maxAmount'),
       width: 140,
       formatter: ({ cellValue }) => {
-        return cellValue > 0
-          ? cellValue.toFixed(2)
-          : $t('cm.commissionRule.unlimited');
+        const value = cellValue as number;
+        return value > 0 ? value.toFixed(2) : $t('cm.commissionRule.unlimited');
       },
     },
     {
