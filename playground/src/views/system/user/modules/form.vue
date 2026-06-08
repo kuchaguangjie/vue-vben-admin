@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { SystemUserApi } from '#/api/system/user';
 
-import { computed, h, nextTick, ref } from 'vue';
+import { computed, nextTick, ref } from 'vue';
 
 import { useVbenDrawer } from '@vben/common-ui';
 
@@ -35,35 +35,9 @@ const [Form, formApi] = useVbenForm({
 });
 
 const loadingData = ref(false);
-const parentUser = ref<null | SystemUserApi.SystemUser>(null);
+const parentUserValid = ref(false);
 const previousParentId = ref<null | number>(null);
 const queryingParentUser = ref(false);
-
-// 计算显示内容
-const parentUserSuffix = computed(() => {
-  if (queryingParentUser.value) {
-    return h('span', { class: 'text-gray-400' }, $t('common.messages.loading'));
-  }
-  if (parentUser.value) {
-    return h(
-      'span',
-      { class: 'text-sm text-green-600' },
-      `✅ ${parentUser.value.id} | ${parentUser.value.username} | ${parentUser.value.nick}`,
-    );
-  }
-  if (
-    previousParentId.value &&
-    !parentUser.value &&
-    !queryingParentUser.value
-  ) {
-    return h(
-      'span',
-      { class: 'text-red-500' },
-      `❌ ${$t('common.messages.loadFailure')}`,
-    );
-  }
-  return '';
-});
 
 async function handleParentIdBlur() {
   const values = await formApi.getValues();
@@ -75,35 +49,37 @@ async function handleParentIdBlur() {
 
   previousParentId.value = currentParentId;
   queryingParentUser.value = true;
-  parentUser.value = null;
+  parentUserValid.value = false;
 
-  // 立即更新 schema 显示加载状态
   await refreshParentIdSchema();
 
   try {
-    const user = await getDetailUser(currentParentId);
-    parentUser.value = user;
+    const result = await getDetailUser(currentParentId);
+    parentUserValid.value = result.user && result.user.id > 0;
   } catch {
-    parentUser.value = null;
+    parentUserValid.value = false;
   } finally {
     queryingParentUser.value = false;
   }
 
-  // 查询完成后再次更新 schema 显示结果
+  if (!parentUserValid.value) {
+    message.error($t('system.user.parentUserNotFound'));
+  }
+
   await refreshParentIdSchema();
 }
 
 function handleParentIdChange(value: null | number) {
   if (!value) {
-    parentUser.value = null;
+    parentUserValid.value = false;
     previousParentId.value = null;
     refreshParentIdSchema();
   }
 }
 
-// 刷新 parentId 字段的 schema，触发重新渲染
 async function refreshParentIdSchema(disabled = false) {
   const currentValues = await formApi.getValues();
+
   formApi.updateSchema([
     {
       fieldName: 'parentId',
@@ -118,16 +94,9 @@ async function refreshParentIdSchema(disabled = false) {
         onBlur: handleParentIdBlur,
         onChange: handleParentIdChange,
       },
-      renderComponentContent() {
-        return {
-          suffix() {
-            return parentUserSuffix.value;
-          },
-        };
-      },
     },
   ]);
-  // 恢复字段值
+
   if (currentValues.parentId) {
     await formApi.setFieldValue('parentId', currentValues.parentId);
   }
@@ -141,8 +110,7 @@ const [Drawer, drawerApi] = useVbenDrawer({
     if (!valid) return;
     const values = await formApi.getValues();
 
-    // 验证上级用户：如果填写了 parentId 但用户不存在，阻止提交
-    if (values.parentId && !parentUser.value) {
+    if (values.parentId && !parentUserValid.value) {
       message.error($t('system.user.parentUserNotFound'));
       return;
     }
@@ -183,28 +151,22 @@ const [Drawer, drawerApi] = useVbenDrawer({
       } else {
         await formApi.removeSchemaByFields(formFieldsToRemoveForCreate());
       }
-      // Wait for Vue to flush DOM updates (form fields mounted)
       await nextTick();
 
-      // get data & update field value
       if (isEdit) {
         await formApi.setValues(data);
-        await loadForUpdate(data.id); // load data, for update
+        await loadForUpdate(data.id);
       } else {
-        await loadForCreate(); // load data, for create
+        await loadForCreate();
       }
     }
   },
 });
 
-// for new, load data & update form value.
 async function loadForCreate() {
   loadingData.value = true;
   try {
-    // load data
     const { deptRoots, roles } = await preCreateUser();
-
-    // set form option
     await updateSchemaForUser(deptRoots, roles);
     await refreshParentIdSchema(false);
   } finally {
@@ -212,25 +174,22 @@ async function loadForCreate() {
   }
 }
 
-// for edit, load data & update form value.
 async function loadForUpdate(userId: number) {
   loadingData.value = true;
   try {
-    // load data
     const { deptRoots, deptIds, roles, codes } = await preUpdateUser(userId);
 
-    // 先查询当前用户的 parentId 对应的上级用户信息
     const userDetail = await getDetailUser(userId);
-    if (userDetail.parentId) {
-      previousParentId.value = userDetail.parentId;
+    if (userDetail.user.parentId) {
+      previousParentId.value = userDetail.user.parentId;
       try {
-        parentUser.value = await getDetailUser(userDetail.parentId);
+        await getDetailUser(userDetail.user.parentId);
+        parentUserValid.value = true;
       } catch {
-        parentUser.value = null;
+        parentUserValid.value = false;
       }
     }
 
-    // set form option
     await updateSchemaForUser(deptRoots, roles, true);
     await refreshParentIdSchema(true);
     await nextTick();

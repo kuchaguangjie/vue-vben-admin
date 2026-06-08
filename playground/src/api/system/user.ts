@@ -10,6 +10,7 @@ export namespace SystemUserApi {
     [key: string]: any;
 
     deptIds: number[];
+    email?: string;
     id: number;
     isBot: boolean;
     nick: string;
@@ -17,6 +18,7 @@ export namespace SystemUserApi {
     permissions?: string[];
     status: number;
     tenantId: number;
+    username: string;
     userType: number;
   }
   export interface UserCore {
