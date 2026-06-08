@@ -13,6 +13,7 @@ export namespace SystemUserApi {
     id: number;
     isBot: boolean;
     nick: string;
+    parentId?: number;
     permissions?: string[];
     status: number;
     tenantId: number;

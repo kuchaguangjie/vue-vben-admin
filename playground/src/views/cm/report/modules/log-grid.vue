@@ -11,6 +11,7 @@ import { getCmCommissionLogPage } from '#/api/cm/report';
 import { doPageQuery } from '#/api/request';
 import { $t } from '#/locales';
 import { usePagerConfig } from '#/utils/pager';
+import { useCopyColumn } from '#/utils/use-copy-column';
 
 const statusMap: Record<number, { color: string; label: string }> = {
   1: { color: 'orange', label: $t('cm.report.frozen') },
@@ -70,11 +71,11 @@ function useGridFormSchema(): VbenFormSchema[] {
 
 function useColumns(): VxeTableGridOptions['columns'] {
   return [
-    {
+    useCopyColumn({
       field: 'orderNo',
       title: $t('cm.report.orderNo'),
-      width: 160,
-    },
+      width: 200,
+    }),
     {
       field: 'beneficiaryName',
       title: $t('cm.report.beneficiary'),

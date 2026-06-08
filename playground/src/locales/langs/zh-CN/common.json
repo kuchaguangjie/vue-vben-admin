@@ -35,6 +35,7 @@
     "copiedId": "ID 复制成功",
     "pidEqId": "不可选择自己作为父节点",
     "pleaseSelect": "请选择",
+    "pleaseInput": "请输入",
     "uploadSuccess": "上传成功",
     "uploadFailed": "上传失败: {error}",
     "wsConnSuccess": "ws 连接成功",

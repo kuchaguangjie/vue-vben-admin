@@ -38,11 +38,11 @@ export function useFormSchema(): VbenFormSchema[] {
       component: 'Input',
       fieldName: 'username',
       label: $t('system.user.username'),
+      defaultValue: '',
       rules: z
         .string()
         .min(3, { message: $t('system.user.usernameValidation') })
         .max(20, { message: $t('system.user.usernameValidation') })
-        // 限制 字符集: 字母、数字、下划线、中划线、点
         .regex(/^[\w\-.]+$/, {
           message: $t('system.user.usernameValidation'),
         }),
@@ -150,6 +150,7 @@ export function useFormSchema(): VbenFormSchema[] {
       label: $t('system.user.dept'),
       componentProps: {
         multiple: true, // 启用多选
+        class: 'w-full',
       },
     },
     {
@@ -158,6 +159,18 @@ export function useFormSchema(): VbenFormSchema[] {
       label: $t('system.user.setRoles'),
       componentProps: {
         multiple: true, // 启用多选
+        class: 'w-full',
+      },
+    },
+    {
+      fieldName: 'parentId',
+      component: 'InputNumber',
+      label: $t('system.user.parentId'),
+      componentProps: {
+        allowClear: true,
+        min: 1,
+        placeholder: $t('common.messages.pleaseInput'),
+        class: 'w-full',
       },
     },
   );

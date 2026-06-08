@@ -35,6 +35,7 @@
     "copiedId": "ID Copied!",
     "pidEqId": "Can't choose self as parent",
     "pleaseSelect": "Please select",
+    "pleaseInput": "Please input",
     "uploadSuccess": "Upload Success",
     "uploadFailed": "Upload failed: {error}",
     "wsConnSuccess": "ws connect success",
