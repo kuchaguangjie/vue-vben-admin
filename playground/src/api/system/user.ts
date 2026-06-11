@@ -22,8 +22,6 @@ export namespace SystemUserApi {
     userType: number;
   }
   export interface UserCore {
-    [key: string]: any;
-
     id: number;
     nick: string;
     tenantId: number;

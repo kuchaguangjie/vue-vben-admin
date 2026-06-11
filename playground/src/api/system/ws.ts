@@ -2,7 +2,6 @@ import { requestClient } from '#/api/request';
 
 export namespace SystemWsApi {
   export interface SystemWsStat {
-    [key: string]: any;
     config: {
       isCluster: boolean;
       maxConnPerSid: number;

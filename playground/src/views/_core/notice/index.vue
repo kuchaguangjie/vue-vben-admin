@@ -15,6 +15,7 @@ import {
   readNotice,
 } from '#/api/core/notice';
 import { $t } from '#/locales';
+import { safeHtml } from '#/utils/security';
 import { formatBackendTime } from '#/utils/value-format';
 
 const [NoticeModal, modalApi] = useVbenModal();
@@ -232,7 +233,7 @@ onMounted(() => {
         <hr class="my-4" />
         <div
           class="prose prose-sm max-w-none dark:prose-invert"
-          v-html="currentDetail.data"
+          v-html="safeHtml(currentDetail.data)"
         ></div>
       </div>
     </NoticeModal>

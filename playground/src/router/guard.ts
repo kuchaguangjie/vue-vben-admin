@@ -7,6 +7,7 @@ import { startProgress, stopProgress } from '@vben/utils';
 
 import { accessRoutes, coreRouteNames } from '#/router/routes';
 import { useAppStore, useAuthStore } from '#/store';
+import { getSafeRedirectPath } from '#/utils/security';
 
 import { generateAccess } from './access';
 
@@ -52,11 +53,11 @@ function setupAccessGuard(router: Router) {
     // 基本路由，这些路由不需要进入权限拦截
     if (coreRouteNames.includes(to.name as string) && !to.meta.requiresAuth) {
       if (to.path === LOGIN_PATH && accessStore.accessToken) {
-        return decodeURIComponent(
-          (to.query?.redirect as string) ||
-            userStore.userInfo?.homePath ||
-            preferences.app.defaultHomePath,
+        const redirectUrl = getSafeRedirectPath(
+          to.query?.redirect as string,
+          userStore.userInfo?.homePath || preferences.app.defaultHomePath,
         );
+        return redirectUrl;
       }
       return true;
     }
@@ -111,7 +112,10 @@ function setupAccessGuard(router: Router) {
     accessStore.setIsAccessChecked(true);
     let redirectPath: string;
     if (from.query.redirect) {
-      redirectPath = from.query.redirect as string;
+      redirectPath = getSafeRedirectPath(
+        from.query.redirect as string,
+        preferences.app.defaultHomePath,
+      );
     } else if (to.fullPath === preferences.app.defaultHomePath) {
       redirectPath = preferences.app.defaultHomePath;
     } else if (userInfo.homePath && to.fullPath === userInfo.homePath) {
@@ -120,7 +124,7 @@ function setupAccessGuard(router: Router) {
       redirectPath = to.fullPath;
     }
     return {
-      ...router.resolve(decodeURIComponent(redirectPath)),
+      ...router.resolve(redirectPath),
       replace: true,
     };
   });

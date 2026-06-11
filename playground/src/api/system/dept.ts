@@ -7,8 +7,6 @@ import { requestClient } from '#/api/request';
 
 export namespace SystemDeptApi {
   export interface SystemDept {
-    [key: string]: any;
-
     children?: SystemDept[];
     id: number;
     name: string;

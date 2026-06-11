@@ -27,8 +27,6 @@ export namespace SystemMenuApi {
 
   /** 系统菜单 */
   export interface SystemMenu {
-    [key: string]: any;
-
     /** 后端权限标识 */
     authCode: string;
     /** 子级 */

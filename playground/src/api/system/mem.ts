@@ -2,8 +2,6 @@ import { requestClient } from '#/api/request';
 
 export namespace SystemMemApi {
   export interface SystemMem {
-    [key: string]: any;
-
     modules: string[];
   }
 }

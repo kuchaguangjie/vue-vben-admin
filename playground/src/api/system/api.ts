@@ -7,8 +7,6 @@ import { requestClient } from '#/api/request';
 
 export namespace SystemApiApi {
   export interface SystemApi {
-    [key: string]: any;
-
     action: string;
     id: number;
     path: string;

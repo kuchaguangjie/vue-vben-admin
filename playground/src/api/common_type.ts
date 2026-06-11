@@ -16,7 +16,6 @@ export namespace CommonType {
   }
 
   export interface Tree<T = any> {
-    [key: string]: any;
     roots: T[];
   }
   export interface TreeWithUserCore<T = any> extends Tree<T> {

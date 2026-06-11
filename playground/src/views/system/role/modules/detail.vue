@@ -1,7 +1,8 @@
 <script lang="ts" setup>
-import type { DataNode } from 'ant-design-vue/es/tree';
-
 import type { Recordable } from '@vben-core/typings';
+
+import type { SystemApiApi } from '#/api/system/api';
+import type { SystemMenuApi } from '#/api/system/menu';
 
 import { nextTick, ref } from 'vue'; // 复用已有的 Schema 定义
 
@@ -29,8 +30,8 @@ const Text = Typography.Text;
 
 const loadingData = ref(false);
 
-const menuOptions = ref<DataNode[]>([]);
-const apiOptions = ref<DataNode[]>([]);
+const menuOptions = ref<SystemMenuApi.SystemMenu[]>([]);
+const apiOptions = ref<SystemApiApi.SystemApi[]>([]);
 
 const du = ref<any>({});
 const effectDu = ref<any>({});
@@ -82,13 +83,13 @@ async function loadDetail(roleId: number) {
 
     // set data - menu
     const { roots: menuRoots, chosenIds: menuChosenIds } = menuTreeWithChosen;
-    menuOptions.value = menuRoots as unknown as DataNode[];
+    menuOptions.value = menuRoots;
     await nextTick();
     await formApi.setFieldValue('permissions', menuChosenIds); // 选中 已有的 menu
 
     // set data - api
     const { roots: apiRoots, chosenIds: apiChosenIds } = apiTreeWithChosen;
-    apiOptions.value = apiRoots as unknown as DataNode[];
+    apiOptions.value = apiRoots;
     await nextTick();
     await formApi.setFieldValue('apis', apiChosenIds); // 选中 已有的 api
   } finally {

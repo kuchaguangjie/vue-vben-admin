@@ -6,8 +6,6 @@ import { requestClient } from '#/api/request';
 
 export namespace SystemLogApi {
   export interface SystemLog {
-    [key: string]: any;
-
     code: string;
     data: string;
     id: number;

@@ -49,6 +49,7 @@
     "@vueuse/core": "catalog:",
     "ant-design-vue": "catalog:",
     "dayjs": "catalog:",
+    "dompurify": "catalog:",
     "json-bigint": "catalog:",
     "pinia": "catalog:",
     "vue": "catalog:",

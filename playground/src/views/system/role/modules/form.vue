@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import type { DataNode } from 'ant-design-vue/es/tree';
-
 import type { Recordable } from '@vben/types';
 
+import type { SystemApiApi } from '#/api/system/api';
+import type { SystemMenuApi } from '#/api/system/menu';
 import type { SystemRoleApi } from '#/api/system/role';
 
 import { computed, nextTick, ref } from 'vue';
@@ -39,8 +39,8 @@ const [Form, formApi] = useVbenForm({
 
 const loadingData = ref(false);
 
-const menuOptions = ref<DataNode[]>([]);
-const apiOptions = ref<DataNode[]>([]);
+const menuOptions = ref<SystemMenuApi.SystemMenu[]>([]);
+const apiOptions = ref<SystemApiApi.SystemApi[]>([]);
 
 const id = ref();
 const [Drawer, drawerApi] = useVbenDrawer({
@@ -108,10 +108,10 @@ async function loadForCreate() {
     updateSchemaForRole(roles);
 
     // set data - menu
-    menuOptions.value = menuRoots as unknown as DataNode[];
+    menuOptions.value = menuRoots;
 
     // set data - api
-    apiOptions.value = apiRoots as unknown as DataNode[];
+    apiOptions.value = apiRoots;
   } finally {
     loadingData.value = false;
   }

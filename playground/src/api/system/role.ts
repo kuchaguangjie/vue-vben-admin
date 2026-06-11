@@ -6,8 +6,6 @@ import { requestClient } from '#/api/request';
 
 export namespace SystemRoleApi {
   export interface SystemRole {
-    [key: string]: any;
-
     code: string;
     id: number;
     name: string;

@@ -7,8 +7,6 @@ import { requestClient } from '#/api/request';
 export namespace SystemTenantApi {
   export const _ = true;
   export interface SystemTenant {
-    [key: string]: any;
-
     code: string;
     commissionRate?: number;
     createdAt?: string;

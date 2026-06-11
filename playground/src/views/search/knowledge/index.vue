@@ -9,6 +9,7 @@ import { Button, Card, Empty, message, Space, Tag } from 'ant-design-vue';
 import { useVbenForm } from '#/adapter/form';
 import { searchKnowledge, SearchKnowledgeApi } from '#/api';
 import { $t } from '#/locales';
+import { safeHtml } from '#/utils/security';
 
 import { loadCategoryOptions, useSearchFormSchema } from '../data';
 
@@ -85,10 +86,8 @@ function onPreview(row: any) {
 }
 
 function renderHighlight(text: string, formatted?: string) {
-  if (formatted) {
-    return formatted;
-  }
-  return text;
+  const html = formatted || text;
+  return safeHtml(html);
 }
 
 onMounted(() => {
