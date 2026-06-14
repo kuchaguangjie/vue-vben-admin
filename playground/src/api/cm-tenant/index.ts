@@ -183,7 +183,7 @@ export namespace CmTenantReportApi {
   }
 
   export interface TenantRelationItem {
-    commissionRate: number | null;
+    commissionRate: null | number;
     id: number;
     name: string;
     parentId: number;
