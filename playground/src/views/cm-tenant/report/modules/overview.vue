@@ -1,20 +1,24 @@
 <script lang="ts" setup>
-import type { CmReportApi } from '#/api/cm/report';
+import type { CmTenantReportApi } from '#/api/cm-tenant';
 
 import { ref } from 'vue';
 
 import { Card, Col, Row, Statistic, Tag } from 'ant-design-vue';
 
-import { getCmCommissionStatistics } from '#/api/cm/report';
+import { getCmTenantCommissionStatistics } from '#/api/cm-tenant';
 import { $t } from '#/locales';
 
-const statistics = ref<CmReportApi.CommissionStatistics | null>(null);
+const statistics = ref<CmTenantReportApi.CommissionStatistics | null>(null);
 const statsLoading = ref(false);
+
+const frozenStyle = { color: '#fa8c16' };
+const settledStyle = { color: '#52c41a' };
+const cancelledStyle = { color: '#f5222d' };
 
 async function loadStatistics() {
   statsLoading.value = true;
   try {
-    statistics.value = await getCmCommissionStatistics({});
+    statistics.value = await getCmTenantCommissionStatistics({});
   } finally {
     statsLoading.value = false;
   }
@@ -28,7 +32,7 @@ loadStatistics();
     <Col :span="4">
       <Card :loading="statsLoading">
         <Statistic
-          :title="$t('cm.report.totalAmount')"
+          title="分佣总金额"
           :value="statistics?.totalAmount ?? 0"
           :precision="2"
         />
@@ -36,16 +40,13 @@ loadStatistics();
     </Col>
     <Col :span="4">
       <Card :loading="statsLoading">
-        <Statistic
-          :title="$t('cm.report.totalOrders')"
-          :value="statistics?.totalOrders ?? 0"
-        />
+        <Statistic title="订单总数" :value="statistics?.totalOrders ?? 0" />
       </Card>
     </Col>
     <Col :span="4">
       <Card :loading="statsLoading">
         <Statistic
-          :title="$t('cm.report.totalBeneficiaries')"
+          title="获益租户数"
           :value="statistics?.totalBeneficiaries ?? 0"
         />
       </Card>
@@ -56,7 +57,7 @@ loadStatistics();
           :title="$t('cm.report.frozenAmount')"
           :value="statistics?.frozenAmount ?? 0"
           :precision="2"
-          :value-style="{ color: '#fa8c16' }"
+          :value-style="frozenStyle"
         />
       </Card>
     </Col>
@@ -66,7 +67,7 @@ loadStatistics();
           :title="$t('cm.report.settledAmount')"
           :value="statistics?.settledAmount ?? 0"
           :precision="2"
-          :value-style="{ color: '#52c41a' }"
+          :value-style="settledStyle"
         />
       </Card>
     </Col>
@@ -76,7 +77,7 @@ loadStatistics();
           :title="$t('cm.report.cancelledAmount')"
           :value="statistics?.cancelledAmount ?? 0"
           :precision="2"
-          :value-style="{ color: '#f5222d' }"
+          :value-style="cancelledStyle"
         />
       </Card>
     </Col>
@@ -84,7 +85,7 @@ loadStatistics();
 
   <Row :gutter="16">
     <Col :span="12">
-      <Card :title="$t('cm.report.levelDistribution')">
+      <Card title="层级分布">
         <template v-if="statistics?.levelStats?.length">
           <div
             v-for="stat in statistics.levelStats"
@@ -106,7 +107,7 @@ loadStatistics();
       </Card>
     </Col>
     <Col :span="12">
-      <Card :title="$t('cm.report.sceneDistribution')">
+      <Card title="场景分布">
         <template v-if="statistics?.sceneStats?.length">
           <div
             v-for="stat in statistics.sceneStats"

@@ -1,5 +1,30 @@
 {
   "title": "Commission",
+  "userCommission": {
+    "title": "User Commission"
+  },
+  "tenantCommission": {
+    "title": "Tenant Commission"
+  },
+  "userReport": {
+    "module": "User Report"
+  },
+  "tenantReport": {
+    "module": "Tenant Report"
+  },
+  "tenantRelation": {
+    "module": "Tenant Commission Relations"
+  },
+  "tenantCommissionRule": {
+    "module": "Tenant Commission Rules",
+    "moduleShort": "Tenant Rule",
+    "list": "Tenant Commission Rules"
+  },
+  "userCommissionRule": {
+    "module": "User Commission Rules",
+    "moduleShort": "User Rule",
+    "list": "User Commission Rules"
+  },
   "commissionRule": {
     "module": "Commission Rules",
     "moduleShort": "Rule",
@@ -53,9 +78,9 @@
     "withdrawnAmount": "Withdrawn"
   },
   "userClosure": {
-    "module": "Commission Relations",
-    "moduleShort": "Relation",
-    "list": "Commission Relations",
+    "module": "User Commission Relations",
+    "moduleShort": "User Relations",
+    "list": "User Commission Relations",
     "userId": "User ID",
     "parentId": "Parent User ID",
     "ancestorId": "Ancestor ID",

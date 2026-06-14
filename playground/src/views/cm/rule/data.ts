@@ -80,28 +80,6 @@ export function useFormSchema(): VbenFormSchema[] {
     },
     {
       component: 'InputNumber',
-      fieldName: 'tenantMaxLevel',
-      label: $t('cm.commissionRule.tenantMaxLevel'),
-      defaultValue: 1,
-      componentProps: {
-        min: 0,
-        max: 10,
-        placeholder: $t('cm.commissionRule.tenantMaxLevel'),
-        style: 'width: 100%',
-      },
-    },
-    {
-      component: 'InputNumber',
-      fieldName: 'tenantLevel1Rate',
-      label: $t('cm.commissionRule.tenantLevel1Rate'),
-      defaultValue: 0.02,
-      componentProps: {
-        ...numberInputProps,
-        placeholder: $t('cm.commissionRule.tenantLevel1Rate'),
-      },
-    },
-    {
-      component: 'InputNumber',
       fieldName: 'maxAmount',
       label: $t('cm.commissionRule.maxAmount'),
       componentProps: {
@@ -210,12 +188,6 @@ export function useColumns<T = CmCommissionRuleApi.CmCommissionRule>(
       formatter: ({ cellValue }) => formatPercent(cellValue as number),
     },
     {
-      field: 'tenantLevel1Rate',
-      title: $t('cm.commissionRule.tenantLevel1Rate'),
-      width: 130,
-      formatter: ({ cellValue }) => formatPercent(cellValue as number),
-    },
-    {
       field: 'maxAmount',
       title: $t('cm.commissionRule.maxAmount'),
       width: 140,
@@ -252,7 +224,7 @@ export function useColumns<T = CmCommissionRuleApi.CmCommissionRule>(
       cellRender: {
         attrs: {
           nameField: 'sceneKey',
-          nameTitle: $t('cm.commissionRule.moduleShort'),
+          nameTitle: $t('cm.userCommissionRule.moduleShort'),
           onClick: onActionClick,
         },
         name: 'CellOperation',

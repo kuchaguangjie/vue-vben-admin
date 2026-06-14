@@ -89,14 +89,14 @@ export async function getCmCommissionLogPage(
   return requestClient.get<{
     items: CmReportApi.CommissionLogRow[];
     total: number;
-  }>('/cm/report/log/page', { params });
+  }>('/cm/user-report/log/page', { params });
 }
 
 export async function getCmCommissionStatistics(
   params: CmReportApi.CommissionStatisticsParams,
 ) {
   return requestClient.get<CmReportApi.CommissionStatistics>(
-    '/cm/report/statistics',
+    '/cm/user-report/statistics',
     { params },
   );
 }
@@ -105,5 +105,5 @@ export async function getCmAccountPage(params: CmReportApi.AccountPageParams) {
   return requestClient.get<{
     items: CmReportApi.AccountRow[];
     total: number;
-  }>('/cm/report/account/page', { params });
+  }>('/cm/user-report/account/page', { params });
 }

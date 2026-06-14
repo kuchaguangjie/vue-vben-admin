@@ -3,7 +3,7 @@ import type {
   OnActionClickParams,
   VxeTableGridOptions,
 } from '#/adapter/vxe-table';
-import type { CmCommissionRuleApi } from '#/api/cm/commission-rule';
+import type { CmCommissionRuleApi } from '#/api/cm-tenant';
 import type { PageParams } from '#/api/request';
 
 import { ref } from 'vue';
@@ -18,7 +18,7 @@ import {
   deleteCmCommissionRule,
   getCmCommissionRulePage,
   updateCmCommissionRuleStatus,
-} from '#/api/cm/commission-rule';
+} from '#/api/cm-tenant';
 import { doPageQuery } from '#/api/request';
 import { $t } from '#/locales';
 import { usePagerConfig } from '#/utils/pager';
@@ -126,12 +126,14 @@ function onCreate() {
 <template>
   <Page auto-content-height>
     <FormDrawer @success="onRefresh" />
-    <Grid :table-title="$t('cm.commissionRule.list')">
+    <Grid table-title="租户分佣规则列表">
       <template #toolbar-tools>
         <Button type="primary" @click="onCreate">
           <Plus class="size-5" />
           {{
-            $t('ui.actionTitle.create', [$t('cm.commissionRule.moduleShort')])
+            $t('ui.actionTitle.create', [
+              $t('cm.tenantCommissionRule.moduleShort'),
+            ])
           }}
         </Button>
       </template>

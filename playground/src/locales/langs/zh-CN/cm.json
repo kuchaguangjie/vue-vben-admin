@@ -1,5 +1,30 @@
 {
   "title": "分佣系统",
+  "userCommission": {
+    "title": "用户分佣"
+  },
+  "tenantCommission": {
+    "title": "租户分佣"
+  },
+  "userReport": {
+    "module": "用户报表"
+  },
+  "tenantReport": {
+    "module": "租户报表"
+  },
+  "tenantRelation": {
+    "module": "租户分佣关系"
+  },
+  "tenantCommissionRule": {
+    "module": "租户分佣规则",
+    "moduleShort": "租户分佣规则",
+    "list": "租户分佣规则列表"
+  },
+  "userCommissionRule": {
+    "module": "用户分佣规则",
+    "moduleShort": "用户分佣规则",
+    "list": "用户分佣规则列表"
+  },
   "commissionRule": {
     "module": "分佣规则",
     "moduleShort": "分佣规则",
@@ -57,9 +82,9 @@
     "withdrawnAmount": "已提现"
   },
   "userClosure": {
-    "module": "分佣关系",
-    "moduleShort": "分佣关系",
-    "list": "分佣关系列表",
+    "module": "用户分佣关系",
+    "moduleShort": "用户分佣关系",
+    "list": "用户分佣关系列表",
     "userId": "用户ID",
     "parentId": "上级用户ID",
     "ancestorId": "上级ID",

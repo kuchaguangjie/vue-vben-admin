@@ -1,5 +1,6 @@
 import { requestClient } from '#/api/request';
 
+// 用户分佣规则类型（只有用户字段，无租户字段）
 export namespace CmCommissionRuleApi {
   export interface CmCommissionRule {
     createdAt: string;
@@ -10,8 +11,6 @@ export namespace CmCommissionRuleApi {
     sceneKey: string;
     status: number;
     tenantId: number;
-    tenantLevel1Rate: number;
-    tenantMaxLevel: number;
     totalRate: number;
     updatedAt?: string;
     updatedBy?: number;
@@ -35,8 +34,6 @@ export namespace CmCommissionRuleApi {
     remark?: string;
     sceneKey: string;
     status: number;
-    tenantLevel1Rate: number;
-    tenantMaxLevel: number;
     totalRate: number;
     userLevel1Rate: number;
     userLevel2Rate: number;
@@ -50,8 +47,6 @@ export namespace CmCommissionRuleApi {
     remark?: string;
     sceneKey: string;
     status: number;
-    tenantLevel1Rate: number;
-    tenantMaxLevel: number;
     totalRate: number;
     userLevel1Rate: number;
     userLevel2Rate: number;
@@ -71,12 +66,12 @@ export async function getCmCommissionRulePage(
   return requestClient.get<{
     items: CmCommissionRuleApi.CmCommissionRule[];
     total: number;
-  }>('/cm/commission-rule/page', { params });
+  }>('/cm/rule/page', { params });
 }
 
 export async function getCmCommissionRule(id: number) {
   return requestClient.get<CmCommissionRuleApi.CmCommissionRule>(
-    `/cm/commission-rule/${id}`,
+    `/cm/rule/${id}`,
   );
 }
 
@@ -84,7 +79,7 @@ export async function createCmCommissionRule(
   data: CmCommissionRuleApi.CmCommissionRuleCreateReq,
 ) {
   return requestClient.post<CmCommissionRuleApi.CmCommissionRule>(
-    '/cm/commission-rule',
+    '/cm/rule',
     data,
   );
 }
@@ -93,15 +88,15 @@ export async function updateCmCommissionRule(
   id: number,
   data: CmCommissionRuleApi.CmCommissionRuleUpdateReq,
 ) {
-  return requestClient.put(`/cm/commission-rule/${id}`, data);
+  return requestClient.put(`/cm/rule/${id}`, data);
 }
 
 export async function deleteCmCommissionRule(id: number) {
-  return requestClient.delete(`/cm/commission-rule/${id}`);
+  return requestClient.delete(`/cm/rule/${id}`);
 }
 
 export async function updateCmCommissionRuleStatus(
   data: CmCommissionRuleApi.CmCommissionRuleStatusReq,
 ) {
-  return requestClient.put('/cm/commission-rule/status', data);
+  return requestClient.put('/cm/rule/status', data);
 }

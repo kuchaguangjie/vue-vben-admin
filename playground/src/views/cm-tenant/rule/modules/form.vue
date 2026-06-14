@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { CmCommissionRuleApi } from '#/api/cm/commission-rule';
+import type { CmCommissionRuleApi } from '#/api/cm-tenant';
 
 import { computed, nextTick, ref } from 'vue';
 
@@ -9,7 +9,7 @@ import { useVbenForm } from '#/adapter/form';
 import {
   createCmCommissionRule,
   updateCmCommissionRule,
-} from '#/api/cm/commission-rule';
+} from '#/api/cm-tenant';
 import { $t } from '#/locales';
 
 import { useFormSchema } from '../data';
@@ -38,10 +38,6 @@ const [Drawer, drawerApi] = useVbenDrawer({
           id: id.value,
           sceneKey: values.sceneKey as string,
           totalRate: values.totalRate as number,
-          userLevel1Rate: values.userLevel1Rate as number,
-          userLevel2Rate: values.userLevel2Rate as number,
-          userLevel3Rate: values.userLevel3Rate as number,
-          userMaxLevel: values.userMaxLevel as number,
           tenantLevel1Rate: values.tenantLevel1Rate as number,
           tenantMaxLevel: values.tenantMaxLevel as number,
           maxAmount: values.maxAmount as number,
@@ -51,10 +47,6 @@ const [Drawer, drawerApi] = useVbenDrawer({
       : createCmCommissionRule({
           sceneKey: values.sceneKey as string,
           totalRate: values.totalRate as number,
-          userLevel1Rate: values.userLevel1Rate as number,
-          userLevel2Rate: values.userLevel2Rate as number,
-          userLevel3Rate: values.userLevel3Rate as number,
-          userMaxLevel: values.userMaxLevel as number,
           tenantLevel1Rate: values.tenantLevel1Rate as number,
           tenantMaxLevel: values.tenantMaxLevel as number,
           maxAmount: values.maxAmount as number,
@@ -95,8 +87,8 @@ const [Drawer, drawerApi] = useVbenDrawer({
 
 const getDrawerTitle = computed(() => {
   return formData.value?.id
-    ? $t('ui.actionTitle.edit', [$t('cm.commissionRule.moduleShort')])
-    : $t('ui.actionTitle.create', [$t('cm.commissionRule.moduleShort')]);
+    ? $t('ui.actionTitle.edit', [$t('cm.tenantCommissionRule.moduleShort')])
+    : $t('ui.actionTitle.create', [$t('cm.tenantCommissionRule.moduleShort')]);
 });
 </script>
 
