@@ -12,6 +12,35 @@
   "tenantReport": {
     "module": "Tenant Report"
   },
+  "tenantWithdraw": {
+    "module": "Tenant Withdraw",
+    "moduleShort": "Withdraw",
+    "apply": "Apply Withdraw",
+    "audit": "Audit",
+    "confirmPaid": "Confirm Paid",
+    "withdrawNo": "Withdraw No",
+    "withdrawAmount": "Withdraw Amount",
+    "feeAmount": "Fee",
+    "actualAmount": "Actual Amount",
+    "payChannel": "Pay Channel",
+    "bankName": "Bank Name",
+    "bankAccountNo": "Bank Account No",
+    "bankAccountName": "Account Name",
+    "alipayAccount": "Alipay Account",
+    "wechatAccount": "WeChat Account",
+    "status": "Status",
+    "statusPending": "Pending",
+    "statusApproved": "Approved",
+    "statusPaid": "Paid",
+    "statusRejected": "Rejected",
+    "auditRemark": "Audit Remark",
+    "payTxNo": "Pay Tx No",
+    "payRemark": "Pay Remark",
+    "availableAmount": "Available Balance",
+    "withdrawPending": "Pending Amount",
+    "withdrawnAmount": "Withdrawn Amount",
+    "totalIncome": "Total Income"
+  },
   "tenantRelation": {
     "module": "Tenant Commission Relations"
   },

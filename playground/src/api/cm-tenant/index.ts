@@ -227,3 +227,111 @@ export async function getCmTenantRelation() {
     '/cm-tenant/relation',
   );
 }
+
+// ========== 租户提现 API（路径 /cm-tenant/withdraw/*） ==========
+
+export namespace CmTenantWithdrawApi {
+  export interface TenantAccount {
+    availableAmount: number;
+    frozenAmount: number;
+    totalIncome: number;
+    withdrawnAmount: number;
+    withdrawPending: number;
+  }
+
+  export interface TenantWithdraw {
+    actualAmount: number;
+    alipayAccount: string;
+    applicantId: number;
+    applicantName: string;
+    auditorId: number;
+    auditorName: string;
+    auditRemark: string;
+    auditTime: string;
+    bankAccountName: string;
+    bankAccountNo: string;
+    bankName: string;
+    createdAt: string;
+    feeAmount: number;
+    id: number;
+    payChannel: string;
+    payRemark: string;
+    payTime: string;
+    payTxNo: string;
+    remark: string;
+    status: number;
+    tenantId: number;
+    tenantName: string;
+    totalIncome: number;
+    wechatAccount: string;
+    withdrawAmount: number;
+    withdrawNo: string;
+  }
+
+  export interface TenantWithdrawPageParams {
+    endDate?: string;
+    page?: number;
+    pageSize?: number;
+    startDate?: string;
+    status?: number;
+    withdrawNo?: string;
+  }
+
+  export interface ApplyReq {
+    alipayAccount?: string;
+    amount: number;
+    bankAccountName?: string;
+    bankAccountNo?: string;
+    bankName?: string;
+    payChannel: string;
+    wechatAccount?: string;
+  }
+
+  export interface AuditReq {
+    auditRemark?: string;
+    id: number;
+    pass: boolean;
+  }
+
+  export interface ConfirmPaidReq {
+    actualAmount: number;
+    id: number;
+    payRemark?: string;
+    payTxNo: string;
+  }
+}
+
+export async function getTenantWithdrawPage(
+  params: CmTenantWithdrawApi.TenantWithdrawPageParams,
+) {
+  return requestClient.get<{
+    items: CmTenantWithdrawApi.TenantWithdraw[];
+    total: number;
+  }>('/cm-tenant/withdraw/page', { params });
+}
+
+export async function getTenantWithdraw(id: number) {
+  return requestClient.get<CmTenantWithdrawApi.TenantWithdraw>(
+    `/cm-tenant/withdraw/${id}`,
+  );
+}
+
+export async function applyTenantWithdraw(data: CmTenantWithdrawApi.ApplyReq) {
+  return requestClient.post('/cm-tenant/withdraw/apply', data);
+}
+
+export async function auditTenantWithdraw(data: CmTenantWithdrawApi.AuditReq) {
+  return requestClient.post('/cm-tenant/withdraw/audit', data);
+}
+
+export async function confirmPaidTenantWithdraw(
+  data: CmTenantWithdrawApi.ConfirmPaidReq,
+) {
+  return requestClient.post('/cm-tenant/withdraw/confirm-paid', data);
+}
+
+export async function getTenantWithdrawAccount() {
+  return requestClient.get<CmTenantWithdrawApi.TenantAccount>(
+    '/cm-tenant/withdraw/account',
+  );
+}

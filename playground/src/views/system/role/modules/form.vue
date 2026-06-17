@@ -129,19 +129,22 @@ async function loadForUpdate(id: number, code: string) {
     updateSchemaForRole(roles, code);
     await nextTick();
     if (inheritCodes && inheritCodes.length > 0)
-      await formApi.setFieldValue('roleCodes', inheritCodes); // 选中 继承的角色
+      await formApi.setFieldValue('roleCodes', inheritCodes);
 
-    // set data - menu
+    // set data - menu & api: 先设置表单选中值，再设置 Tree 数据源
+    // 避免 Tree 渲染后再改 modelValue 导致的 Checkbox 组件销毁重建时报错
     const { roots: menuRoots, chosenIds: menuChosenIds } = menuTreeWithChosen;
-    menuOptions.value = menuRoots as unknown as DataNode[];
-    await nextTick();
-    await formApi.setFieldValue('permissions', menuChosenIds); // 选中 已有的 menu
-
-    // set data - api
     const { roots: apiRoots, chosenIds: apiChosenIds } = apiTreeWithChosen;
-    apiOptions.value = apiRoots as unknown as DataNode[];
+
+    // 先设置选中值（此时 Tree 还没渲染，因为 treeData 为空）
+    await formApi.setFieldValue('permissions', menuChosenIds);
+    await formApi.setFieldValue('apis', apiChosenIds);
+
+    // 等表单值更新完成后，再设置 Tree 数据源
+    // 这样 Tree 首次渲染时 modelValue 就是正确的，避免后续 watcher 触发
     await nextTick();
-    await formApi.setFieldValue('apis', apiChosenIds); // 选中 已有的 api
+    menuOptions.value = menuRoots as unknown as DataNode[];
+    apiOptions.value = apiRoots as unknown as DataNode[];
   } finally {
     loadingData.value = false;
   }
@@ -198,7 +201,9 @@ function getNodeClass(node: Recordable<any>) {
 <template>
   <Drawer :title="getDrawerTitle">
     <Form>
-      <template #permissions="slotProps">
+      <template
+        #permissions="{ modelValue, 'onUpdate:modelValue': updateValue }"
+      >
         <Spin :spinning="loadingData" wrapper-class-name="w-full">
           <Tree
             :tree-data="menuOptions"
@@ -206,7 +211,8 @@ function getNodeClass(node: Recordable<any>) {
             bordered
             :default-expanded-level="2"
             :get-node-class="getNodeClass"
-            v-bind="slotProps"
+            :model-value="modelValue"
+            @update:model-value="updateValue"
             value-field="id"
             label-field="meta.title"
             icon-field="meta.icon"
@@ -218,7 +224,7 @@ function getNodeClass(node: Recordable<any>) {
           </Tree>
         </Spin>
       </template>
-      <template #apis="slotProps">
+      <template #apis="{ modelValue, 'onUpdate:modelValue': updateValue }">
         <Spin :spinning="loadingData" wrapper-class-name="w-full">
           <Tree
             :tree-data="apiOptions"
@@ -226,7 +232,8 @@ function getNodeClass(node: Recordable<any>) {
             bordered
             :default-expanded-level="2"
             :get-node-class="getNodeClass"
-            v-bind="slotProps"
+            :model-value="modelValue"
+            @update:model-value="updateValue"
             value-field="id"
           >
             <template #node="{ value }">

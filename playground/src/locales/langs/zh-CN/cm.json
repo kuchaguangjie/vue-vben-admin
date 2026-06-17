@@ -12,6 +12,35 @@
   "tenantReport": {
     "module": "租户报表"
   },
+  "tenantWithdraw": {
+    "module": "租户提现",
+    "moduleShort": "提现",
+    "apply": "申请提现",
+    "audit": "审核",
+    "confirmPaid": "确认打款",
+    "withdrawNo": "提现单号",
+    "withdrawAmount": "提现金额",
+    "feeAmount": "手续费",
+    "actualAmount": "实际到账",
+    "payChannel": "打款渠道",
+    "bankName": "银行名称",
+    "bankAccountNo": "银行账号",
+    "bankAccountName": "户名",
+    "alipayAccount": "支付宝账号",
+    "wechatAccount": "微信账号",
+    "status": "状态",
+    "statusPending": "待审核",
+    "statusApproved": "审核通过",
+    "statusPaid": "已打款",
+    "statusRejected": "已拒绝",
+    "auditRemark": "审核备注",
+    "payTxNo": "打款流水号",
+    "payRemark": "打款备注",
+    "availableAmount": "可提现余额",
+    "withdrawPending": "审核中金额",
+    "withdrawnAmount": "已提现金额",
+    "totalIncome": "累计收入"
+  },
   "tenantRelation": {
     "module": "租户分佣关系"
   },
