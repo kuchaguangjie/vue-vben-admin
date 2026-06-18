@@ -39,7 +39,9 @@
     "availableAmount": "Available Balance",
     "withdrawPending": "Pending Amount",
     "withdrawnAmount": "Withdrawn Amount",
-    "totalIncome": "Total Income"
+    "totalIncome": "Total Income",
+    "amountMin": "Min Amount",
+    "amountMax": "Max Amount"
   },
   "tenantRelation": {
     "module": "Tenant Commission Relations"

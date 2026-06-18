@@ -39,7 +39,9 @@
     "availableAmount": "可提现余额",
     "withdrawPending": "审核中金额",
     "withdrawnAmount": "已提现金额",
-    "totalIncome": "累计收入"
+    "totalIncome": "累计收入",
+    "amountMin": "最低金额",
+    "amountMax": "最高金额"
   },
   "tenantRelation": {
     "module": "租户分佣关系"

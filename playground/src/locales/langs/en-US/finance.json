@@ -71,6 +71,8 @@
     "channelBank": "Bank",
     "currency": "Currency",
     "amount": "Amount",
+    "amountMin": "Min Amount",
+    "amountMax": "Max Amount",
     "status": "Status",
     "statusPending": "Pending",
     "statusPaid": "Paid",

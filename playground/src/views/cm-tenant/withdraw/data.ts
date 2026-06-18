@@ -183,6 +183,36 @@ export function useGridFormSchema(): VbenFormSchema[] {
         style: 'width: 100%',
       },
     },
+    {
+      component: 'RangePicker',
+      fieldName: 'createdAtRangeMs',
+      label: $t('common.createdAt'),
+      componentProps: {
+        valueFormat: 'x',
+      },
+    },
+    {
+      component: 'InputNumber',
+      fieldName: 'amountMin',
+      label: $t('cm.tenantWithdraw.amountMin'),
+      componentProps: {
+        min: 0,
+        precision: 2,
+        placeholder: $t('cm.tenantWithdraw.amountMin'),
+        style: 'width: 100%',
+      },
+    },
+    {
+      component: 'InputNumber',
+      fieldName: 'amountMax',
+      label: $t('cm.tenantWithdraw.amountMax'),
+      componentProps: {
+        min: 0,
+        precision: 2,
+        placeholder: $t('cm.tenantWithdraw.amountMax'),
+        style: 'width: 100%',
+      },
+    },
   ];
 }
 

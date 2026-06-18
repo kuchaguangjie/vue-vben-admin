@@ -243,6 +243,36 @@ export function useGridFormSchema(isPlatformAdmin = false): VbenFormSchema[] {
         ],
       },
     },
+    {
+      component: 'RangePicker',
+      fieldName: 'createdAtRangeMs',
+      label: $t('finance.payOrder.createdAt'),
+      componentProps: {
+        valueFormat: 'x',
+      },
+    },
+    {
+      component: 'InputNumber',
+      fieldName: 'amountMin',
+      label: $t('finance.payOrder.amountMin'),
+      componentProps: {
+        min: 0,
+        precision: 2,
+        placeholder: '',
+        style: 'width: 100%',
+      },
+    },
+    {
+      component: 'InputNumber',
+      fieldName: 'amountMax',
+      label: $t('finance.payOrder.amountMax'),
+      componentProps: {
+        min: 0,
+        precision: 2,
+        placeholder: '',
+        style: 'width: 100%',
+      },
+    },
   ];
 
   if (saasEnabled.value && isPlatformAdmin) {
