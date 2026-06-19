@@ -9,7 +9,7 @@ import { useVbenForm } from '#/adapter/form';
 import { auditTenantWithdraw } from '#/api/cm-tenant';
 import { $t } from '#/locales';
 
-import { useAuditFormSchema } from '../data';
+import { formatChannelInfo, useAuditFormSchema } from '../data';
 
 const emits = defineEmits(['success']);
 
@@ -62,12 +62,20 @@ const [Drawer, drawerApi] = useVbenDrawer({
         {{ withdrawData.withdrawNo }}
       </p>
       <p>
+        <strong>{{ $t('cm.tenantWithdraw.tenantName') }}:</strong>
+        {{ withdrawData.tenantName }}
+      </p>
+      <p>
         <strong>{{ $t('cm.tenantWithdraw.withdrawAmount') }}:</strong>
         {{ withdrawData.withdrawAmount.toFixed(2) }}
       </p>
       <p>
         <strong>{{ $t('cm.tenantWithdraw.payChannel') }}:</strong>
         {{ withdrawData.payChannel }}
+      </p>
+      <p>
+        <strong>{{ $t('cm.tenantWithdraw.receivingAccount') }}:</strong>
+        {{ formatChannelInfo(withdrawData) }}
       </p>
     </div>
     <Form />

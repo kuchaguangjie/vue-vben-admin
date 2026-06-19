@@ -17,6 +17,35 @@ const payChannelOptions = [
   { label: 'WeChat', value: 'wechat' },
 ];
 
+function maskAccount(text: string): string {
+  if (!text) return '-';
+  if (text.includes('@')) {
+    const [name, domain] = text.split('@');
+    return `${name[0]}***@${domain}`;
+  }
+  if (text.length <= 4) return '****';
+  return `****${text.slice(-4)}`;
+}
+
+export function formatChannelInfo(
+  row: CmTenantWithdrawApi.TenantWithdraw,
+): string {
+  switch (row.payChannel) {
+    case 'alipay': {
+      return `${maskAccount(row.alipayAccount)}`;
+    }
+    case 'bank': {
+      return `${row.bankName || '-'} / ${maskAccount(row.bankAccountNo)} / ${row.bankAccountName || '-'}`;
+    }
+    case 'wechat': {
+      return `${maskAccount(row.wechatAccount)}`;
+    }
+    default: {
+      return '-';
+    }
+  }
+}
+
 export function useApplyFormSchema(): VbenFormSchema[] {
   return [
     {

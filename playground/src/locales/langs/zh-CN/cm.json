@@ -41,7 +41,10 @@
     "withdrawnAmount": "已提现金额",
     "totalIncome": "累计收入",
     "amountMin": "最低金额",
-    "amountMax": "最高金额"
+    "amountMax": "最高金额",
+    "tenantName": "租户名称",
+    "receivingAccount": "收款账户",
+    "selectAccount": "选择收款账户"
   },
   "tenantRelation": {
     "module": "租户分佣关系"

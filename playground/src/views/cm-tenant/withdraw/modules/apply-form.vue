@@ -1,14 +1,17 @@
 <script lang="ts" setup>
-import type { CmTenantWithdrawApi } from '#/api/cm-tenant';
+import type {
+  CmTenantWithdrawAccountApi,
+  CmTenantWithdrawApi,
+} from '#/api/cm-tenant';
 
-import { nextTick, ref } from 'vue';
+import { computed, nextTick, ref } from 'vue';
 
 import { useVbenDrawer } from '@vben/common-ui';
 
-import { Statistic } from 'ant-design-vue';
+import { Select, Statistic } from 'ant-design-vue';
 
 import { useVbenForm } from '#/adapter/form';
-import { applyTenantWithdraw } from '#/api/cm-tenant';
+import { applyTenantWithdraw, getWithdrawAccountList } from '#/api/cm-tenant';
 import { $t } from '#/locales';
 
 import { useApplyFormSchema } from '../data';
@@ -22,6 +25,51 @@ const account = ref<CmTenantWithdrawApi.TenantAccount>({
   withdrawnAmount: 0,
   frozenAmount: 0,
 });
+
+const withdrawAccounts = ref<CmTenantWithdrawAccountApi.WithdrawAccount[]>([]);
+const selectedAccountId = ref<number | undefined>();
+
+function getAccountLabel(
+  acc: CmTenantWithdrawAccountApi.WithdrawAccount,
+): string {
+  switch (acc.payChannel) {
+    case 'alipay': {
+      return `支付宝 ${acc.alipayAccount || ''}`;
+    }
+    case 'bank': {
+      return `${acc.bankName || ''} ****${(acc.bankAccountNo || '').slice(-4)}`;
+    }
+    case 'wechat': {
+      return `微信 ${acc.wechatAccount || ''}`;
+    }
+    default: {
+      return acc.payChannel;
+    }
+  }
+}
+
+const accountOptions = computed(() => {
+  const opts = withdrawAccounts.value.map((a) => ({
+    label: `${getAccountLabel(a)}${a.isDefault ? ' (默认)' : ''}`,
+    value: a.id,
+  }));
+  return opts;
+});
+
+function onAccountSelect(id: number) {
+  selectedAccountId.value = id;
+  const acc = withdrawAccounts.value.find((a) => a.id === id);
+  if (acc) {
+    formApi.setValues({
+      payChannel: acc.payChannel,
+      bankName: acc.bankName,
+      bankAccountNo: acc.bankAccountNo,
+      bankAccountName: acc.bankAccountName,
+      alipayAccount: acc.alipayAccount,
+      wechatAccount: acc.wechatAccount,
+    });
+  }
+}
 
 const [Form, formApi] = useVbenForm({
   schema: useApplyFormSchema(),
@@ -64,6 +112,15 @@ const [Drawer, drawerApi] = useVbenDrawer({
         account.value = data.account;
       }
       await formApi.resetForm();
+      selectedAccountId.value = undefined;
+
+      try {
+        const resp = await getWithdrawAccountList();
+        withdrawAccounts.value = resp.list || [];
+      } catch {
+        withdrawAccounts.value = [];
+      }
+
       await nextTick();
     }
   },
@@ -79,6 +136,15 @@ const [Drawer, drawerApi] = useVbenDrawer({
         :title="$t('cm.tenantWithdraw.availableAmount')"
         prefix="¥"
         value-style="color: #52c41a"
+      />
+    </div>
+    <div v-if="withdrawAccounts.length > 0" class="mb-4">
+      <Select
+        :value="selectedAccountId"
+        :options="accountOptions"
+        :placeholder="$t('cm.tenantWithdraw.selectAccount')"
+        class="w-full"
+        @change="onAccountSelect"
       />
     </div>
     <Form />

@@ -335,3 +335,65 @@ export async function getTenantWithdrawAccount() {
     '/cm-tenant/withdraw/account',
   );
 }
+
+// ========== 租户提现收款账户 API（路径 /cm-tenant/withdraw-account/*） ==========
+
+export namespace CmTenantWithdrawAccountApi {
+  export interface WithdrawAccount {
+    alipayAccount: string;
+    bankAccountName: string;
+    bankAccountNo: string;
+    bankName: string;
+    id: number;
+    isDefault: boolean;
+    payChannel: string;
+    tenantId: number;
+    wechatAccount: string;
+  }
+
+  export interface CreateReq {
+    alipayAccount?: string;
+    bankAccountName?: string;
+    bankAccountNo?: string;
+    bankName?: string;
+    isDefault?: boolean;
+    payChannel: string;
+    wechatAccount?: string;
+  }
+
+  export interface UpdateReq {
+    alipayAccount?: string;
+    bankAccountName?: string;
+    bankAccountNo?: string;
+    bankName?: string;
+    isDefault?: boolean;
+    payChannel: string;
+    wechatAccount?: string;
+  }
+}
+
+export async function getWithdrawAccountList() {
+  return requestClient.get<{
+    list: CmTenantWithdrawAccountApi.WithdrawAccount[];
+  }>('/cm-tenant/withdraw-account/list');
+}
+
+export async function createWithdrawAccount(
+  data: CmTenantWithdrawAccountApi.CreateReq,
+) {
+  return requestClient.post<CmTenantWithdrawAccountApi.WithdrawAccount>(
+    '/cm-tenant/withdraw-account',
+    data,
+  );
+}
+
+export async function updateWithdrawAccount(
+  id: number,
+  data: CmTenantWithdrawAccountApi.UpdateReq,
+) {
+  return requestClient.put(`/cm-tenant/withdraw-account/${id}`, data);
+}
+
+export async function deleteWithdrawAccount(id: number) {
+  return requestClient.delete(`/cm-tenant/withdraw-account/${id}`);
+}

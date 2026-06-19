@@ -4,6 +4,9 @@
 import type { AxiosResponseHeaders, RequestClientOptions } from '@vben/request';
 import type { Recordable } from '@vben/types';
 
+import { useRouter } from 'vue-router';
+
+import { LOGIN_PATH } from '@vben/constants';
 import { useAppConfig } from '@vben/hooks';
 import { preferences } from '@vben/preferences';
 import {
@@ -12,7 +15,7 @@ import {
   errorMessageResponseInterceptor,
   RequestClient,
 } from '@vben/request';
-import { useAccessStore } from '@vben/stores';
+import { resetAllStores, useAccessStore } from '@vben/stores';
 import { cloneDeep } from '@vben/utils';
 
 import { message } from 'ant-design-vue';
@@ -45,6 +48,8 @@ function createRequestClient(baseURL: string, options?: RequestClientOptions) {
 
   /**
    * 重新认证逻辑
+   * token 失效时，调用 logout 清理服务端 session；
+   * 如果已在登录页则直接清理本地状态，避免 API 401 死循环
    */
   async function doReAuthenticate() {
     console.warn('Access token or refresh token is invalid or expired. ');
@@ -57,7 +62,13 @@ function createRequestClient(baseURL: string, options?: RequestClientOptions) {
     ) {
       accessStore.setLoginExpired(true);
     } else {
-      await authStore.logout();
+      const router = useRouter();
+      if (router.currentRoute.value.path === LOGIN_PATH) {
+        resetAllStores();
+        accessStore.setLoginExpired(false);
+      } else {
+        await authStore.logout();
+      }
     }
   }
 

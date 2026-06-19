@@ -41,7 +41,10 @@
     "withdrawnAmount": "Withdrawn Amount",
     "totalIncome": "Total Income",
     "amountMin": "Min Amount",
-    "amountMax": "Max Amount"
+    "amountMax": "Max Amount",
+    "tenantName": "Tenant Name",
+    "receivingAccount": "Receiving Account",
+    "selectAccount": "Select Account"
   },
   "tenantRelation": {
     "module": "Tenant Commission Relations"
