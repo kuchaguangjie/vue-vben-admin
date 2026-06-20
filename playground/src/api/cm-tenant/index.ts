@@ -320,9 +320,10 @@ export async function auditTenantWithdraw(data: CmTenantWithdrawApi.AuditReq) {
   return requestClient.post('/cm-tenant/withdraw/audit', data);
 }
 
-export async function getTenantWithdrawAccount() {
+export async function getTenantWithdrawAccount(tenantId?: number) {
   return requestClient.get<CmTenantWithdrawApi.TenantAccount>(
     '/cm-tenant/withdraw/account',
+    { params: tenantId ? { tenantId } : {} },
   );
 }
 

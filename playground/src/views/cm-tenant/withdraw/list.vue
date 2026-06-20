@@ -3,7 +3,7 @@ import type { VxeTableGridOptions } from '#/adapter/vxe-table';
 import type { CmTenantWithdrawApi } from '#/api/cm-tenant';
 import type { PageParams } from '#/api/request';
 
-import { onMounted, ref, unref } from 'vue';
+import { onMounted, ref, unref, watch } from 'vue';
 
 import { Page, useVbenDrawer } from '@vben/common-ui';
 import { Plus } from '@vben/icons';
@@ -32,9 +32,9 @@ const account = ref<CmTenantWithdrawApi.TenantAccount>({
   frozenAmount: 0,
 });
 
-async function loadAccount() {
+async function loadAccount(tenantId?: number) {
   try {
-    account.value = await getTenantWithdrawAccount();
+    account.value = await getTenantWithdrawAccount(tenantId);
   } catch {
     // 忽略错误，使用默认值
   }
@@ -51,6 +51,8 @@ const [AuditDrawer, auditDrawerApi] = useVbenDrawer({
 });
 
 const { isPlatformAdmin } = usePlatformAdmin();
+
+const tenantIdFilter = ref<number | undefined>();
 
 const [Grid, gridApi] = useVbenVxeGrid({
   formOptions: {
@@ -69,6 +71,9 @@ const [Grid, gridApi] = useVbenVxeGrid({
           if (!unref(isPlatformAdmin)) {
             delete filteredFormValues.tenantId;
           }
+          // 更新 tenantId 筛选，触发卡片刷新
+          const tid = filteredFormValues.tenantId;
+          tenantIdFilter.value = tid ? Number(tid) : undefined;
           return doPageQuery(getTenantWithdrawPage, params, filteredFormValues);
         },
       },
@@ -114,6 +119,10 @@ const statusTextMap: Record<number, string> = {
 onMounted(() => {
   loadAccount();
 });
+
+watch(tenantIdFilter, (tid) => {
+  loadAccount(tid);
+});
 </script>
 
 <template>
@@ -128,7 +137,7 @@ onMounted(() => {
           :precision="2"
           :title="$t('cm.tenantWithdraw.totalIncome')"
           prefix="¥"
-          value-style="color: #1890ff"
+          :value-style="{ color: '#1890ff' }"
         />
       </Card>
       <Card>
@@ -137,7 +146,7 @@ onMounted(() => {
           :precision="2"
           :title="$t('cm.tenantWithdraw.availableAmount')"
           prefix="¥"
-          value-style="color: #52c41a"
+          :value-style="{ color: '#52c41a' }"
         />
       </Card>
       <Card>
@@ -146,7 +155,7 @@ onMounted(() => {
           :precision="2"
           :title="$t('cm.tenantWithdraw.withdrawPending')"
           prefix="¥"
-          value-style="color: #fa8c16"
+          :value-style="{ color: '#fa8c16' }"
         />
       </Card>
       <Card>
@@ -155,7 +164,7 @@ onMounted(() => {
           :precision="2"
           :title="$t('cm.tenantWithdraw.withdrawnAmount')"
           prefix="¥"
-          value-style="color: #722ed1"
+          :value-style="{ color: '#722ed1' }"
         />
       </Card>
     </div>
