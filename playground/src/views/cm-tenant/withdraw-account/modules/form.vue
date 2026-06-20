@@ -1,0 +1,86 @@
+<script lang="ts" setup>
+import type { CmTenantWithdrawAccountApi } from '#/api/cm-tenant';
+
+import { computed, nextTick, ref } from 'vue';
+
+import { useVbenDrawer } from '@vben/common-ui';
+
+import { useVbenForm } from '#/adapter/form';
+import { createWithdrawAccount, updateWithdrawAccount } from '#/api/cm-tenant';
+import { $t } from '#/locales';
+
+import { useFormSchema } from '../data';
+
+const emits = defineEmits(['success']);
+
+const formData = ref<CmTenantWithdrawAccountApi.WithdrawAccount>();
+
+const [Form, formApi] = useVbenForm({
+  schema: useFormSchema(),
+  showDefaultActions: false,
+});
+
+const id = ref();
+const [Drawer, drawerApi] = useVbenDrawer({
+  destroyOnClose: true,
+  async onConfirm() {
+    const { valid } = await formApi.validate();
+    if (!valid) return;
+
+    const values = await formApi.getValues();
+
+    drawerApi.lock();
+    (id.value
+      ? updateWithdrawAccount(id.value, values)
+      : createWithdrawAccount(values)
+    )
+      .then(() => {
+        emits('success');
+        drawerApi.close();
+      })
+      .catch(() => {
+        drawerApi.unlock();
+      });
+  },
+
+  async onOpenChange(isOpen) {
+    if (isOpen) {
+      const data =
+        drawerApi.getData<CmTenantWithdrawAccountApi.WithdrawAccount>();
+      await formApi.resetForm();
+
+      const isEdit = data && data.id;
+      if (isEdit) {
+        formData.value = data;
+        id.value = data.id;
+        formApi.updateSchema([
+          {
+            fieldName: 'payChannel',
+            componentProps: {
+              disabled: true,
+            },
+          },
+        ]);
+      } else {
+        id.value = undefined;
+      }
+      await nextTick();
+
+      if (isEdit) {
+        await formApi.setValues(data);
+      }
+    }
+  },
+});
+
+const getDrawerTitle = computed(() => {
+  return formData.value?.id
+    ? $t('ui.actionTitle.edit', [$t('cm.tenantWithdrawAccount.moduleShort')])
+    : $t('ui.actionTitle.create', [$t('cm.tenantWithdrawAccount.moduleShort')]);
+});
+</script>
+<template>
+  <Drawer :title="getDrawerTitle">
+    <Form />
+  </Drawer>
+</template>

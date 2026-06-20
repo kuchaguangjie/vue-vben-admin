@@ -3,7 +3,7 @@ import type { VxeTableGridOptions } from '#/adapter/vxe-table';
 import type { CmTenantWithdrawApi } from '#/api/cm-tenant';
 import type { PageParams } from '#/api/request';
 
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, unref } from 'vue';
 
 import { Page, useVbenDrawer } from '@vben/common-ui';
 import { Plus } from '@vben/icons';
@@ -16,13 +16,13 @@ import {
   getTenantWithdrawPage,
 } from '#/api/cm-tenant';
 import { doPageQuery } from '#/api/request';
+import { usePlatformAdmin } from '#/hooks/common/use-platform-admin';
 import { $t } from '#/locales';
 import { usePagerConfig } from '#/utils/pager';
 
 import { useColumns, useGridFormSchema } from './data';
 import ApplyForm from './modules/apply-form.vue';
 import AuditForm from './modules/audit-form.vue';
-import ConfirmPaidForm from './modules/confirm-paid-form.vue';
 
 const account = ref<CmTenantWithdrawApi.TenantAccount>({
   totalIncome: 0,
@@ -50,14 +50,11 @@ const [AuditDrawer, auditDrawerApi] = useVbenDrawer({
   destroyOnClose: true,
 });
 
-const [ConfirmPaidDrawer, confirmPaidDrawerApi] = useVbenDrawer({
-  connectedComponent: ConfirmPaidForm,
-  destroyOnClose: true,
-});
+const { isPlatformAdmin } = usePlatformAdmin();
 
 const [Grid, gridApi] = useVbenVxeGrid({
   formOptions: {
-    schema: useGridFormSchema(),
+    schema: useGridFormSchema(unref(isPlatformAdmin)),
     submitOnChange: true,
   },
   gridOptions: {
@@ -68,7 +65,11 @@ const [Grid, gridApi] = useVbenVxeGrid({
     proxyConfig: {
       ajax: {
         query: async (params: PageParams, formValues) => {
-          return doPageQuery(getTenantWithdrawPage, params, formValues);
+          const filteredFormValues = { ...formValues };
+          if (!unref(isPlatformAdmin)) {
+            delete filteredFormValues.tenantId;
+          }
+          return doPageQuery(getTenantWithdrawPage, params, filteredFormValues);
         },
       },
     },
@@ -93,10 +94,6 @@ function onAudit(row: CmTenantWithdrawApi.TenantWithdraw) {
   auditDrawerApi.setData(row).open();
 }
 
-function onConfirmPaid(row: CmTenantWithdrawApi.TenantWithdraw) {
-  confirmPaidDrawerApi.setData(row).open();
-}
-
 function onRefresh() {
   loadAccount();
   gridApi.query();
@@ -104,14 +101,12 @@ function onRefresh() {
 
 const statusColorMap: Record<number, string> = {
   0: 'orange',
-  1: 'blue',
   2: 'green',
   3: 'red',
 };
 
 const statusTextMap: Record<number, string> = {
   0: $t('cm.tenantWithdraw.statusPending'),
-  1: $t('cm.tenantWithdraw.statusApproved'),
   2: $t('cm.tenantWithdraw.statusPaid'),
   3: $t('cm.tenantWithdraw.statusRejected'),
 };
@@ -125,7 +120,6 @@ onMounted(() => {
   <Page auto-content-height>
     <ApplyDrawer @success="onRefresh" />
     <AuditDrawer @success="onRefresh" />
-    <ConfirmPaidDrawer @success="onRefresh" />
 
     <div class="mb-4 grid grid-cols-2 gap-4 md:grid-cols-4">
       <Card>
@@ -168,7 +162,11 @@ onMounted(() => {
 
     <Grid :table-title="$t('cm.tenantWithdraw.module')">
       <template #toolbar-tools>
-        <Button type="primary" @click="onApply">
+        <Button
+          v-access:code="['Cm:TenantWithdraw:Apply']"
+          type="primary"
+          @click="onApply"
+        >
           <Plus class="size-5" />
           {{ $t('cm.tenantWithdraw.apply') }}
         </Button>
@@ -181,22 +179,17 @@ onMounted(() => {
       </template>
 
       <template #operation="{ row }">
-        <Button
-          v-if="row.status === 0"
-          type="link"
-          size="small"
-          @click="onAudit(row)"
-        >
-          {{ $t('cm.tenantWithdraw.audit') }}
-        </Button>
-        <Button
-          v-if="row.status === 1"
-          type="link"
-          size="small"
-          @click="onConfirmPaid(row)"
-        >
-          {{ $t('cm.tenantWithdraw.confirmPaid') }}
-        </Button>
+        <template v-if="isPlatformAdmin">
+          <Button
+            v-if="row.status === 0"
+            v-access:code="['Cm:TenantWithdraw:Audit']"
+            type="link"
+            size="small"
+            @click="onAudit(row)"
+          >
+            {{ $t('cm.tenantWithdraw.audit') }}
+          </Button>
+        </template>
       </template>
     </Grid>
   </Page>

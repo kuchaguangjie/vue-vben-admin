@@ -20,6 +20,8 @@
     "confirmPaid": "确认打款",
     "withdrawNo": "提现单号",
     "withdrawAmount": "提现金额",
+    "amountExceedsBalance": "提现金额不能超过可提现余额",
+    "tenantIdPlaceholder": "留空查询全部",
     "feeAmount": "手续费",
     "actualAmount": "实际到账",
     "payChannel": "打款渠道",
@@ -44,7 +46,24 @@
     "amountMax": "最高金额",
     "tenantName": "租户名称",
     "receivingAccount": "收款账户",
-    "selectAccount": "选择收款账户"
+    "selectAccount": "选择收款账户",
+    "noAccount": "暂无收款账户",
+    "noAccountDesc": "请先在收款账户管理中添加收款账户，提现时可直接选择。"
+  },
+  "tenantWithdrawAccount": {
+    "module": "租户收款账户",
+    "moduleShort": "租户收款账户",
+    "payChannel": "打款渠道",
+    "payChannelPlaceholder": "请选择打款渠道",
+    "payChannelBank": "银行",
+    "payChannelAlipay": "支付宝",
+    "payChannelWechat": "微信",
+    "bankName": "银行名称",
+    "bankAccountNo": "银行账号",
+    "bankAccountName": "户名",
+    "alipayAccount": "支付宝账号",
+    "wechatAccount": "微信账号",
+    "isDefault": "默认"
   },
   "tenantRelation": {
     "module": "租户分佣关系"

@@ -19,7 +19,7 @@ const routes: RouteRecordRaw[] = [
           icon: 'mdi:percent',
           title: $t('cm.commissionRule.module'),
         },
-        component: () => import('#/views/cm/commission-rule/list.vue'),
+        component: () => import('#/views/cm/rule/list.vue'),
       },
       {
         path: '/cm/user-closure',
@@ -37,7 +37,7 @@ const routes: RouteRecordRaw[] = [
           icon: 'mdi:chart-bar',
           title: $t('cm.report.module'),
         },
-        component: () => import('#/views/cm/report/list.vue'),
+        component: () => import('#/views/cm/user-report/list.vue'),
       },
     ],
   },

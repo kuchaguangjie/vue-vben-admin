@@ -288,16 +288,12 @@ export namespace CmTenantWithdrawApi {
   }
 
   export interface AuditReq {
+    actualAmount?: number;
     auditRemark?: string;
     id: number;
     pass: boolean;
-  }
-
-  export interface ConfirmPaidReq {
-    actualAmount: number;
-    id: number;
     payRemark?: string;
-    payTxNo: string;
+    payTxNo?: string;
   }
 }
 
@@ -307,12 +303,12 @@ export async function getTenantWithdrawPage(
   return requestClient.get<{
     items: CmTenantWithdrawApi.TenantWithdraw[];
     total: number;
-  }>('/cm-tenant/withdraw/page', { params });
+  }>('/cm-tenant/withdraw/list', { params });
 }
 
 export async function getTenantWithdraw(id: number) {
   return requestClient.get<CmTenantWithdrawApi.TenantWithdraw>(
-    `/cm-tenant/withdraw/${id}`,
+    `/cm-tenant/withdraw/detail/${id}`,
   );
 }
 
@@ -322,12 +318,6 @@ export async function applyTenantWithdraw(data: CmTenantWithdrawApi.ApplyReq) {
 
 export async function auditTenantWithdraw(data: CmTenantWithdrawApi.AuditReq) {
   return requestClient.post('/cm-tenant/withdraw/audit', data);
-}
-
-export async function confirmPaidTenantWithdraw(
-  data: CmTenantWithdrawApi.ConfirmPaidReq,
-) {
-  return requestClient.post('/cm-tenant/withdraw/confirm-paid', data);
 }
 
 export async function getTenantWithdrawAccount() {

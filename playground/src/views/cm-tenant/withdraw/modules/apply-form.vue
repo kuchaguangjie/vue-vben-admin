@@ -8,7 +8,7 @@ import { computed, nextTick, ref } from 'vue';
 
 import { useVbenDrawer } from '@vben/common-ui';
 
-import { Select, Statistic } from 'ant-design-vue';
+import { Alert, message, Select, Statistic } from 'ant-design-vue';
 
 import { useVbenForm } from '#/adapter/form';
 import { applyTenantWithdraw, getWithdrawAccountList } from '#/api/cm-tenant';
@@ -58,17 +58,6 @@ const accountOptions = computed(() => {
 
 function onAccountSelect(id: number) {
   selectedAccountId.value = id;
-  const acc = withdrawAccounts.value.find((a) => a.id === id);
-  if (acc) {
-    formApi.setValues({
-      payChannel: acc.payChannel,
-      bankName: acc.bankName,
-      bankAccountNo: acc.bankAccountNo,
-      bankAccountName: acc.bankAccountName,
-      alipayAccount: acc.alipayAccount,
-      wechatAccount: acc.wechatAccount,
-    });
-  }
 }
 
 const [Form, formApi] = useVbenForm({
@@ -82,17 +71,28 @@ const [Drawer, drawerApi] = useVbenDrawer({
     const { valid } = await formApi.validate();
     if (!valid) return;
 
+    const acc = withdrawAccounts.value.find(
+      (a) => a.id === selectedAccountId.value,
+    );
+    if (!acc) return;
+
     const values = await formApi.getValues();
+    const amount = values.amount as number;
+
+    if (amount > account.value.availableAmount) {
+      message.error($t('cm.tenantWithdraw.amountExceedsBalance'));
+      return;
+    }
 
     drawerApi.lock();
     applyTenantWithdraw({
       amount: values.amount as number,
-      payChannel: values.payChannel as string,
-      bankName: values.bankName as string,
-      bankAccountNo: values.bankAccountNo as string,
-      bankAccountName: values.bankAccountName as string,
-      alipayAccount: values.alipayAccount as string,
-      wechatAccount: values.wechatAccount as string,
+      payChannel: acc.payChannel,
+      bankName: acc.bankName,
+      bankAccountNo: acc.bankAccountNo,
+      bankAccountName: acc.bankAccountName,
+      alipayAccount: acc.alipayAccount,
+      wechatAccount: acc.wechatAccount,
     })
       .then(() => {
         emits('success');
@@ -147,6 +147,13 @@ const [Drawer, drawerApi] = useVbenDrawer({
         @change="onAccountSelect"
       />
     </div>
+    <Alert
+      v-else
+      type="warning"
+      :message="$t('cm.tenantWithdraw.noAccount')"
+      :description="$t('cm.tenantWithdraw.noAccountDesc')"
+      class="mb-4"
+    />
     <Form />
   </Drawer>
 </template>

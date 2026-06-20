@@ -32,7 +32,10 @@ const [Drawer, drawerApi] = useVbenDrawer({
     auditTenantWithdraw({
       id: withdrawData.value!.id,
       pass: values.pass as boolean,
-      auditRemark: values.auditRemark as string,
+      auditRemark: (values.auditRemark as string) || '',
+      payTxNo: (values.payTxNo as string) || '',
+      actualAmount: (values.actualAmount as number) || 0,
+      payRemark: (values.payRemark as string) || '',
     })
       .then(() => {
         emits('success');
@@ -49,6 +52,9 @@ const [Drawer, drawerApi] = useVbenDrawer({
       withdrawData.value = data;
       await formApi.resetForm();
       await nextTick();
+      if (data) {
+        await formApi.setValues({ actualAmount: data.withdrawAmount });
+      }
     }
   },
 });
