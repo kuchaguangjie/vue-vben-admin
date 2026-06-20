@@ -197,6 +197,14 @@ function getNodeClass(node: Recordable<any>) {
 
   return classes.join(' ');
 }
+
+function handleTreeUpdate(
+  val: any,
+  _treeData: any,
+  updateValue: (val: any) => void,
+) {
+  updateValue(val);
+}
 </script>
 <template>
   <Drawer :title="getDrawerTitle">
@@ -212,7 +220,9 @@ function getNodeClass(node: Recordable<any>) {
             :default-expanded-level="2"
             :get-node-class="getNodeClass"
             :model-value="modelValue"
-            @update:model-value="updateValue"
+            @update:model-value="
+              (val) => handleTreeUpdate(val, menuOptions, updateValue)
+            "
             value-field="id"
             label-field="meta.title"
             icon-field="meta.icon"
@@ -230,6 +240,7 @@ function getNodeClass(node: Recordable<any>) {
             :tree-data="apiOptions"
             multiple
             bordered
+            check-strictly
             :default-expanded-level="2"
             :get-node-class="getNodeClass"
             :model-value="modelValue"
