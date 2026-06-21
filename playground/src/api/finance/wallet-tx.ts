@@ -15,6 +15,7 @@ export namespace FinanceCurrencyApi {
     sort: number;
     symbol: string;
     updatedAt: string;
+    withdrawDailyMaxCount: number;
   }
 
   export interface CurrencyPageParams {
@@ -38,6 +39,7 @@ export namespace FinanceCurrencyApi {
     rateToCny: number;
     sort: number;
     symbol: string;
+    withdrawDailyMaxCount: number;
   }
 
   export interface CurrencyUpdateParams extends CurrencyCreateParams {

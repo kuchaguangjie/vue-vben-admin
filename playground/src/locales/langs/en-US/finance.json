@@ -51,6 +51,7 @@
     "maxRecharge": "Max Recharge",
     "minWithdraw": "Min Withdraw",
     "maxWithdraw": "Max Withdraw",
+    "withdrawDailyMaxCount": "Daily Withdraw Limit",
     "enabled": "Enabled",
     "sort": "Sort"
   },

@@ -92,6 +92,16 @@ export function useFormSchema(): VbenFormSchema[] {
     },
     {
       component: 'InputNumber',
+      fieldName: 'withdrawDailyMaxCount',
+      label: $t('finance.currency.withdrawDailyMaxCount'),
+      componentProps: {
+        min: 0,
+        precision: 0,
+        placeholder: '0 = 不限制',
+      },
+    },
+    {
+      component: 'InputNumber',
       fieldName: 'sort',
       label: $t('finance.currency.sort'),
       componentProps: {
@@ -197,6 +207,13 @@ export function useColumns<T = FinanceCurrencyApi.Currency>(
       width: 120,
       sortable: true,
       formatter: ({ cellValue }) => (cellValue ?? 0).toFixed(4),
+    },
+    {
+      field: 'withdrawDailyMaxCount',
+      title: $t('finance.currency.withdrawDailyMaxCount'),
+      width: 120,
+      formatter: ({ cellValue }) =>
+        (cellValue ?? 0) === 0 ? '不限' : cellValue,
     },
     {
       field: 'sort',

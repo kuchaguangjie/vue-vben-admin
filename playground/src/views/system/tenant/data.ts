@@ -20,12 +20,9 @@ async function loadTenantOptions() {
       label: `${t.name} (${t.code})`,
       value: t.id,
     }));
-    options.unshift(
-      { label: '平台 (tid=0)', value: 0 },
-      { label: '无上级 (不参与分佣)', value: -1 },
-    );
+    options.unshift({ label: '无上级 (不参与分佣)', value: -1 });
     tenantOptionsRef.value = options;
-    const tenantMap: Record<number, string> = { 0: '平台', [-1]: '无上级' };
+    const tenantMap: Record<number, string> = { [-1]: '无上级' };
     for (const t of result) {
       tenantMap[t.id] = t.name;
     }

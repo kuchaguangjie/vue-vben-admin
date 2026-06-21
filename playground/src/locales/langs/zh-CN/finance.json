@@ -51,6 +51,7 @@
     "maxRecharge": "最大充值",
     "minWithdraw": "最小提现",
     "maxWithdraw": "最大提现",
+    "withdrawDailyMaxCount": "每日最大提现次数",
     "enabled": "是否启用",
     "sort": "排序"
   },

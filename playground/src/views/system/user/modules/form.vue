@@ -110,12 +110,16 @@ const [Drawer, drawerApi] = useVbenDrawer({
     if (!valid) return;
     const values = await formApi.getValues();
 
-    if (values.parentId && !parentUserValid.value) {
-      message.error($t('system.user.parentUserNotFound'));
-      return;
+    if (values.parentId && values.parentId !== previousParentId.value) {
+      await handleParentIdBlur();
     }
+
     if (queryingParentUser.value) {
       message.error($t('common.messages.loading'));
+      return;
+    }
+    if (values.parentId && !parentUserValid.value) {
+      message.error($t('system.user.parentUserNotFound'));
       return;
     }
 
@@ -180,19 +184,18 @@ async function loadForUpdate(userId: number) {
     const { deptRoots, deptIds, roles, codes } = await preUpdateUser(userId);
 
     const userDetail = await getDetailUser(userId);
-    if (userDetail.user.parentId) {
-      previousParentId.value = userDetail.user.parentId;
-      try {
-        await getDetailUser(userDetail.user.parentId);
-        parentUserValid.value = true;
-      } catch {
-        parentUserValid.value = false;
-      }
+    if (userDetail.parentId) {
+      previousParentId.value = userDetail.parentId;
+      parentUserValid.value = true;
     }
 
     await updateSchemaForUser(deptRoots, roles, true);
     await refreshParentIdSchema(true);
     await nextTick();
+
+    if (userDetail.parentId) {
+      await formApi.setFieldValue('parentId', userDetail.parentId);
+    }
 
     // set current value
     if (codes && codes.length > 0)
