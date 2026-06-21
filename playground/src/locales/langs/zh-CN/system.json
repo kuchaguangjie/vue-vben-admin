@@ -63,7 +63,12 @@
     "typeLink": "外链",
     "typeMenu": "菜单",
     "moveUp": "上移",
-    "moveDown": "下移"
+    "moveDown": "下移",
+    "menuId": "菜单ID",
+    "menuIdPlaceholder": "留空则自动生成，输入可自定义",
+    "menuIdHelp": "顶级目录: 100000+ 且为10000倍数; 子tab: 父级+100/200...; 按钮: 父级+1/2...",
+    "menuIdMin": "ID 最小 70000",
+    "menuIdInvalid": "菜单ID不符合规范，请检查父级ID和ID的关系"
   },
   "api": {
     "menuName": "api",

@@ -35,6 +35,8 @@ export namespace SystemMenuApi {
     component?: string;
     /** 菜单ID */
     id: number;
+    /** 指定菜单ID（创建时可选，用于自定义ID分配） */
+    menuId?: number;
     /** 菜单元数据 */
     meta?: {
       /** 激活时显示的图标 */
@@ -139,9 +141,17 @@ async function isMenuPathExists(
  * @param data 菜单数据
  */
 async function createMenu(
-  data: Omit<SystemMenuApi.SystemMenu, 'children' | 'id'>,
+  data: Omit<SystemMenuApi.SystemMenu, 'children' | 'id'> & {
+    menuId?: number;
+  },
 ) {
   return requestClient.post('/system/menu', data);
+}
+
+async function suggestMenuId(pid: number) {
+  return requestClient.get<{ suggestedId: number }>('/system/menu/suggestId', {
+    params: { pid },
+  });
 }
 
 /**
@@ -189,6 +199,7 @@ export {
   getMenuTreeWithUserCore,
   isMenuNameExists,
   isMenuPathExists,
+  suggestMenuId,
   updateMenu,
   updateMenuSort,
   updateMenuStatus,

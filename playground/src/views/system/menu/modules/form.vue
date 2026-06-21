@@ -19,6 +19,7 @@ import {
   getMenuTreeRoots,
   isMenuNameExists,
   isMenuPathExists,
+  suggestMenuId,
   SystemMenuApi,
   updateMenu,
 } from '#/api/system/menu';
@@ -41,6 +42,50 @@ const schema: VbenFormSchema[] = [
       style: { display: 'none' }, // 隐藏输入框
       disabled: true, // 不可编辑
     },
+  },
+  {
+    component: 'InputNumber',
+    componentProps: {
+      class: 'w-full',
+      min: 70_000,
+      placeholder: $t('system.menu.menuIdPlaceholder'),
+    },
+    dependencies: {
+      trigger: async (values, form) => {
+        if (values.pid === undefined) return;
+        try {
+          const resp = await suggestMenuId(values.pid || 0);
+          form.setFieldValue('menuId', resp.suggestedId);
+        } catch {
+          // ignore
+        }
+      },
+      show: (_values, _form) => {
+        return !formData.value?.id;
+      },
+      triggerFields: ['pid'],
+    },
+    fieldName: 'menuId',
+    help: $t('system.menu.menuIdHelp'),
+    label: $t('system.menu.menuId'),
+    rules: z
+      .number()
+      .min(70_000, $t('system.menu.menuIdMin'))
+      .optional()
+      .refine((val) => {
+        if (!val) return true;
+        const pid = formApi.form?.values?.pid || 0;
+        if (pid === 0) {
+          return val >= 100_000 && val % 10_000 === 0;
+        }
+        if (pid % 10_000 === 0) {
+          return val > pid && val < pid + 10_000 && val % 100 === 0;
+        }
+        if (pid % 100 === 0) {
+          return val > pid && val < pid + 100;
+        }
+        return val >= 100_000;
+      }, $t('system.menu.menuIdInvalid')),
   },
   {
     component: 'RadioGroup',
@@ -454,6 +499,7 @@ const [Form, formApi] = useVbenForm({
   showDefaultActions: false,
   wrapperClass: 'grid-cols-2 gap-x-4',
 });
+
 const [Drawer, drawerApi] = useVbenDrawer({
   destroyOnClose: true,
   onConfirm: onSubmit,
@@ -468,6 +514,11 @@ const [Drawer, drawerApi] = useVbenDrawer({
       if (data) {
         formData.value = data;
         formApi.setValues(formData.value);
+        if (!data.id && data.pid === undefined) {
+          suggestMenuId(0).then((resp) => {
+            formApi.setFieldValue('menuId', resp.suggestedId);
+          });
+        }
         titleSuffix.value = formData.value.meta?.title
           ? $t(formData.value.meta.title)
           : '';
