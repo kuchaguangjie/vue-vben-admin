@@ -101,6 +101,21 @@ export function useFormSchema(): VbenFormSchema[] {
       },
     },
     {
+      component: 'Select',
+      fieldName: 'withdrawNeedReview',
+      label: $t('system.tenant.withdrawNeedReview'),
+      componentProps: {
+        allowClear: true,
+        options: [
+          { label: $t('system.tenant.withdrawNeedReviewGlobal'), value: null },
+          { label: $t('system.tenant.withdrawNeedReviewYes'), value: 1 },
+          { label: $t('system.tenant.withdrawNeedReviewNo'), value: 0 },
+        ],
+        placeholder: $t('system.tenant.withdrawNeedReviewPlaceholder'),
+        style: 'width: 100%',
+      },
+    },
+    {
       component: 'Input',
       fieldName: 'version',
       label: '',
@@ -334,6 +349,36 @@ export function useColumns<T = SystemTenantApi.SystemTenant>(
           return $t('system.tenant.useGlobal');
         }
         return `${(rate * 100).toFixed(2)}%`;
+      },
+    },
+    {
+      field: 'userWithdrawNeedReview',
+      title: $t('system.tenant.withdrawNeedReview'),
+      width: 130,
+      sortable: true,
+      formatter: ({ cellValue }) => {
+        const v = cellValue as null | number | undefined;
+        if (v === undefined || v === null) {
+          return $t('system.tenant.useGlobal');
+        }
+        return v === 1
+          ? $t('system.tenant.withdrawNeedReviewYes')
+          : $t('system.tenant.withdrawNeedReviewNo');
+      },
+    },
+    {
+      field: 'userWithdrawAutoPay',
+      title: $t('system.tenant.userWithdrawAutoPay'),
+      width: 130,
+      sortable: true,
+      formatter: ({ cellValue }) => {
+        const v = cellValue as null | number | undefined;
+        if (v === undefined || v === null) {
+          return $t('system.tenant.useGlobal');
+        }
+        return v === 1
+          ? $t('system.tenant.autoPayYes')
+          : $t('system.tenant.autoPayNo');
       },
     },
     {

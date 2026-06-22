@@ -6,6 +6,7 @@ import { $t } from '#/locales';
 
 const statusOptions = [
   { label: $t('cm.tenantWithdraw.statusPending'), value: 0 },
+  { label: $t('cm.tenantWithdraw.statusApproved'), value: 1 },
   { label: $t('cm.tenantWithdraw.statusPaid'), value: 2 },
   { label: $t('cm.tenantWithdraw.statusRejected'), value: 3 },
 ];
@@ -121,6 +122,32 @@ export function useAuditFormSchema(): VbenFormSchema[] {
   ];
 }
 
+export function useReviewFormSchema(): VbenFormSchema[] {
+  return [
+    {
+      component: 'RadioGroup',
+      fieldName: 'pass',
+      label: $t('cm.tenantWithdraw.review'),
+      rules: 'required',
+      defaultValue: true,
+      componentProps: {
+        options: [
+          { label: $t('cm.tenantWithdraw.statusApproved'), value: true },
+          { label: $t('cm.tenantWithdraw.statusRejected'), value: false },
+        ],
+      },
+    },
+    {
+      component: 'Textarea',
+      fieldName: 'remark',
+      label: $t('cm.tenantWithdraw.reviewRemark'),
+      componentProps: {
+        rows: 3,
+      },
+    },
+  ];
+}
+
 export function useGridFormSchema(isPlatformAdmin = false): VbenFormSchema[] {
   const schema: VbenFormSchema[] = [];
 
@@ -197,6 +224,7 @@ export function useGridFormSchema(isPlatformAdmin = false): VbenFormSchema[] {
 function formatStatus(status: number): string {
   const map: Record<number, string> = {
     0: $t('cm.tenantWithdraw.statusPending'),
+    1: $t('cm.tenantWithdraw.statusApproved'),
     2: $t('cm.tenantWithdraw.statusPaid'),
     3: $t('cm.tenantWithdraw.statusRejected'),
   };

@@ -295,6 +295,12 @@ export namespace CmTenantWithdrawApi {
     payRemark?: string;
     payTxNo?: string;
   }
+
+  export interface ReviewReq {
+    id: number;
+    pass: boolean;
+    remark?: string;
+  }
 }
 
 export async function getTenantWithdrawPage(
@@ -318,6 +324,12 @@ export async function applyTenantWithdraw(data: CmTenantWithdrawApi.ApplyReq) {
 
 export async function auditTenantWithdraw(data: CmTenantWithdrawApi.AuditReq) {
   return requestClient.post('/cm-tenant/withdraw/audit', data);
+}
+
+export async function reviewTenantWithdraw(
+  data: CmTenantWithdrawApi.ReviewReq,
+) {
+  return requestClient.post('/cm-tenant/withdraw/review', data);
 }
 
 export async function getTenantWithdrawAccount(tenantId?: number) {

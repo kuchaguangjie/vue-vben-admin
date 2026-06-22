@@ -19,6 +19,7 @@ export namespace SystemTenantApi {
     updatedAt?: string;
     updatedBy?: number;
     version?: number;
+    withdrawNeedReview?: number;
   }
 
   export interface CreateAndInitTenantReq {
@@ -34,6 +35,8 @@ export namespace SystemTenantApi {
     status: number;
     templateCode?: string;
     templateId?: number;
+    userWithdrawAutoPay?: number;
+    userWithdrawNeedReview?: number;
   }
 
   export interface CreateAndInitTenantResp {
@@ -156,14 +159,30 @@ async function getTenantTemplateDetail(params: { code?: string; id?: number }) {
   );
 }
 
+async function getTenantSettings() {
+  return requestClient.get<SystemTenantApi.SystemTenant>(
+    '/system/tenant/settings',
+  );
+}
+
+async function updateTenantSettings(data: {
+  userWithdrawAutoPay?: number;
+  userWithdrawNeedReview?: number;
+  version: number;
+}) {
+  return requestClient.put('/system/tenant/settings', data);
+}
+
 export {
   createAndInitTenant,
   createTenant,
   getDetailTenant,
   getTenantAll,
   getTenantList,
+  getTenantSettings,
   getTenantTemplateDetail,
   getTenantTemplateList,
   updateTenant,
+  updateTenantSettings,
   updateTenantStatus,
 };

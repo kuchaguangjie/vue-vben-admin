@@ -23,6 +23,7 @@ import { usePagerConfig } from '#/utils/pager';
 import { useColumns, useGridFormSchema } from './data';
 import ApplyForm from './modules/apply-form.vue';
 import AuditForm from './modules/audit-form.vue';
+import ReviewForm from './modules/review-form.vue';
 
 const account = ref<CmTenantWithdrawApi.TenantAccount>({
   totalIncome: 0,
@@ -47,6 +48,11 @@ const [ApplyDrawer, applyDrawerApi] = useVbenDrawer({
 
 const [AuditDrawer, auditDrawerApi] = useVbenDrawer({
   connectedComponent: AuditForm,
+  destroyOnClose: true,
+});
+
+const [ReviewDrawer, reviewDrawerApi] = useVbenDrawer({
+  connectedComponent: ReviewForm,
   destroyOnClose: true,
 });
 
@@ -99,6 +105,10 @@ function onAudit(row: CmTenantWithdrawApi.TenantWithdraw) {
   auditDrawerApi.setData(row).open();
 }
 
+function onReview(row: CmTenantWithdrawApi.TenantWithdraw) {
+  reviewDrawerApi.setData(row).open();
+}
+
 function onRefresh() {
   loadAccount();
   gridApi.query();
@@ -106,12 +116,14 @@ function onRefresh() {
 
 const statusColorMap: Record<number, string> = {
   0: 'orange',
+  1: 'blue',
   2: 'green',
   3: 'red',
 };
 
 const statusTextMap: Record<number, string> = {
   0: $t('cm.tenantWithdraw.statusPending'),
+  1: $t('cm.tenantWithdraw.statusApproved'),
   2: $t('cm.tenantWithdraw.statusPaid'),
   3: $t('cm.tenantWithdraw.statusRejected'),
 };
@@ -129,6 +141,7 @@ watch(tenantIdFilter, (tid) => {
   <Page auto-content-height>
     <ApplyDrawer @success="onRefresh" />
     <AuditDrawer @success="onRefresh" />
+    <ReviewDrawer @success="onRefresh" />
 
     <div class="mb-4 grid grid-cols-2 gap-4 md:grid-cols-4">
       <Card>
@@ -190,13 +203,24 @@ watch(tenantIdFilter, (tid) => {
       <template #operation="{ row }">
         <template v-if="isPlatformAdmin">
           <Button
-            v-if="row.status === 0"
+            v-if="row.status === 1"
             v-access:code="['Cm:TenantWithdraw:Audit']"
             type="link"
             size="small"
             @click="onAudit(row)"
           >
             {{ $t('cm.tenantWithdraw.audit') }}
+          </Button>
+        </template>
+        <template v-else>
+          <Button
+            v-if="row.status === 0"
+            v-access:code="['Cm:TenantWithdraw:Review']"
+            type="link"
+            size="small"
+            @click="onReview(row)"
+          >
+            {{ $t('cm.tenantWithdraw.review') }}
           </Button>
         </template>
       </template>

@@ -67,6 +67,15 @@ const routes: RouteRecordRaw[] = [
         component: () => import('#/views/system/tenant/list.vue'),
       },
       {
+        path: '/system/tenant-settings',
+        name: 'SystemTenantSettings',
+        meta: {
+          icon: 'mdi:cog',
+          title: $t('system.tenant.settingsTitle'),
+        },
+        component: () => import('#/views/system/tenant-settings/index.vue'),
+      },
+      {
         path: '/system/notice',
         name: 'SystemNotice',
         meta: {
