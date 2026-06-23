@@ -4,14 +4,18 @@ import type {
   CmTenantWithdrawApi,
 } from '#/api/cm-tenant';
 
-import { computed, nextTick, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 
 import { useVbenDrawer } from '@vben/common-ui';
 
 import { Alert, message, Select, Statistic } from 'ant-design-vue';
 
 import { useVbenForm } from '#/adapter/form';
-import { applyTenantWithdraw, getWithdrawAccountList } from '#/api/cm-tenant';
+import {
+  applyTenantWithdraw,
+  getTenantWithdrawAccount,
+  getWithdrawAccountList,
+} from '#/api/cm-tenant';
 import { $t } from '#/locales';
 
 import { useApplyFormSchema } from '../data';
@@ -29,6 +33,11 @@ const account = ref<CmTenantWithdrawApi.TenantAccount>({
 const withdrawAccounts = ref<CmTenantWithdrawAccountApi.WithdrawAccount[]>([]);
 const selectedAccountId = ref<number | undefined>();
 
+const currencySymbol = computed(() => {
+  const formValues = formApi.form?.values;
+  return formValues?.currency === 'USD' ? '$' : '¥';
+});
+
 function getAccountLabel(
   acc: CmTenantWithdrawAccountApi.WithdrawAccount,
 ): string {
@@ -38,6 +47,9 @@ function getAccountLabel(
     }
     case 'bank': {
       return `${acc.bankName || ''} ****${(acc.bankAccountNo || '').slice(-4)}`;
+    }
+    case 'usd': {
+      return `USD`;
     }
     case 'wechat': {
       return `微信 ${acc.wechatAccount || ''}`;
@@ -65,6 +77,23 @@ const [Form, formApi] = useVbenForm({
   showDefaultActions: false,
 });
 
+async function loadAccountForCurrency(currency: string) {
+  try {
+    account.value = await getTenantWithdrawAccount(undefined, currency);
+  } catch {
+    // ignore
+  }
+}
+
+async function loadWithdrawAccounts(currency: string) {
+  try {
+    const resp = await getWithdrawAccountList(currency);
+    withdrawAccounts.value = resp.list || [];
+  } catch {
+    withdrawAccounts.value = [];
+  }
+}
+
 const [Drawer, drawerApi] = useVbenDrawer({
   destroyOnClose: true,
   async onConfirm() {
@@ -87,6 +116,7 @@ const [Drawer, drawerApi] = useVbenDrawer({
     drawerApi.lock();
     applyTenantWithdraw({
       amount: values.amount as number,
+      currency: values.currency as string,
       payChannel: acc.payChannel,
       bankName: acc.bankName,
       bankAccountNo: acc.bankAccountNo,
@@ -105,23 +135,23 @@ const [Drawer, drawerApi] = useVbenDrawer({
 
   async onOpenChange(isOpen) {
     if (isOpen) {
-      const data = drawerApi.getData<{
-        account: CmTenantWithdrawApi.TenantAccount;
-      }>();
-      if (data?.account) {
-        account.value = data.account;
-      }
       await formApi.resetForm();
       selectedAccountId.value = undefined;
 
-      try {
-        const resp = await getWithdrawAccountList();
-        withdrawAccounts.value = resp.list || [];
-      } catch {
-        withdrawAccounts.value = [];
-      }
+      const initialCurrency = formApi.form?.values?.currency || 'CNY';
+      await loadAccountForCurrency(initialCurrency);
+      await loadWithdrawAccounts(initialCurrency);
 
-      await nextTick();
+      watch(
+        () => formApi.form?.values?.currency,
+        (newCurrency) => {
+          if (newCurrency) {
+            loadAccountForCurrency(newCurrency);
+            loadWithdrawAccounts(newCurrency);
+            selectedAccountId.value = undefined;
+          }
+        },
+      );
     }
   },
 });
@@ -134,8 +164,8 @@ const [Drawer, drawerApi] = useVbenDrawer({
         :value="account.availableAmount"
         :precision="2"
         :title="$t('cm.tenantWithdraw.availableAmount')"
-        prefix="¥"
-        value-style="color: #52c41a"
+        :prefix="currencySymbol"
+        :value-style="{ color: '#52c41a' }"
       />
     </div>
     <div v-if="withdrawAccounts.length > 0" class="mb-4">

@@ -5,10 +5,14 @@ import type { CmTenantWithdrawAccountApi } from '#/api/cm-tenant';
 import { $t } from '#/locales';
 import { formatBackendTime } from '#/utils/value-format';
 
-const payChannelOptions = [
+const cnyPayChannelOptions = [
   { label: $t('cm.tenantWithdrawAccount.payChannelBank'), value: 'bank' },
   { label: $t('cm.tenantWithdrawAccount.payChannelAlipay'), value: 'alipay' },
   { label: $t('cm.tenantWithdrawAccount.payChannelWechat'), value: 'wechat' },
+];
+
+const usdPayChannelOptions = [
+  { label: $t('cm.tenantWithdrawAccount.payChannelUsd'), value: 'usd' },
 ];
 
 export function useGridFormSchema(isPlatformAdmin = false): VbenFormSchema[] {
@@ -32,12 +36,35 @@ export function useFormSchema(): VbenFormSchema[] {
   return [
     {
       component: 'Select',
+      fieldName: 'currency',
+      label: $t('cm.tenantWithdraw.currency'),
+      rules: 'required',
+      defaultValue: 'CNY',
+      componentProps: {
+        options: [
+          { label: 'CNY', value: 'CNY' },
+          { label: 'USD', value: 'USD' },
+        ],
+        style: 'width: 100%',
+      },
+    },
+    {
+      component: 'Select',
       fieldName: 'payChannel',
       label: $t('cm.tenantWithdrawAccount.payChannel'),
       rules: 'required',
       componentProps: {
-        options: payChannelOptions,
+        options: cnyPayChannelOptions,
         placeholder: $t('cm.tenantWithdrawAccount.payChannelPlaceholder'),
+      },
+      dependencies: {
+        triggerFields: ['currency'],
+        componentProps: (values) => {
+          if (values.currency === 'USD') {
+            return { options: usdPayChannelOptions };
+          }
+          return { options: cnyPayChannelOptions };
+        },
       },
     },
     {
@@ -100,6 +127,11 @@ export function useColumns(): VxeTableGridOptions<CmTenantWithdrawAccountApi.Wit
     {
       field: 'tenantId',
       title: $t('system.tenant.id'),
+      width: 80,
+    },
+    {
+      field: 'currency',
+      title: $t('cm.tenantWithdrawAccount.currency'),
       width: 80,
     },
     {

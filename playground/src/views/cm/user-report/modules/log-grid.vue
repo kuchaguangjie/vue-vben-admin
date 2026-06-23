@@ -4,14 +4,19 @@ import type { VxeTableGridOptions } from '#/adapter/vxe-table';
 import type { CmReportApi } from '#/api/cm/report';
 import type { PageParams } from '#/api/request';
 
+import { unref } from 'vue';
+
 import { Tag } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { getCmCommissionLogPage } from '#/api/cm/report';
 import { doPageQuery } from '#/api/request';
+import { usePlatformAdmin } from '#/hooks/common/use-platform-admin';
 import { $t } from '#/locales';
 import { usePagerConfig } from '#/utils/pager';
 import { useCopyColumn } from '#/utils/use-copy-column';
+
+const { isPlatformAdmin } = usePlatformAdmin();
 
 const statusMap: Record<number, { color: string; label: string }> = {
   1: { color: 'orange', label: $t('cm.report.frozen') },
@@ -20,7 +25,20 @@ const statusMap: Record<number, { color: string; label: string }> = {
 };
 
 function useGridFormSchema(): VbenFormSchema[] {
-  return [
+  const schema: VbenFormSchema[] = [];
+  if (unref(isPlatformAdmin)) {
+    schema.push({
+      component: 'InputNumber',
+      fieldName: 'tenantId',
+      label: $t('system.tenant.id'),
+      componentProps: {
+        allowClear: true,
+        placeholder: $t('system.tenant.id'),
+        style: 'width: 100%',
+      },
+    });
+  }
+  schema.push(
     {
       component: 'Input',
       fieldName: 'orderNo',
@@ -53,6 +71,20 @@ function useGridFormSchema(): VbenFormSchema[] {
     },
     {
       component: 'Select',
+      fieldName: 'currency',
+      label: $t('cm.report.currency'),
+      componentProps: {
+        allowClear: true,
+        options: [
+          { label: 'CNY', value: 'CNY' },
+          { label: 'USD', value: 'USD' },
+        ],
+        placeholder: $t('cm.report.currency'),
+        style: 'width: 100%',
+      },
+    },
+    {
+      component: 'Select',
       fieldName: 'status',
       label: $t('common.status'),
       componentProps: {
@@ -66,11 +98,17 @@ function useGridFormSchema(): VbenFormSchema[] {
         style: 'width: 100%',
       },
     },
-  ];
+  );
+  return schema;
 }
 
 function useColumns(): VxeTableGridOptions['columns'] {
   return [
+    {
+      field: 'tenantId',
+      title: $t('system.tenant.id'),
+      width: 80,
+    },
     useCopyColumn({
       field: 'orderNo',
       title: $t('cm.report.orderNo'),
@@ -90,6 +128,11 @@ function useColumns(): VxeTableGridOptions['columns'] {
       field: 'sceneKey',
       title: $t('cm.report.sceneKey'),
       width: 120,
+    },
+    {
+      field: 'currency',
+      title: $t('cm.report.currency'),
+      width: 80,
     },
     {
       field: 'orderAmount',

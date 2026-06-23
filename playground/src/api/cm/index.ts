@@ -59,6 +59,7 @@ export namespace CmUserWithdrawApi {
     bankAccountName?: string;
     bankAccountNo?: string;
     bankName?: string;
+    currency: string;
     payChannel: string;
     wechatAccount?: string;
   }

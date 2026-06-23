@@ -43,6 +43,20 @@ export function formatChannelInfo(
 export function useApplyFormSchema(): VbenFormSchema[] {
   return [
     {
+      component: 'Select',
+      fieldName: 'currency',
+      label: $t('cm.tenantWithdraw.currency'),
+      rules: 'required',
+      defaultValue: 'CNY',
+      componentProps: {
+        options: [
+          { label: 'CNY', value: 'CNY' },
+          { label: 'USD', value: 'USD' },
+        ],
+        style: 'width: 100%',
+      },
+    },
+    {
       component: 'InputNumber',
       fieldName: 'amount',
       label: $t('cm.tenantWithdraw.withdrawAmount'),
@@ -239,6 +253,11 @@ export function useColumns<
       field: 'withdrawNo',
       title: $t('cm.tenantWithdraw.withdrawNo'),
       width: 200,
+    },
+    {
+      field: 'currency',
+      title: $t('cm.tenantWithdraw.currency'),
+      width: 80,
     },
     {
       field: 'tenantId',

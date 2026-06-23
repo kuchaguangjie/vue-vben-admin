@@ -25,7 +25,7 @@ function isAccessible(
   const values = Array.isArray(value) ? value : [value];
 
   if (!authMethod(values)) {
-    el?.remove();
+    el.setAttribute('style', 'display: none !important');
   }
 }
 

@@ -3,12 +3,12 @@ import type { VxeTableGridOptions } from '#/adapter/vxe-table';
 import type { CmTenantWithdrawApi } from '#/api/cm-tenant';
 import type { PageParams } from '#/api/request';
 
-import { onMounted, ref, unref, watch } from 'vue';
+import { computed, onMounted, ref, unref, watch } from 'vue';
 
 import { Page, useVbenDrawer } from '@vben/common-ui';
 import { Plus } from '@vben/icons';
 
-import { Button, Card, Statistic, Tag } from 'ant-design-vue';
+import { Button, Card, Select, Statistic, Tag } from 'ant-design-vue';
 
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import {
@@ -33,9 +33,18 @@ const account = ref<CmTenantWithdrawApi.TenantAccount>({
   frozenAmount: 0,
 });
 
-async function loadAccount(tenantId?: number) {
+const currency = ref('CNY');
+
+const currencySymbol = computed(() => {
+  return currency.value === 'USD' ? '$' : '¥';
+});
+
+async function loadAccount(tenantId?: number, cur?: string) {
   try {
-    account.value = await getTenantWithdrawAccount(tenantId);
+    account.value = await getTenantWithdrawAccount(
+      tenantId,
+      cur || currency.value,
+    );
   } catch {
     // 忽略错误，使用默认值
   }
@@ -77,6 +86,7 @@ const [Grid, gridApi] = useVbenVxeGrid({
           if (!unref(isPlatformAdmin)) {
             delete filteredFormValues.tenantId;
           }
+          filteredFormValues.currency = currency.value;
           // 更新 tenantId 筛选，触发卡片刷新
           const tid = filteredFormValues.tenantId;
           tenantIdFilter.value = tid ? Number(tid) : undefined;
@@ -110,7 +120,7 @@ function onReview(row: CmTenantWithdrawApi.TenantWithdraw) {
 }
 
 function onRefresh() {
-  loadAccount();
+  loadAccount(undefined, currency.value);
   gridApi.query();
 }
 
@@ -133,7 +143,12 @@ onMounted(() => {
 });
 
 watch(tenantIdFilter, (tid) => {
-  loadAccount(tid);
+  loadAccount(tid, currency.value);
+});
+
+watch(currency, () => {
+  loadAccount(tenantIdFilter.value, currency.value);
+  gridApi.query();
 });
 </script>
 
@@ -143,43 +158,58 @@ watch(tenantIdFilter, (tid) => {
     <AuditDrawer @success="onRefresh" />
     <ReviewDrawer @success="onRefresh" />
 
-    <div class="mb-4 grid grid-cols-2 gap-4 md:grid-cols-4">
-      <Card>
-        <Statistic
-          :value="account.totalIncome"
-          :precision="2"
-          :title="$t('cm.tenantWithdraw.totalIncome')"
-          prefix="¥"
-          :value-style="{ color: '#1890ff' }"
+    <div class="mb-4 flex items-center gap-4">
+      <div class="w-32">
+        <div class="mb-1 text-sm text-gray-500">
+          {{ $t('cm.tenantWithdraw.currency') }}
+        </div>
+        <Select
+          v-model:value="currency"
+          :options="[
+            { label: 'CNY', value: 'CNY' },
+            { label: 'USD', value: 'USD' },
+          ]"
+          style="width: 100%"
         />
-      </Card>
-      <Card>
-        <Statistic
-          :value="account.availableAmount"
-          :precision="2"
-          :title="$t('cm.tenantWithdraw.availableAmount')"
-          prefix="¥"
-          :value-style="{ color: '#52c41a' }"
-        />
-      </Card>
-      <Card>
-        <Statistic
-          :value="account.withdrawPending"
-          :precision="2"
-          :title="$t('cm.tenantWithdraw.withdrawPending')"
-          prefix="¥"
-          :value-style="{ color: '#fa8c16' }"
-        />
-      </Card>
-      <Card>
-        <Statistic
-          :value="account.withdrawnAmount"
-          :precision="2"
-          :title="$t('cm.tenantWithdraw.withdrawnAmount')"
-          prefix="¥"
-          :value-style="{ color: '#722ed1' }"
-        />
-      </Card>
+      </div>
+      <div class="grid flex-1 grid-cols-2 gap-4 md:grid-cols-4">
+        <Card>
+          <Statistic
+            :value="account.totalIncome"
+            :precision="2"
+            :title="$t('cm.tenantWithdraw.totalIncome')"
+            :prefix="currencySymbol"
+            :value-style="{ color: '#1890ff' }"
+          />
+        </Card>
+        <Card>
+          <Statistic
+            :value="account.availableAmount"
+            :precision="2"
+            :title="$t('cm.tenantWithdraw.availableAmount')"
+            :prefix="currencySymbol"
+            :value-style="{ color: '#52c41a' }"
+          />
+        </Card>
+        <Card>
+          <Statistic
+            :value="account.withdrawPending"
+            :precision="2"
+            :title="$t('cm.tenantWithdraw.withdrawPending')"
+            :prefix="currencySymbol"
+            :value-style="{ color: '#fa8c16' }"
+          />
+        </Card>
+        <Card>
+          <Statistic
+            :value="account.withdrawnAmount"
+            :precision="2"
+            :title="$t('cm.tenantWithdraw.withdrawnAmount')"
+            :prefix="currencySymbol"
+            :value-style="{ color: '#722ed1' }"
+          />
+        </Card>
+      </div>
     </div>
 
     <Grid :table-title="$t('cm.tenantWithdraw.module')">
@@ -203,17 +233,6 @@ watch(tenantIdFilter, (tid) => {
       <template #operation="{ row }">
         <template v-if="isPlatformAdmin">
           <Button
-            v-if="row.status === 1"
-            v-access:code="['Cm:TenantWithdraw:Audit']"
-            type="link"
-            size="small"
-            @click="onAudit(row)"
-          >
-            {{ $t('cm.tenantWithdraw.audit') }}
-          </Button>
-        </template>
-        <template v-else>
-          <Button
             v-if="row.status === 0"
             v-access:code="['Cm:TenantWithdraw:Review']"
             type="link"
@@ -221,6 +240,15 @@ watch(tenantIdFilter, (tid) => {
             @click="onReview(row)"
           >
             {{ $t('cm.tenantWithdraw.review') }}
+          </Button>
+          <Button
+            v-if="row.status === 1"
+            v-access:code="['Cm:TenantWithdraw:Audit']"
+            type="link"
+            size="small"
+            @click="onAudit(row)"
+          >
+            {{ $t('cm.tenantWithdraw.audit') }}
           </Button>
         </template>
       </template>

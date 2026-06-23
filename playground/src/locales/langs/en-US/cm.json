@@ -100,11 +100,13 @@
   "tenantWithdrawAccount": {
     "module": "Tenant Withdraw Account",
     "moduleShort": "Account",
+    "currency": "Currency",
     "payChannel": "Pay Channel",
     "payChannelPlaceholder": "Select pay channel",
     "payChannelBank": "Bank",
     "payChannelAlipay": "Alipay",
     "payChannelWechat": "WeChat",
+    "payChannelUsd": "USD",
     "bankName": "Bank Name",
     "bankAccountNo": "Bank Account No",
     "bankAccountName": "Account Name",
@@ -175,6 +177,11 @@
     "nick": "Nickname",
     "totalIncome": "Total Income",
     "availableAmount": "Available",
+    "currency": "Currency",
+    "allCurrency": "All Currencies",
+    "allTenant": "All Tenants",
+    "platform": "Platform",
+    "tenantFilter": "Tenant Filter",
     "withdrawnAmount": "Withdrawn"
   },
   "userClosure": {

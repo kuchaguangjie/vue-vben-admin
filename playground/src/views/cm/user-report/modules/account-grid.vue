@@ -4,14 +4,32 @@ import type { VxeTableGridOptions } from '#/adapter/vxe-table';
 import type { CmReportApi } from '#/api/cm/report';
 import type { PageParams } from '#/api/request';
 
+import { unref } from 'vue';
+
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { getCmAccountPage } from '#/api/cm/report';
 import { doPageQuery } from '#/api/request';
+import { usePlatformAdmin } from '#/hooks/common/use-platform-admin';
 import { $t } from '#/locales';
 import { usePagerConfig } from '#/utils/pager';
 
+const { isPlatformAdmin } = usePlatformAdmin();
+
 function useGridFormSchema(): VbenFormSchema[] {
-  return [
+  const schema: VbenFormSchema[] = [];
+  if (unref(isPlatformAdmin)) {
+    schema.push({
+      component: 'InputNumber',
+      fieldName: 'tenantId',
+      label: $t('system.tenant.id'),
+      componentProps: {
+        allowClear: true,
+        placeholder: $t('system.tenant.id'),
+        style: 'width: 100%',
+      },
+    });
+  }
+  schema.push(
     {
       component: 'InputNumber',
       fieldName: 'userId',
@@ -22,7 +40,22 @@ function useGridFormSchema(): VbenFormSchema[] {
         style: 'width: 100%',
       },
     },
-  ];
+    {
+      component: 'Select',
+      fieldName: 'currency',
+      label: $t('cm.report.currency'),
+      componentProps: {
+        allowClear: true,
+        options: [
+          { label: 'CNY', value: 'CNY' },
+          { label: 'USD', value: 'USD' },
+        ],
+        placeholder: $t('cm.report.currency'),
+        style: 'width: 100%',
+      },
+    },
+  );
+  return schema;
 }
 
 function useColumns(): VxeTableGridOptions['columns'] {
@@ -41,6 +74,16 @@ function useColumns(): VxeTableGridOptions['columns'] {
       field: 'nick',
       title: $t('cm.report.nick'),
       width: 140,
+    },
+    {
+      field: 'tenantName',
+      title: $t('system.tenant.name'),
+      width: 120,
+    },
+    {
+      field: 'currency',
+      title: $t('cm.report.currency'),
+      width: 80,
     },
     {
       field: 'totalIncome',
@@ -88,12 +131,23 @@ const [AccountGrid] = useVbenVxeGrid({
     proxyConfig: {
       ajax: {
         query: async (params: PageParams, formValues) => {
-          return doPageQuery(getCmAccountPage, params, formValues);
+          const result = await doPageQuery(
+            getCmAccountPage,
+            params,
+            formValues,
+          );
+          if (result.items) {
+            result.items = result.items.map((item: CmReportApi.AccountRow) => ({
+              ...item,
+              _rowKey: `${item.userId}_${item.currency}`,
+            }));
+          }
+          return result;
         },
       },
     },
     rowConfig: {
-      keyField: 'userId',
+      keyField: '_rowKey',
     },
     toolbarConfig: {
       custom: true,

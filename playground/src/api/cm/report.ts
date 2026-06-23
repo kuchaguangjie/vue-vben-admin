@@ -4,6 +4,7 @@ export namespace CmReportApi {
   export interface CommissionLogPageParams {
     beneficiaryId?: number;
     buyerId?: number;
+    currency?: string;
     level?: number;
     orderNo?: string;
     page?: number;
@@ -12,6 +13,7 @@ export namespace CmReportApi {
     sortBy?: string;
     sortDesc?: boolean;
     status?: number;
+    tenantId?: number;
   }
 
   export interface CommissionLogRow {
@@ -22,6 +24,7 @@ export namespace CmReportApi {
     buyerName: string;
     commissionRate: number;
     createdAt: string;
+    currency: string;
     id: number;
     level: number;
     orderAmount: number;
@@ -31,12 +34,16 @@ export namespace CmReportApi {
     settledAt: string;
     settleTime: string;
     status: number;
+    tenantId: number;
+    tenantName: string;
   }
 
   export interface CommissionStatisticsParams {
+    currency?: string;
     endDate?: string;
     sceneKey?: string;
     startDate?: string;
+    tenantId?: number;
   }
 
   export interface CommissionStatistics {
@@ -63,18 +70,23 @@ export namespace CmReportApi {
   }
 
   export interface AccountPageParams {
+    currency?: string;
     page?: number;
     pageSize?: number;
     sortBy?: string;
     sortDesc?: boolean;
+    tenantId?: number;
     userId?: number;
   }
 
   export interface AccountRow {
     availableAmount: number;
     createdAt: string;
+    currency: string;
     frozenAmount: number;
     nick: string;
+    tenantId: number;
+    tenantName: string;
     totalIncome: number;
     updatedAt: string;
     userId: number;

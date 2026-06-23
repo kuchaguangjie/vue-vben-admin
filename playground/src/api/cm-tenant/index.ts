@@ -121,6 +121,7 @@ export namespace CmTenantReportApi {
     buyerName: string;
     commissionRate: number;
     createdAt: string;
+    currency: string;
     id: number;
     level: number;
     orderAmount: number;
@@ -172,6 +173,7 @@ export namespace CmTenantReportApi {
   export interface TenantAccountRow {
     availableAmount: number;
     createdAt: string;
+    currency: string;
     frozenAmount: number;
     ownerId: number;
     ownerType: number;
@@ -252,6 +254,7 @@ export namespace CmTenantWithdrawApi {
     bankAccountNo: string;
     bankName: string;
     createdAt: string;
+    currency: string;
     feeAmount: number;
     id: number;
     payChannel: string;
@@ -269,6 +272,7 @@ export namespace CmTenantWithdrawApi {
   }
 
   export interface TenantWithdrawPageParams {
+    currency?: string;
     endDate?: string;
     page?: number;
     pageSize?: number;
@@ -283,6 +287,7 @@ export namespace CmTenantWithdrawApi {
     bankAccountName?: string;
     bankAccountNo?: string;
     bankName?: string;
+    currency: string;
     payChannel: string;
     wechatAccount?: string;
   }
@@ -332,10 +337,16 @@ export async function reviewTenantWithdraw(
   return requestClient.post('/cm-tenant/withdraw/review', data);
 }
 
-export async function getTenantWithdrawAccount(tenantId?: number) {
+export async function getTenantWithdrawAccount(
+  tenantId?: number,
+  currency?: string,
+) {
+  const params: Record<string, number | string> = {};
+  if (tenantId) params.tenantId = tenantId;
+  if (currency) params.currency = currency;
   return requestClient.get<CmTenantWithdrawApi.TenantAccount>(
     '/cm-tenant/withdraw/account',
-    { params: tenantId ? { tenantId } : {} },
+    { params },
   );
 }
 
@@ -347,6 +358,7 @@ export namespace CmTenantWithdrawAccountApi {
     bankAccountName: string;
     bankAccountNo: string;
     bankName: string;
+    currency: string;
     id: number;
     isDefault: boolean;
     payChannel: string;
@@ -359,6 +371,7 @@ export namespace CmTenantWithdrawAccountApi {
     bankAccountName?: string;
     bankAccountNo?: string;
     bankName?: string;
+    currency: string;
     isDefault?: boolean;
     payChannel: string;
     wechatAccount?: string;
@@ -369,16 +382,19 @@ export namespace CmTenantWithdrawAccountApi {
     bankAccountName?: string;
     bankAccountNo?: string;
     bankName?: string;
+    currency: string;
     isDefault?: boolean;
     payChannel: string;
     wechatAccount?: string;
   }
 }
 
-export async function getWithdrawAccountList() {
+export async function getWithdrawAccountList(currency?: string) {
   return requestClient.get<{
     list: CmTenantWithdrawAccountApi.WithdrawAccount[];
-  }>('/cm-tenant/withdraw-account/list');
+  }>('/cm-tenant/withdraw-account/list', {
+    params: { currency },
+  });
 }
 
 export async function createWithdrawAccount(
