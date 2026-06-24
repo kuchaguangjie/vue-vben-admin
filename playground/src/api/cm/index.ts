@@ -44,6 +44,7 @@ export namespace CmUserWithdrawApi {
   export interface PageParams {
     amountMax?: number;
     amountMin?: number;
+    currency?: string;
     endDate?: string;
     page?: number;
     pageSize?: number;

@@ -135,10 +135,18 @@ const [Drawer, drawerApi] = useVbenDrawer({
 
   async onOpenChange(isOpen) {
     if (isOpen) {
+      const data = drawerApi.getData<{
+        account: CmTenantWithdrawApi.TenantAccount;
+        currency?: string;
+      }>();
       await formApi.resetForm();
       selectedAccountId.value = undefined;
 
-      const initialCurrency = formApi.form?.values?.currency || 'CNY';
+      const initialCurrency =
+        data?.currency || formApi.form?.values?.currency || 'CNY';
+      if (data?.currency) {
+        await formApi.setValues({ currency: initialCurrency });
+      }
       await loadAccountForCurrency(initialCurrency);
       await loadWithdrawAccounts(initialCurrency);
 

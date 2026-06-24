@@ -117,6 +117,9 @@
   "tenantRelation": {
     "module": "Tenant Commission Relations"
   },
+  "userWithdrawSettings": {
+    "module": "Withdraw Settings"
+  },
   "tenantCommissionRule": {
     "module": "Tenant Commission Rules",
     "moduleShort": "Tenant Rule",

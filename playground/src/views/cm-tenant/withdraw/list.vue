@@ -31,9 +31,11 @@ const account = ref<CmTenantWithdrawApi.TenantAccount>({
   withdrawPending: 0,
   withdrawnAmount: 0,
   frozenAmount: 0,
+  primaryCurrency: '',
 });
 
 const currency = ref('CNY');
+let isInitialLoad = true;
 
 const currencySymbol = computed(() => {
   return currency.value === 'USD' ? '$' : '¥';
@@ -45,6 +47,10 @@ async function loadAccount(tenantId?: number, cur?: string) {
       tenantId,
       cur || currency.value,
     );
+    if (isInitialLoad && account.value.primaryCurrency) {
+      currency.value = account.value.primaryCurrency;
+      isInitialLoad = false;
+    }
   } catch {
     // 忽略错误，使用默认值
   }
@@ -108,7 +114,9 @@ const [Grid, gridApi] = useVbenVxeGrid({
 });
 
 function onApply() {
-  applyDrawerApi.setData({ account: account.value }).open();
+  applyDrawerApi
+    .setData({ account: account.value, currency: currency.value })
+    .open();
 }
 
 function onAudit(row: CmTenantWithdrawApi.TenantWithdraw) {

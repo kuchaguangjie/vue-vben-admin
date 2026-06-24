@@ -302,7 +302,7 @@
     }
   },
   "tenant": {
-    "module": "租户",
+    "module": "租户管理",
     "title": "租户管理",
     "list": "租户列表",
     "name": "租户名称",
@@ -321,11 +321,14 @@
     "withdrawNeedReviewYes": "需要审核",
     "withdrawNeedReviewNo": "免审核",
     "withdrawNeedReviewDesc": "设置用户提现是否需要审核，留空则使用全局默认配置",
-    "userWithdrawAutoPay": "用户提现自动打款",
+    "userWithdrawAutoPay": "用户提现打款",
     "autoPayYes": "自动打款",
     "autoPayNo": "手动打款",
     "autoPayPlaceholder": "请选择自动打款模式",
     "autoPayDesc": "无需审核时自动调用打款接口，成功则直接完成，失败则标记失败",
+    "primaryCurrency": "主币种",
+    "primaryCurrencyDesc": "设置租户主币种，留空使用平台默认（CNY），影响币种列表的排序",
+    "primaryCurrencyGlobal": "使用平台默认",
     "settingsTitle": "租户设置",
     "noParent": "无上级",
     "useGlobal": "使用全局",
@@ -343,6 +346,11 @@
     "selectTemplate": "选择模板",
     "selectTemplatePlaceholder": "请选择租户模板（留空使用默认模板）",
     "noTemplate": "无模板"
+  },
+  "tenantSingleConfig": {
+    "currencySection": "币种配置",
+    "module": "单租户配置",
+    "withdrawSection": "用户提现配置"
   },
   "apiKey": {
     "module": "API Key",

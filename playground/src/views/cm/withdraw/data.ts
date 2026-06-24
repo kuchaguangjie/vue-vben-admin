@@ -74,6 +74,18 @@ export function useGridFormSchema(isPlatformAdmin = false): VbenFormSchema[] {
       },
     },
     {
+      component: 'Select',
+      fieldName: 'currency',
+      label: $t('cm.tenantWithdraw.currency'),
+      componentProps: {
+        options: [
+          { label: 'CNY', value: 'CNY' },
+          { label: 'USD', value: 'USD' },
+        ],
+        clearable: true,
+      },
+    },
+    {
       component: 'DateRangePicker',
       fieldName: 'dateRange',
       label: $t('common.createdAt'),

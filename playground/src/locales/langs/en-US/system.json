@@ -323,14 +323,22 @@
     "withdrawNeedReviewYes": "Need Review",
     "withdrawNeedReviewNo": "No Review",
     "withdrawNeedReviewDesc": "Set whether user withdrawal requires review. Leave empty to use global default.",
-    "userWithdrawAutoPay": "Auto Pay",
+    "userWithdrawAutoPay": "Pay",
     "autoPayYes": "Auto Pay",
     "autoPayNo": "Manual Pay",
     "autoPayPlaceholder": "Select auto pay mode",
     "autoPayDesc": "When no review needed, auto-pay via API. Success marks as paid, failure marks as failed.",
+    "primaryCurrency": "Primary Currency",
+    "primaryCurrencyDesc": "Set tenant primary currency. Leave empty to use platform default (CNY). Affects currency list sorting.",
+    "primaryCurrencyGlobal": "Use Platform Default",
     "settingsTitle": "Tenant Settings",
     "noParent": "No Parent",
     "useGlobal": "Use Global"
+  },
+  "tenantSingleConfig": {
+    "currencySection": "Currency Settings",
+    "module": "Tenant Config",
+    "withdrawSection": "Withdraw Settings"
   },
   "apiKey": {
     "module": "API Key",

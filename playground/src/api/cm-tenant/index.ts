@@ -239,6 +239,7 @@ export namespace CmTenantWithdrawApi {
     totalIncome: number;
     withdrawnAmount: number;
     withdrawPending: number;
+    primaryCurrency: string;
   }
 
   export interface TenantWithdraw {

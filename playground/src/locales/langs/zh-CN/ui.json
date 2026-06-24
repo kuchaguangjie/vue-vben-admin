@@ -10,7 +10,8 @@
     "create": "新建 {0}",
     "edit": "编辑 {0}",
     "expend": "展开",
-    "collapse": "折叠"
+    "collapse": "折叠",
+    "save": "保存"
   },
   "actionMessage": {
     "deleting": "正在删除 {0}...",

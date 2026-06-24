@@ -159,18 +159,19 @@ async function getTenantTemplateDetail(params: { code?: string; id?: number }) {
   );
 }
 
-async function getTenantSettings() {
+async function getTenantSingleConfig() {
   return requestClient.get<SystemTenantApi.SystemTenant>(
-    '/system/tenant/settings',
+    '/system/tenant-single-config',
   );
 }
 
-async function updateTenantSettings(data: {
+async function updateTenantSingleConfig(data: {
+  primaryCurrency?: string;
   userWithdrawAutoPay?: number;
   userWithdrawNeedReview?: number;
   version: number;
 }) {
-  return requestClient.put('/system/tenant/settings', data);
+  return requestClient.put('/system/tenant-single-config', data);
 }
 
 export {
@@ -179,10 +180,10 @@ export {
   getDetailTenant,
   getTenantAll,
   getTenantList,
-  getTenantSettings,
+  getTenantSingleConfig,
   getTenantTemplateDetail,
   getTenantTemplateList,
   updateTenant,
-  updateTenantSettings,
+  updateTenantSingleConfig,
   updateTenantStatus,
 };

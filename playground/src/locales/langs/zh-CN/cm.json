@@ -117,6 +117,9 @@
   "tenantRelation": {
     "module": "租户分佣关系"
   },
+  "userWithdrawSettings": {
+    "module": "用户提现设置"
+  },
   "tenantCommissionRule": {
     "module": "租户分佣规则",
     "moduleShort": "租户分佣规则",
