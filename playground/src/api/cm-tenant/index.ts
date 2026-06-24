@@ -236,10 +236,10 @@ export namespace CmTenantWithdrawApi {
   export interface TenantAccount {
     availableAmount: number;
     frozenAmount: number;
+    primaryCurrency: string;
     totalIncome: number;
     withdrawnAmount: number;
     withdrawPending: number;
-    primaryCurrency: string;
   }
 
   export interface TenantWithdraw {
