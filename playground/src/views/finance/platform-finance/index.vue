@@ -1,6 +1,8 @@
 <script lang="ts" setup>
 import type { EchartsUIType } from '@vben/plugins/echarts';
 
+import type { PlatformFinanceApi } from '#/api/finance/platform-finance';
+
 import { computed, onMounted, ref, watch } from 'vue';
 
 import { Page } from '@vben/common-ui';
@@ -8,17 +10,14 @@ import { EchartsUI, useEcharts } from '@vben/plugins/echarts';
 
 import { DatePicker, Select } from 'ant-design-vue';
 
-import {
-  getPlatformFinanceOverview,
-  type PlatformFinanceApi,
-} from '#/api/finance/platform-finance';
+import { getPlatformFinanceOverview } from '#/api/finance/platform-finance';
 import { $t } from '#/locales';
 
 const chartRef = ref<EchartsUIType>();
 const { renderEcharts } = useEcharts(chartRef);
 
 const loading = ref(false);
-const overview = ref<PlatformFinanceApi.OverviewResp | null>(null);
+const overview = ref<null | PlatformFinanceApi.OverviewResp>(null);
 const startDate = ref<string>('');
 const endDate = ref<string>('');
 const currency = ref<string>('');
@@ -176,11 +175,7 @@ watch([startDate, endDate, currency], () => {
           :placeholder="$t('finance.platformFinance.currency')"
           style="width: 120px"
         >
-          <Select.Option
-            v-for="c in availableCurrencies"
-            :key="c"
-            :value="c"
-          >
+          <Select.Option v-for="c in availableCurrencies" :key="c" :value="c">
             {{ c }}
           </Select.Option>
         </Select>
@@ -199,10 +194,7 @@ watch([startDate, endDate, currency], () => {
           <div class="mt-1 text-2xl font-bold">
             {{ item.value }}
           </div>
-          <div
-            v-if="item.extra"
-            class="mt-1 text-xs text-muted-foreground"
-          >
+          <div v-if="item.extra" class="mt-1 text-xs text-muted-foreground">
             {{ item.extra }}
           </div>
         </div>
