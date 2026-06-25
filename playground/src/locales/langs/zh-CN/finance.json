@@ -85,5 +85,28 @@
     "errorMsg": "错误信息",
     "createdAt": "创建时间",
     "paidAt": "支付时间"
+  },
+  "platformFinance": {
+    "module": "平台收支",
+    "list": "平台收支",
+    "grossRevenue": "毛收入（充值总额）",
+    "grossRevenueCount": "充值笔数",
+    "platformIncome": "平台收入",
+    "userCommissionExpense": "用户分佣支出",
+    "tenantShareExpense": "租户分润支出",
+    "tenantCommissionExpense": "租户分佣支出",
+    "totalCommissionExpense": "分佣支出合计",
+    "frozenAmount": "待结算分佣",
+    "settledAmount": "已结算分佣",
+    "canceledAmount": "已取消分佣",
+    "monthlyTrend": "月度趋势",
+    "currencyBreakdown": "币种分布",
+    "month": "月份",
+    "commissionExpense": "分佣支出",
+    "dateRange": "日期范围",
+    "startDate": "开始日期",
+    "endDate": "结束日期",
+    "currency": "币种",
+    "allCurrencies": "全部币种"
   }
 }

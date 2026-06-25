@@ -85,5 +85,28 @@
     "errorMsg": "Error Message",
     "createdAt": "Created At",
     "paidAt": "Paid At"
+  },
+  "platformFinance": {
+    "module": "Platform Finance",
+    "list": "Platform Finance",
+    "grossRevenue": "Gross Revenue (Total Recharges)",
+    "grossRevenueCount": "Recharge Count",
+    "platformIncome": "Platform Income",
+    "userCommissionExpense": "User Commission",
+    "tenantShareExpense": "Tenant Share",
+    "tenantCommissionExpense": "Tenant Commission",
+    "totalCommissionExpense": "Total Commission",
+    "frozenAmount": "Frozen Commission",
+    "settledAmount": "Settled Commission",
+    "canceledAmount": "Canceled Commission",
+    "monthlyTrend": "Monthly Trend",
+    "currencyBreakdown": "Currency Breakdown",
+    "month": "Month",
+    "commissionExpense": "Commission Expense",
+    "dateRange": "Date Range",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "currency": "Currency",
+    "allCurrencies": "All Currencies"
   }
 }
