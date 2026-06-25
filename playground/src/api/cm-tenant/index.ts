@@ -360,10 +360,12 @@ export namespace CmTenantWithdrawAccountApi {
     bankAccountNo: string;
     bankName: string;
     currency: string;
+    douyinAccount: string;
     id: number;
     isDefault: boolean;
     payChannel: string;
     tenantId: number;
+    usdAccount: string;
     wechatAccount: string;
   }
 
@@ -373,8 +375,10 @@ export namespace CmTenantWithdrawAccountApi {
     bankAccountNo?: string;
     bankName?: string;
     currency: string;
+    douyinAccount?: string;
     isDefault?: boolean;
     payChannel: string;
+    usdAccount?: string;
     wechatAccount?: string;
   }
 
@@ -384,8 +388,10 @@ export namespace CmTenantWithdrawAccountApi {
     bankAccountNo?: string;
     bankName?: string;
     currency: string;
+    douyinAccount?: string;
     isDefault?: boolean;
     payChannel: string;
+    usdAccount?: string;
     wechatAccount?: string;
   }
 }
