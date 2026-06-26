@@ -112,6 +112,15 @@ const routes: RouteRecordRaw[] = [
         },
         component: () => import('#/views/system/api-key/list.vue'),
       },
+      {
+        path: '/system/config',
+        name: 'SystemConfig',
+        meta: {
+          icon: 'mdi:cog-outline',
+          title: $t('system.config.module'),
+        },
+        component: () => import('#/views/system/config/list.vue'),
+      },
     ],
   },
 ];

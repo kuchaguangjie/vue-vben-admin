@@ -1,6 +1,7 @@
 export * from './api';
 export * from './api-key';
 export * from './casbin';
+export * from './config';
 export * from './dept';
 export * from './gen';
 export * from './log';

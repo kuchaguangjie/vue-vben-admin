@@ -372,5 +372,15 @@
     "apiKey": "API Key",
     "createSuccessNotice": "API Key 创建成功，请复制保存，后续不会再显示",
     "copyWarning": "请妥善保管，泄露会导致安全风险"
+  },
+  "config": {
+    "module": "系统配置",
+    "moduleShort": "配置",
+    "list": "配置列表",
+    "key": "配置键",
+    "value": "配置值",
+    "keyPlaceholder": "例如: commission.enable",
+    "valuePlaceholder": "JSON 格式或纯文本",
+    "remarkPlaceholder": "备注说明"
   }
 }

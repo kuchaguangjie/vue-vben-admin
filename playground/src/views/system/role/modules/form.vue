@@ -240,7 +240,6 @@ function handleTreeUpdate(
             :tree-data="apiOptions"
             multiple
             bordered
-            check-strictly
             :default-expanded-level="2"
             :get-node-class="getNodeClass"
             :model-value="modelValue"
