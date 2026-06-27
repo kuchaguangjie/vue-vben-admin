@@ -10,7 +10,6 @@ Refer: [playground/README.md](playground/README.md)
 | :--------: | -------------------------------------------- |
 |    main    | vben 主分支.<br/> 不要动, 方便 同步 & 升级.  |
 | fiber-crud | 本项目分支.<br/> 主要修改 playground/ 子目录 |
-|    saas    | 本项目分支.<br/> fiber-crud 的 saas 版本     |
 
 ## 启动
 
