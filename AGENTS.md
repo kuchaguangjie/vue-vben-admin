@@ -7,6 +7,7 @@
 - [常用组件与工具](#常用组件与工具)
 - [代码优化建议](#代码优化建议)
 - [调试技巧](#调试技巧)
+- [自动化测试](#自动化测试)
 
 ---
 
@@ -54,6 +55,7 @@ playground/src/
 pnpm install          # 安装依赖
 pnpm dev:play         # 启动开发服务器
 pnpm build:play       # 构建生产版本
+pnpm test:unit        # 运行单元测试（需在 playground 目录下执行）
 ```
 
 ---
@@ -387,3 +389,44 @@ query: async (params, formValues) => {
 https_proxy=127.0.0.1:10077
 http_proxy=127.0.0.1:10077
 ```
+
+---
+
+## 自动化测试
+
+### 测试框架
+
+Vitest + @vue/test-utils + happy-dom（复用 monorepo 已有依赖）
+
+### 测试文件结构
+
+```
+playground/
+├── vitest.config.ts                          # vitest 配置（Vue + JSX + # alias）
+└── src/
+    ├── test/
+    │   └── setup.ts                          # 全局 mock（localStorage, matchMedia, IntersectionObserver, ResizeObserver）
+    ├── utils/__tests__/
+    │   ├── security.test.ts                  # isSafeRedirectUrl + getSafeRedirectPath + safeHtml
+    │   ├── object.test.ts                    # checkAllFieldsEmpty + removeEmptyFields
+    │   ├── value-format.test.ts              # formatBackendTime + formatJsonObj + extractTreeValue
+    │   ├── token-util.test.ts                # formatToken
+    │   ├── hash.test.ts                      # generateSHA256
+    │   ├── pager.test.ts                     # usePagerConfig 系列
+    │   └── use-preview-link.test.ts          # usePreviewLink 列配置
+    └── hooks/common/__tests__/
+        └── use-user-core-map.test.ts         # useUserCoreMap CRUD + 全局共享
+```
+
+### 运行测试
+
+```bash
+cd playground
+pnpm test:unit         # 运行所有测试
+```
+
+### 编写新测试
+
+- 工具函数测试放在 `src/utils/__tests__/` 下，文件名 `{模块名}.test.ts`
+- Composables 测试放在 `src/hooks/common/__tests__/` 下，文件名 `{模块名}.test.ts`
+- 测试 setup 文件 `src/test/setup.ts` 已配置浏览器 API mock
