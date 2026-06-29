@@ -116,6 +116,7 @@
     "module": "用户",
     "id": "用户ID",
     "title": "用户管理",
+    "count": "用户总数",
     "list": "用户列表",
     "nick": "昵称",
     "username": "用户名",
@@ -304,6 +305,7 @@
   "tenant": {
     "module": "租户管理",
     "title": "租户管理",
+    "count": "租户总数",
     "list": "租户列表",
     "name": "租户名称",
     "code": "租户编码",

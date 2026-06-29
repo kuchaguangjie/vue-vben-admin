@@ -1,5 +1,6 @@
 {
   "title": "财务管理",
+  "monthlyRevenue": "本月收入",
   "walletTx": {
     "module": "帐变管理",
     "list": "帐变列表",

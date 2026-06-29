@@ -1,4 +1,7 @@
 {
+  "action": {
+    "view": "查看"
+  },
   "confirm": {
     "title": "确认",
     "deleteTitle": "确认删除",
@@ -44,5 +47,8 @@
   },
   "message": {
     "loadFailed": "加载失败"
-  }
+  },
+  "quickNav": "快捷入口",
+  "latestNotices": "近期公告",
+  "noData": "暂无数据"
 }
