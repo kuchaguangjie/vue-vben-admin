@@ -1,0 +1,17 @@
+{
+  "title": "Docs",
+  "help": "Help",
+  "about": "About",
+  "helpTitle": "Help Guide",
+  "helpDescription": "Welcome to the fiber-crud admin system. Below are common operation guides.",
+  "gettingStarted": "Getting Started",
+  "gettingStartedDesc": "After logging in, you will see the workspace overview page with key metrics and shortcuts.",
+  "navigation": "Navigation",
+  "navigationDesc": "The left menu is grouped by module: System, AI, Knowledge, Search, Risk Control, Commission, Finance, etc.",
+  "commonOps": "Common Operations",
+  "commonOpsDesc": "Most list pages support search, create, edit, delete, and status toggle. Click a table row to view details.",
+  "permissions": "Permissions",
+  "permissionsDesc": "The system uses RBAC model. Admins can configure role permissions in System → Role Management.",
+  "shortcuts": "Shortcuts",
+  "shortcutsDesc": "The workspace homepage provides quick links to frequently used features."
+}

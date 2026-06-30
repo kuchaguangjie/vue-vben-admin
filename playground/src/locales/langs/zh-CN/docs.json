@@ -1,0 +1,17 @@
+{
+  "title": "文档",
+  "help": "帮助",
+  "about": "关于",
+  "helpTitle": "使用帮助",
+  "helpDescription": "欢迎使用 fiber-crud 后台管理系统，以下是常见操作指南。",
+  "gettingStarted": "快速入门",
+  "gettingStartedDesc": "登录系统后，您将看到工作台概览页面，显示关键指标和快捷入口。",
+  "navigation": "导航说明",
+  "navigationDesc": "左侧菜单按功能模块分组：系统管理、AI 服务、知识库、搜索、风控、分佣、财务等。",
+  "commonOps": "常用操作",
+  "commonOpsDesc": "大多数列表页面支持搜索、新建、编辑、删除、状态切换等操作。点击表格行可查看详情。",
+  "permissions": "权限说明",
+  "permissionsDesc": "系统使用 RBAC 权限模型，管理员可在「系统管理 → 角色管理」中配置角色权限。",
+  "shortcuts": "快捷操作",
+  "shortcutsDesc": "登录后首页工作台提供了快捷入口，可直接跳转到常用功能页面。"
+}
