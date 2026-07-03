@@ -153,6 +153,26 @@
     "appAdmin": "Admin",
     "appUser": "User"
   },
+  "ooLog": {
+    "title": "Log Search",
+    "module": "Module",
+    "moduleAdmin": "Admin",
+    "moduleUser": "User",
+    "keyword": "Keyword",
+    "keywordPlaceholder": "Enter keyword to search...",
+    "dateRange": "Time Range",
+    "timestamp": "Time",
+    "level": "Level",
+    "message": "Message",
+    "caller": "Caller",
+    "tenantId": "Tenant ID",
+    "userId": "User ID",
+    "username": "Username",
+    "requestId": "Request ID",
+    "raw": "Raw Data",
+    "search": "Search",
+    "refresh": "Refresh"
+  },
   "mem": {
     "title": "Cache Mgr",
     "globalStatus": "Global cache status",
@@ -370,5 +390,21 @@
     "keyPlaceholder": "e.g. commission.enable",
     "valuePlaceholder": "JSON or plain text",
     "remarkPlaceholder": "Remark description"
+  },
+  "ooLog": {
+    "module": "Module",
+    "moduleAdmin": "Admin",
+    "moduleUser": "User",
+    "keyword": "Keyword",
+    "timeRange": "Time Range",
+    "timestamp": "Timestamp",
+    "level": "Level",
+    "message": "Message",
+    "caller": "Caller",
+    "userId": "User ID",
+    "username": "Username",
+    "requestId": "Request ID",
+    "list": "System Log List",
+    "title": "System Log"
   }
 }

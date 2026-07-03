@@ -156,6 +156,26 @@
     "appAdmin": "管理端",
     "appUser": "用户端"
   },
+  "ooLog": {
+    "title": "日志搜索",
+    "module": "模块",
+    "moduleAdmin": "管理端",
+    "moduleUser": "用户端",
+    "keyword": "关键字",
+    "keywordPlaceholder": "输入关键字搜索...",
+    "dateRange": "时间范围",
+    "timestamp": "时间",
+    "level": "级别",
+    "message": "消息",
+    "caller": "调用位置",
+    "tenantId": "租户 ID",
+    "userId": "用户 ID",
+    "username": "用户名",
+    "requestId": "请求 ID",
+    "raw": "原始数据",
+    "search": "搜索",
+    "refresh": "刷新"
+  },
   "mem": {
     "title": "缓存管理",
     "globalStatus": "全局缓存状态",
@@ -384,5 +404,21 @@
     "keyPlaceholder": "例如: commission.enable",
     "valuePlaceholder": "JSON 格式或纯文本",
     "remarkPlaceholder": "备注说明"
+  },
+  "ooLog": {
+    "module": "模块",
+    "moduleAdmin": "管理端",
+    "moduleUser": "用户端",
+    "keyword": "关键字",
+    "timeRange": "时间范围",
+    "timestamp": "时间",
+    "level": "级别",
+    "message": "消息",
+    "caller": "调用位置",
+    "userId": "用户ID",
+    "username": "用户名",
+    "requestId": "请求ID",
+    "list": "系统日志列表",
+    "title": "系统日志"
   }
 }
