@@ -18,10 +18,12 @@ export namespace SystemOOLogApi {
   export interface OOLogPageParams {
     endTime?: string;
     keyword: string;
+    level?: string;
     module: string;
-    pageNum: number;
+    page: number;
     pageSize: number;
     startTime?: string;
+    userId?: number;
   }
 }
 

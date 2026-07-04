@@ -1,10 +1,6 @@
 import type { VbenFormSchema } from '#/adapter/form';
 import type { VxeTableGridOptions } from '#/adapter/vxe-table';
 
-import { h } from 'vue';
-
-import { Tag } from 'ant-design-vue';
-
 import { useSaasEnabled } from '#/hooks/common/use-saas-enabled';
 import { $t } from '#/locales';
 
@@ -22,6 +18,32 @@ export function useGridFormSchema(): VbenFormSchema[] {
         ],
       },
       defaultValue: 'admin',
+    },
+    {
+      component: 'Select',
+      fieldName: 'level',
+      label: $t('system.ooLog.level'),
+      componentProps: {
+        allowClear: true,
+        options: [
+          { label: 'DEBUG', value: 'debug' },
+          { label: 'INFO', value: 'info' },
+          { label: 'WARN', value: 'warn' },
+          { label: 'ERROR', value: 'error' },
+          { label: 'DPANIC', value: 'dpanic' },
+          { label: 'PANIC', value: 'panic' },
+          { label: 'FATAL', value: 'fatal' },
+        ],
+      },
+    },
+    {
+      component: 'InputNumber',
+      fieldName: 'userId',
+      label: $t('system.ooLog.userId'),
+      componentProps: {
+        min: 1,
+        controls: false,
+      },
     },
     {
       component: 'Input',
@@ -60,10 +82,7 @@ export function useColumns(): VxeTableGridOptions['columns'] {
       title: $t('system.ooLog.level'),
       width: 100,
       align: 'center',
-      formatter: ({ cellValue }) => {
-        const color = getLevelColor(cellValue);
-        return h(Tag, { color }, () => cellValue);
-      },
+      slots: { default: 'level' },
     },
     {
       field: 'message',
@@ -91,11 +110,7 @@ export function useColumns(): VxeTableGridOptions['columns'] {
       field: 'userId',
       title: $t('system.ooLog.userId'),
       width: 100,
-    },
-    {
-      field: 'username',
-      title: $t('system.ooLog.username'),
-      width: 150,
+      slots: { default: 'userId' },
     },
     {
       field: 'requestId',

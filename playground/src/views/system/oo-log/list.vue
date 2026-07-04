@@ -5,19 +5,21 @@ import type { SystemOOLogApi } from '#/api/system/oo-log';
 
 import { Page } from '@vben/common-ui';
 
+import { Tag } from 'ant-design-vue';
+
 import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { doPageQuery } from '#/api/request';
 import { getOOLogPage } from '#/api/system/oo-log';
 import { $t } from '#/locales';
 import { usePagerConfig } from '#/utils/pager';
 
-import { useColumns, useGridFormSchema } from './data';
+import { getLevelColor, useColumns, useGridFormSchema } from './data';
 
 const [Grid] = useVbenVxeGrid({
   formOptions: {
     fieldMappingTime: [['timeRange', ['startTime', 'endTime']]],
     schema: useGridFormSchema(),
-    submitOnChange: false,
+    submitOnChange: true,
   },
   gridOptions: {
     columns: useColumns(),
@@ -55,7 +57,15 @@ function getExpandContent(row: SystemOOLogApi.OOLogItem) {
 
 <template>
   <Page auto-content-height>
-    <Grid :table-title="$t('system.ooLog.list')">
+    <Grid :table-title="$t('system.ooLog.title')">
+      <template #level="{ row }">
+        <Tag :color="getLevelColor(row.level)">
+          {{ row.level }}
+        </Tag>
+      </template>
+      <template #userId="{ row }">
+        {{ row.userId > 0 ? row.userId : '-' }}
+      </template>
       <template #expand="{ row }">
         <div class="bg-gray-50 p-4 dark:bg-gray-900">
           <pre class="whitespace-pre-wrap break-words text-sm">{{

@@ -147,8 +147,8 @@
     "instance": "实例",
     "code": "操作码",
     "data": "数据",
-    "title": "日志管理",
-    "list": "日志列表",
+    "title": "操作日志",
+    "list": "操作日志",
     "id": "日志 ID",
     "createdBy": "创建人 ID",
     "createdAt": "创建时间",
@@ -157,12 +157,13 @@
     "appUser": "用户端"
   },
   "ooLog": {
-    "title": "日志搜索",
+    "title": "系统日志",
     "module": "模块",
     "moduleAdmin": "管理端",
     "moduleUser": "用户端",
     "keyword": "关键字",
     "keywordPlaceholder": "输入关键字搜索...",
+    "timeRange": "时间范围",
     "dateRange": "时间范围",
     "timestamp": "时间",
     "level": "级别",
@@ -404,21 +405,5 @@
     "keyPlaceholder": "例如: commission.enable",
     "valuePlaceholder": "JSON 格式或纯文本",
     "remarkPlaceholder": "备注说明"
-  },
-  "ooLog": {
-    "module": "模块",
-    "moduleAdmin": "管理端",
-    "moduleUser": "用户端",
-    "keyword": "关键字",
-    "timeRange": "时间范围",
-    "timestamp": "时间",
-    "level": "级别",
-    "message": "消息",
-    "caller": "调用位置",
-    "userId": "用户ID",
-    "username": "用户名",
-    "requestId": "请求ID",
-    "list": "系统日志列表",
-    "title": "系统日志"
   }
 }

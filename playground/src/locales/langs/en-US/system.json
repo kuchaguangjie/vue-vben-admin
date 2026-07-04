@@ -144,8 +144,8 @@
     "instance": "Instance",
     "code": "Code",
     "data": "Data",
-    "title": "Log Mgr",
-    "list": "Log List",
+    "title": "Operation Log",
+    "list": "Operation Log",
     "id": "Log ID",
     "createdBy": "Created By [ID]",
     "createdAt": "Created At",
@@ -154,12 +154,13 @@
     "appUser": "User"
   },
   "ooLog": {
-    "title": "Log Search",
+    "title": "System Log",
     "module": "Module",
     "moduleAdmin": "Admin",
     "moduleUser": "User",
     "keyword": "Keyword",
     "keywordPlaceholder": "Enter keyword to search...",
+    "timeRange": "Time Range",
     "dateRange": "Time Range",
     "timestamp": "Time",
     "level": "Level",
@@ -390,21 +391,5 @@
     "keyPlaceholder": "e.g. commission.enable",
     "valuePlaceholder": "JSON or plain text",
     "remarkPlaceholder": "Remark description"
-  },
-  "ooLog": {
-    "module": "Module",
-    "moduleAdmin": "Admin",
-    "moduleUser": "User",
-    "keyword": "Keyword",
-    "timeRange": "Time Range",
-    "timestamp": "Timestamp",
-    "level": "Level",
-    "message": "Message",
-    "caller": "Caller",
-    "userId": "User ID",
-    "username": "Username",
-    "requestId": "Request ID",
-    "list": "System Log List",
-    "title": "System Log"
   }
 }
