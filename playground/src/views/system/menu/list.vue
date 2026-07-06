@@ -9,7 +9,6 @@ import { ref } from 'vue';
 
 import { Page, useVbenDrawer } from '@vben/common-ui';
 import { IconifyIcon, Plus } from '@vben/icons';
-import { $t } from '@vben/locales';
 
 import { MenuBadge } from '@vben-core/menu-ui';
 
@@ -27,6 +26,7 @@ import {
 import { useDeleteAction } from '#/hooks/common/use-delete-action';
 import { useStatusToggle } from '#/hooks/common/use-status-toggle';
 import { useUserCoreMap } from '#/hooks/common/use-user-core-map';
+import { $t } from '#/locales';
 import { useDisabledPagerConfig } from '#/utils/pager';
 
 import { useColumns } from './data';

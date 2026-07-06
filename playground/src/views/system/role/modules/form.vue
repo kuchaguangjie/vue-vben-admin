@@ -185,8 +185,8 @@ function updateSchemaForRole(roles: any, code?: string) {
 
 const getDrawerTitle = computed(() => {
   return formData.value?.id
-    ? $t('common.edit', $t('system.role.name'))
-    : $t('common.create', $t('system.role.name'));
+    ? $t('ui.actionTitle.edit', [$t('system.role.module')])
+    : $t('ui.actionTitle.create', [$t('system.role.module')]);
 });
 
 function getNodeClass(node: Recordable<any>) {

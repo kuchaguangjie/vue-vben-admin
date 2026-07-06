@@ -9,7 +9,6 @@ import { computed, h, ref } from 'vue';
 
 import { useVbenDrawer } from '@vben/common-ui';
 import { IconifyIcon } from '@vben/icons';
-import { $te } from '@vben/locales';
 
 import { breakpointsTailwind, useBreakpoints } from '@vueuse/core';
 
@@ -23,7 +22,7 @@ import {
   SystemMenuApi,
   updateMenu,
 } from '#/api/system/menu';
-import { $t } from '#/locales';
+import { $t, $te } from '#/locales';
 import { componentKeys } from '#/router/routes';
 
 import { getMenuTypeOptions } from '../data';

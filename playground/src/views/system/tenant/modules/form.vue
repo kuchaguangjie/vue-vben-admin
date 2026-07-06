@@ -80,8 +80,8 @@ const [Drawer, drawerApi] = useVbenDrawer({
 
 const getDrawerTitle = computed(() => {
   return formData.value?.id
-    ? $t('common.edit', $t('system.tenant.name'))
-    : $t('common.create', $t('system.tenant.name'));
+    ? $t('ui.actionTitle.edit', [$t('system.tenant.module')])
+    : $t('ui.actionTitle.create', [$t('system.tenant.module')]);
 });
 
 async function loadTemplateOptions() {

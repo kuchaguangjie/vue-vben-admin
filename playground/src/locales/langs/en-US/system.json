@@ -69,6 +69,7 @@
     "badgeVariants": "Badge Style"
   },
   "api": {
+    "module": "API",
     "menuName": "api",
     "title": "api Mgr",
     "list": "api List",
@@ -97,6 +98,7 @@
     "setPermissions": "Menus",
     "setApis": "Role APIs",
     "codeValidation": "Code length 1-20, can contain 'a-z A-Z 0-9 _'",
+    "codePlaceholder": "1 ~ 20 chars",
     "detail": {
       "tabBasic": "Role info",
       "tabUsage": "Direct usage",
@@ -240,6 +242,8 @@
     "category": "Category",
     "push": "Is Push",
     "tags": "tags",
+    "tagHoliday": "Holiday",
+    "tagBonus": "Bonus",
     "statusOption": {
       "draft": "Draft",
       "published": "Published"
@@ -354,6 +358,7 @@
     "primaryCurrencyGlobal": "Use Platform Default",
     "settingsTitle": "Tenant Settings",
     "noParent": "No Parent",
+    "noParentNoCommission": "No Parent (no commission)",
     "useGlobal": "Use Global"
   },
   "tenantSingleConfig": {
@@ -380,7 +385,9 @@
     "lastUsedAt": "Last Used At",
     "apiKey": "API Key",
     "createSuccessNotice": "API Key created successfully, please copy and save, it will not be shown again",
-    "copyWarning": "Please keep it safe, leakage will cause security risks"
+    "copyWarning": "Please keep it safe, leakage will cause security risks",
+    "show": "Show",
+    "hide": "Hide"
   },
   "config": {
     "module": "System Config",

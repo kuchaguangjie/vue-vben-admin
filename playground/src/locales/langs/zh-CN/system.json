@@ -71,6 +71,7 @@
     "menuIdInvalid": "菜单ID不符合规范，请检查父级ID和ID的关系"
   },
   "api": {
+    "module": "API",
     "menuName": "api",
     "title": "api管理",
     "list": "api列表",
@@ -99,6 +100,7 @@
     "setPermissions": "菜单",
     "setApis": "角色 APIs",
     "codeValidation": "编码 长度 1-20, 可包含 'a-z A-Z 0-9 _'",
+    "codePlaceholder": "1 ~ 20 个字符",
     "detail": {
       "tabBasic": "角色信息",
       "tabUsage": "直接使用者",
@@ -251,6 +253,8 @@
     },
     "targetTenant": "目标租户",
     "tags": "标签",
+    "tagHoliday": "节日",
+    "tagBonus": "奖励",
     "statusOption": {
       "draft": "草稿",
       "published": "发布"
@@ -354,6 +358,7 @@
     "primaryCurrencyGlobal": "使用平台默认",
     "settingsTitle": "租户设置",
     "noParent": "无上级",
+    "noParentNoCommission": "无上级 (不参与分佣)",
     "useGlobal": "使用全局",
     "adminUsername": "管理员用户名",
     "adminEmail": "管理员邮箱",
@@ -394,7 +399,9 @@
     "lastUsedAt": "最后使用时间",
     "apiKey": "API Key",
     "createSuccessNotice": "API Key 创建成功，请复制保存，后续不会再显示",
-    "copyWarning": "请妥善保管，泄露会导致安全风险"
+    "copyWarning": "请妥善保管，泄露会导致安全风险",
+    "show": "显示",
+    "hide": "隐藏"
   },
   "config": {
     "module": "系统配置",

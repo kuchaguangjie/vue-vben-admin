@@ -20,9 +20,14 @@ async function loadTenantOptions() {
       label: `${t.name} (${t.code})`,
       value: t.id,
     }));
-    options.unshift({ label: '无上级 (不参与分佣)', value: -1 });
+    options.unshift({
+      label: $t('system.tenant.noParentNoCommission'),
+      value: -1,
+    });
     tenantOptionsRef.value = options;
-    const tenantMap: Record<number, string> = { [-1]: '无上级' };
+    const tenantMap: Record<number, string> = {
+      [-1]: $t('system.tenant.noParent'),
+    };
     for (const t of result) {
       tenantMap[t.id] = t.name;
     }

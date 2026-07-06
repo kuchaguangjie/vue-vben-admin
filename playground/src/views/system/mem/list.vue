@@ -2,11 +2,11 @@
 import { onMounted, ref } from 'vue';
 
 import { Page, VbenButton } from '@vben/common-ui';
-import { $t } from '@vben/locales';
 
 import { Card, Divider, message, Tag } from 'ant-design-vue';
 
 import { getMemStatus, loadMemAll } from '#/api/system/mem';
+import { $t } from '#/locales';
 import { formatBackendTime } from '#/utils/value-format';
 
 const displayData = ref<any>(null);

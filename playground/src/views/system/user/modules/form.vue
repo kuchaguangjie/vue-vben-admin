@@ -266,8 +266,8 @@ async function updateSchemaForUser(
 
 const getDrawerTitle = computed(() => {
   return formData.value?.id
-    ? $t('common.edit', $t('system.user.module'))
-    : $t('common.create', $t('system.user.module'));
+    ? $t('ui.actionTitle.edit', [$t('system.user.module')])
+    : $t('ui.actionTitle.create', [$t('system.user.module')]);
 });
 </script>
 

@@ -70,7 +70,7 @@ export function useFormSchema(): VbenFormSchema[] {
     {
       fieldName: 'roleCodes',
       component: 'TreeSelect',
-      label: $t('system.user.setRoles'),
+      label: $t('system.dept.roleCodes'),
       componentProps: {
         multiple: true, // 启用多选
       },

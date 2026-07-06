@@ -1,20 +1,12 @@
-import type { Ref } from 'vue';
-
 import type { VbenFormSchema } from '#/adapter/form';
 import type { VxeTableGridOptions } from '#/adapter/vxe-table';
-import type { SystemUserApi } from '#/api';
-
-import { ref } from 'vue';
 
 import { useSaasEnabled } from '#/hooks/common/use-saas-enabled';
+import { useUserCoreMap } from '#/hooks/common/use-user-core-map';
 import { $t } from '#/locales';
 import { useCopyColumn } from '#/utils/use-copy-column';
 import { useUserCoreColumn } from '#/utils/user-core';
 import { formatBackendTime } from '#/utils/value-format';
-
-export const userCoreMapRef: Ref<Record<number, SystemUserApi.UserCore>> = ref(
-  {},
-);
 
 // for search list
 export function useGridFormSchema(isPlatformAdmin = false): VbenFormSchema[] {
@@ -76,6 +68,7 @@ export function useGridFormSchema(isPlatformAdmin = false): VbenFormSchema[] {
 
 export function useColumns(): VxeTableGridOptions['columns'] {
   const { saasEnabled } = useSaasEnabled();
+  const { userCoreMap } = useUserCoreMap();
 
   const columns: VxeTableGridOptions['columns'] = [
     {
@@ -127,7 +120,7 @@ export function useColumns(): VxeTableGridOptions['columns'] {
         title: $t('common.createdBy'),
         width: 120,
       },
-      userCoreMapRef,
+      userCoreMap,
     ),
   );
 

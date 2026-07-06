@@ -4,7 +4,6 @@ import type { SystemWsApi } from '#/api/system/ws';
 import { onMounted, ref } from 'vue';
 
 import { Page, VbenButton } from '@vben/common-ui';
-import { $t } from '@vben/locales';
 
 import {
   Card,
@@ -17,6 +16,7 @@ import {
 } from 'ant-design-vue';
 
 import { getWsStat } from '#/api/system/ws';
+import { $t } from '#/locales';
 import { formatBackendTime } from '#/utils/value-format';
 
 const displayData = ref<null | SystemWsApi.SystemWsStat>(null);
@@ -105,9 +105,7 @@ async function handleStat(showSuccess: boolean = false) {
           <Descriptions.Item>
             <template #label>
               <div class="flex items-center gap-2">
-                <span>{{
-                  $t('system.ws.config.rateLimit.title') || 'Rate Limit'
-                }}</span>
+                <span>{{ $t('system.ws.config.rateLimit.title') }}</span>
                 <Tag
                   :color="
                     displayData.config?.rateLimit.enable ? 'success' : 'error'

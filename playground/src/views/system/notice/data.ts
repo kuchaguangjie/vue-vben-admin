@@ -96,8 +96,8 @@ export function useFormSchema(): VbenFormSchema[] {
         allowClear: true,
         showArrow: true,
         options: [
-          { label: 'holiday', value: 'holiday' },
-          { label: 'bonus', value: 'bonus' },
+          { label: $t('system.notice.tagHoliday'), value: 'holiday' },
+          { label: $t('system.notice.tagBonus'), value: 'bonus' },
         ],
         maxTagCount: 'responsive', // 自动响应式隐藏多余标签，避免撑爆高度
       },

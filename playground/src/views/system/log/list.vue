@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import type { VxeTableGridOptions } from '#/adapter/vxe-table';
-import type { SystemUserApi } from '#/api';
+import type { SystemLogApi } from '#/api';
 import type { PageParams } from '#/api/request';
 
 import { unref } from 'vue';
@@ -11,12 +11,14 @@ import { useVbenVxeGrid } from '#/adapter/vxe-table';
 import { getLogListWithUserCore } from '#/api';
 import { doPageQuery } from '#/api/request';
 import { usePlatformAdmin } from '#/hooks/common/use-platform-admin';
+import { useUserCoreMap } from '#/hooks/common/use-user-core-map';
 import { $t } from '#/locales';
 import { usePagerConfig } from '#/utils/pager';
 
-import { useColumns, useGridFormSchema, userCoreMapRef } from './data';
+import { useColumns, useGridFormSchema } from './data';
 
 const { isPlatformAdmin } = usePlatformAdmin();
+const { setUserCoreMap } = useUserCoreMap();
 
 const [Grid] = useVbenVxeGrid({
   formOptions: {
@@ -41,7 +43,7 @@ const [Grid] = useVbenVxeGrid({
             params,
             filteredFormValues,
           );
-          userCoreMapRef.value = result.userCoreMap;
+          setUserCoreMap(result.userCoreMap);
           return result;
         },
       },
@@ -57,7 +59,7 @@ const [Grid] = useVbenVxeGrid({
       search: true,
       zoom: true,
     },
-  } as VxeTableGridOptions<SystemUserApi.SystemUser>,
+  } as VxeTableGridOptions<SystemLogApi.SystemLog>,
 });
 </script>
 <template>

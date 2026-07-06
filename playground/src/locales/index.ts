@@ -8,6 +8,7 @@ import { ref } from 'vue';
 
 import {
   $t,
+  $te,
   setupI18n as coreSetup,
   loadLocalesMapFromDir,
 } from '@vben/locales';
@@ -99,4 +100,4 @@ async function setupI18n(app: App, options: LocaleSetupOptions = {}) {
   });
 }
 
-export { $t, antdLocale, setupI18n };
+export { $t, $te, antdLocale, setupI18n };

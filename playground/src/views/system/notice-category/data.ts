@@ -4,6 +4,7 @@ import type { SystemNoticeApi } from '#/api';
 
 import { useSaasEnabled } from '#/hooks/common/use-saas-enabled';
 import { $t } from '#/locales';
+import { formatBackendTime } from '#/utils/value-format';
 
 export function useFormSchema(): VbenFormSchema[] {
   const { saasEnabled } = useSaasEnabled();
@@ -110,6 +111,7 @@ export function useColumns<T = SystemNoticeApi.SystemNoticeCategory>(
       title: $t('common.createdAt'),
       width: 160,
       sortable: true,
+      formatter: ({ cellValue }) => formatBackendTime(cellValue),
     },
     {
       align: 'center',

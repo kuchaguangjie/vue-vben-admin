@@ -47,14 +47,14 @@ export function useFormSchema(): VbenFormSchema[] {
       defaultValue: 'role_',
       rules: z
         .string()
-        .min(1, { message: '代码长度不能少于1个字符' })
-        .max(20, { message: '代码长度不能超过20个字符' })
+        .min(1, { message: $t('ui.formRules.minLength', [$t('system.role.code'), 1]) })
+        .max(20, { message: $t('ui.formRules.maxLength', [$t('system.role.code'), 20]) })
         // 限制 字符集: 字母、数字、下划线
         .regex(/^\w+$/, {
           message: $t('system.role.codeValidation'),
         }),
       componentProps: {
-        placeholder: '1 ~ 20 个字符',
+        placeholder: $t('system.role.codePlaceholder'),
         maxlength: 20,
         showCount: true,
       },

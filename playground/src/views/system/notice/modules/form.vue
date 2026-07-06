@@ -75,8 +75,8 @@ const [Drawer, drawerApi] = useVbenDrawer({
 
 const getDrawerTitle = computed(() => {
   return formData.value?.id
-    ? $t('common.edit', $t('system.notice.moduleShort'))
-    : $t('common.create', $t('system.notice.moduleShort'));
+    ? $t('ui.actionTitle.edit', [$t('system.notice.moduleShort')])
+    : $t('ui.actionTitle.create', [$t('system.notice.moduleShort')]);
 });
 </script>
 <template>

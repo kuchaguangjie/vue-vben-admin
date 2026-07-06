@@ -2,7 +2,6 @@
 import { onMounted, ref } from 'vue';
 
 import { Page, VbenButton } from '@vben/common-ui';
-import { $t } from '@vben/locales';
 
 import { Card, message } from 'ant-design-vue';
 
@@ -11,6 +10,7 @@ import {
   getCasbinStat,
   loadCasbin,
 } from '#/api/system/casbin';
+import { $t } from '#/locales';
 import { formatBackendTime } from '#/utils/value-format';
 
 const manualStatusData = ref<any>(null);
