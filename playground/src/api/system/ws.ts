@@ -1,6 +1,13 @@
 import { requestClient } from '#/api/request';
 
 export namespace SystemWsApi {
+  export interface TenantStat {
+    connCount: number;
+    sidCount: number;
+    tenantId: number;
+    userCount: number;
+  }
+
   export interface SystemWsStat {
     config: {
       isCluster: boolean;
@@ -15,17 +22,17 @@ export namespace SystemWsApi {
       connCount: number;
       instanceCount: number;
       sidCount: number;
+      tenantStats?: Record<number, TenantStat>;
       userCount: number;
     };
     statAt: string;
   }
 }
 
-/**
- * 获取 ws stat
- */
-async function getWsStat() {
-  return requestClient.get<SystemWsApi.SystemWsStat>('/system/ws/stat');
+async function getWsStat(params?: { tenantId?: number }) {
+  return requestClient.get<SystemWsApi.SystemWsStat>('/system/ws/stat', {
+    params,
+  });
 }
 
 export { getWsStat };

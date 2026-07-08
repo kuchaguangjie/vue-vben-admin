@@ -214,14 +214,17 @@
     "title": "WS Mgr",
     "btnGetStat": "Refresh stat",
     "section": {
+      "global": "Global Stat/Config",
       "stat": "Stat",
+      "tenantStat": "Tenant Stats",
       "config": "Config"
     },
     "stat": {
       "instanceCount": "ws server count",
       "connCount": "Total connections",
       "userCount": "Total connected users",
-      "sidCount": "Total connected sessions"
+      "sidCount": "Total connected sessions",
+      "tenantId": "Tenant ID"
     },
     "config": {
       "isCluster": "Is cluster",

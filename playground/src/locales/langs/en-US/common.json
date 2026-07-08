@@ -1,5 +1,7 @@
 {
   "id": "ID",
+  "items": "items",
+  "inputPlaceholder": "Please input",
   "sortOrder": "Sort Order",
   "view": "View",
   "unbind": "Unbind",

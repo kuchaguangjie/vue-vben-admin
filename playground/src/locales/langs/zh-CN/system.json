@@ -217,14 +217,17 @@
     "title": "WS 管理",
     "btnGetStat": "刷新 统计",
     "section": {
+      "global": "全局统计/配置",
       "stat": "统计",
+      "tenantStat": "租户级统计",
       "config": "配置"
     },
     "stat": {
       "instanceCount": "ws服务 实例数",
       "connCount": "连接总数",
       "userCount": "连接用户总数",
-      "sidCount": "连接 Session 总数"
+      "sidCount": "连接 Session 总数",
+      "tenantId": "租户ID"
     },
     "config": {
       "isCluster": "是否启用集群",
