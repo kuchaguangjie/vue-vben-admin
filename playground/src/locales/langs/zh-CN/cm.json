@@ -1,9 +1,5 @@
 {
   "title": "分佣系统",
-  "withdraw": {
-    "pending": "待审核提现",
-    "noPending": "暂无待审核提现"
-  },
   "userCommission": {
     "title": "用户分佣"
   },
@@ -20,7 +16,7 @@
     "module": "租户提现",
     "moduleShort": "提现",
     "apply": "申请提现",
-    "audit": "打款",
+    "audit": "审核",
     "review": "审核",
     "reviewRemark": "审核备注",
     "confirmPaid": "确认打款",
@@ -104,13 +100,11 @@
   "tenantWithdrawAccount": {
     "module": "租户收款账户",
     "moduleShort": "租户收款账户",
-    "currency": "币种",
     "payChannel": "打款渠道",
     "payChannelPlaceholder": "请选择打款渠道",
     "payChannelBank": "银行",
     "payChannelAlipay": "支付宝",
     "payChannelWechat": "微信",
-    "payChannelUsd": "美元",
     "bankName": "银行名称",
     "bankAccountNo": "银行账号",
     "bankAccountName": "户名",
@@ -120,9 +114,6 @@
   },
   "tenantRelation": {
     "module": "租户分佣关系"
-  },
-  "userWithdrawSettings": {
-    "module": "用户提现设置"
   },
   "tenantCommissionRule": {
     "module": "租户分佣规则",
@@ -191,7 +182,6 @@
     "currency": "币种",
     "allCurrency": "全部币种",
     "allTenant": "全部租户",
-    "platform": "平台",
     "tenantFilter": "租户筛选",
     "withdrawnAmount": "已提现"
   },
