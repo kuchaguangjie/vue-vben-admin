@@ -32,5 +32,20 @@
     "isCustom": "Is Custom",
     "id": "ID",
     "operation": "Operation"
+  },
+  "stat": {
+    "module": "Chat Statistics",
+    "title": "AI Chat Statistics",
+    "total": "Total",
+    "today": "Today",
+    "totalConversations": "Conversations",
+    "totalMessages": "Messages",
+    "totalTokensUsed": "Token Usage",
+    "activeUsers": "Active Users",
+    "conversationCount": "Conversations",
+    "messageCount": "Messages",
+    "tokenUsed": "Token Usage",
+    "noData": "No Data",
+    "tenantFilter": "Tenant Filter"
   }
 }

@@ -30,6 +30,15 @@ const routes: RouteRecordRaw[] = [
         },
         component: () => import('#/views/ai/model/list.vue'),
       },
+      {
+        path: '/ai/stat',
+        name: 'AIChatStat',
+        meta: {
+          icon: 'mdi:bar-chart',
+          title: $t('ai.stat.module'),
+        },
+        component: () => import('#/views/ai/stat/index.vue'),
+      },
     ],
   },
 ];

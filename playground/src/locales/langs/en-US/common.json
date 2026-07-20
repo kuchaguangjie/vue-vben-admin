@@ -1,6 +1,8 @@
 {
   "id": "ID",
   "items": "items",
+  "all": "All",
+  "platform": "Platform",
   "inputPlaceholder": "Please input",
   "sortOrder": "Sort Order",
   "view": "View",

@@ -210,6 +210,51 @@ async function deleteAiModel(id: number) {
   return requestClient.delete(`/ai/model/${id}`);
 }
 
+export namespace SystemAiChatStatApi {
+  export interface ChatStatOverviewResp {
+    activeUsers: number;
+    conversationTrend: TrendItem[];
+    modelDistribution: ModelDistributionItem[];
+    todayConversations: number;
+    todayMessages: number;
+    todayTokensUsed: number;
+    tokenTrend: TrendItem[];
+    totalConversations: number;
+    totalMessages: number;
+    totalTokensUsed: number;
+  }
+
+  export interface ModelDistributionItem {
+    conversationCount: number;
+    messageCount: number;
+    modelCode: string;
+    modelName: string;
+    tokenUsed: number;
+  }
+
+  export interface TrendItem {
+    count: number;
+    date: string;
+  }
+
+  export interface ChatStatFilterReq {
+    endDate?: string;
+    modelCode?: string;
+    startDate?: string;
+    tenantId?: number;
+    userId?: number;
+  }
+}
+
+async function getChatStatOverview(
+  params?: SystemAiChatStatApi.ChatStatFilterReq,
+) {
+  return requestClient.get<SystemAiChatStatApi.ChatStatOverviewResp>(
+    '/ai/stat/overview',
+    { params },
+  );
+}
+
 export {
   batchBindProviderModels,
   bindProviderModel,
@@ -223,6 +268,7 @@ export {
   getAiProviderDetail,
   getAiProviderPage,
   getAvailableModels,
+  getChatStatOverview,
   getProviderModels,
   updateAiModel,
   updateAiProvider,

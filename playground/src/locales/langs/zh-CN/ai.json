@@ -32,5 +32,20 @@
     "isCustom": "是否自定义",
     "id": "ID",
     "operation": "操作"
+  },
+  "stat": {
+    "module": "对话统计",
+    "title": "AI 对话统计",
+    "total": "总计",
+    "today": "今日",
+    "totalConversations": "对话数",
+    "totalMessages": "消息数",
+    "totalTokensUsed": "Token 消耗",
+    "activeUsers": "活跃用户",
+    "conversationCount": "对话数",
+    "messageCount": "消息数",
+    "tokenUsed": "Token 消耗",
+    "noData": "暂无数据",
+    "tenantFilter": "租户筛选"
   }
 }

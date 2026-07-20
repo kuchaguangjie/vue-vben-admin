@@ -1,6 +1,8 @@
 {
   "id": "ID",
   "items": "项",
+  "all": "全部",
+  "platform": "平台",
   "inputPlaceholder": "请输入",
   "sort": "排序",
   "view": "查看",
