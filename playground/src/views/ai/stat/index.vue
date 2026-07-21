@@ -61,7 +61,6 @@ function renderConversationTrend() {
   renderConvChart({
     grid: {
       bottom: 40,
-      containLabel: true,
       left: '3%',
       right: '3%',
       top: '10%',
@@ -123,7 +122,6 @@ function renderTokenTrend() {
   renderTokenChart({
     grid: {
       bottom: 40,
-      containLabel: true,
       left: '3%',
       right: '3%',
       top: '10%',
@@ -236,6 +234,7 @@ onMounted(() => {
             icon: SvgBellIcon,
             today: statData?.todayMessages ?? 0,
             total: statData?.totalMessages ?? 0,
+            tooltip: $t('ai.stat.messageCountTip'),
           },
           {
             title: $t('ai.stat.totalTokensUsed'),
@@ -248,6 +247,7 @@ onMounted(() => {
             icon: SvgCakeIcon,
             today: 0,
             total: statData?.activeUsers ?? 0,
+            tooltip: $t('ai.stat.activeUsersTip'),
           },
         ]"
         :key="item.title"
@@ -259,10 +259,11 @@ onMounted(() => {
           }}</span>
           <component
             :is="item.icon"
-            class="h-5 w-5 text-gray-400 dark:text-gray-500"
+            :title="item.tooltip"
+            class="h-5 w-5 cursor-help text-gray-400 dark:text-gray-500"
           />
         </div>
-        <div v-if="item.today > 0" class="mt-3">
+        <div class="mt-3">
           <span class="text-xs text-gray-500 dark:text-gray-400">{{
             $t('ai.stat.today')
           }}</span>

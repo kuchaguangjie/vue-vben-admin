@@ -1,5 +1,9 @@
 {
   "title": "分佣系统",
+  "withdraw": {
+    "pending": "待审核提现",
+    "noPending": "暂无待审核提现"
+  },
   "userCommission": {
     "title": "用户分佣"
   },
