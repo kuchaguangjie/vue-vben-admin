@@ -103,6 +103,7 @@ function renderConversationTrend() {
       axisTick: {
         show: false,
       },
+      minInterval: 1,
       splitLine: {
         lineStyle: {
           type: 'dashed',
