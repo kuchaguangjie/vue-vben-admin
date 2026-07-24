@@ -8,18 +8,18 @@ export namespace DashboardApi {
   }
 
   export interface KnowledgeStats {
-    totalCount: number;
-    tenantCount: number;
     personalCount: number;
+    tenantCount: number;
+    totalCount: number;
   }
 
   export interface OverviewResp {
+    knowledgeStats: KnowledgeStats;
     latestNotices: LatestNoticeItem[];
     monthlyRevenue: number;
     pendingWithdrawCount: number;
     tenantCount: number;
     userCount: number;
-    knowledgeStats: KnowledgeStats;
   }
 }
 

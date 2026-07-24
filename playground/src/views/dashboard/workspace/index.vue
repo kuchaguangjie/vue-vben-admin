@@ -158,7 +158,10 @@ function navTo(url: string) {
             {{ overview.knowledgeStats.totalCount }}
           </div>
           <div class="mt-2 text-xs text-muted-foreground">
-            {{ $t('system.knowledge.tenantCount') }}: {{ overview.knowledgeStats.tenantCount }} | {{ $t('system.knowledge.personalCount') }}: {{ overview.knowledgeStats.personalCount }}
+            {{ $t('system.knowledge.tenantCount') }}:
+            {{ overview.knowledgeStats.tenantCount }} |
+            {{ $t('system.knowledge.personalCount') }}:
+            {{ overview.knowledgeStats.personalCount }}
           </div>
         </div>
       </div>
