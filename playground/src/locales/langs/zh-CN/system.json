@@ -415,5 +415,10 @@
     "keyPlaceholder": "例如: commission.enable",
     "valuePlaceholder": "JSON 格式或纯文本",
     "remarkPlaceholder": "备注说明"
+  },
+  "knowledge": {
+    "title": "知识库",
+    "tenantCount": "租户知识库",
+    "personalCount": "个人知识库"
   }
 }

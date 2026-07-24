@@ -22,6 +22,11 @@ const overview = ref<DashboardApi.OverviewResp>({
   pendingWithdrawCount: 0,
   tenantCount: 0,
   userCount: 0,
+  knowledgeStats: {
+    totalCount: 0,
+    tenantCount: 0,
+    personalCount: 0,
+  },
 });
 const loading = ref(false);
 
@@ -141,6 +146,19 @@ function navTo(url: string) {
             >
               {{ $t('ui.action.view') }}
             </Button>
+          </div>
+        </div>
+        <div
+          class="rounded-lg border bg-card p-4 text-card-foreground shadow-sm"
+        >
+          <div class="text-sm font-medium text-muted-foreground">
+            {{ $t('system.knowledge.title') }}
+          </div>
+          <div class="mt-1 text-2xl font-bold">
+            {{ overview.knowledgeStats.totalCount }}
+          </div>
+          <div class="mt-2 text-xs text-muted-foreground">
+            {{ $t('system.knowledge.tenantCount') }}: {{ overview.knowledgeStats.tenantCount }} | {{ $t('system.knowledge.personalCount') }}: {{ overview.knowledgeStats.personalCount }}
           </div>
         </div>
       </div>

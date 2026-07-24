@@ -7,12 +7,19 @@ export namespace DashboardApi {
     title: string;
   }
 
+  export interface KnowledgeStats {
+    totalCount: number;
+    tenantCount: number;
+    personalCount: number;
+  }
+
   export interface OverviewResp {
     latestNotices: LatestNoticeItem[];
     monthlyRevenue: number;
     pendingWithdrawCount: number;
     tenantCount: number;
     userCount: number;
+    knowledgeStats: KnowledgeStats;
   }
 }
 

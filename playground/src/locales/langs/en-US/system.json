@@ -401,5 +401,10 @@
     "keyPlaceholder": "e.g. commission.enable",
     "valuePlaceholder": "JSON or plain text",
     "remarkPlaceholder": "Remark description"
+  },
+  "knowledge": {
+    "title": "Knowledge",
+    "tenantCount": "Tenant Knowledge",
+    "personalCount": "Personal Knowledge"
   }
 }
