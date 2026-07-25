@@ -215,8 +215,11 @@ export namespace SystemAiChatStatApi {
     activeUsers: number;
     conversationTrend: TrendItem[];
     modelDistribution: ModelDistributionItem[];
+    referenceCount: number;
+    referencedReplies: number;
     todayConversations: number;
     todayMessages: number;
+    todayReferencedReplies: number;
     todayTokensUsed: number;
     tokenTrend: TrendItem[];
     totalConversations: number;

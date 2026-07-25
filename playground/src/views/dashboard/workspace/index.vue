@@ -1,20 +1,30 @@
 <script lang="ts" setup>
 import type { DashboardApi } from '#/api/dashboard';
 
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 
 import { Page } from '@vben/common-ui';
 import { preferences } from '@vben/preferences';
 import { useUserStore } from '@vben/stores';
 
-import { Avatar, Button } from 'ant-design-vue';
+import { Avatar, Button, Select } from 'ant-design-vue';
 
 import { getDashboardOverview } from '#/api/dashboard';
+import { getTenantAll } from '#/api/system/tenant';
+import { usePlatformAdmin } from '#/hooks/common/use-platform-admin';
 import { $t } from '#/locales';
 
 const userStore = useUserStore();
 const router = useRouter();
+const { isPlatformAdmin } = usePlatformAdmin();
+const tenants = ref<Array<{ id: number; name: string }>>([]);
+const selectedTenantId = ref(0);
+
+const tenantOptions = computed(() => [
+  { label: $t('common.platform'), value: 0 },
+  ...tenants.value.map((tenant) => ({ label: tenant.name, value: tenant.id })),
+]);
 
 const overview = ref<DashboardApi.OverviewResp>({
   latestNotices: [],
@@ -33,14 +43,31 @@ const loading = ref(false);
 async function fetchOverview() {
   loading.value = true;
   try {
-    const resp = await getDashboardOverview();
+    const resp = await getDashboardOverview(
+      isPlatformAdmin.value ? { tenantId: selectedTenantId.value } : undefined,
+    );
+    // #region debug-point A:overview-response
+    fetch('http://127.0.0.1:7777/event', { method: 'POST', body: JSON.stringify({ sessionId: 'workspace-tenant-switch', runId: 'pre', hypothesisId: 'A', location: 'workspace/index.vue:49', msg: '[DEBUG] dashboard overview response', data: { latestNotices: resp.latestNotices, knowledgeStats: resp.knowledgeStats, tenantId: selectedTenantId.value }, ts: Date.now() }) }).catch(() => {});
+    // #endregion
     overview.value = resp;
   } finally {
     loading.value = false;
   }
 }
 
+async function loadTenants() {
+  if (!isPlatformAdmin.value) return;
+  try {
+    tenants.value = await getTenantAll();
+  } catch {
+    tenants.value = [];
+  }
+}
+
+watch(selectedTenantId, fetchOverview);
+
 onMounted(() => {
+  loadTenants();
   fetchOverview();
 });
 
@@ -89,12 +116,19 @@ function navTo(url: string) {
           :size="64"
           class="mr-4"
         />
-        <div>
+        <div class="mr-auto">
           <div class="text-2xl font-semibold">
             早安, {{ userStore.userInfo?.realName }}
           </div>
           <div class="text-sm text-muted-foreground">开始您一天的工作吧！</div>
         </div>
+        <Select
+          v-if="isPlatformAdmin"
+          v-model:value="selectedTenantId"
+          :options="tenantOptions"
+          :placeholder="$t('ai.stat.tenantFilter')"
+          style="width: 180px"
+        />
       </div>
 
       <div class="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -152,15 +186,15 @@ function navTo(url: string) {
           class="rounded-lg border bg-card p-4 text-card-foreground shadow-sm"
         >
           <div class="text-sm font-medium text-muted-foreground">
-            {{ $t('system.knowledge.title') }}
+            {{ $t('knowledge.title') }}
           </div>
           <div class="mt-1 text-2xl font-bold">
             {{ overview.knowledgeStats.totalCount }}
           </div>
           <div class="mt-2 text-xs text-muted-foreground">
-            {{ $t('system.knowledge.tenantCount') }}:
+            {{ $t('knowledge.tenantCount') }}:
             {{ overview.knowledgeStats.tenantCount }} |
-            {{ $t('system.knowledge.personalCount') }}:
+            {{ $t('knowledge.personalCount') }}:
             {{ overview.knowledgeStats.personalCount }}
           </div>
         </div>

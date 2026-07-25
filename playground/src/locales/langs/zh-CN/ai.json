@@ -48,6 +48,10 @@
       "noData": "暂无数据",
       "tenantFilter": "租户筛选",
       "messageCountTip": "仅统计用户发送的消息数",
-      "activeUsersTip": "统计有对话记录的用户数"
+      "activeUsersTip": "统计有对话记录的用户数",
+      "referencedReplies": "知识库引用回复",
+      "referencedRepliesTip": "成功回答中引用知识库的回复数",
+      "referenceCount": "知识库引用数",
+      "referenceCountTip": "成功回答引用的知识库条目总数"
     }
 }

@@ -250,6 +250,20 @@ onMounted(() => {
             total: statData?.activeUsers ?? 0,
             tooltip: $t('ai.stat.activeUsersTip'),
           },
+          {
+            title: $t('ai.stat.referencedReplies'),
+            icon: SvgCardIcon,
+            today: statData?.todayReferencedReplies ?? 0,
+            total: statData?.referencedReplies ?? 0,
+            tooltip: $t('ai.stat.referencedRepliesTip'),
+          },
+          {
+            title: $t('ai.stat.referenceCount'),
+            icon: SvgBellIcon,
+            today: 0,
+            total: statData?.referenceCount ?? 0,
+            tooltip: $t('ai.stat.referenceCountTip'),
+          },
         ]"
         :key="item.title"
         class="rounded-lg border border-gray-200 bg-gray-50 p-4 shadow-sm dark:border-gray-700 dark:bg-gray-800"

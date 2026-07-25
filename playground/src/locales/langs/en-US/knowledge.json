@@ -1,5 +1,7 @@
 {
   "title": "Knowledge Management",
+  "tenantCount": "Tenant Knowledge",
+  "personalCount": "Personal Knowledge",
   "category": {
     "module": "Knowledge Category",
     "moduleShort": "Category",

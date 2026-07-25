@@ -46,6 +46,10 @@
     "messageCount": "Messages",
     "tokenUsed": "Token Usage",
     "noData": "No Data",
-    "tenantFilter": "Tenant Filter"
+    "tenantFilter": "Tenant Filter",
+    "referencedReplies": "Knowledge-Based Replies",
+    "referencedRepliesTip": "Successful replies that cited knowledge",
+    "referenceCount": "Knowledge References",
+    "referenceCountTip": "Total knowledge items cited by successful replies"
   }
 }

@@ -23,6 +23,8 @@ export namespace DashboardApi {
   }
 }
 
-export async function getDashboardOverview() {
-  return requestClient.get<DashboardApi.OverviewResp>('/dashboard/overview');
+export async function getDashboardOverview(params?: { tenantId?: number }) {
+  return requestClient.get<DashboardApi.OverviewResp>('/dashboard/overview', {
+    params,
+  });
 }
