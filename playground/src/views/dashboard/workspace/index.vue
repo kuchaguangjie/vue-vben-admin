@@ -47,7 +47,22 @@ async function fetchOverview() {
       isPlatformAdmin.value ? { tenantId: selectedTenantId.value } : undefined,
     );
     // #region debug-point A:overview-response
-    fetch('http://127.0.0.1:7777/event', { method: 'POST', body: JSON.stringify({ sessionId: 'workspace-tenant-switch', runId: 'pre', hypothesisId: 'A', location: 'workspace/index.vue:49', msg: '[DEBUG] dashboard overview response', data: { latestNotices: resp.latestNotices, knowledgeStats: resp.knowledgeStats, tenantId: selectedTenantId.value }, ts: Date.now() }) }).catch(() => {});
+    fetch('http://127.0.0.1:7777/event', {
+      method: 'POST',
+      body: JSON.stringify({
+        sessionId: 'workspace-tenant-switch',
+        runId: 'pre',
+        hypothesisId: 'A',
+        location: 'workspace/index.vue:49',
+        msg: '[DEBUG] dashboard overview response',
+        data: {
+          latestNotices: resp.latestNotices,
+          knowledgeStats: resp.knowledgeStats,
+          tenantId: selectedTenantId.value,
+        },
+        ts: Date.now(),
+      }),
+    }).catch(() => {});
     // #endregion
     overview.value = resp;
   } finally {
