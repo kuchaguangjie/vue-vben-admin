@@ -260,7 +260,7 @@ onMounted(() => {
           {
             title: $t('ai.stat.referenceCount'),
             icon: SvgBellIcon,
-            today: 0,
+            today: statData?.todayReferenceCount ?? 0,
             total: statData?.referenceCount ?? 0,
             tooltip: $t('ai.stat.referenceCountTip'),
           },

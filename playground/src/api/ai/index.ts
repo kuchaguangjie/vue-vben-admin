@@ -219,6 +219,7 @@ export namespace SystemAiChatStatApi {
     referencedReplies: number;
     todayConversations: number;
     todayMessages: number;
+    todayReferenceCount: number;
     todayReferencedReplies: number;
     todayTokensUsed: number;
     tokenTrend: TrendItem[];
