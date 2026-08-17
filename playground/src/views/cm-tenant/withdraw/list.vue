@@ -95,7 +95,10 @@ const [Grid, gridApi] = useVbenVxeGrid({
           filteredFormValues.currency = currency.value;
           // 更新 tenantId 筛选，触发卡片刷新
           const tid = filteredFormValues.tenantId;
-          tenantIdFilter.value = tid ? Number(tid) : undefined;
+          tenantIdFilter.value =
+            tid === undefined || tid === null || tid === ''
+              ? undefined
+              : Number(tid);
           return doPageQuery(getTenantWithdrawPage, params, filteredFormValues);
         },
       },

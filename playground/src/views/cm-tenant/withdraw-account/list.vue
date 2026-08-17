@@ -47,10 +47,14 @@ const [Grid, gridApi] = useVbenVxeGrid({
         query: async (_params: PageParams, formValues) => {
           const resp = await getWithdrawAccountList();
           let items = resp.list || [];
-          if (unref(isPlatformAdmin) && formValues.tenantId) {
-            items = items.filter(
-              (item) => item.tenantId === Number(formValues.tenantId),
-            );
+          const tid = formValues.tenantId;
+          if (
+            unref(isPlatformAdmin) &&
+            tid !== undefined &&
+            tid !== null &&
+            tid !== ''
+          ) {
+            items = items.filter((item) => item.tenantId === Number(tid));
           }
           return {
             items,

@@ -279,6 +279,7 @@ export namespace CmTenantWithdrawApi {
     pageSize?: number;
     startDate?: string;
     status?: number;
+    tenantId?: number;
     withdrawNo?: string;
   }
 
@@ -343,7 +344,7 @@ export async function getTenantWithdrawAccount(
   currency?: string,
 ) {
   const params: Record<string, number | string> = {};
-  if (tenantId) params.tenantId = tenantId;
+  if (tenantId !== undefined) params.tenantId = tenantId;
   if (currency) params.currency = currency;
   return requestClient.get<CmTenantWithdrawApi.TenantAccount>(
     '/cm-tenant/withdraw/account',
