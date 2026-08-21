@@ -10,7 +10,13 @@ import { resetAllStores, useAccessStore, useUserStore } from '@vben/stores';
 import { notification } from 'ant-design-vue';
 import { defineStore } from 'pinia';
 
-import { getAccessCodesApi, getUserInfoApi, loginApi, logoutApi } from '#/api';
+import {
+  accessCodesQueryOptions,
+  loginApi,
+  logoutApi,
+  userInfoQueryOptions,
+} from '#/api';
+import { queryClient } from '#/api/query-client';
 import { $t } from '#/locales';
 
 export const useAuthStore = defineStore('auth', () => {
@@ -45,7 +51,7 @@ export const useAuthStore = defineStore('auth', () => {
         // 获取用户信息并存储到 accessStore 中
         const [fetchUserInfoResult, accessCodes] = await Promise.all([
           fetchUserInfo(),
-          getAccessCodesApi(),
+          queryClient.fetchQuery(accessCodesQueryOptions()),
         ]);
 
         userInfo = fetchUserInfoResult;
@@ -102,6 +108,9 @@ export const useAuthStore = defineStore('auth', () => {
       isLoggingOut.value = false; // 重置 标识
 
       resetAllStores();
+      // 清空 queryClient 缓存，避免下一用户登录时拿到上一用户的服务器状态
+      // (userInfo / menus / accessCodes / i18nInfo 等)
+      queryClient.clear();
       accessStore.setLoginExpired(false);
     }
 
@@ -117,7 +126,11 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   async function fetchUserInfo() {
-    const userInfo: null | UserInfo = await getUserInfoApi();
+    // 走 queryClient.fetchQuery：与 profile/base-setting.vue 的 useQuery 共享同一缓存，
+    // 同会话内重复调用自动去重，超过 staleTime (30s) 自动重拉保证实时性。
+    const userInfo: null | UserInfo = await queryClient.fetchQuery(
+      userInfoQueryOptions(),
+    );
     userStore.setUserInfo(userInfo);
     return userInfo;
   }

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { computed, ref } from 'vue';
 import { CircleStencil, Cropper } from 'vue-advanced-cropper';
 import 'vue-advanced-cropper/dist/style.css';
 
@@ -7,9 +7,10 @@ import { $t } from '@vben/locales';
 
 import { VbenAvatar } from '@vben-core/shadcn-ui';
 
+import { useQuery } from '@tanstack/vue-query';
 import { message, TabPane, Tabs } from 'ant-design-vue';
 
-import { getSysAvatarListApi, updateUserAvatarApi, UserApi } from '#/api';
+import { sysAvatarListQueryOptions, updateUserAvatarApi, UserApi } from '#/api';
 
 defineProps<{
   currentAvatar: string;
@@ -30,39 +31,22 @@ const cropperRef = ref();
 const uploading = ref(false);
 
 // --- 系统头像相关状态 ---
-const sysAvatarList = ref<UserApi.AvatarPreviewItem[]>([]);
-const loadingSysList = ref(false);
+// 延迟加载：仅在 modal 打开且切到 system tab 时启用 query。
+// 10min staleTime 内重复打开直接命中缓存秒开，无需重复拉取。
 const activeTab = ref(DEFAULT_TAB_NAME);
-
-/**
- * 1. 延迟加载：基于常量判断
- */
-watch(activeTab, (newTab) => {
-  if (newTab === SYSTEM_TAB_NAME && sysAvatarList.value.length === 0) {
-    loadSystemAvatars();
-  }
+const { data: sysAvatarData, isFetching: loadingSysList } = useQuery({
+  ...sysAvatarListQueryOptions(),
+  enabled: () => activeTab.value === SYSTEM_TAB_NAME && showModal.value,
 });
-
-async function loadSystemAvatars() {
-  if (loadingSysList.value) return;
-  loadingSysList.value = true;
-  try {
-    const res = await getSysAvatarListApi();
-    sysAvatarList.value = res.avatarList;
-  } catch (error) {
-    console.error('Failed to sync system avatars:', error);
-    message.error($t('common.messages.loadFailed'));
-  } finally {
-    loadingSysList.value = false;
-  }
-}
+const sysAvatarList = computed<UserApi.AvatarPreviewItem[]>(() => {
+  return sysAvatarData.value?.avatarList ?? [];
+});
 
 /**
  * 2. 状态清理逻辑
  */
 function closeModal() {
   showModal.value = false;
-  sysAvatarList.value = [];
   previewImage.value = '';
   activeTab.value = DEFAULT_TAB_NAME;
 }

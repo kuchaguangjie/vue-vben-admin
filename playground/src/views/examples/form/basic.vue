@@ -10,8 +10,9 @@ import { Button, Card, message, Spin, Tag } from 'ant-design-vue';
 import dayjs from 'dayjs';
 
 import { useVbenForm, z } from '#/adapter/form';
-import { getAllMenusApiRoots } from '#/api';
+import { allMenusRootsQueryOptions } from '#/api';
 import { upload_file } from '#/api/examples/upload';
+import { queryClient } from '#/api/query-client';
 import { $t } from '#/locales';
 
 import DocButton from '../doc-button.vue';
@@ -31,6 +32,12 @@ function fetchRemoteOptions({ keyword = '选项' }: Record<string, any>) {
       fetching.value = false;
     }, 1000);
   });
+}
+
+// 复用全局菜单缓存：与 router/access.ts 共享同一 queryKey，
+// staleTime (5min) 内重复进入表单页直接命中缓存秒开，无需重复请求。
+async function fetchMenuRoots() {
+  return queryClient.fetchQuery(allMenusRootsQueryOptions());
 }
 
 const [BaseForm, baseFormApi] = useVbenForm({
@@ -79,8 +86,8 @@ const [BaseForm, baseFormApi] = useVbenForm({
             value: item.path,
           }));
         },
-        // 菜单接口
-        api: getAllMenusApiRoots,
+        // 菜单接口（走 queryClient 缓存）
+        api: fetchMenuRoots,
         autoSelect: 'first',
       },
       // 字段名
@@ -124,8 +131,8 @@ const [BaseForm, baseFormApi] = useVbenForm({
       component: 'ApiTreeSelect',
       // 对应组件的参数
       componentProps: {
-        // 菜单接口
-        api: getAllMenusApiRoots,
+        // 菜单接口（走 queryClient 缓存）
+        api: fetchMenuRoots,
         // 菜单接口转options格式
         labelField: 'name',
         valueField: 'path',

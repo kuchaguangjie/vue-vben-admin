@@ -9,7 +9,8 @@ import { accessRoutes, coreRouteNames } from '#/router/routes';
 import { useAppStore, useAuthStore } from '#/store';
 import { getSafeRedirectPath } from '#/utils/security';
 
-import { getAccessCodesApi } from '../api/core/auth';
+import { accessCodesQueryOptions } from '../api/core/auth';
+import { queryClient } from '../api/query-client';
 import { generateAccess } from './access';
 
 /**
@@ -111,7 +112,7 @@ function setupAccessGuard(router: Router) {
     accessStore.setAccessMenus(accessibleMenus);
     accessStore.setAccessRoutes(accessibleRoutes);
 
-    const codes = await getAccessCodesApi();
+    const codes = await queryClient.fetchQuery(accessCodesQueryOptions());
     accessStore.setAccessCodes(codes);
 
     accessStore.setIsAccessChecked(true);

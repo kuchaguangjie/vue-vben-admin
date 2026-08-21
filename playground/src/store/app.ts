@@ -2,7 +2,8 @@ import { ref } from 'vue';
 
 import { defineStore } from 'pinia';
 
-import { getI18nInfoApi } from '#/api';
+import { i18nInfoQueryOptions } from '#/api';
+import { queryClient } from '#/api/query-client';
 
 const DEFAULT_APP_NAME = 'Fiber Admin';
 
@@ -12,7 +13,9 @@ export const useAppStore = defineStore('app', () => {
 
   async function fetchAppConfig() {
     try {
-      const resp = await getI18nInfoApi();
+      // 走 queryClient.fetchQuery：与路由守卫共享同一缓存，
+      // 同会话内重复调用自动去重，staleTime (5min) 内不重拉保证实时性。
+      const resp = await queryClient.fetchQuery(i18nInfoQueryOptions());
       saasEnabled.value = resp.saasEnabled ?? true;
       appName.value = resp.appName ?? DEFAULT_APP_NAME;
     } catch (error) {

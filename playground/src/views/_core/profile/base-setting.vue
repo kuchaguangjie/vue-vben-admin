@@ -1,16 +1,22 @@
 <script setup lang="ts">
 import type { VbenFormSchema } from '#/adapter/form';
 
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 
 import { ProfileBaseSetting } from '@vben/common-ui';
 import { $t } from '@vben/locales';
 
+import { useQuery } from '@tanstack/vue-query';
 import { message } from 'ant-design-vue';
 
-import { getUserInfoApi, updateUserBasicInfoApi } from '#/api';
+import { updateUserBasicInfoApi, userInfoQueryOptions } from '#/api';
+import { queryClient } from '#/api/query-client';
 
 const profileBaseSettingRef = ref();
+
+// 复用全局 userInfo 缓存：登录后由 store/auth.ts 拉取过，
+// 30s staleTime 内进入本页直接命中缓存秒开，超时自动后台刷新。
+const { data: userInfo } = useQuery(userInfoQueryOptions());
 
 const formSchema = computed((): VbenFormSchema[] => {
   return [
@@ -85,12 +91,18 @@ const formSchema = computed((): VbenFormSchema[] => {
   ];
 });
 
-onMounted(initUserInfo);
+// 首次进入页面：若缓存已存在则同步填充表单（无需等待网络）
+onMounted(() => {
+  if (userInfo.value) {
+    profileBaseSettingRef.value?.getFormApi().setValues(userInfo.value);
+  }
+});
 
-async function initUserInfo() {
-  const data = await getUserInfoApi();
-  profileBaseSettingRef.value.getFormApi().setValues(data);
-}
+// 后台刷新或缓存命中后，watch 触发同步表单
+watch(userInfo, (newData) => {
+  if (!newData) return;
+  profileBaseSettingRef.value?.getFormApi().setValues(newData);
+});
 
 async function handleUpdate(values: any) {
   await updateUserBasicInfoApi({
@@ -98,7 +110,8 @@ async function handleUpdate(values: any) {
     remark: values.remark,
     version: values.version,
   });
-  await initUserInfo(); // 刷新
+  // 强制刷新 userInfo（等待数据真正返回后再提示成功，保证用户体验一致）
+  await queryClient.refetchQueries({ queryKey: ['user', 'info'] });
   message.success($t('common.messages.success'));
 }
 </script>

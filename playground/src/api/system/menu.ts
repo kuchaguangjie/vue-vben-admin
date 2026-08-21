@@ -2,6 +2,8 @@ import type { Recordable } from '@vben/types';
 
 import type { CommonType } from '#/api';
 
+import { queryOptions } from '@tanstack/vue-query';
+
 import { getTreeAsRoots } from '#/api';
 import { requestClient } from '#/api/request';
 
@@ -108,6 +110,36 @@ async function getMenuTree(params: Recordable<any>) {
 }
 async function getMenuTreeRoots(params: Recordable<any>) {
   return getTreeAsRoots<SystemMenuApi.SystemMenu>(getMenuTree, params);
+}
+
+/**
+ * 菜单树 queryOptions 工厂
+ *
+ * 适用于「全局只读 + 跨页共享」的服务器状态（如分配角色权限时的菜单树）。
+ * 业务调用方目前仍直接调 getMenuTree/getMenuTreeRoots，可按需逐步改为
+ * queryClient.fetchQuery(menuTreeQueryOptions(params)) 复用缓存。
+ *
+ * 注意：params 进入 queryKey 用于区分不同筛选条件的缓存。
+ * 与 api/core/menu.ts 的 allMenusQueryOptions 区别：此处是 system/menu/tree
+ * 接口（管理端菜单树，带 params），allMenusQueryOptions 是 /menu/all（用户菜单）。
+ */
+export function menuTreeQueryOptions(params: Recordable<any> = {}) {
+  return queryOptions({
+    queryFn: () => getMenuTree(params),
+    queryKey: ['system', 'menu', 'tree', params] as const,
+    staleTime: 60_000,
+  });
+}
+
+/**
+ * 菜单树 roots queryOptions 工厂（同上，但返回 roots 数组形式）
+ */
+export function menuTreeRootsQueryOptions(params: Recordable<any> = {}) {
+  return queryOptions({
+    queryFn: () => getMenuTreeRoots(params),
+    queryKey: ['system', 'menu', 'treeRoots', params] as const,
+    staleTime: 60_000,
+  });
 }
 
 async function getMenuTreeWithUserCore(params: Recordable<any>) {

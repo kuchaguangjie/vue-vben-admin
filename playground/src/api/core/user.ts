@@ -1,5 +1,7 @@
 import type { UserInfo } from '@vben/types';
 
+import { queryOptions } from '@tanstack/vue-query';
+
 import { requestClient } from '#/api/request';
 
 export namespace UserApi {
@@ -39,10 +41,37 @@ export async function getUserInfoApi() {
   return requestClient.get<UserInfo>('/user/info');
 }
 
+/**
+ * 用户信息 queryOptions 工厂
+ *
+ * 全局只读服务器数据：登录后多处共享，建议缓存 30s 避免短时间重复拉取。
+ * 变更点（如 profile 修改资料后）通过 `queryClient.invalidateQueries` 失效。
+ */
+export function userInfoQueryOptions() {
+  return queryOptions({
+    queryFn: () => getUserInfoApi(),
+    queryKey: ['user', 'info'] as const,
+    staleTime: 30_000,
+  });
+}
+
 export async function getSysAvatarListApi() {
   return requestClient.get<UserApi.GetSysAvatarListResp>(
     '/user/getSysAvatarList',
   );
+}
+
+/**
+ * 系统预设头像列表 queryOptions 工厂
+ *
+ * 全局只读、变更极少，长缓存即可。
+ */
+export function sysAvatarListQueryOptions() {
+  return queryOptions({
+    queryFn: () => getSysAvatarListApi(),
+    queryKey: ['user', 'sysAvatarList'] as const,
+    staleTime: 10 * 60 * 1000,
+  });
 }
 
 export async function updateUserBasicInfoApi(data: any) {

@@ -19,11 +19,37 @@
 - **框架**: Vue 3 + TypeScript
 - **构建工具**: Vite 5
 - **UI 库**: Ant Design Vue
-- **状态管理**: Pinia
+- **状态管理**: Pinia（客户端状态） + TanStack Query（服务器状态）
 - **路由**: Vue Router
 - **表格组件**: VXE-Table
 - **表单组件**: Vben Form
 - **样式**: Tailwind CSS + SCSS
+
+### 服务器状态管理（TanStack Query）
+
+`@tanstack/vue-query` 已内置并由 [bootstrap.ts](src/bootstrap.ts) 注册 `VueQueryPlugin`，
+单例 QueryClient 位于 [`src/api/query-client.ts`](src/api/query-client.ts)。
+
+**核心约定**：
+
+- **全局只读服务器状态**（用户信息、菜单、权限码、i18n 信息、时区选项、系统头像列表等）
+  通过 `queryOptions` 工厂封装，见 `src/api/core/*` 与 `src/api/system/*`。
+- **组件 setup 内**：`useQuery(xxxQueryOptions())`。
+- **非 setup 上下文**（store action / router guard / effectScope）：
+  `await queryClient.fetchQuery(xxxQueryOptions())`，与组件共享同一缓存。
+- **变更后失效**：`await queryClient.refetchQueries({ queryKey: [...] })`
+  或 `queryClient.invalidateQueries({ queryKey: [...] })`。
+- **退出登录清缓存**：`queryClient.clear()`（已在 `store/auth.ts` 中调用）。
+
+**默认配置**（`queryClient.ts`）：
+
+| 选项 | 默认值 | 说明 |
+| --- | --- | --- |
+| `staleTime` | 5s | 短去重窗口，避免短时间重复拉取，超时自动重拉保证实时性 |
+| `gcTime` | 5min | 缓存回收周期 |
+| `refetchOnWindowFocus` | false | 关闭窗口聚焦自动后台刷新（后台管理无需此优化） |
+| `refetchOnReconnect` | true | 网络恢复后刷新 |
+| `retry` | 1 | 失败重试一次 |
 
 ### 分支说明
 

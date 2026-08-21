@@ -1,3 +1,5 @@
+import { queryOptions } from '@tanstack/vue-query';
+
 import { requestClient } from '#/api/request';
 
 /**
@@ -11,6 +13,20 @@ export async function getTimezoneOptionsApi() {
     }[]
   >('/timezone/getTimezoneOptions');
 }
+
+/**
+ * 系统时区选项列表 queryOptions 工厂
+ *
+ * 全局只读、几乎不变，长缓存即可。
+ */
+export function timezoneOptionsQueryOptions() {
+  return queryOptions({
+    queryFn: () => getTimezoneOptionsApi(),
+    queryKey: ['timezone', 'options'] as const,
+    staleTime: 30 * 60 * 1000,
+  });
+}
+
 /**
  * 获取用户时区
  */

@@ -61,9 +61,11 @@ async function bootstrap(namespace: string) {
   // 配置路由及路由守卫
   app.use(router);
 
-  // 配置@tanstack/vue-query
+  // 配置@tanstack/vue-query（复用 #/api/query-client.ts 单例，
+  // 便于 store / router guard / effectScope 等非 setup 上下文共享同一缓存）
   const { VueQueryPlugin } = await import('@tanstack/vue-query');
-  app.use(VueQueryPlugin);
+  const { queryClient } = await import('#/api/query-client');
+  app.use(VueQueryPlugin, { queryClient });
 
   // 配置Motion插件
   const { MotionPlugin } = await import('@vben/plugins/motion');

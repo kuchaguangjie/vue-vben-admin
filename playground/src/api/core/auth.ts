@@ -1,5 +1,7 @@
 import { useAccessStore } from '@vben/stores';
 
+import { queryOptions } from '@tanstack/vue-query';
+
 import { baseRequestClient, requestClient } from '#/api/request';
 import { formatToken } from '#/utils/token-util';
 
@@ -67,4 +69,19 @@ export async function logoutApi() {
  */
 export async function getAccessCodesApi() {
   return requestClient.get<string[]>('/auth/codes');
+}
+
+/**
+ * 当前用户权限码 queryOptions 工厂
+ *
+ * 全局只读、与用户身份强绑定；登录后由路由守卫和 authStore 共享拉取，
+ * 同一会话内多次调用会自动去重。
+ * 切换用户、修改权限后应 `queryClient.invalidateQueries({ queryKey: ['auth', 'codes'] })`。
+ */
+export function accessCodesQueryOptions() {
+  return queryOptions({
+    queryFn: () => getAccessCodesApi(),
+    queryKey: ['auth', 'codes'] as const,
+    staleTime: 60_000,
+  });
 }

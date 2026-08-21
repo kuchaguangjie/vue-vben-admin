@@ -2,6 +2,8 @@ import type { Recordable } from '@vben/types';
 
 import type { CommonType } from '#/api';
 
+import { queryOptions } from '@tanstack/vue-query';
+
 import { getTreeAsRoots } from '#/api';
 import { requestClient } from '#/api/request';
 
@@ -28,6 +30,34 @@ async function getApiTree(params: Recordable<any>) {
 }
 async function getApiTreeRoots(params: Recordable<any>) {
   return getTreeAsRoots<SystemApiApi.SystemApi>(getApiTree, params);
+}
+
+/**
+ * API 树 queryOptions 工厂
+ *
+ * 适用于「全局只读 + 跨页共享」的服务器状态（如分配权限时的 API 树）。
+ * 业务调用方目前仍直接调 getApiTree/getApiTreeRoots，可按需逐步改为
+ * queryClient.fetchQuery(apiTreeQueryOptions(params)) 复用缓存。
+ *
+ * 注意：params 进入 queryKey 用于区分不同筛选条件的缓存。
+ */
+export function apiTreeQueryOptions(params: Recordable<any> = {}) {
+  return queryOptions({
+    queryFn: () => getApiTree(params),
+    queryKey: ['system', 'api', 'tree', params] as const,
+    staleTime: 60_000,
+  });
+}
+
+/**
+ * API 树 roots queryOptions 工厂（同上，但返回 roots 数组形式）
+ */
+export function apiTreeRootsQueryOptions(params: Recordable<any> = {}) {
+  return queryOptions({
+    queryFn: () => getApiTreeRoots(params),
+    queryKey: ['system', 'api', 'treeRoots', params] as const,
+    staleTime: 60_000,
+  });
 }
 
 async function getApiTreeWithUserCore(params: Recordable<any>) {

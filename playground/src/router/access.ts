@@ -9,7 +9,8 @@ import { generateAccessible } from '@vben/access';
 
 import { message } from 'ant-design-vue';
 
-import { getAllMenusApiRoots } from '#/api';
+import { allMenusRootsQueryOptions } from '#/api';
+import { queryClient } from '#/api/query-client';
 import { BasicLayout, IFrameView } from '#/layouts';
 import { $t } from '#/locales';
 
@@ -36,7 +37,9 @@ async function generateAccess(options: GenerateMenuAndRoutesOptions) {
         duration: 1.5,
       });
 
-      return await getAllMenusApiRoots();
+      // 走 queryClient.fetchQuery：与 examples/form/basic.vue 等共享菜单缓存，
+      // 同会话内重复调用自动去重，staleTime (5min) 内不重拉。
+      return await queryClient.fetchQuery(allMenusRootsQueryOptions());
     },
     // 可以指定没有权限跳转403页面
     forbiddenComponent,
