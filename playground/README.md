@@ -27,18 +27,14 @@
 
 ### 服务器状态管理（TanStack Query）
 
-`@tanstack/vue-query` 已内置并由 [bootstrap.ts](src/bootstrap.ts) 注册 `VueQueryPlugin`，
-单例 QueryClient 位于 [`src/api/query-client.ts`](src/api/query-client.ts)。
+`@tanstack/vue-query` 已内置并由 [bootstrap.ts](src/bootstrap.ts) 注册 `VueQueryPlugin`，单例 QueryClient 位于 [`src/api/query-client.ts`](src/api/query-client.ts)。
 
 **核心约定**：
 
-- **全局只读服务器状态**（用户信息、菜单、权限码、i18n 信息、时区选项、系统头像列表等）
-  通过 `queryOptions` 工厂封装，见 `src/api/core/*` 与 `src/api/system/*`。
+- **全局只读服务器状态**（用户信息、菜单、权限码、i18n 信息、时区选项、系统头像列表等）通过 `queryOptions` 工厂封装，见 `src/api/core/*` 与 `src/api/system/*`。
 - **组件 setup 内**：`useQuery(xxxQueryOptions())`。
-- **非 setup 上下文**（store action / router guard / effectScope）：
-  `await queryClient.fetchQuery(xxxQueryOptions())`，与组件共享同一缓存。
-- **变更后失效**：`await queryClient.refetchQueries({ queryKey: [...] })`
-  或 `queryClient.invalidateQueries({ queryKey: [...] })`。
+- **非 setup 上下文**（store action / router guard / effectScope）： `await queryClient.fetchQuery(xxxQueryOptions())`，与组件共享同一缓存。
+- **变更后失效**：`await queryClient.refetchQueries({ queryKey: [...] })` 或 `queryClient.invalidateQueries({ queryKey: [...] })`。
 - **退出登录清缓存**：`queryClient.clear()`（已在 `store/auth.ts` 中调用）。
 
 **默认配置**（`queryClient.ts`）：
