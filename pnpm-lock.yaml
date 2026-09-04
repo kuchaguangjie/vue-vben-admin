@@ -204,9 +204,6 @@ catalogs:
     depcheck:
       specifier: ^1.4.7
       version: 1.4.7
-    dompurify:
-      specifier: ^3.4.9
-      version: 3.4.9
     dotenv:
       specifier: ^16.6.1
       version: 16.6.1
@@ -530,6 +527,7 @@ overrides:
   '@ast-grep/napi': ^0.39.9
   '@ctrl/tinycolor': ^4.2.0
   clsx: ^2.1.1
+  dompurify: ^3.4.9
   esbuild: ^0.25.12
   jiti: ^2.6.1
   pinia: ^3.0.4
@@ -1963,7 +1961,7 @@ importers:
         specifier: 'catalog:'
         version: 1.11.19
       dompurify:
-        specifier: 'catalog:'
+        specifier: ^3.4.9
         version: 3.4.9
       json-bigint:
         specifier: 'catalog:'
