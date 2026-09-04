@@ -20,6 +20,7 @@ dev-dist
 .stylelintcache
 yarn.lock
 package-lock.json
+.pnpm-store
 .VSCodeCounter
 **/backend-mock/data
 
